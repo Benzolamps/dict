@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  logback 配置 - release
+-->
+<configuration>
+    <springProperty scope="context" name="title" source="system.title"/>
+    <springProperty scope="context" name="version" source="system.version"/>
+    <springProperty scope="context" name="encoding" source="system.console_encoding"/>
+
+    <!-- 向控制台输出日志 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <pattern>
+          **${title} - ${version} [%d{yyyy-MM-dd HH:mm:ss.SSS}] &lt;%p&gt; %logger [%F:%L] %n%m%n%n
+        </pattern>
+        <charset>${encoding}</charset>
+      </encoder>
+      
+      <!--过滤器-->
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <!-- 最小级别 -->
+        <param name="levelMin" value="DEBUG"/>
+        <!-- 最大级别 -->
+        <param name="levelMax" value="ERROR"/>
+        <onMatch>ACCEPT</onMatch>
+        <onMismatch>DENY</onMismatch>
+      </filter>
+    </appender>
+
+    <!-- 向文件输出配置 -->
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <pattern>
+          ${title} - ${version} [%d{yyyy-MM-dd HH:mm:ss.SSS}] &lt;%p&gt; %logger [%F:%L] %n%m %n%n
+        </pattern>
+        <charset>UTF-8</charset>
+      </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <fileNamePattern>./logs/dict_%d{yyyy-MM-dd}~%i.txt</fileNamePattern>
+      <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+        <maxFileSize>1MB</maxFileSize>
+      </timeBasedFileNamingAndTriggeringPolicy>
+      <maxHistory>90</maxHistory>
+    </rollingPolicy>
+  </appender>
+
+  <root level="WARN">
+    <appender-ref ref="console"/>
+    <appender-ref ref="file"/>
+  </root>
+
+  <logger name="com.benzolamps.dict" level="DEBUG" additivity="true"/>
+</configuration>

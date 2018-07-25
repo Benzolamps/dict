@@ -1,0 +1,134 @@
+system:
+
+  # 系统名称
+  name: dictionary
+
+  # 系统名称
+  title: Yet Another Artifact 【YAA】
+
+  # 主机名
+  host: localhost
+
+  # 端口号
+  port: 2018
+
+  # 系统版本
+  version: 2.1.1
+
+  # 是否是发行版本
+  is_release: true
+
+  # 系统控制台编码
+  console_encoding: GBK
+
+  # 远程文件路径
+  remote_base_url: http://benzolamps.oss-cn-beijing.aliyuncs.com
+
+  # universe路径
+  universe_path: universe/
+
+jdbc:
+
+  # SQLite JDBC 驱动
+  driver: org.sqlite.JDBC
+
+  # SQLite数据库连接串前缀
+  url_prefix: 'jdbc:sqlite:'
+
+  # 默认数据库文件路径
+  default_db: dictionary.db
+
+  # 是否打印SQL语句
+  show_sql: false
+
+  # 是否自动创建和更新数据库表结构
+  generate_ddl: true
+
+service:
+
+  # 工作空间
+  workspace: ./
+
+  # 界面显示中文字体
+  chinese_font_family: 微软雅黑
+
+  # 界面显示中文字体大小
+  chinese_font_size: 12
+
+  # 界面显示英文字体
+  english_font_family: Times New Roman
+
+  # 界面显示英文字体大小
+  english_font_size: 13
+
+  # 筛选时词性的可选项
+  word_clazzes: 动词, 名词, 形容词 #, 副词, 连词, 介词, 代词, 数词, 冠词, 连词, 冠词
+
+  # 文件样式
+  file_exported:
+
+    # 文件中文字体
+    chinese_font_family: 宋体
+
+    # 文件英文字体
+    english_font_family: Times New Roman
+
+    # 文件字体大小
+    font_size: 21
+
+    # 文件行间距
+    line_height: 300
+
+    # 是否在导出的Word文档中显示分隔线
+    show_separators: true
+
+    # 生词表模板文件标题
+    new_words_title: 生词表
+
+    # 抄写表模板文件标题
+    copy_words_title: 抄写表
+
+    # 短语生词表模板文件标题
+    new_phrases_title: 短语生词表
+
+    # 短语抄写表模板文件标题
+    copy_phrases_title: 短语抄写表
+
+    # 是否在单词之间添加空行
+    insert_blank_line_between_words: false
+
+    # 单词词义纵向排列
+    definition_arranges_vertically: false
+
+    table_border_color: "#AAAAAA"
+
+  # 抄写表的生成策略
+  copy_strategy_setup: roseCopyStrategySetup
+
+  # 生成抄写表的次序设置
+  rose_copy_strategy:
+
+    # 每个单元的单词个数
+    unit_size: 10
+
+    # 每个单元带提示的单词重复的次数
+    unit_tip_repeat: 1
+
+    # 每个单元不带提示的单词重复的次数
+    unit_nontip_repeat: 2
+
+    # 所有单词带提示重复的次数
+    entire_tip_repeat: 2
+
+    # 所有单词不带提示重复的次数
+    entire_nontip_repeat: 1
+
+    # 是否乱序
+    shuffled: true
+
+    # 是否指定乱序的种子, 不指定则以当前时间戳为准, 每次生成的次序都不一样
+    shuffle_seed_specified: false
+
+    # 乱序的种子
+    # 如果将shuffle_seed_specified设置为true, 则相同的种子, 相同的一组单词, 生成的次序一样
+    shuffle_seed: 0

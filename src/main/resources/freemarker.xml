@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Freemarker配置文件
+  author: Benzolamps
+  version: 2.1.1
+  datetime: 2018-7-11 19:15:30
+-->
+<!--suppress SpringPlaceholdersInspection, SpringXmlModelInspection-->
+<beans
+  xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+>
+  <bean id="freemarkerConfig" class="com.benzolamps.dict.cfg.freemarker.FreemarkerConfig">
+    <property name="sharedVariables">
+      <map>
+        <entry key="system_name" value="${system.name}"/>
+        <entry key="system_version" value="${system.version}"/>
+        <entry key="system_title" value="${system.title}"/>
+        <entry key="user_name" value="${user.name}"/>
+        <entry key="os_name" value="${os.name}"/>
+        <entry key="os_version" value="${os.version}"/>
+        <entry key="os_arth" value="${os.arch}"/>
+        <entry key="java_version" value="${java.version}"/>
+        <entry key="base_url" value="#{servletContext.contextPath}"/>
+        <entry key="base_path" value="#{new java.io.File('').absolutePath}"/>
+        <entry key="remote_base_url" value="${system.remote_base_url}"/>
+        <entry key="springboot_version" value="#{T(org.springframework.boot.SpringBootVersion).version}"/>
+        <entry key="host_address" value="#{T(java.net.InetAddress).localHost.hostAddress}"/>
+        <entry key="host_name" value="#{T(java.net.InetAddress).localHost.hostName}"/>
+        <entry key="tomcat_version" value="#{servletContext.serverInfo}"/>
+        <entry key="servlet_version" value="#{servletContext.majorVersion + '.' + servletContext.minorVersion}"/>
+        <entry key="hibernate_version" value="#{T(org.hibernate.Version).versionString}"/>
+        <entry key="poi_version" value="#{T(org.apache.poi.Version).version}"/>
+        <entry key="is_release" value="#{isRelease}"/>
+        <entry key="logger" value="#{T(org.slf4j.LoggerFactory).getLogger(T(com.benzolamps.dict.cfg.freemarker.FreemarkerConfig))}"/>
+        <entry key="url_yaml_parse">
+          <bean class="com.benzolamps.dict.cfg.freemarker.YamlParser">
+            <property name="resourceType" value="URL"/>
+          </bean>
+        </entry>
+        <entry key="class_path_yaml_parse">
+          <bean class="com.benzolamps.dict.cfg.freemarker.YamlParser">
+            <property name="resourceType" value="CLASS_PATH"/>
+          </bean>
+        </entry>
+        <entry key="file_system_yaml_parse">
+          <bean class="com.benzolamps.dict.cfg.freemarker.YamlParser">
+            <property name="resourceType" value="FILE_SYSTEM"/>
+          </bean>
+        </entry>
+        <entry key="string_yaml_parse">
+          <bean class="com.benzolamps.dict.cfg.freemarker.YamlParser">
+            <property name="resourceType" value="STRING"/>
+          </bean>
+        </entry>
+        <entry key="json_dumper" value-ref="jsonDumper"/>
+      </map>
+    </property>
+  </bean>
+</beans>

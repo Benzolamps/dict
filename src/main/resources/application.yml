@@ -1,0 +1,76 @@
+spring:
+  datasource:
+    driver_class_name: org.sqlite.JDBC
+    url: jdbc:sqlite:dictionary.db
+
+  jpa:
+    show_sql: false
+    generate_ddl: true
+    database_platform: com.benzolamps.dict.cfg.sqlite.SQLiteDialect
+
+  mvc:
+    view:
+      prefix:
+      suffix: .ftl
+    favicon:
+      enabled: false
+    async:
+      request_timeout: 30000
+
+  resources:
+    static_locations: file:templates/static/
+
+  jackson:
+
+    time_zone: GMT+8
+
+    date_format: yyyy-MM-dd HH:mm:ss
+
+    serialization:
+
+      # 格式化输出
+      indent_output: true
+
+      # 忽略无法转换的对象
+      fail_on_empty_beans: false
+
+    # 设置空如何序列化
+    defaultPropertyInclusion: NON_EMPTY
+
+    deserialization:
+      #允许对象忽略json中不存在的属性
+
+      fail_on_unknown_properties: false
+
+    parser:
+
+      #允许出现特殊字符和转义符
+      allow_unquoted_control_chars: true
+
+      #允许出现单引号
+      allow_single_quotes: true
+
+  http:
+    encoding:
+      force: true
+
+  freemarker:
+    template_loader_path: file:templates
+    settings:
+      number_format: '#'
+
+
+server:
+  port: ${system.port}
+  context_path: /${system.name}-${system.version}
+  tomcat:
+    uri-encoding: UTF-8
+
+logging:
+  config: classpath:logback-spring.xml
+
+endpoints:
+  shutdown:
+    enabled: true
+    sensitive: false
+    path: shutdown.json

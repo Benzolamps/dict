@@ -1,0 +1,123 @@
+{
+  "solutions" : [ {
+    "id" : 1,
+    "name" : "你有毛病",
+    "strategyClass" : "rose.RoseShuffleStrategySetup",
+    "properties" : {
+      "unitSize" : 54,
+      "unitTipRepeat" : 1,
+      "unitNontipRepeat" : 2,
+      "entireTipRepeat" : 2,
+      "entireNontipRepeat" : 1,
+      "shuffled" : true,
+      "shuffleSeedSpecified" : true,
+      "shuffleSeed" : 55
+    },
+    "remark" : "哈哈哈哈"
+  }, {
+    "id" : 8,
+    "name" : "你有毛病",
+    "strategyClass" : "rose.RoseShuffleStrategySetup",
+    "properties" : {
+      "unitSize" : 54,
+      "unitTipRepeat" : 1,
+      "unitNontipRepeat" : 2,
+      "entireTipRepeat" : 2,
+      "entireNontipRepeat" : 1,
+      "shuffled" : true,
+      "shuffleSeedSpecified" : true,
+      "shuffleSeed" : 55
+    },
+    "remark" : "哈哈哈哈"
+  }, {
+    "id" : 7,
+    "name" : "你有毛病",
+    "strategyClass" : "rose.RoseShuffleStrategySetup",
+    "properties" : {
+      "unitSize" : 54,
+      "unitTipRepeat" : 1,
+      "unitNontipRepeat" : 2,
+      "entireTipRepeat" : 2,
+      "entireNontipRepeat" : 1,
+      "shuffled" : true,
+      "shuffleSeedSpecified" : true,
+      "shuffleSeed" : 55
+    },
+    "remark" : "哈哈哈哈"
+  }, {
+    "id" : 6,
+    "name" : "你有毛病",
+    "strategyClass" : "rose.RoseShuffleStrategySetup",
+    "properties" : {
+      "unitSize" : 54,
+      "unitTipRepeat" : 1,
+      "unitNontipRepeat" : 2,
+      "entireTipRepeat" : 2,
+      "entireNontipRepeat" : 1,
+      "shuffled" : true,
+      "shuffleSeedSpecified" : true,
+      "shuffleSeed" : 55
+    },
+    "remark" : "哈哈哈哈"
+  }, {
+    "id" : 5,
+    "name" : "你有毛病",
+    "strategyClass" : "rose.RoseShuffleStrategySetup",
+    "properties" : {
+      "unitSize" : 54,
+      "unitTipRepeat" : 1,
+      "unitNontipRepeat" : 2,
+      "entireTipRepeat" : 2,
+      "entireNontipRepeat" : 1,
+      "shuffled" : true,
+      "shuffleSeedSpecified" : true,
+      "shuffleSeed" : 55
+    },
+    "remark" : "哈哈哈哈"
+  }, {
+    "id" : 4,
+    "name" : "你有毛病",
+    "strategyClass" : "rose.RoseShuffleStrategySetup",
+    "properties" : {
+      "unitSize" : 54,
+      "unitTipRepeat" : 1,
+      "unitNontipRepeat" : 2,
+      "entireTipRepeat" : 2,
+      "entireNontipRepeat" : 1,
+      "shuffled" : true,
+      "shuffleSeedSpecified" : true,
+      "shuffleSeed" : 55
+    },
+    "remark" : "哈哈哈哈"
+  }, {
+    "id" : 3,
+    "name" : "你有毛病",
+    "strategyClass" : "rose.RoseShuffleStrategySetup",
+    "properties" : {
+      "unitSize" : 54,
+      "unitTipRepeat" : 1,
+      "unitNontipRepeat" : 2,
+      "entireTipRepeat" : 2,
+      "entireNontipRepeat" : 1,
+      "shuffled" : true,
+      "shuffleSeedSpecified" : true,
+      "shuffleSeed" : 55
+    },
+    "remark" : "哈哈哈哈"
+  }, {
+    "id" : 2,
+    "name" : "你有毛病",
+    "strategyClass" : "rose.RoseShuffleStrategySetup",
+    "properties" : {
+      "unitSize" : 54,
+      "unitTipRepeat" : 1,
+      "unitNontipRepeat" : 2,
+      "entireTipRepeat" : 2,
+      "entireNontipRepeat" : 1,
+      "shuffled" : true,
+      "shuffleSeedSpecified" : true,
+      "shuffleSeed" : 55
+    },
+    "remark" : "哈哈哈哈"
+  } ]
+}

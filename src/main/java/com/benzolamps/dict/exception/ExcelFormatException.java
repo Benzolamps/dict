@@ -1,0 +1,19 @@
+package com.benzolamps.dict.exception;
+
+/**
+ * Excel格式错误
+ * @author Benzolamps
+ * @version 1.1.6
+ * @datetime 2018-7-1 21:12:35
+ */
+public class ExcelFormatException extends DictException {
+
+    /**
+     * @param message 错误消息
+     * @param rowNum 行号
+     * @param columnNum 列号
+     */
+    public ExcelFormatException(String message, int rowNum, int columnNum) {
+        super("导入失败, 在第 " + rowNum + " 行, 第 " + columnNum + " 列发生错误, " + message);
+    }
+}
