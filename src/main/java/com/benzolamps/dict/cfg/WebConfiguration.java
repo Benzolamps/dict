@@ -3,6 +3,7 @@ package com.benzolamps.dict.cfg;
 import com.benzolamps.dict.controller.interceptor.ContentTypeInterceptor;
 import com.benzolamps.dict.controller.interceptor.NavigationInterceptor;
 import com.benzolamps.dict.controller.interceptor.ScopeInterceptor;
+import com.benzolamps.dict.controller.interceptor.WindowInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -22,5 +23,6 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addInterceptor(new NavigationInterceptor()).addPathPatterns("/**");
         registry.addInterceptor(new ContentTypeInterceptor()).addPathPatterns("/**");
         registry.addInterceptor(new ScopeInterceptor()).addPathPatterns("/**");
+        registry.addInterceptor(new WindowInterceptor()).addPathPatterns("/**");
     }
 }

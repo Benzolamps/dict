@@ -47,10 +47,11 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @PostConstruct
     private void postConstruct() {
         /* 将检测到的IShuffleStrategySetup实体类加入 */
+        dictDynamicClass.compile();
         for (val clazz : dictDynamicClass.getDynamicClassSet()) {
-            if (DictBean.classInstantiable(clazz) && IShuffleStrategySetup.class.isAssignableFrom(clazz)) {
+         //   if (/*DictBean.classInstantiable(clazz) && */IShuffleStrategySetup.class.isAssignableFrom(clazz)) {
                 availableStrategySetups.add((Class<IShuffleStrategySetup>) clazz);
-            }
+          //  }
         }
     }
 

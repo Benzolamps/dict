@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page" -->
 
 <div class="layui-row">
-  <button class="layui-btn layui-btn-warm layui-btn-sm">
+  <button class="layui-btn layui-btn-warm layui-btn-sm add">
     <i class="layui-icon" style="font-size: 20px; color: #FFFFFF">&#xe654; 添加</i>
   </button>
   <button class="layui-btn layui-btn-danger layui-btn-sm layui-disabled">
@@ -39,6 +39,16 @@
       ]],
       data: <@json_dumper obj = page.content />,
       id: 'shuffle_solutions'
+    });
+  });
+
+  $('.add').click(function () {
+    layui.use('layer', function () {
+        layer.open({
+          type: 2,
+          content: '${base_url}/shuffle_solution/add.html',
+          area: ['800px', '600px']
+        });
     });
   });
 </script>
