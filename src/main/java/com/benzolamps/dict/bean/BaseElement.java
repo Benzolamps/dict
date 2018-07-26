@@ -2,7 +2,6 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.ExcelHeader;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -25,20 +24,17 @@ public abstract class BaseElement extends BaseEntity {
     /** 索引 */
     @ExcelHeader(value = 0, range = @ExcelHeader.Range(min = 1))
     @Column(nullable = false, updatable = false, name = "indexes")
-    @NonNull
     @NotNull
     protected Integer index;
 
     /** 词库 */
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "library", nullable = false, updatable = false)
-    @NonNull
     @NotNull
     protected Library library;
 
     /* 已掌握该单词 (短语) 的学生 */
     @Transient
-    @NonNull
     protected Set<Student> masteredStudents;
 
     /** @return 用于实体类中字段的格式 */

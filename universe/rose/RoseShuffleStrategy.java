@@ -15,6 +15,8 @@ import java.util.function.Supplier;
  */
 public class RoseShuffleStrategy implements IShuffleStrategy {
 
+    private static final long serialVersionUID = 4447991782406385092L;
+
     /* 列表的容量 */
     private int size;
 

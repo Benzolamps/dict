@@ -35,7 +35,7 @@ dict.postHref = function (url, data) {
         dataType: 'text',
         data: {},
         type: 'post',
-        contentType: 'application/x-www-form-urlencodedd',
+        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         error: function (request, status, error) {
             console.log('请求失败');
             console.log(request);

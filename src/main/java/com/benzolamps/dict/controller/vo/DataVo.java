@@ -42,6 +42,17 @@ public class DataVo extends BaseVo {
 
     /**
      * 构造器
+     * @param data 数据
+     */
+    public DataVo(Collection data) {
+        this.count = (long) data.size();
+        this.data = data;
+        this.code = 0;
+        this.msg = "";
+    }
+
+    /**
+     * 构造器
      * @param msg 提示信息
      * @param code 状态码
      */

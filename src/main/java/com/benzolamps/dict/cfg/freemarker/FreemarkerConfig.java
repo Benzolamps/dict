@@ -3,7 +3,6 @@ package com.benzolamps.dict.cfg.freemarker;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateModelException;
-import lombok.NonNull;
 import lombok.Setter;
 
 import javax.annotation.PostConstruct;
@@ -23,7 +22,6 @@ public class FreemarkerConfig {
 
     /** global 变量 */
     @Setter
-    @NonNull
     private Map<String, Object> sharedVariables;
 
     @PostConstruct

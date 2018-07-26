@@ -2,6 +2,7 @@ package com.benzolamps.dict.service.base;
 
 import com.benzolamps.dict.component.IShuffleStrategySetup;
 import com.benzolamps.dict.bean.ShuffleSolution;
+import com.benzolamps.dict.controller.vo.DictPropertyInfoVo;
 import com.benzolamps.dict.dao.core.Page;
 
 import java.util.Collection;
@@ -46,4 +47,11 @@ public interface ShuffleSolutionService {
      * @param shuffleSolution 乱序方案
      */
     void remove(ShuffleSolution shuffleSolution);
+
+    /**
+     * 根据乱序策略生成器类名获取属性
+     * @param className 类名
+     * @return DictPropertyInfoVo
+     */
+    Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className);
 }

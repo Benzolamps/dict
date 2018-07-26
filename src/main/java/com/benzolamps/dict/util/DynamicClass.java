@@ -1,6 +1,7 @@
 package com.benzolamps.dict.util;
 
 import com.benzolamps.dict.exception.DictException;
+import org.springframework.util.ClassUtils;
 
 import javax.tools.*;
 import java.io.*;
@@ -76,6 +77,7 @@ public class DynamicClass {
 
     /** @return 获取全部的动态类 */
     public Set<Class<?>> getDynamicClassSet() {
+        this.compile();
         return dynamicClassSet;
     }
 
@@ -125,7 +127,7 @@ public class DynamicClass {
 
     /* 生成ClassLoader */
     private URLClassLoader produceClassLoader() {
-        return new URLClassLoader(new URL[0], getClass().getClassLoader()) {
+        return new URLClassLoader(new URL[0], ClassUtils.getDefaultClassLoader()) {
             @Override
             protected Class<?> findClass(String name) throws ClassNotFoundException {
                 byte[] buf = classBytes.get(name);

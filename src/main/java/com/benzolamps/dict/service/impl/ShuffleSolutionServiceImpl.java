@@ -2,6 +2,7 @@ package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
+import com.benzolamps.dict.controller.vo.DictPropertyInfoVo;
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
@@ -13,8 +14,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
@@ -47,11 +50,10 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @PostConstruct
     private void postConstruct() {
         /* 将检测到的IShuffleStrategySetup实体类加入 */
-        dictDynamicClass.compile();
         for (val clazz : dictDynamicClass.getDynamicClassSet()) {
-         //   if (/*DictBean.classInstantiable(clazz) && */IShuffleStrategySetup.class.isAssignableFrom(clazz)) {
+            if (new DictBean<>(clazz).instantiable() && IShuffleStrategySetup.class.isAssignableFrom(clazz)) {
                 availableStrategySetups.add((Class<IShuffleStrategySetup>) clazz);
-          //  }
+            }
         }
     }
 
@@ -73,7 +75,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     private IShuffleStrategySetup apply(ShuffleSolution shuffleSolution) {
         val strategyClass = dictDynamicClass.loadDynamicClass(shuffleSolution.getStrategyClass());
         Properties properties = DictMap.convertToProperties(shuffleSolution.getProperties());
-        return DictBean.createSpringBean(context, (Class<? extends IShuffleStrategySetup>) strategyClass, properties).getObj();
+        return (IShuffleStrategySetup) new DictBean<>(strategyClass).createSpringBean(context, properties);
     }
 
     @Override
@@ -101,5 +103,15 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Override
     public void remove(ShuffleSolution shuffleSolution) {
         shuffleSolutionDao.remove(shuffleSolution);
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
+        System.out.println(getAvailableCopyStrategyNames());
+        System.out.println(className);
+        Assert.isTrue(getAvailableCopyStrategyNames().contains(className));
+        val strategyClass = dictDynamicClass.loadDynamicClass(className);
+        return DictPropertyInfoVo.applyDictPropertyInfo(strategyClass);
     }
 }

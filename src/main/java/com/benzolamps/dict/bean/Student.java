@@ -1,7 +1,6 @@
 package com.benzolamps.dict.bean;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -26,14 +25,12 @@ public class Student extends BaseEntity {
 
     /** 学号 */
     @Column(nullable = false, updatable = false)
-    @NonNull
     @NotBlank
     @Length(max = 20)
     private String number;
 
     /** 姓名 */
     @Column(nullable = false)
-    @NonNull
     @NotBlank
     @Length(max = 20)
     private String name;
@@ -41,19 +38,16 @@ public class Student extends BaseEntity {
     /** 主要学习的词库 */
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "major", updatable = false, nullable = false)
-    @NonNull
     @NotNull
     private Library major;
 
     /** 已掌握的单词 */
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "dict_sw", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
-    @NonNull
     private Set<Word> masteredWords;
 
     /** 已掌握的短语 */
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "dict_sp", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
-    @NonNull
     private Set<Phrase> masteredPhrases;
 }

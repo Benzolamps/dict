@@ -1,7 +1,6 @@
 package com.benzolamps.dict.bean;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -28,7 +27,6 @@ public class WordClazz extends BaseEntity {
 
     /** 名字 */
     @Column(nullable = false)
-    @NonNull
     @NotBlank
     @Length(max = 255)
     private String name;
@@ -40,6 +38,5 @@ public class WordClazz extends BaseEntity {
 
     /** 单词 */
     @ManyToMany(mappedBy = "clazzes")
-    @NonNull
     private Set<Word> words;
 }

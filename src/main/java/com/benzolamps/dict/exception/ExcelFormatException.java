@@ -8,6 +8,8 @@ package com.benzolamps.dict.exception;
  */
 public class ExcelFormatException extends DictException {
 
+    private static final long serialVersionUID = -120019519237553699L;
+
     /**
      * @param message 错误消息
      * @param rowNum 行号

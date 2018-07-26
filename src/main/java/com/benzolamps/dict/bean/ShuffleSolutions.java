@@ -1,7 +1,6 @@
 package com.benzolamps.dict.bean;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -22,6 +21,5 @@ public class ShuffleSolutions implements Serializable {
     private static final long serialVersionUID = -5570719228526398391L;
 
     /** 集合 */
-    @NonNull
     private Set<ShuffleSolution> solutions;
 }

@@ -1,7 +1,10 @@
 package rose;
 
+import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.IShuffleStrategy;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,95 +15,43 @@ import org.springframework.stereotype.Component;
  * @datetime 2018-6-18 15:52:55
  */
 @Component
+@Getter
+@Setter
 public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
 
+    private static final long serialVersionUID = -3170125922193664875L;
+
     @Value("15")
+    @DictPropertyInfo(display = "unit size", description = "每个单元的单词个数")
     private int unitSize;
 
     @Value("2")
+    @DictPropertyInfo(display = "unit tip repeat", description = "每个单元带提示的单词重复的次数")
     private int unitTipRepeat;
 
     @Value("1")
+    @DictPropertyInfo(display = "unit nontip repeat", description = "每个单元不带提示的单词重复的次数")
     private int unitNontipRepeat;
 
     @Value("2")
+    @DictPropertyInfo(display = "entire tip repeat", description = "所有单词带提示重复的次数")
     private int entireTipRepeat;
 
     @Value("1")
+    @DictPropertyInfo(display = "entire nontip repeat", description = "所有单词不带提示重复的次数")
     private int entireNontipRepeat;
 
     @Value("true")
+    @DictPropertyInfo(display = "shuffled", description = "是否乱序")
     private boolean shuffled;
 
     @Value("false")
+    @DictPropertyInfo(display = "shuffled seed specified", description = "是否指定乱序的种子, 不指定则以当前时间戳为准, 每次生成的次序都不一样")
     private boolean shuffleSeedSpecified;
 
     @Value("0")
+    @DictPropertyInfo(display = "shuffle seed", description = "乱序的种子, 如果将shuffle_seed_specified设置为true, 则相同的种子, 相同的一组单词, 生成的次序一样")
     private int shuffleSeed;
-
-    public void setUnitSize(int unitSize) {
-        this.unitSize = unitSize;
-    }
-
-    public void setUnitTipRepeat(int unitTipRepeat) {
-        this.unitTipRepeat = unitTipRepeat;
-    }
-
-    public void setUnitNontipRepeat(int unitNontipRepeat) {
-        this.unitNontipRepeat = unitNontipRepeat;
-    }
-
-    public void setEntireTipRepeat(int entireTipRepeat) {
-        this.entireTipRepeat = entireTipRepeat;
-    }
-
-    public void setEntireNontipRepeat(int entireNonTipRepeat) {
-        this.entireNontipRepeat = entireNonTipRepeat;
-    }
-
-    public void setShuffled(boolean shuffled) {
-        this.shuffled = shuffled;
-    }
-
-    public void setShuffleSeedSpecified(boolean shuffleSeedSpecified) {
-        this.shuffleSeedSpecified = shuffleSeedSpecified;
-    }
-
-    public void setShuffleSeed(int shuffleSeed) {
-        this.shuffleSeed = shuffleSeed;
-    }
-
-    public int getUnitSize() {
-        return unitSize;
-    }
-
-    public int getUnitTipRepeat() {
-        return unitTipRepeat;
-    }
-
-    public int getUnitNontipRepeat() {
-        return unitNontipRepeat;
-    }
-
-    public int getEntireTipRepeat() {
-        return entireTipRepeat;
-    }
-
-    public int getEntireNontipRepeat() {
-        return entireNontipRepeat;
-    }
-
-    public boolean isShuffled() {
-        return shuffled;
-    }
-
-    public boolean isShuffleSeedSpecified() {
-        return shuffleSeedSpecified;
-    }
-
-    public int getShuffleSeed() {
-        return shuffleSeed;
-    }
 
     @Override
     public IShuffleStrategy setup(int size, int hash) {

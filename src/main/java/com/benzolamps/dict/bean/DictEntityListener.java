@@ -1,7 +1,8 @@
 package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.util.DictBean;
-import lombok.val;
+import com.benzolamps.dict.util.DictLambda.Action2;
+import com.benzolamps.dict.util.DictProperty;
 
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -16,11 +17,12 @@ import java.util.Date;
 public final class DictEntityListener {
 
     /* 监听实体类数据格式 */
+    @SuppressWarnings("unchecked")
     private void format(BaseEntity bean) {
-        val dictBean = new DictBean<BaseEntity>(bean);
-        dictBean.forEachAnnotatedProperty(Format.class, (property, format) -> {
-            val value = dictBean.invokeMethod(dictBean.getMethod(format.value(), property.getType()), property.getValue());
-            property.setValue(value);
+        DictBean<? extends BaseEntity> dictBean = new DictBean<>(bean.getClass());
+        dictBean.forEachAnnotatedProperty(Format.class, (Action2<DictProperty, Format>) (property, format) -> {
+            Object value = dictBean.getMethod(format.value(), property.get(dictBean)).invoke(dictBean);
+            property.set(dictBean, value);
         });
     }
 

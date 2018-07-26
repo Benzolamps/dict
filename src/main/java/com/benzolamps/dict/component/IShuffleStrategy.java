@@ -1,5 +1,6 @@
 package com.benzolamps.dict.component;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Iterator;
  * @version 1.1.2
  * @datetime 2018-6-18 15:45:46
  */
-public interface IShuffleStrategy extends Iterator<Integer> {
+public interface IShuffleStrategy extends Iterator<Integer>, Serializable {
 
     /** @return 当前序号是否可见 */
     boolean visible();

@@ -1,10 +1,10 @@
 package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.controller.interceptor.WindowView;
+import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -17,6 +17,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("shuffle_solution/")
+@Slf4j
 public class ShuffleSolutionController extends BaseController {
 
     @Resource
@@ -40,5 +41,12 @@ public class ShuffleSolutionController extends BaseController {
         System.out.println(shuffleSolutionService.getAvailableCopyStrategyNames());
         mv.addObject("strategies", shuffleSolutionService.getAvailableCopyStrategyNames());
         return mv;
+    }
+
+    @PostMapping("/property_info.json")
+    @ResponseBody
+    protected DataVo propertyInfo(String className) {
+        logger.info(className);
+        return new DataVo(shuffleSolutionService.getShuffleSolutionPropertyInfo(className));
     }
 }

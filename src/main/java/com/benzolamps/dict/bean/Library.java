@@ -1,7 +1,6 @@
 package com.benzolamps.dict.bean;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -26,33 +25,28 @@ public class Library extends BaseEntity {
 
     /** 名字 */
     @Column(nullable = false)
-    @NonNull
     @NotBlank
     @Length(max = 20)
     private String name;
 
     /** 描述 */
     @Column
-    @NonNull
     @NotBlank
     @Length(max = 50)
     private String description;
 
     /** 词库中的单词 */
     @OneToMany(mappedBy = "library", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @NonNull
     @NotNull
     private Set<Word> words;
 
     /** 词库中的短语 */
     @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)
-    @NonNull
     @NotNull
     private Set<Phrase> phrases;
 
     /** 正在学习该词库的学生 */
     @OneToMany(mappedBy = "major", fetch = FetchType.LAZY)
-    @NonNull
     @NotNull
     private Set<Student> students;
 }

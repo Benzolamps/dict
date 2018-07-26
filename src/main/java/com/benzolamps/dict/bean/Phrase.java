@@ -3,7 +3,6 @@ package com.benzolamps.dict.bean;
 import com.benzolamps.dict.component.DetectColumnNum;
 import com.benzolamps.dict.component.ExcelHeader;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -32,7 +31,6 @@ public class Phrase extends BaseElement {
     /** 短语原形 */
     @ExcelHeader(value = 1, notEmpty = true)
     @Column(nullable = false)
-    @NonNull
     @NotBlank
     @Length(max = 255)
     private String prototype;
@@ -41,7 +39,6 @@ public class Phrase extends BaseElement {
     @Format("replaceString")
     @ExcelHeader(value = 2, notEmpty = true)
     @Column(nullable = false)
-    @NonNull
     @NotBlank
     @Length(max = 255)
     private String definition;

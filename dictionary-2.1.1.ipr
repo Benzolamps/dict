@@ -78,6 +78,7 @@
         <option name="ignoreAnonymousInnerClasses" value="false" />
         <option name="superClassString" value="" />
       </inspection_tool>
+      <inspection_tool class="TrivialIf" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="WeakerAccess" enabled="false" level="WARNING" enabled_by_default="false">
         <option name="SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS" value="true" />
         <option name="SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES" value="true" />
@@ -225,6 +226,7 @@
         <w>itemd</w>
         <w>jpql</w>
         <w>layui</w>
+        <w>nontip</w>
         <w>qrcode</w>
         <w>sqlite</w>
         <w>tencent</w>
@@ -256,12 +258,11 @@
     <library name="Maven: antlr:antlr:2.7.7">
       <CLASSES>
         <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7.jar!/" />
+        <root url="jar://C:/dev-tools/Java/jre1.8.0_161/lib/tools.jar!/" />
       </CLASSES>
-      <JAVADOC>
-        <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7-javadoc.jar!/" />
-      </JAVADOC>
+      <JAVADOC />
       <SOURCES>
-        <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7-sources.jar!/" />
+        <root url="jar://C:/dev-tools/Java/jre1.8.0_161/lib/tools.jar!/" />
       </SOURCES>
     </library>
     <library name="Maven: ch.qos.logback:logback-classic:1.1.11">

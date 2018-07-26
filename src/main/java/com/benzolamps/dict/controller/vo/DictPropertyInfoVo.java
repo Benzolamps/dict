@@ -2,11 +2,15 @@ package com.benzolamps.dict.controller.vo;
 
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.util.DictBean;
+import com.benzolamps.dict.util.DictProperty;
 import lombok.Getter;
 import lombok.NonNull;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -57,9 +61,12 @@ public class DictPropertyInfoVo extends BaseVo {
      */
     @SuppressWarnings("deprecation")
     public static <T> Collection<DictPropertyInfoVo> applyDictPropertyInfo(@NonNull Class<T> clazz) {
-        DictBean<T> bean = DictBean.createBean(clazz, null);
-        return bean.getProperties().stream()
-            .map(property -> new DictPropertyInfoVo(property.getName(), (DictPropertyInfo) property.getAnnotation(DictPropertyInfo.class)))
-            .collect(Collectors.toSet());
+        DictBean<T> bean = new DictBean<>(clazz);
+        Set<DictPropertyInfoVo> set = new LinkedHashSet<>();
+        for (DictProperty property : bean.getProperties()) {
+            DictPropertyInfoVo dictPropertyInfoVo = new DictPropertyInfoVo(property.getName(), property.getAnnotation(DictPropertyInfo.class));
+            set.add(dictPropertyInfoVo);
+        }
+        return set;
     }
 }

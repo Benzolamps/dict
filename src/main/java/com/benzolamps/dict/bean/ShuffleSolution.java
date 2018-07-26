@@ -22,17 +22,14 @@ public class ShuffleSolution implements Serializable {
     private static final long serialVersionUID = 4614817880825423160L;
 
     /** id */
-    @NonNull
     private Long id;
 
     /** 名称 */
-    @NonNull
     @NotBlank
     @Length(max = 20)
     private String name;
 
     /** 乱序策略类 */
-    @NonNull
     @NotBlank
     private String strategyClass;
 

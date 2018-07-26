@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DictException extends RuntimeException {
 
+    private static final long serialVersionUID = 6844909847465796221L;
+
     public DictException(String message) {
         super(message);
     }
