@@ -1,12 +1,10 @@
 package com.benzolamps.dict.controller;
 
-import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
-import com.benzolamps.dict.service.base.ShuffleSolutionService;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.annotation.Resource;
 
 /**
  * 系统管理控制器
@@ -17,9 +15,6 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("system/")
 public class SystemController extends BaseController {
-
-    @Resource
-    private ShuffleSolutionService shuffleSolutionService;
 
     /**
      * 系统信息界面
