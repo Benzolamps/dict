@@ -1,4 +1,4 @@
-package com.benzolamps.dict.aspect;
+package com.benzolamps.dict.advice;
 
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import lombok.val;
@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
  */
 @Component
 @Aspect
-public class ShuffleSolutionAspect {
+public class ShuffleSolutionAdvice {
 
     @Resource
     private ShuffleSolutionDao shuffleSolutionDao;

@@ -11,6 +11,7 @@ import java.util.Collection;
  * @version 2.1.1
  * @datetime 2018-7-4 20:51:17
  */
+@SuppressWarnings("unused")
 public class BaseController {
 
     /**

@@ -5,7 +5,7 @@
  * @datetime 2018-7-10 22:02:50
  */
 $(function () {
-    var columns;
+    var columns = null;
 
     /* 请求栏目JSON */
     $.ajax({

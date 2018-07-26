@@ -37,7 +37,7 @@
         {field: 'remark', title: '备注', sort: 'true'},
         {fixed: 'right', align: 'left', toolbar: '#shuffle-solutions-tools'}
       ]],
-      data: <@json_dumper obj = page.content />,
+      data: <@json_dumper obj = page.content/>,
       id: 'shuffle_solutions'
     });
   });
@@ -52,4 +52,3 @@
     });
   });
 </script>
-

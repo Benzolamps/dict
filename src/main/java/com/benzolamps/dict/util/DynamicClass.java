@@ -80,6 +80,7 @@ public class DynamicClass {
     }
 
     /** 编译 */
+    @SuppressWarnings("SpellCheckingInspection")
     public void compile() {
         if (!compiled && (compiled = true)) {
             StandardJavaFileManager manager = compiler.getStandardFileManager(diagnosticListener, locale, charset);

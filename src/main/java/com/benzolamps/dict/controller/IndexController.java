@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.net.MalformedURLException;
 
 /**
@@ -46,11 +45,10 @@ public class IndexController extends BaseController {
     /**
      * 可解析资源路径
      * @param request request
-     * @param response response
      * @return ModelAndView
      */
     @RequestMapping(value = "/res/**", method = {RequestMethod.GET, RequestMethod.POST})
-    protected ModelAndView res(HttpServletRequest request, HttpServletResponse response) {
+    protected ModelAndView res(HttpServletRequest request) {
         String url = request.getRequestURL().toString();
         int index = url.indexOf("res");
         return new ModelAndView(url.substring(index));
