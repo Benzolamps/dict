@@ -7,7 +7,7 @@
 
 /**
  * 全局变量
- * @type {object}
+ * @type {Object}
  */
 window.dict = {};
 

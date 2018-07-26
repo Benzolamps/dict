@@ -8,7 +8,6 @@
 <div id="shuffle-solutions-container"></div>
 
 <script type="text/javascript">
-
   dict.loadText({
     url: '${base_url}/shuffle_solution/list.html',
     success: function (data) {
