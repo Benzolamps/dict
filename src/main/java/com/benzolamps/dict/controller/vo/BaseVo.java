@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @version 2.1.1
  * @datetime 2018-7-25 20:11:08
  */
-public class BaseVo implements Serializable {
+public abstract class BaseVo implements Serializable {
 
     private static final long serialVersionUID = 765352179825632965L;
 }

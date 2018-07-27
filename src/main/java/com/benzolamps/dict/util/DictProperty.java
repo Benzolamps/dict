@@ -20,7 +20,6 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
  * @version 2.1.1
  * @datetime 2018-7-26 23:43:06
  */
-@SuppressWarnings("deprecation")
 @Getter
 public class DictProperty {
 
@@ -51,8 +50,8 @@ public class DictProperty {
      * @param bean DictBean对象
      */
     public DictProperty(String name, DictBean<?> bean) {
-        Assert.notNull(name);
-        Assert.notNull(bean);
+        Assert.notNull(name, "name不能为null");
+        Assert.notNull(bean, "bean不能为null");
         this.name = name;
         this.bean = bean;
         PropertyDescriptor propertyDescriptor = BeanUtils.getPropertyDescriptor(bean.getType(), name);
@@ -65,34 +64,34 @@ public class DictProperty {
 
     /**
      * 获取指定类型的注解
-     * @param aClass 注解类型
+     * @param annoClass 注解类型
      * @param <A> 注解类型
      * @return 注解对象
      */
-    public <A extends Annotation> A getAnnotation(Class<A> aClass) {
-        Assert.notNull(aClass);
-        if (field != null && field.isAnnotationPresent(aClass)) {
-            return field.getAnnotation(aClass);
-        } else if (get != null && get.isAnnotationPresent(aClass)) {
-            return get.getAnnotation(aClass);
-        } if (set != null && set.isAnnotationPresent(aClass)) {
-            return set.getAnnotation(aClass);
+    public <A extends Annotation> A getAnnotation(Class<A> annoClass) {
+        Assert.notNull(annoClass, "anno class不能为null");
+        if (field != null && field.isAnnotationPresent(annoClass)) {
+            return field.getAnnotation(annoClass);
+        } else if (get != null && get.isAnnotationPresent(annoClass)) {
+            return get.getAnnotation(annoClass);
+        } if (set != null && set.isAnnotationPresent(annoClass)) {
+            return set.getAnnotation(annoClass);
         }
         return null;
     }
 
     /**
      * 判断是否有指定类型的注解
-     * @param aClass 注解类型
+     * @param annoClass 注解类型
      * @return 判断结果
      */
-    public boolean hasAnnotation(Class<? extends Annotation> aClass) {
-        Assert.notNull(aClass);
-        if (field != null && field.isAnnotationPresent(aClass)) {
+    public boolean hasAnnotation(Class<? extends Annotation> annoClass) {
+        Assert.notNull(annoClass, "anno class不能为null");
+        if (field != null && field.isAnnotationPresent(annoClass)) {
             return true;
-        } else if (get != null && get.isAnnotationPresent(aClass)) {
+        } else if (get != null && get.isAnnotationPresent(annoClass)) {
             return true;
-        } if (set != null && set.isAnnotationPresent(aClass)) {
+        } if (set != null && set.isAnnotationPresent(annoClass)) {
             return true;
         } else {
             return false;
@@ -131,8 +130,8 @@ public class DictProperty {
      */
     @SuppressWarnings("unchecked")
     public <T> T get(final Object obj) {
-        Assert.notNull(obj);
-        Assert.isTrue(bean.getType().isInstance(obj));
+        Assert.notNull(obj, "obj不能为null");
+        Assert.isTrue(bean.getType().isInstance(obj), "obj必须是" + bean.getType() + "的实例");
         return get == null ? null : tryFunc(() -> (T) get.invoke(obj));
     }
 
@@ -142,8 +141,8 @@ public class DictProperty {
      * @param value 值
      */
     public void set(final Object obj, final Object value) {
-        Assert.notNull(obj);
-        Assert.isTrue(bean.getType().isInstance(obj));
+        Assert.notNull(obj, "obj不能为null");
+        Assert.isTrue(bean.getType().isInstance(obj), "obj必须是" + bean.getType() + "的实例");
         if (set != null) {
             tryAction(() -> set.invoke(obj, value));
         }

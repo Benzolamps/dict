@@ -18,13 +18,13 @@ import java.util.List;
 public class WordDaoImpl extends BaseDaoImpl<Word> implements WordDao {
 
     @Override
-    public List<Word> searchWords(Integer start, Integer end, String defination, WordClazz clazz) {
+    public List<Word> searchWords(Integer start, Integer end, String definition, WordClazz clazz) {
 //        StringBuilder builder = new StringBuilder();
 //        builder.append("select word from Word as word where 1 = 1 ");
-//        if (defination != null) builder.append("and word.definition like :definition ");
+//        if (definition != null) builder.append("and word.definition like :definition ");
 //        if (clazz != null) builder.append("and :clazz in (word.clazzes)");
 //        return findList(start, end - start + 1, builder.toString(), new HashMap<String, Object>() {{
-//            put("definition", defination);
+//            put("definition", definition);
 //            put("clazz", clazz);
 //        }});
 

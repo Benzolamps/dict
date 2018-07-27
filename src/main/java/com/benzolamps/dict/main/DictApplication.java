@@ -4,6 +4,7 @@ import com.benzolamps.dict.util.DictMap;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
@@ -33,6 +34,7 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
 @ImportResource(locations = "classpath:freemarker.xml")
 // @PropertySource(value = "file:dictionary.yml", factory = YamlPropertyLoaderFactory.class)
 @EnableTransactionManagement
+@EnableCaching
 public abstract class DictApplication {
 
     private static Properties properties;
@@ -63,7 +65,7 @@ public abstract class DictApplication {
      * main方法
      * @param args 参数
      */
-    public static void main(String[] args) {
+    public static void main(String... args) {
         new SpringApplicationBuilder(DictApplication.class).properties(properties).build().run(args);
     }
 }

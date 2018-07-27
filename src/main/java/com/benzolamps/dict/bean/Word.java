@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -28,7 +29,7 @@ public class Word extends BaseElement {
     /** 单词原形 */
     @ExcelHeader(value = 1, notEmpty = true)
     @Column(nullable = false)
-    @NotBlank
+    @NotEmpty
     @Length(max = 255)
     private String prototype;
 
@@ -36,7 +37,7 @@ public class Word extends BaseElement {
     @Format("replaceString")
     @ExcelHeader(value = 3, notEmpty = true)
     @Column(nullable = false)
-    @NotBlank
+    @NotEmpty
     @Length(max = 255)
     private String americanPronunciation;
 
@@ -44,12 +45,12 @@ public class Word extends BaseElement {
     @Format("replaceString")
     @ExcelHeader(value = 2, notEmpty = true)
     @Column(nullable = false)
-    @NotBlank
+    @NotEmpty
     @Length(max = 255)
     private String britishPronunciation;
 
     /** 词性 */
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "dict_wc", joinColumns = @JoinColumn(name = "word"), inverseJoinColumns = @JoinColumn(name = "clazz"))
     private Set<WordClazz> clazzes;
 
@@ -57,7 +58,7 @@ public class Word extends BaseElement {
     @Format("replaceString")
     @ExcelHeader(value = 5, notEmpty = true)
     @Column
-    @NotBlank
+    @NotEmpty
     @Length(max = 255)
     private String definition;
 

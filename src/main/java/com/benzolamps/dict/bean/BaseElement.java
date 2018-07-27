@@ -28,9 +28,8 @@ public abstract class BaseElement extends BaseEntity {
     protected Integer index;
 
     /** 词库 */
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "library", nullable = false, updatable = false)
-    @NotNull
     protected Library library;
 
     /* 已掌握该单词 (短语) 的学生 */

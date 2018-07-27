@@ -13,5 +13,5 @@ import java.util.List;
  */
 public interface WordDao extends BaseDao<Word> {
 
-    List<Word> searchWords(Integer start, Integer end, String defination, WordClazz clazz);
+    List<Word> searchWords(Integer start, Integer end, String definition, WordClazz clazz);
 }

@@ -26,26 +26,26 @@ public class YamlParser implements TemplateMethodModelEx {
 
     /** 资源类型 */
     @Setter
-    @NonNull
     private ResourceType resourceType;
 
     @Value("#{new org.yaml.snakeyaml.Yaml()}")
     private Yaml yaml;
 
-    /** 构造器, 默认资源类型为String */
     public YamlParser() {
-        resourceType = ResourceType.STRING;
+        this.resourceType = ResourceType.STRING;
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public Object exec(List arguments) {
-        Assert.notEmpty(arguments);
+        Assert.notNull(resourceType, "resource type不能为空");
+        Assert.notEmpty(arguments, "arguments不能为空");
         String str = arguments.get(0).toString();
+        Assert.notNull(str, "arguments[0]不能为null或空");
         return DictLambda.tryFunc(() -> execInternal(str));
     }
 
-    private Object execInternal(@NonNull String str) throws Exception {
+    private Object execInternal(String str) throws Exception {
         switch (resourceType) {
             case STRING:
                 return yaml.load(str);

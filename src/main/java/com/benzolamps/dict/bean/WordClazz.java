@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,7 +28,7 @@ public class WordClazz extends BaseEntity {
 
     /** 名字 */
     @Column(nullable = false)
-    @NotBlank
+    @NotEmpty
     @Length(max = 255)
     private String name;
 

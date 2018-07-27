@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +32,7 @@ public class Phrase extends BaseElement {
     /** 短语原形 */
     @ExcelHeader(value = 1, notEmpty = true)
     @Column(nullable = false)
-    @NotBlank
+    @NotEmpty
     @Length(max = 255)
     private String prototype;
 
@@ -39,7 +40,7 @@ public class Phrase extends BaseElement {
     @Format("replaceString")
     @ExcelHeader(value = 2, notEmpty = true)
     @Column(nullable = false)
-    @NotBlank
+    @NotEmpty
     @Length(max = 255)
     private String definition;
 

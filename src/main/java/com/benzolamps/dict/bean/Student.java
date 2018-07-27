@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,29 +26,28 @@ public class Student extends BaseEntity {
 
     /** 学号 */
     @Column(nullable = false, updatable = false)
-    @NotBlank
+    @NotEmpty
     @Length(max = 20)
     private String number;
 
     /** 姓名 */
     @Column(nullable = false)
-    @NotBlank
+    @NotEmpty
     @Length(max = 20)
     private String name;
 
     /** 主要学习的词库 */
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "major", updatable = false, nullable = false)
-    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "major")
     private Library major;
 
     /** 已掌握的单词 */
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "dict_sw", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
     private Set<Word> masteredWords;
 
     /** 已掌握的短语 */
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "dict_sp", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     private Set<Phrase> masteredPhrases;
 }

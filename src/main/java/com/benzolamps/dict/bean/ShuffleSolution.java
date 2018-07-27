@@ -3,6 +3,7 @@ package com.benzolamps.dict.bean;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -25,12 +26,12 @@ public class ShuffleSolution implements Serializable {
     private Long id;
 
     /** 名称 */
-    @NotBlank
+    @NotEmpty
     @Length(max = 20)
     private String name;
 
     /** 乱序策略类 */
-    @NotBlank
+    @NotEmpty
     private String strategyClass;
 
     /** 属性 */

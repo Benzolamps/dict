@@ -16,11 +16,11 @@ public class BaseController {
 
     /**
      * 转换数据
-     * @param page 集合
+     * @param data 数据
      * @return DataVo
      */
-    protected DataVo wrapperData(Page page) {
-        return new DataVo(page);
+    protected DataVo wrapperData(Object data) {
+        return new DataVo(data);
     }
 
     /**

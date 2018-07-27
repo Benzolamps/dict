@@ -1,6 +1,7 @@
 package com.benzolamps.dict.util;
 
 import com.benzolamps.dict.exception.DictException;
+import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import javax.tools.*;
@@ -145,6 +146,7 @@ public class DynamicClass {
      * @param classPath 类加载路径
      */
     public DynamicClass(String classPath) {
+        Assert.notNull(classPath, "class path不能为null");
         if (compiler == null) {
             throw new DictException("需要tools.jar");
         }
@@ -160,6 +162,7 @@ public class DynamicClass {
      * @return 类对象
      */
     public Class<?> loadDynamicClass(String className) {
+        Assert.hasLength(className, "class name不能为null或空");
         this.compile();
         return dynamicClassSet.stream().filter(clazz -> className.equals(clazz.getName())).findFirst().get();
     }

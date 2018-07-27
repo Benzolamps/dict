@@ -1,5 +1,7 @@
 package com.benzolamps.dict.util;
 
+import org.springframework.util.Assert;
+
 public class DictString {
 
 
@@ -9,6 +11,7 @@ public class DictString {
      * @return 转换后
      */
     public static String toCamel(String origin) {
+        Assert.hasLength(origin, "origin不能为null或空");
         StringBuilder sb = new StringBuilder();
         if (origin.contains("-") || origin.contains("_")) {
             origin = origin.toLowerCase();

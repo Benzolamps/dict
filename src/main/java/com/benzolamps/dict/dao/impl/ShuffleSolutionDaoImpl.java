@@ -6,7 +6,6 @@ import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.NonNull;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -46,13 +45,14 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
 
     @Override
     public ShuffleSolution find(Long id) {
+        Assert.notNull(id, "id不能为null");
         return solutions.getSolutions().stream().filter(solution -> solution.getId().equals(id)).findFirst().get();
     }
 
     @Override
-    public ShuffleSolution persist(@NonNull ShuffleSolution shuffleSolution) {
-
-        Assert.isNull(shuffleSolution.getId());
+    public ShuffleSolution persist(ShuffleSolution shuffleSolution) {
+        Assert.notNull(shuffleSolution, "shuffle solution不能为null");
+        Assert.isNull(shuffleSolution.getId(), "shuffle solution必须为新建对象");
 
         Long id = 0L;
         for (val solution : solutions.getSolutions()) {
@@ -66,9 +66,8 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
 
     @Override
     public ShuffleSolution update(ShuffleSolution shuffleSolution) {
-
-        Assert.notNull(shuffleSolution);
-        Assert.state(shuffleSolution.getId() != null);
+        Assert.notNull(shuffleSolution, "shuffle solution不能为null");
+        Assert.notNull(shuffleSolution.getId(), "shuffle solution不能为新建对象");
         val ref = solutions.getSolutions().stream()
             .filter(solution -> solution.getId().equals(shuffleSolution.getId())).findFirst().get();
         ref.setName(shuffleSolution.getName());
@@ -80,8 +79,8 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
 
     @Override
     public void remove(ShuffleSolution shuffleSolution) {
-        Assert.notNull(shuffleSolution);
-        Assert.state(shuffleSolution.getId() != null);
+        Assert.notNull(shuffleSolution, "shuffle solution不能为null");
+        Assert.notNull(shuffleSolution.getId(), "shuffle solution不能为新建对象");
         val ref = solutions.getSolutions().stream()
             .filter(solution -> solution.getId().equals(shuffleSolution.getId())).findFirst().get();
         solutions.getSolutions().remove(ref);

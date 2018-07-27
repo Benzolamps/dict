@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.dao.base.BaseDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.KeyValuePairs;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
@@ -20,7 +21,8 @@ import java.util.Map;
  * @version 2.1.1
  * @datetime 2018-7-1 18:30:10
  */
-@SuppressWarnings({"deprecation", "unchecked"})
+@Slf4j
+@SuppressWarnings("unchecked")
 public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
 	/** 实体类类型 */
@@ -45,9 +47,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
 	@Override
 	public T find(Integer id) {
-		if (id == null) {
-			return null;
-		}
+        Assert.notNull(id, "id不能为空");
 		return entityManager.find(entityClass, id);
 	}
 
@@ -60,6 +60,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public T findSingle(CriteriaQuery<T> criteriaQuery) {
+        Assert.notNull(criteriaQuery, "criteria query不能为空");
 	    try {
             return entityManager.createQuery(criteriaQuery).getSingleResult();
         } catch (NoResultException | NonUniqueResultException e) {
@@ -84,18 +85,23 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public List<T> findList(Filter filter, Collection<Order> orders) {
-        return findList(filter, orders.toArray(new Order[0]));
+	    Order[] orderArray = orders == null ? new Order[0] : orders.toArray(new Order[0]);
+        return findList(filter, orderArray);
     }
 
     @Override
     public List<T> findList(String jpql, Map<String, Object> parameters) {
+	    Assert.hasLength(jpql, "jpql不能为空或null");
+	    logger.info("jpql: " + jpql);
         TypedQuery<T> query = entityManager.createQuery(jpql, entityClass);
-        parameters.forEach(query::setParameter);
+        if (parameters != null) parameters.forEach(query::setParameter);
         return query.getResultList();
     }
 
     @Override
     public List<T> findList(String jpql, KeyValuePairs<String, Object>... parameters) {
+        Assert.hasLength(jpql, "jpql不能为空或null");
+        logger.info("jpql: " + jpql);
         TypedQuery<T> query = entityManager.createQuery(jpql, entityClass);
         Arrays.stream(parameters).forEach(pairs -> query.setParameter(pairs.getKey(), pairs.getValue()));
         return query.getResultList();
@@ -103,15 +109,17 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public List<T> findList(CriteriaQuery<T> criteriaQuery) {
+	    Assert.notNull(criteriaQuery, "criteria query不能为空");
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
     @Override
-	public Page<T> findPage(DictQuery<T> query, Pageable pageable) {
-        query.applyOrders(pageable.getOrders().toArray(new Order[0]));
-        long total = query.getCountQuery(entityManager).getSingleResult();
-        if (pageable != null) pageable.getSearches().forEach(query::applySearch);
-        TypedQuery<T> typedQuery = query.getTypedQuery(entityManager);
+	public Page<T> findPage(DictQuery<T> dictQuery, Pageable pageable) {
+        Assert.notNull(dictQuery, " dict query不能为空");
+        dictQuery.applyOrders(pageable.getOrders().toArray(new Order[0]));
+        long total = dictQuery.getCountQuery(entityManager).getSingleResult();
+        if (pageable != null) pageable.getSearches().forEach(dictQuery::applySearch);
+        TypedQuery<T> typedQuery = dictQuery.getTypedQuery(entityManager);
         if (pageable != null) {
             if (pageable.getPageNumber() != -1) {
                 int totalPages = (int) Math.ceil((double) total / (double) pageable.getPageSize());
@@ -129,30 +137,32 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
 	public T persist(T entity) {
-		Assert.notNull(entity);
+		Assert.notNull(entity, "entity不能为空");
+		Assert.isTrue(entity.isNew(), "entity必须为新建对象");
 		entityManager.persist(entity);
         return entity;
 	}
 
     @Override
     public T update(T entity) {
-        Assert.notNull(entity);
+        Assert.notNull(entity, "entity不能为空");
+        Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
         entityManager.merge(entity);
         return entity;
     }
 
     @Override
 	public void remove(T entity) {
-		if (entity != null) {
-			entityManager.remove(entity);
-		}
+        Assert.notNull(entity, "entity不能为空");
+        Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
+	    entityManager.remove(entity);
 	}
 
 	@Override
 	public T detach(T entity) {
-		if (entity != null) {
-			entityManager.detach(entity);
-		}
+        Assert.notNull(entity, "entity不能为空");
+        Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
+        entityManager.detach(entity);
 		return entity;
 	}
 }

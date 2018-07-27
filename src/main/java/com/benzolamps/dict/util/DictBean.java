@@ -21,7 +21,7 @@ import java.util.function.BiConsumer;
  * @version 2.1.1
  * @datetime 2018-7-1 14:48:25
  */
-@SuppressWarnings({"unused", "deprecation"})
+@SuppressWarnings("unused")
 @Getter
 public class DictBean<B> {
 
@@ -48,7 +48,7 @@ public class DictBean<B> {
      * @param type 类型
      */
     public DictBean(Class<B> type) {
-        Assert.notNull(type);
+        Assert.notNull(type, "type不能为null");
         this.type = type;
         this.methods = internalGetMethods();
         this.fields = internalGetFields();
@@ -93,7 +93,7 @@ public class DictBean<B> {
      * @return DictProperty
      */
     public DictProperty getProperty(String name) {
-        Assert.hasLength(name);
+        Assert.hasLength(name, "name不能为null或空");
         return new DictProperty(name, this);
     }
 
@@ -104,7 +104,7 @@ public class DictBean<B> {
      * @return Method
      */
     public Method getMethod(String name, Class<?>... paramTypes) {
-        Assert.hasLength(name);
+        Assert.hasLength(name, "name不能为null或空");
         return BeanUtils.findMethod(type, name, paramTypes);
     }
 
@@ -114,7 +114,7 @@ public class DictBean<B> {
      * @return Field
      */
     public Field getField(String name) {
-        Assert.hasLength(name);
+        Assert.hasLength(name, "name不能为null或空");
         return internalGetField(type, name);
     }
 
@@ -135,13 +135,13 @@ public class DictBean<B> {
 
     /**
      * 获取指定注解
-     * @param aClass 注解类型
+     * @param annoClass 注解类型
      * @param <A> 注解类型
      * @return 注解对象
      */
-    public <A extends Annotation> A getAnnotation(Class<A> aClass) {
-        Assert.notNull(aClass);
-        return type.getAnnotation(aClass);
+    public <A extends Annotation> A getAnnotation(Class<A> annoClass) {
+        Assert.notNull(annoClass, "anno class不能为null");
+        return type.getAnnotation(annoClass);
     }
 
     /**
@@ -151,8 +151,8 @@ public class DictBean<B> {
      * @param <A> 注解类型
      */
     public <A extends Annotation> void forEachAnnotatedMethod(Class<A> annoClazz, BiConsumer<Method, A> action) {
-        Assert.notNull(annoClazz);
-        Assert.notNull(action);
+        Assert.notNull(annoClazz, "anno class不能为null");
+        Assert.notNull(action, "action不能为null");
         for (Method method : methods) {
             if (method.isAnnotationPresent(annoClazz)) {
                 A anno = method.getDeclaredAnnotation(annoClazz);
@@ -168,8 +168,8 @@ public class DictBean<B> {
      * @param <A> 注解类型
      */
     public <A extends Annotation> void forEachAnnotatedProperty(Class<A> annoClazz, BiConsumer<DictProperty, A> action) {
-        Assert.notNull(annoClazz);
-        Assert.notNull(action);
+        Assert.notNull(annoClazz, "anno class不能为null");
+        Assert.notNull(action, "action不能为null");
         getProperties().stream()
             .filter(dictProperty -> dictProperty.hasAnnotation(annoClazz))
             .forEach(dictProperty -> action.accept(dictProperty, dictProperty.getAnnotation(annoClazz)));
@@ -183,6 +183,7 @@ public class DictBean<B> {
      */
     @SuppressWarnings({"deprecation", "unchecked"})
     public B createSpringBean(ConfigurableApplicationContext context, Properties properties) {
+        Assert.notNull(context, "context不能为null");
         properties = properties == null ? new Properties() : properties;
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(type);
@@ -199,7 +200,7 @@ public class DictBean<B> {
      * @return DictBean对象
      */
     public B createBean(Properties properties) {
-        Assert.isTrue(instantiable());
+        Assert.isTrue(instantiable(), "类必须是可实例化的");
         final B obj = BeanUtils.instantiate(type);
         properties = properties == null ? new Properties() : properties;
         properties.forEach((key, value) -> getProperty(key.toString()).set(obj, value));

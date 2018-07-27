@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,28 +26,24 @@ public class Library extends BaseEntity {
 
     /** 名字 */
     @Column(nullable = false)
-    @NotBlank
+    @NotEmpty
     @Length(max = 20)
     private String name;
 
     /** 描述 */
     @Column
-    @NotBlank
     @Length(max = 50)
     private String description;
 
     /** 词库中的单词 */
-    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @NotNull
+    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)
     private Set<Word> words;
 
     /** 词库中的短语 */
     @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)
-    @NotNull
     private Set<Phrase> phrases;
 
     /** 正在学习该词库的学生 */
-    @OneToMany(mappedBy = "major", fetch = FetchType.LAZY)
-    @NotNull
+    @OneToMany(mappedBy = "major")
     private Set<Student> students;
 }

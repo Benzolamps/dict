@@ -1,5 +1,7 @@
 package com.benzolamps.dict.util;
 
+import org.springframework.util.Assert;
+
 /**
  * Web工具类
  * @author Benzolamps
@@ -14,6 +16,7 @@ public interface DictWeb {
      * @return content type
      */
     static String convertContentType(String extension) {
+        Assert.hasLength(extension, "extension不能为null或空");
         switch (extension.toLowerCase()) {
             case "css":
                 return "text/css";

@@ -3,6 +3,7 @@ package com.benzolamps.dict.dao.core;
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.util.DictString;
 import org.springframework.core.ResolvableType;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -44,12 +45,14 @@ public abstract class GeneratedDictQuery<B extends BaseEntity> implements DictQu
 
     @Override
     public void applySearch(Search search) {
-        filter.and(Filter.like(search.getField(), '%' + String.valueOf(search.getValue()) + '%'));
+        if (search != null) {
+            filter.and(Filter.like(search.getField(), '%' + String.valueOf(search.getValue()) + '%'));
+        }
     }
 
     @Override
     public TypedQuery<B> getTypedQuery(EntityManager entityManager) {
-
+        Assert.notNull(entityManager, "entity manager不能为空");
         String classSimpleName = entityClass.getSimpleName();
         String alias = DictString.toCamel(classSimpleName);
         String jpql = select(alias);
@@ -62,7 +65,7 @@ public abstract class GeneratedDictQuery<B extends BaseEntity> implements DictQu
 
     @Override
     public TypedQuery<Long> getCountQuery(EntityManager entityManager) {
-
+        Assert.notNull(entityManager, "entity manager不能为空");
         String jpql = select("count(*)");
         TypedQuery<Long> typedQuery = entityManager.createQuery(jpql, Long.class);
         for (int i = 0; i < filter.getParameters().size(); i++) {
@@ -72,6 +75,7 @@ public abstract class GeneratedDictQuery<B extends BaseEntity> implements DictQu
     }
 
     private String select(String field) {
+        Assert.hasLength(field, "entity manager不能为空或null");
         String classSimpleName = entityClass.getSimpleName();
         String alias = DictString.toCamel(classSimpleName);
         StringJoiner jpql = new StringJoiner(" ");
@@ -89,6 +93,7 @@ public abstract class GeneratedDictQuery<B extends BaseEntity> implements DictQu
      * @param filter 条件
      */
     public void setFilter(Filter filter) {
+        if (filter == null) filter = new Filter();
         filter.and(filter);
     }
 }

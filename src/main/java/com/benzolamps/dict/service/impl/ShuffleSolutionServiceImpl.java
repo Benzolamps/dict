@@ -11,6 +11,7 @@ import com.benzolamps.dict.util.DictMap;
 import com.benzolamps.dict.util.DynamicClass;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,12 +60,14 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("availableCopyStrategyNames")
     public Set<String> getAvailableCopyStrategyNames() {
         return availableStrategySetups.stream().map(Class::getName).collect(Collectors.toSet());
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("defaultSolutionInstance")
     public IShuffleStrategySetup getDefaultSolutionInstance() {
         ShuffleSolution shuffleSolution = new ShuffleSolution();
         shuffleSolution.setStrategyClass("rose.RoseShuffleStrategySetup");
@@ -80,12 +83,14 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("solutionInstanceAt")
     public IShuffleStrategySetup getSolutionInstanceAt(Long id) {
         return apply(shuffleSolutionDao.find(id));
     }
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("solutions")
     public Page<ShuffleSolution> getSolutions() {
         return shuffleSolutionDao.findAll();
     }
@@ -105,12 +110,12 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
         shuffleSolutionDao.remove(shuffleSolution);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
+    @Transactional(readOnly = true)
+    @Cacheable("shuffleSolutionPropertyInfo")
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
-        System.out.println(getAvailableCopyStrategyNames());
-        System.out.println(className);
-        Assert.isTrue(getAvailableCopyStrategyNames().contains(className));
+        Assert.hasLength(className, "class name不能为null或空");
+        Assert.isTrue(getAvailableCopyStrategyNames().contains(className), "class name不存在");
         val strategyClass = dictDynamicClass.loadDynamicClass(className);
         return DictPropertyInfoVo.applyDictPropertyInfo(strategyClass);
     }

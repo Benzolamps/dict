@@ -72,6 +72,7 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public Filter and(Filter another) {
+        Assert.notNull(another, "another不能为null");
         if (!another.snippets.isEmpty()) {
             if (snippets.isEmpty()) snippets.add(new OperatorSnippet("1 = 1"));
             snippets.add(new OperatorSnippet("and ("));
@@ -87,6 +88,7 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public Filter or(Filter another) {
+        Assert.notNull(another, "another不能为null");
         if (!another.snippets.isEmpty()) {
             if (snippets.isEmpty()) snippets.add(new OperatorSnippet("1 = 1"));
             snippets.add(new OperatorSnippet("or ("));
@@ -113,7 +115,7 @@ public class Filter implements Serializable {
      */
     @SuppressWarnings("deprecation")
     public void build(String alias) {
-        Assert.hasLength(alias);
+        Assert.hasLength(alias, "alias不能为null或空");
         if (snippets.isEmpty()) snippets.add(new OperatorSnippet("1 = 1"));
         parameters = new ArrayList<>();
         snippet = new StringJoiner(" ");
@@ -168,6 +170,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter eq(String field, Object value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.notNull(value, "value不能为null");
         return binary(field, "=", value);
     }
 
@@ -178,6 +182,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter eqic(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binaryIgnoreCase(field, "=", value);
     }
 
@@ -188,6 +194,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter neq(String field, Object value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.notNull(value, "value不能为null");
         return binary(field, "<>", value);
     }
 
@@ -198,6 +206,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter neqic(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binaryIgnoreCase(field, "<>", value);
     }
 
@@ -208,6 +218,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter lt(String field, Object value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.notNull(value, "value不能为null");
         return binary(field, "<", value);
     }
 
@@ -218,6 +230,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter ltic(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binaryIgnoreCase(field, "<", value);
     }
 
@@ -228,6 +242,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter le(String field, Object value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.notNull(value, "value不能为null");
         return binary(field, "<=", value);
     }
 
@@ -238,6 +254,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter leic(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binaryIgnoreCase(field, "<=", value);
     }
 
@@ -250,6 +268,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter gt(String field, Object value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.notNull(value, "value不能为null");
         return binary(field, ">", value);
     }
 
@@ -260,6 +280,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter gtic(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binaryIgnoreCase(field, ">", value);
     }
 
@@ -270,6 +292,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter ge(String field, Object value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.notNull(value, "value不能为null");
         return binary(field, ">=", value);
     }
 
@@ -280,6 +304,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter geic(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binaryIgnoreCase(field, "<", value);
     }
 
@@ -290,6 +316,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter like(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binary(field, "like", value);
     }
 
@@ -300,6 +328,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter likeIgnoreCase(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binaryIgnoreCase(field, "like", value);
     }
 
@@ -310,6 +340,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter notLike(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binary(field, "not like", value);
     }
 
@@ -320,6 +352,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter notLikeIgnoreCase(String field, String value) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(value, "value不能为null或空");
         return binaryIgnoreCase(field, "not like", value);
     }
 
@@ -330,6 +364,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter in(String field, Collection value) {
+        Assert.hasLength(field, "field不能为null或空");
+        if (value == null) value = new HashSet<>();
         return binary(field, "in", value);
     }
 
@@ -340,6 +376,7 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter inIgnoreCase(String field, Collection<String> value) {
+        Assert.hasLength(field, "field不能为null或空");
         if (value == null) value = new HashSet<>();
         else value = value.stream().map(String::toLowerCase).collect(Collectors.toSet());
         return new Filter()
@@ -356,6 +393,8 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter notIn(String field, Collection value) {
+        Assert.hasLength(field, "field不能为null或空");
+        if (value == null) value = new HashSet<>();
         return binary(field, "not in", value);
     }
 
@@ -366,6 +405,7 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter notInIgnoreCase(String field, Collection<String> value) {
+        Assert.hasLength(field, "field不能为null或空");
         if (value == null) value = new HashSet<>();
         else value = value.stream().map(String::toLowerCase).collect(Collectors.toSet());
         return new Filter()
@@ -383,6 +423,9 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter betweenAnd(String field, Object left, Object right) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.notNull(left, "left不能为null");
+        Assert.notNull(right, "right不能为null");
         return new Filter()
             .addSnippet(new FieldSnippet(field))
             .addSnippet(new OperatorSnippet("between"))
@@ -399,6 +442,9 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter betweenAndIgnoreCase(String field, String left, String right) {
+        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasLength(left, "left不能为null或空");
+        Assert.hasLength(right, "right不能为null或空");
         return new Filter()
             .addSnippet(new OperatorSnippet("lower("))
             .addSnippet(new FieldSnippet(field))
@@ -415,6 +461,7 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter isNull(String field) {
+        Assert.hasLength(field, "field不能为null或空");
         return new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is null"));
     }
 
@@ -424,6 +471,7 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public static Filter isNotNull(String field) {
+        Assert.hasLength(field, "field不能为null或空");
         return new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is not null"));
     }
 }

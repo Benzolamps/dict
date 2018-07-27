@@ -46,7 +46,6 @@ public class ShuffleSolutionController extends BaseController {
     @PostMapping("/property_info.json")
     @ResponseBody
     protected DataVo propertyInfo(String className) {
-        logger.info(className);
-        return new DataVo(shuffleSolutionService.getShuffleSolutionPropertyInfo(className));
+        return wrapperData(shuffleSolutionService.getShuffleSolutionPropertyInfo(className));
     }
 }

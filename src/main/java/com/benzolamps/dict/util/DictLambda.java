@@ -1,6 +1,7 @@
 package com.benzolamps.dict.util;
 
 import com.benzolamps.dict.exception.DictException;
+import org.springframework.util.Assert;
 
 import java.util.function.*;
 
@@ -18,6 +19,7 @@ public interface DictLambda {
      * @param action action
      */
     static void tryAction(Action action) {
+        Assert.notNull(action, "action不能为null");
         try {
             action.execute();
         } catch (RuntimeException | Error e) {
@@ -34,6 +36,7 @@ public interface DictLambda {
      * @return 返回值
      */
     static <R> R tryFunc(Func<R> func) {
+        Assert.notNull(func, "func不能为null");
         try {
             return func.execute();
         } catch (RuntimeException | Error e) {

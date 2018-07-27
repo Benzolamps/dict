@@ -1,8 +1,8 @@
 package com.benzolamps.dict.controller.vo;
 
-import com.benzolamps.dict.dao.core.Page;
 import lombok.Getter;
 
+import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -27,28 +27,26 @@ public class DataVo extends BaseVo {
     private final Long count;
 
     /** 数据 */
-    private final Collection data;
+    private final Object data;
 
     /**
      * 构造器
      * @param data 数据
      */
-    public DataVo(Page data) {
-        this.count = (long) data.getContent().size();
-        this.data = data.getContent();
-        this.code = 0;
-        this.msg = "";
-    }
-
-    /**
-     * 构造器
-     * @param data 数据
-     */
-    public DataVo(Collection data) {
-        this.count = (long) data.size();
+    public DataVo(Object data) {
         this.data = data;
+        if (data == null) {
+            this.count = null;
+        } else if (data.getClass().isArray()) {
+            this.count = (long) Array.getLength(data);
+        }
+        else if (Collection.class.isAssignableFrom(data.getClass())) {
+            this.count = (long) ((Collection) data).size();
+        } else {
+            this.count = null;
+        }
         this.code = 0;
-        this.msg = "";
+        this.msg = null;
     }
 
     /**
@@ -57,9 +55,9 @@ public class DataVo extends BaseVo {
      * @param code 状态码
      */
     public DataVo(String msg, Byte code) {
-        this.msg = msg;
+        this.data = null;
+        this.count = null;
         this.code = code;
-        this.data = new HashSet();
-        this.count = 0L;
+        this.msg = msg == null ? "" : msg;
     }
 }

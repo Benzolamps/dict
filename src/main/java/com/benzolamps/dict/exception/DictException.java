@@ -8,10 +8,13 @@ import lombok.NoArgsConstructor;
  * @version 1.1.1
  * @datetime 2018年6月9日16:45:35
  */
-@NoArgsConstructor
 public class DictException extends RuntimeException {
 
     private static final long serialVersionUID = 6844909847465796221L;
+
+    public DictException() {
+        super();
+    }
 
     public DictException(String message) {
         super(message);
