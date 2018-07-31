@@ -3,7 +3,6 @@ package com.benzolamps.dict.cfg.freemarker;
 import com.benzolamps.dict.util.DictLambda;
 import com.benzolamps.dict.util.ResourceType;
 import freemarker.template.TemplateMethodModelEx;
-import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;

@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 @Service
 public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
+    private static final String CACHE_NAME = "shuffle_solution";
+
     /* 动态类加载器 */
     @Value("#{new com.benzolamps.dict.util.DynamicClass('${system.universe_path}')}")
     private DynamicClass dictDynamicClass;
@@ -60,14 +62,14 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable("availableCopyStrategyNames")
+    @Cacheable(value = CACHE_NAME, key = "#root.method")
     public Set<String> getAvailableCopyStrategyNames() {
         return availableStrategySetups.stream().map(Class::getName).collect(Collectors.toSet());
     }
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable("defaultSolutionInstance")
+    @Cacheable(value = CACHE_NAME, key = "#root.method")
     public IShuffleStrategySetup getDefaultSolutionInstance() {
         ShuffleSolution shuffleSolution = new ShuffleSolution();
         shuffleSolution.setStrategyClass("rose.RoseShuffleStrategySetup");
@@ -83,14 +85,14 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable("solutionInstanceAt")
+    @Cacheable(value = CACHE_NAME, key = "#root.method + #id")
     public IShuffleStrategySetup getSolutionInstanceAt(Long id) {
         return apply(shuffleSolutionDao.find(id));
     }
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable("solutions")
+    @Cacheable(value = CACHE_NAME, key = "#root.method")
     public Page<ShuffleSolution> getSolutions() {
         return shuffleSolutionDao.findAll();
     }
@@ -112,7 +114,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable("shuffleSolutionPropertyInfo")
+    @Cacheable(value = CACHE_NAME, key = "#root.method + #className")
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
         Assert.hasLength(className, "class name不能为null或空");
         Assert.isTrue(getAvailableCopyStrategyNames().contains(className), "class name不存在");

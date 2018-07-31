@@ -8,7 +8,6 @@ import freemarker.template.TemplateDirectiveModel;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
 import freemarker.template.utility.DeepUnwrap;
-import lombok.Cleanup;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
