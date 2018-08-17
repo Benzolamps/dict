@@ -27,6 +27,18 @@ dict.postHref = function (url, data) {
     return form;
 };
 
+dict.$name = function (selector) {
+    return dict.$single(selector)[0].localName.toLowerCase();
+};
+
+dict.$single = function (selector) {
+    var $selector = $(selector);
+    dict.assert($selector.length > 0, '元素为空!');
+    dict.assert($selector.length <= 1, '元素不唯一!');
+    return $selector.first();
+};
+
+
 (function ($, dict) {
     // noinspection SpellCheckingInspection
     var defaultOptions = {

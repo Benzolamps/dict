@@ -17,7 +17,6 @@ import java.util.Date;
 public final class DictEntityListener {
 
     /* 监听实体类数据格式 */
-    @SuppressWarnings("unchecked")
     private void format(BaseEntity bean) {
         DictBean<? extends BaseEntity> dictBean = new DictBean<>(bean.getClass());
         dictBean.forEachAnnotatedProperty(Format.class, (Action2<DictProperty, Format>) (property, format) -> {

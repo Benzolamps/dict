@@ -29,7 +29,7 @@
     </form>
   </div>
 </div>
-
+    <script type="text/javascript" src="${base_url}/res/js/dynamic-form.js"></script>
 <script type="text/javascript">
   layui.use('form', function(){
     var form = layui.form;
@@ -40,31 +40,16 @@
     });
 
     form.on('select(strategy-class)', function (data) {
-      dict.loadText({
-        url: 'property_info.json',
-        data: {
-          className: data.value
-        },
-        dataType: 'json',
-        success: function (data) {
-          var $table = $('.shuffle-strategy-table');
-          $table.html('');
-          console.log(data.count);
-          for (var i = 0; i < data.count; i++) {
-            var ele = '<tr>';
-            ele += '<th>' + data.data[i].display + '</th>';
-            ele += '<td>' + '<input type="text" name="' + data.data[i].name +
-              '" required lay-verify="required" placeholder="' + data.data[i].description + '" class="layui-input">';
-            ele += '</td>' + '</tr>';
-            console.log(ele);
-            $table.append(ele);
-          }
-        },
-        error: function () {
-          var $table = $('.shuffle-strategy-table');
-          $table.html('');
-        }
-      });
+      if (data.value == null || data.value == '') {
+
+      }
+
+      dict.dynamicForm(
+        // language=JQuery-CSS
+        '.shuffle-strategy-table',
+        'property_info.json',
+        {className: data.value}
+      );
     });
   });
 </script>
