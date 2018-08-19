@@ -20,6 +20,9 @@
     <link rel="stylesheet" type="text/css" href="${base_url}/res/css/common.css"/>
     <script type="text/javascript" src="${base_url}/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="${base_url}/js/jquery.cookie.js"></script>
+    <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/jquery.validate.js"></script>
+    <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/additional-methods.js"></script>
+    <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/localization/messages_zh.js"></script>
     <script type="text/javascript" src="${base_url}/layui/layui.js"></script>
     <script type="text/javascript" src="${base_url}/layui/lay/modules/layer.js"></script>
     <script type="text/javascript" src="${base_url}/res/js/common.js"></script>

@@ -1,19 +1,25 @@
 package com.benzolamps.dict.controller.vo;
 
-import com.benzolamps.dict.component.DictPropertyInfo;
-import com.benzolamps.dict.util.DictBean;
 import com.benzolamps.dict.component.DictOptions;
+import com.benzolamps.dict.component.DictPropertyInfo;
+import com.benzolamps.dict.component.DictRemote;
+import com.benzolamps.dict.util.DictBean;
+import com.benzolamps.dict.util.DictList;
 import com.benzolamps.dict.util.DictProperty;
 import lombok.Getter;
 import org.apache.commons.lang.enums.EnumUtils;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
@@ -28,7 +34,10 @@ public class DictPropertyInfoVo extends BaseVo {
     private static final long serialVersionUID = -1774782907582679818L;
 
     /* DictProperty */
-    private final DictProperty dictProperty;
+    private final transient DictProperty dictProperty;
+
+    /* DictPropertyInfo */
+    private final transient DictPropertyInfo dictPropertyInfo;
 
     /** 名称 */
     @Getter
@@ -44,10 +53,35 @@ public class DictPropertyInfoVo extends BaseVo {
 
     /** 选项 */
     @Getter
-    private final Collection<String> options;
+    private final Collection<?> options;
 
-    /* DictPropertyInfo */
-    private final DictPropertyInfo dictPropertyInfo;
+    /** 最大值 */
+    @Getter
+    private final Object min;
+
+    /** 最小值 */
+    @Getter
+    private final Object max;
+
+    /** 是否是过去的时间 */
+    @Getter
+    private boolean past;
+
+    /** 是否是将来的时间 */
+    @Getter
+    private final boolean future;
+
+    /** 正则表达式 */
+    @Getter
+    private final String pattern;
+
+    /** 字符串是否可为空 */
+    @Getter
+    private final boolean notEmpty;
+
+    /** 远程验证 */
+    @Getter
+    private final String remote;
 
     /**
      * 构造器
@@ -56,11 +90,18 @@ public class DictPropertyInfoVo extends BaseVo {
     public DictPropertyInfoVo(DictProperty dictProperty) {
         Assert.notNull(dictProperty, "dict property不能为null");
         this.dictProperty = dictProperty;
-        this.name = dictProperty.getName();
-        this.dictPropertyInfo = dictProperty.getAnnotation(DictPropertyInfo.class);
-        this.type = internalGetType();
-        this.defaultValue = internalGetDefaultValue();
-        this.options = internalGetOptions();
+        this.name = this.dictProperty.getName();
+        this.dictPropertyInfo = this.dictProperty.getAnnotation(DictPropertyInfo.class);
+        this.type = this.internalGetType();
+        this.defaultValue = this.internalGetDefaultValue();
+        this.min = this.internalGetMin();
+        this.max = this.internalGetMax();
+        this.options = this.internalGetOptions();
+        this.past = this.internalIsPast();
+        this.future = this.internalIsFuture();
+        this.pattern = this.internalGetPattern();
+        this.notEmpty = this.internalIsNotEmpty();
+        this.remote = this.internalGetRemote();
     }
 
     /** @return 获取展示的名称 */
@@ -127,15 +168,99 @@ public class DictPropertyInfoVo extends BaseVo {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private List<String> internalGetOptions() {
-        if ("string".equals(getType())) {
+    private Object internalGetMax() {
+        Long value = null;
+        if (dictProperty.hasAnnotation(Max.class)) {
+            value = dictProperty.getAnnotation(Max.class).value();
+        } else if (dictProperty.hasAnnotation(Range.class)) {
+            value = dictProperty.getAnnotation(Range.class).max();
+        }
+
+        if (value != null) {
+            if ("char".equals(getType())) {
+                return (char) (long) value;
+            } else if ("integer".equals(getType()) || "float".equals(getType())) {
+                return value;
+            }
+        }
+        return value;
+    }
+
+    private Object internalGetMin() {
+        Long value = null;
+        if (dictProperty.hasAnnotation(Min.class)) {
+            value = dictProperty.getAnnotation(Min.class).value();
+        } else if (dictProperty.hasAnnotation(Range.class)) {
+            value = dictProperty.getAnnotation(Range.class).min();
+        }
+
+        if (value != null) {
+            if ("char".equals(getType())) {
+                return (char) (long) value;
+            } else if ("integer".equals(getType()) || "float".equals(getType())) {
+                return value;
+            }
+        }
+        return value;
+    }
+
+    private List<?> internalGetOptions() {
+        if (Arrays.asList("string", "integer", "float", "char", "date").contains(getType())) {
             if (dictProperty.hasAnnotation(DictOptions.class)) {
-                return Arrays.stream(dictProperty.getAnnotation(DictOptions.class).value()).collect(Collectors.toList());
+                Stream<String> values = Arrays.stream(dictProperty.getAnnotation(DictOptions.class).value());
+                if ("integer".equals(getType())) {
+                    return values.map(Long::valueOf).sorted().collect(Collectors.toList());
+                } else if ("float".equals(getType())) {
+                    return values.map(Double::valueOf).sorted().collect(Collectors.toList());
+                } else {
+                    return values.sorted().collect(Collectors.toList());
+                }
+            } else if ("integer".equals(getType()) || "char".equals(getType())) {
+                if (getMax() != null && getMin() != null) {
+                    if ("integer".equals(getType())) {
+                        long max = (Long) getMax();
+                        long min = (Long) getMin();
+                        if (max - min > 0 && max - min <= 100) {
+                            return DictList.range(min, max + 1);
+                        }
+                    } else if ("char".equals(getType())) {
+                        char max = (Character) getMax();
+                        char min = (Character) getMin();
+                        if (max - min > 0 && max - min <= 100) {
+                            return DictList.range(min, max + 1).stream().map(chr -> String.valueOf((char) (long) chr)).collect(Collectors.toList());
+                        }
+                    }
+                }
             }
         } else if ("enum".equals(getType())) {
             List<?> enumList = EnumUtils.getEnumList(dictProperty.getType());
             return enumList.stream().map(Object::toString).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    private boolean internalIsPast() {
+        return dictProperty.hasAnnotation(Past.class);
+    }
+
+    private boolean internalIsFuture() {
+        return dictProperty.hasAnnotation(Future.class);
+    }
+
+    private boolean internalIsNotEmpty() {
+        return dictProperty.hasAnnotation(NotEmpty.class);
+    }
+
+    private String internalGetPattern() {
+        if (dictProperty.hasAnnotation(Pattern.class)) {
+            return dictProperty.getAnnotation(Pattern.class).regexp();
+        }
+        return null;
+    }
+
+    private String internalGetRemote() {
+        if (dictProperty.hasAnnotation(DictRemote.class)) {
+            return dictProperty.getAnnotation(DictRemote.class).value();
         }
         return null;
     }
@@ -146,7 +271,6 @@ public class DictPropertyInfoVo extends BaseVo {
      * @param <T> 类型
      * @return 自定义属性的集合
      */
-    @SuppressWarnings("deprecation")
     public static <T> Collection<DictPropertyInfoVo> applyDictPropertyInfo(Class<T> clazz) {
         Assert.notNull(clazz, "clazz不能为null");
         DictBean<T> bean = new DictBean<>(clazz);

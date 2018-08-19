@@ -38,4 +38,47 @@
         options.data = {pattern: options.pattern};
         dict.rtText(selector, options);
     }
+
+    /**
+     * 获取元素名称
+     * @param selector {*} 选择器
+     * @returns {string} 名称
+     */
+    dict.$name = function (selector) {
+        return dict.$single(selector)[0].localName.toLowerCase();
+    };
+
+    /**
+     * 获取元素的唯一一个
+     * @param selector {*} 选择器
+     * @returns jQuery元素
+     */
+    dict.$single = function (selector) {
+        var $selector = $(selector);
+        dict.assert($selector.length > 0, '元素为空!');
+        dict.assert($selector.length <= 1, '元素不唯一!');
+        return $selector.first();
+    };
+
+    /**
+     * 将表单元素序列化成对象
+     * @param selector {*} 选择器
+     * @return {Object} 对象
+     */
+    dict.serializeObject = function (selector) {
+        var $form = $(selector);
+        var object = {};
+        $.each($form.serializeArray(), function (index, item) {
+            var value = object[item.name];
+            if (value && $.isArray(value)) {
+                value.push(item.value);
+            } else if (value && !$.isArray(value)) {
+                value = [value];
+                value.push(item.value);
+            } else {
+                object[item.name] = item.value;
+            }
+        });
+        return object;
+    }
 })(jQuery, dict);

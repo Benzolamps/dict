@@ -17,7 +17,7 @@ public interface DictList {
      * @param length length
      * @return 序列
      */
-    static List<Integer> range(int length) {
+    static List<Long> range(long length) {
         return range(0, length);
     }
 
@@ -27,10 +27,10 @@ public interface DictList {
      * @param max max
      * @return 序列
      */
-    static List<Integer> range(int min, int max) {
-        List<Integer> list = new ArrayList<>();
+    static List<Long> range(long min, long max) {
+        List<Long> list = new ArrayList<>();
 
-        for (int i = min; i < max; i++) {
+        for (long i = min; i < max; i++) {
             list.add(i);
         }
 

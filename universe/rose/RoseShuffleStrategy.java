@@ -24,10 +24,10 @@ public class RoseShuffleStrategy implements IShuffleStrategy {
     private RoseShuffleStrategySetup setup;
 
     /* 生成策略供应 */
-    private Iterator<Supplier<Iterator<Integer>>> supplier;
+    private Iterator<Supplier<Iterator<Long>>> supplier;
 
     /* 当前生成的序列 */
-    private Iterator<Integer> currentGroup;
+    private Iterator<Long> currentGroup;
 
     /* 随机数 */
     private Random random;
@@ -52,8 +52,8 @@ public class RoseShuffleStrategy implements IShuffleStrategy {
     }
 
     /* 创建生成策略生成器 */
-    private List<Supplier<Iterator<Integer>>> createSuppliers() {
-        List<Supplier<Iterator<Integer>>> suppliers = new ArrayList<>();
+    private List<Supplier<Iterator<Long>>> createSuppliers() {
+        List<Supplier<Iterator<Long>>> suppliers = new ArrayList<>();
         if (setup.getUnitSize() < 1) {
             suppliers.add(() -> createIterator(0, size, setup.getUnitTipRepeat(), true));
             suppliers.add(() -> createIterator(0, size, setup.getUnitNontipRepeat(), false));
@@ -71,10 +71,10 @@ public class RoseShuffleStrategy implements IShuffleStrategy {
     }
 
     /* 根据序列和重复次数生成一个迭代器 */
-    private Iterator<Integer> createIterator(int start, int end, int repeat, boolean index) {
+    private Iterator<Long> createIterator(int start, int end, int repeat, boolean index) {
         start = DictMath.limit(start, 0, size - 1);
         end = DictMath.limit(end, start + 1, size);
-        List<Integer> map = DictList.range(index ? start : start + size, index ? end : end + size);
+        List<Long> map = DictList.range(index ? start : start + size, index ? end : end + size);
         if (setup.isShuffled()) {
             return new Shuffler<>(map, random, repeat);
         } else {
@@ -96,7 +96,7 @@ public class RoseShuffleStrategy implements IShuffleStrategy {
     @Override
     public Integer next() {
         if (hasNext()) {
-            return (current = currentGroup.next()) % size;
+            return (current = Math.toIntExact(currentGroup.next())) % size;
         } else {
             current = -1;
             throw new NoSuchElementException();
