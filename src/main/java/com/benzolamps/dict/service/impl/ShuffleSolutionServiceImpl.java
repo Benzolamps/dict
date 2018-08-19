@@ -69,7 +69,6 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = CACHE_NAME, key = "#root.method")
     public IShuffleStrategySetup getDefaultSolutionInstance() {
         ShuffleSolution shuffleSolution = new ShuffleSolution();
         shuffleSolution.setStrategyClass("rose.RoseShuffleStrategySetup");
@@ -85,14 +84,12 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = CACHE_NAME, key = "#root.method + #id")
     public IShuffleStrategySetup getSolutionInstanceAt(Long id) {
         return apply(shuffleSolutionDao.find(id));
     }
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = CACHE_NAME, key = "#root.method")
     public Page<ShuffleSolution> getSolutions() {
         return shuffleSolutionDao.findAll();
     }
