@@ -81,28 +81,16 @@
             $(this).attr('type', 'hidden');
         });
 
-        var body = dict.serializeObject($form);
-        var requestBody = {};
-        console.log(body);
-        for (var key in body) {
-          var variable = 'requestBody';
-          var layers = key.split('.');
-          $.each(layers, function (index, item) {
-            dict.assert(/^[$_a-z][$_a-z0-9]*$/i.test(item), '标识符不符合规范');
-            variable += '.' + item;
-            if (index == layers.length - 1) {
-              eval(dict.format('{0} = {1};', variable, dict.singleQuote(body[key])));
-            } else if (!eval(variable)) {
-              eval(dict.format('{0} = {1};', variable, '{}'));
-            }
-          });
-        }
-
         dict.loadText({
           url: $form.attr('action'),
           type: $form.attr('method'),
-          data: requestBody,
-          requestBody: true
+          data: dict.generateObject(dict.serializeObject($form)),
+          requestBody: true,
+          success: function () {
+            var index = parent.layer.getFrameIndex(window.name);
+            layer.close(index);
+            parent.location.reload(true);
+          }
         });
 
         // parent.layer.close(parent.getFrame(window.name));

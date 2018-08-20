@@ -1,16 +1,18 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page" -->
 
 <div class="layui-row">
-  <button class="layui-btn layui-btn-warm layui-btn-sm add">
-    <i class="layui-icon" style="font-size: 20px; color: #FFFFFF">&#xe654; 添加</i>
-  </button>
-  <button class="layui-btn layui-btn-danger layui-btn-sm layui-disabled">
-    <i class="layui-icon" style="font-size: 20px;  color: #FFFFFF">&#xe640; 删除</i>
-  </button>
-  <button class="layui-btn layui-btn-normal layui-btn-sm" onclick=";">
-    <i class="layui-icon" style="font-size: 20px;  color: #FFFFFF">&#xe666; 刷新</i>
-  </button>
-  <table class="layui-table" id="shuffle-solutions"></table>
+  <form class="layui-form list-form" method="post">
+    <button class="layui-btn layui-btn-warm layui-btn-sm add">
+      <i class="layui-icon layui-input" style="font-size: 20px; color: #FFFFFF">&#xe654; 添加</i>
+    </button>
+    <button class="layui-btn layui-btn-danger layui-btn-sm layui-disabled">
+      <i class="layui-icon layui-input" style="font-size: 20px; color: #FFFFFF">&#xe640; 删除</i>
+    </button>
+    <button class="layui-btn layui-btn-normal layui-btn-sm" onclick=";">
+      <i class="layui-icon layui-input" style="font-size: 20px; color: #FFFFFF">&#xe666; 刷新</i>
+    </button>
+    <table class="layui-table" id="shuffle-solutions"></table>
+  </form>
 </div>
 
 <script type="text/html" id="shuffle-solutions-tools">
@@ -32,6 +34,7 @@
       cols: [[
         {type: 'numbers'},
         {type: 'checkbox'},
+        {field: 'id', title: 'id', sort: 'true'},
         {field: 'name', title: '随机方案名称', sort: 'true'},
         {field: 'strategyClass', title: '随机策略名称', sort: 'true'},
         {field: 'remark', title: '备注', sort: 'true'},

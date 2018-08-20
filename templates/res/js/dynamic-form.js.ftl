@@ -274,4 +274,4 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
         onclick: false,
         submitHandler: submitHandler
     })
-}
+};
