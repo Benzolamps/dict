@@ -1,123 +1,30 @@
-{
-  "solutions" : [ {
-    "id" : 1,
-    "name" : "你有毛病",
-    "strategyClass" : "rose.RoseShuffleStrategySetup",
-    "properties" : {
-      "unitSize" : 54,
-      "unitTipRepeat" : 1,
-      "unitNontipRepeat" : 2,
-      "entireTipRepeat" : 2,
-      "entireNontipRepeat" : 1,
-      "shuffled" : true,
-      "shuffleSeedSpecified" : true,
-      "shuffleSeed" : 55
-    },
-    "remark" : "哈哈哈哈"
-  }, {
-    "id" : 8,
-    "name" : "你有毛病",
-    "strategyClass" : "rose.RoseShuffleStrategySetup",
-    "properties" : {
-      "unitSize" : 54,
-      "unitTipRepeat" : 1,
-      "unitNontipRepeat" : 2,
-      "entireTipRepeat" : 2,
-      "entireNontipRepeat" : 1,
-      "shuffled" : true,
-      "shuffleSeedSpecified" : true,
-      "shuffleSeed" : 55
-    },
-    "remark" : "哈哈哈哈"
-  }, {
-    "id" : 7,
-    "name" : "你有毛病",
-    "strategyClass" : "rose.RoseShuffleStrategySetup",
-    "properties" : {
-      "unitSize" : 54,
-      "unitTipRepeat" : 1,
-      "unitNontipRepeat" : 2,
-      "entireTipRepeat" : 2,
-      "entireNontipRepeat" : 1,
-      "shuffled" : true,
-      "shuffleSeedSpecified" : true,
-      "shuffleSeed" : 55
-    },
-    "remark" : "哈哈哈哈"
-  }, {
-    "id" : 6,
-    "name" : "你有毛病",
-    "strategyClass" : "rose.RoseShuffleStrategySetup",
-    "properties" : {
-      "unitSize" : 54,
-      "unitTipRepeat" : 1,
-      "unitNontipRepeat" : 2,
-      "entireTipRepeat" : 2,
-      "entireNontipRepeat" : 1,
-      "shuffled" : true,
-      "shuffleSeedSpecified" : true,
-      "shuffleSeed" : 55
-    },
-    "remark" : "哈哈哈哈"
-  }, {
-    "id" : 5,
-    "name" : "你有毛病",
-    "strategyClass" : "rose.RoseShuffleStrategySetup",
-    "properties" : {
-      "unitSize" : 54,
-      "unitTipRepeat" : 1,
-      "unitNontipRepeat" : 2,
-      "entireTipRepeat" : 2,
-      "entireNontipRepeat" : 1,
-      "shuffled" : true,
-      "shuffleSeedSpecified" : true,
-      "shuffleSeed" : 55
-    },
-    "remark" : "哈哈哈哈"
-  }, {
-    "id" : 4,
-    "name" : "你有毛病",
-    "strategyClass" : "rose.RoseShuffleStrategySetup",
-    "properties" : {
-      "unitSize" : 54,
-      "unitTipRepeat" : 1,
-      "unitNontipRepeat" : 2,
-      "entireTipRepeat" : 2,
-      "entireNontipRepeat" : 1,
-      "shuffled" : true,
-      "shuffleSeedSpecified" : true,
-      "shuffleSeed" : 55
-    },
-    "remark" : "哈哈哈哈"
-  }, {
-    "id" : 3,
-    "name" : "你有毛病",
-    "strategyClass" : "rose.RoseShuffleStrategySetup",
-    "properties" : {
-      "unitSize" : 54,
-      "unitTipRepeat" : 1,
-      "unitNontipRepeat" : 2,
-      "entireTipRepeat" : 2,
-      "entireNontipRepeat" : 1,
-      "shuffled" : true,
-      "shuffleSeedSpecified" : true,
-      "shuffleSeed" : 55
-    },
-    "remark" : "哈哈哈哈"
-  }, {
-    "id" : 2,
-    "name" : "你有毛病",
-    "strategyClass" : "rose.RoseShuffleStrategySetup",
-    "properties" : {
-      "unitSize" : 54,
-      "unitTipRepeat" : 1,
-      "unitNontipRepeat" : 2,
-      "entireTipRepeat" : 2,
-      "entireNontipRepeat" : 1,
-      "shuffled" : true,
-      "shuffleSeedSpecified" : true,
-      "shuffleSeed" : 55
-    },
-    "remark" : "哈哈哈哈"
-  } ]
-}
+!!com.benzolamps.dict.bean.ShuffleSolutions
+solutions: !!set
+  ? id: 1
+    name: 乱序方案1
+    properties: {unitSize: 30, unitTipRepeat: 0, unitNontipRepeat: 0, entireTipRepeat: 1,
+      entireNontipRepeat: 0, shuffled: false, shuffleSeedSpecified: false, shuffleSeed: 0}
+    remark: 所有单词按顺序重复一遍
+    strategyClass: rose.RoseShuffleStrategySetup
+  : null
+  ? id: 2
+    name: 最优方案
+    properties: {unitSize: 10, unitTipRepeat: 2, unitNontipRepeat: 1, entireTipRepeat: 2,
+      entireNontipRepeat: 1, shuffled: true, shuffleSeedSpecified: false, shuffleSeed: 0}
+    remark: 最优方案
+    strategyClass: rose.RoseShuffleStrategySetup
+  : null
+  ? id: 3
+    name: 巩固复习
+    properties: {unitSize: 10, unitTipRepeat: 5, unitNontipRepeat: 5, entireTipRepeat: 0,
+      entireNontipRepeat: 0, shuffled: true, shuffleSeedSpecified: false, shuffleSeed: 0}
+    remark: ''
+    strategyClass: rose.RoseShuffleStrategySetup
+  : null
+  ? id: 4
+    name: 地狱级别
+    properties: {unitSize: 10, unitTipRepeat: 0, unitNontipRepeat: 1, entireTipRepeat: 0,
+      entireNontipRepeat: 5, shuffled: true, shuffleSeedSpecified: false, shuffleSeed: 0}
+    remark: ''
+    strategyClass: rose.RoseShuffleStrategySetup
+  : null

@@ -59,8 +59,26 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         for (val solution : solutions.getSolutions()) {
             id = Math.max(id, solution.getId());
         }
-
         shuffleSolution.setId(id + 1);
+        for (String key : shuffleSolution.getProperties().keySet()) {
+            Object value = shuffleSolution.getProperties().get(key);
+            if (value == null) continue;
+            if ("true".equalsIgnoreCase(value.toString())) {
+                value = Boolean.TRUE;
+            } else if ("false".equalsIgnoreCase(value.toString())) {
+                value = Boolean.FALSE;
+            } else {
+                try {
+                    if (value.toString().contains(".")) {
+                        value = Double.valueOf(value.toString());
+                    } else {
+                        value = Long.valueOf(value.toString());
+                    }
+                } catch (NumberFormatException e) {
+                }
+            }
+            shuffleSolution.getProperties().put(key, value);
+        }
         solutions.getSolutions().add(shuffleSolution);
         return shuffleSolution;
     }
@@ -73,6 +91,25 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
             .filter(solution -> solution.getId().equals(shuffleSolution.getId())).findFirst().get();
         ref.setName(shuffleSolution.getName());
         ref.setProperties(shuffleSolution.getProperties());
+        for (String key : ref.getProperties().keySet()) {
+            Object value = ref.getProperties().get(key);
+            if (value == null) continue;
+            if ("true".equalsIgnoreCase(value.toString())) {
+                value = Boolean.TRUE;
+            } else if ("false".equalsIgnoreCase(value.toString())) {
+                value = Boolean.FALSE;
+            } else {
+                try {
+                    if (value.toString().contains(".")) {
+                        value = Double.valueOf(value.toString());
+                    } else {
+                        value = Long.valueOf(value.toString());
+                    }
+                } catch (NumberFormatException e) {
+                }
+            }
+            ref.getProperties().put(key, value);
+        }
         ref.setRemark(shuffleSolution.getRemark());
         ref.setStrategyClass(shuffleSolution.getStrategyClass());
         return ref;
