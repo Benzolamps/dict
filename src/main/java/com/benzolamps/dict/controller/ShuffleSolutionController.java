@@ -32,7 +32,7 @@ public class ShuffleSolutionController extends BaseController {
     @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
     protected ModelAndView list() {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/list");
-        mv.addObject("page", shuffleSolutionService.getSolutions());
+        mv.addObject("page", shuffleSolutionService.findAll());
         return mv;
     }
 
@@ -40,7 +40,7 @@ public class ShuffleSolutionController extends BaseController {
      * 添加乱序方案界面
      * @return ModelAndView
      */
-    @RequestMapping("/add.html")
+    @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView add() {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/add");
@@ -57,9 +57,38 @@ public class ShuffleSolutionController extends BaseController {
     @PostMapping("/save.json")
     @ResponseBody
     protected DataVo save(@RequestBody ShuffleSolution shuffleSolution) {
-
         try {
             shuffleSolution = shuffleSolutionService.persist(shuffleSolution);
+            return new DataVo(shuffleSolution);
+        } catch (Throwable e) {
+            return new DataVo(e.getMessage(), (byte) 1);
+        }
+    }
+
+    /**
+     * 修改乱序方案界面
+     * @return ModelAndView
+     */
+    @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @WindowView
+    protected ModelAndView edit(Long id) {
+        ModelAndView mv = new ModelAndView("view/shuffle_solution/edit");
+        System.out.println(shuffleSolutionService.getAvailableCopyStrategyNames());
+        mv.addObject("solution", shuffleSolutionService.find(id));
+        mv.addObject("strategies", shuffleSolutionService.getAvailableCopyStrategyNames());
+        return mv;
+    }
+
+    /**
+     * 更新乱序方案
+     * @param shuffleSolution 乱序方案
+     * @return 保存后的乱序方案
+     */
+    @PostMapping("/update.json")
+    @ResponseBody
+    protected DataVo update(@RequestBody ShuffleSolution shuffleSolution) {
+        try {
+            shuffleSolution = shuffleSolutionService.update(shuffleSolution);
             return new DataVo(shuffleSolution);
         } catch (Throwable e) {
             return new DataVo(e.getMessage(), (byte) 1);

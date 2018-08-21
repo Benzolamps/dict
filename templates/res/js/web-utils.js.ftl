@@ -12,12 +12,12 @@
  * @returns {HTMLFormElement} 表单
  */
 dict.postHref = function (url, data) {
-    var form = document.createElement("form");
+    var form = document.createElement('form');
     form.action = url;
-    form.method = "POST";
-    form.style.display = "none";
+    form.method = 'post';
+    form.style.display = 'none';
     for (var key in data) {
-        var element = document.createElement("textarea");
+        var element = document.createElement('textarea');
         element.name = key;
         element.value = data[key];
         form.appendChild(element);
@@ -28,7 +28,6 @@ dict.postHref = function (url, data) {
 };
 
 (function ($, dict) {
-    // noinspection SpellCheckingInspection
     var defaultOptions = {
         async: false,
         cache: false,

@@ -25,8 +25,15 @@ public interface ShuffleSolutionService {
     /** @return 根据id获取一个乱序策略实例 */
     IShuffleStrategySetup getSolutionInstanceAt(Long id);
 
-    /** @return 获取所有的乱序方案 */
-    Page<ShuffleSolution> getSolutions();
+    /** @return 获取全部乱序方案 */
+    Page<ShuffleSolution> findAll();
+
+    /**
+     * 根据id寻找乱序方案
+     * @param id id
+     * @return 乱序方案
+     */
+    ShuffleSolution find(Long id);
 
     /**
      * 保存一个乱序方案

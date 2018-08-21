@@ -6,7 +6,8 @@
  */
 
 /** nothing function */
-dict.nothing = function () { };
+dict.nothing = function () {
+};
 
 /**
  * 自定义断言
@@ -15,7 +16,7 @@ dict.nothing = function () { };
  * @throws Error
  */
 dict.assert = function (value, msg) {
-    if (!value) throw Error(msg ? msg : "Assertion Failed!");
+    if (!value) throw Error(msg ? msg : 'Assertion Failed!');
 };
 
 /**
@@ -30,7 +31,7 @@ dict.format = function (source, params) {
         params = $.makeArray(arguments).slice(1);
     }
     $.each(params, function (i, n) {
-        source = source.replace(new RegExp("\\{" + i + "\\}", "g"), n);
+        source = source.replace(new RegExp('\\{' + i + '\\}', 'g'), n);
     });
     return source;
 };

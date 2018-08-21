@@ -1,31 +1,35 @@
 <#-- @ftlvariable name="strategies" type="java.util.Collection<java.lang.String>" -->
+<#-- @ftlvariable name="solution" type="com.benzolamps.dict.bean.ShuffleSolution" -->
 <div class="layui-card">
   <div class="layui-card-header">添加乱序方案</div>
   <div class="layui-card-body">
-    <form class="layui-form shuffle-solution-form" method="post" action="save.json">
+    <form class="layui-form shuffle-solution-form" method="post" action="update.json">
+      <input type="hidden" name="id" value="${solution.id}">
       <table class="layui-table">
         <tbody>
-          <tr>
-            <th title="乱序方案名称">乱序方案名称</th>
-            <td><input type="text" name="name" placeholder="请输入乱序方案名称" required autocomplete="off" class="layui-input"></td>
-          </tr>
-          <tr>
-            <th title="备注">备注</th>
-            <td>
-              <textarea placeholder="请输入备注" class="layui-textarea" name="remark"></textarea>
-            </td>
-          </tr>
-          <tr>
-            <th title="乱序策略">乱序策略</th>
-            <td>
-              <select name="strategyClass" lay-filter="strategy-class" required title="">
-                <option value="">请选择乱序策略</option>
+        <tr>
+          <th title="乱序方案名称">乱序方案名称</th>
+          <td>
+            <input type="text" name="name" placeholder="请输入乱序方案名称" required autocomplete="off" value="${solution.name}" class="layui-input">
+          </td>
+        </tr>
+        <tr>
+          <th title="备注">备注</th>
+          <td>
+            <textarea placeholder="请输入备注" class="layui-textarea" name="remark">${solution.remark}</textarea>
+          </td>
+        </tr>
+        <tr>
+          <th title="乱序策略">乱序策略</th>
+          <td>
+            <select name="strategyClass" lay-filter="strategy-class" required title="">
+              <option value="">请选择乱序策略</option>
                 <#list strategies as strategy>
-                  <option value="${strategy}">${strategy}</option>
+                  <option value="${strategy}"<#if solution.strategyClass == strategy> selected</#if>>${strategy}</option>
                 </#list>
-              </select>
-            </td>
-          </tr>
+            </select>
+          </td>
+        </tr>
         </tbody>
         <tbody class="shuffle-strategy-table"></tbody>
       </table>
@@ -39,11 +43,16 @@
     var form = layui.form;
     var $form = $('.shuffle-solution-form');
     var $table = $('.shuffle-strategy-table');
+
+    var showEdit = function (className) {
+      dict.dynamicForm($table, 'property_info.json', {className: className}, 'properties.', <@json_dumper obj = solution.properties/>);
+    };
+
     form.on('select(strategy-class)', function (data) {
       if (data.value == null || data.value == '') {
         $table.empty();
       } else {
-        dict.dynamicForm($table, 'property_info.json', {className: data.value}, 'properties.');
+        showEdit(data.value);
       }
     });
 
@@ -75,10 +84,9 @@
       }
     }, function () {
       $form.find('input[type=checkbox]').each(function () {
-          $(this).val($(this).next().find('em').text().toLowerCase() == $(this).attr('lay-text').split('|')[0].toLowerCase());
-          $(this).attr('type', 'hidden');
+        $(this).val($(this).next().find('em').text().toLowerCase() == $(this).attr('lay-text').split('|')[0].toLowerCase());
+        $(this).attr('type', 'hidden');
       });
-
       dict.loadText({
         url: $form.attr('action'),
         type: $form.attr('method'),
@@ -92,5 +100,7 @@
       });
       return false;
     });
+
+    <#if solution.strategyClass??>showEdit('${solution.strategyClass}');</#if>
   });
 </script>

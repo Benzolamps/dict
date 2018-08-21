@@ -19,4 +19,4 @@ $.getScript('${base_url}/res/js/lang-utils.js');
 $.getScript('${base_url}/res/js/web-utils.js');
 $.getScript('${base_url}/res/js/dom-utils.js');
 
-layui.use("element");
+layui.use('element');

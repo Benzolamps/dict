@@ -4,9 +4,12 @@
  * @param url {string} URL
  * @param [data] {Object} 参数
  * @param [prefix] {string} 参数
+ * @param initValues {Object}
  * @param [requestBody] {boolean} 是否是RequestBody
  */
-dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
+dict.dynamicForm = function (selector, url, data, prefix, initValues, requestBody) {
+
+    initValues || (initValues = {});
 
     var $form;
 
@@ -37,6 +40,8 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
         dict.assert(property.type, 'property.type不能为空');
         dict.assert(property.name, 'property.name不能为空');
 
+        console.log(property);
+
         var $component;
 
         /* 是否是选择下拉框 */
@@ -45,8 +50,7 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
                 .attr('name', property.name)
                 .addClass('layui-input')
                 .attr('required', property.notEmpty)
-                .append(
-                $(document.createElement('option'))
+                .append($(document.createElement('option'))
                     .val('')
                     .text('请选择' + property.display)
                     .addClass('layui-input')
@@ -56,6 +60,7 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
                 var $option = $(document.createElement('option'))
                     .attr('value', option)
                     .text(option)
+                    .attr('selected', property.options[i] == property.value)
                     .addClass('layui-input');
                 $component.append($option);
             }
@@ -66,8 +71,8 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
                         .attr('type', 'checkbox')
                         .attr('name', property.name)
                         .attr('lay-skin', 'switch')
-                        .attr('lay-text', 'true|false')
-                        .attr('checked', false)
+                        .attr('lay-text', '开|关')
+                        .attr('checked', property.value)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
                     break;
@@ -78,6 +83,7 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
                         .attr('name', property.name)
                         .attr('placeholder', '请输入' + property.display)
                         .attr('autocomplete', 'off')
+                        .attr('value', property.value)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
                     break;
@@ -88,6 +94,7 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
                         .attr('name', property.name)
                         .attr('placeholder', '请输入' + property.display)
                         .attr('autocomplete', 'off')
+                        .attr('value', property.value)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
                     break;
@@ -98,6 +105,7 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
                         .attr('name', property.name)
                         .attr('placeholder', '请输入' + property.display)
                         .attr('autocomplete', 'off')
+                        .attr('value', property.value)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
                     break;
@@ -108,6 +116,7 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
                         .attr('name', property.name)
                         .attr('placeholder', '请输入' + property.display)
                         .attr('autocomplete', 'off')
+                        .attr('value', property.value)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
                     break;
@@ -129,6 +138,7 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
             var property = data.data;
 
             for (var i = 0; i < data.count; i++) {
+                property[i].value = initValues[property[i].name] != null ? initValues[property[i].name] : property[i].defaultValue;
                 prefix && (property[i].name = prefix + property[i].name);
                 var $tr = $(document.createElement('tr'));
                 $table.append($tr);
@@ -231,6 +241,7 @@ dict.dynamicForm = function (selector, url, data, prefix, requestBody) {
  * @param selector {*} 选择器
  * @param [rules] {Object} 验证规则
  * @param [messages] {Object} 错误消息
+ * @param submitHandler {Function} 提交拦截器
  */
 dict.validateForm = function (selector, rules, messages, submitHandler) {
     var $form = $(selector);

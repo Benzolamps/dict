@@ -90,8 +90,13 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ShuffleSolution> getSolutions() {
+    public Page<ShuffleSolution> findAll() {
         return shuffleSolutionDao.findAll();
+    }
+
+    @Override
+    public ShuffleSolution find(Long id) {
+        return shuffleSolutionDao.find(id);
     }
 
     @Override
