@@ -110,8 +110,8 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     }
 
     @Override
-    public void remove(ShuffleSolution shuffleSolution) {
-        shuffleSolutionDao.remove(shuffleSolution);
+    public void remove(Long shuffleSolutionId) {
+        shuffleSolutionDao.remove(shuffleSolutionId);
     }
 
     @Override

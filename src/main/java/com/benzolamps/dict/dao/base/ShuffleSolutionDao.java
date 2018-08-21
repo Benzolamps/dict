@@ -3,8 +3,6 @@ package com.benzolamps.dict.dao.base;
 import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.dao.core.Page;
 
-import java.util.Collection;
-
 /**
  * 乱序方案Dao接口
  * @author Benzolamps
@@ -39,9 +37,9 @@ public interface ShuffleSolutionDao {
 
     /**
      * 删除一个乱序方案
-     * @param shuffleSolution 乱序方案
+     * @param shuffleSolutionId 乱序方案id
      */
-    void remove(ShuffleSolution shuffleSolution);
+    void remove(final Long shuffleSolutionId);
 
     /** 重新加载 */
     void reload();

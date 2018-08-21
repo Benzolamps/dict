@@ -8,16 +8,13 @@ $(function () {
     var columns = null;
 
     /* 请求栏目JSON */
-    $.ajax({
+    dict.loadText({
         type: "get",
         url: '${base_url}/res/json/columns.json',
         cache: true,
-        dataType: "json",
+        dataType: 'json',
         success: function(data) {
             columns = data;
-        },
-        error: function(msg) {
-            console.log(msg);
         }
     });
 

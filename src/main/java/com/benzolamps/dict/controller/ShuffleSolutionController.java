@@ -4,12 +4,12 @@ import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 /**
  * 乱序方案控制器
@@ -67,6 +67,7 @@ public class ShuffleSolutionController extends BaseController {
 
     /**
      * 修改乱序方案界面
+     * @param id id
      * @return ModelAndView
      */
     @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
@@ -90,6 +91,21 @@ public class ShuffleSolutionController extends BaseController {
         try {
             shuffleSolution = shuffleSolutionService.update(shuffleSolution);
             return new DataVo(shuffleSolution);
+        } catch (Throwable e) {
+            return new DataVo(e.getMessage(), (byte) 1);
+        }
+    }
+
+    /**
+     * 删除乱序方案
+     * @return 提示信息
+     */
+    @PostMapping("/delete.json")
+    @ResponseBody
+    protected DataVo delete(@RequestParam("id") Long... ids) {
+        try {
+            Arrays.stream(ids).forEach(shuffleSolutionService::remove);
+            return new DataVo("success", (byte) 0);
         } catch (Throwable e) {
             return new DataVo(e.getMessage(), (byte) 1);
         }

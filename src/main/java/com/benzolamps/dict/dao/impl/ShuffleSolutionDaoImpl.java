@@ -5,13 +5,14 @@ import com.benzolamps.dict.bean.ShuffleSolutions;
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import org.yaml.snakeyaml.Yaml;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -26,13 +27,13 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
 public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
 
     /* 乱序方案配置文件 */
-    @Value("file:setting/shuffle-solutions.json")
-    private Resource resource;
+    @Value("setting/shuffle-solutions.yml")
+    private FileSystemResource resource;
 
     private ShuffleSolutions solutions;
 
-    @javax.annotation.Resource
-    private ObjectMapper objectMapper;
+    @Value("#{new org.yaml.snakeyaml.Yaml()}")
+    private Yaml yaml;
 
     @Override
     public Page<ShuffleSolution> findAll() {
@@ -78,21 +79,20 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     }
 
     @Override
-    public void remove(ShuffleSolution shuffleSolution) {
-        Assert.notNull(shuffleSolution, "shuffle solution不能为null");
-        Assert.notNull(shuffleSolution.getId(), "shuffle solution不能为新建对象");
+    public void remove(final Long shuffleSolutionId) {
+        Assert.notNull(shuffleSolutionId, "shuffle solution id不能为null");
         val ref = solutions.getSolutions().stream()
-            .filter(solution -> solution.getId().equals(shuffleSolution.getId())).findFirst().get();
+            .filter(solution -> solution.getId().equals(shuffleSolutionId)).findFirst().get();
         solutions.getSolutions().remove(ref);
     }
 
     @Override
     public void reload() {
-        solutions = tryFunc(() -> objectMapper.readValue(resource.getFile(), ShuffleSolutions.class));
+        solutions = tryFunc(() -> yaml.loadAs(resource.getInputStream(), ShuffleSolutions.class));
     }
 
     @Override
     public void flush() {
-        tryAction(() -> objectMapper.writeValue(resource.getFile(), solutions));
+        tryAction(() -> yaml.dump(solutions, new FileWriter(resource.getFile())));
     }
 }

@@ -51,9 +51,9 @@ public interface ShuffleSolutionService {
 
     /**
      * 删除一个乱序方案
-     * @param shuffleSolution 乱序方案
+     * @param shuffleSolutionId 乱序方案id
      */
-    void remove(ShuffleSolution shuffleSolution);
+    void remove(Long shuffleSolutionId);
 
     /**
      * 根据乱序策略生成器类名获取属性

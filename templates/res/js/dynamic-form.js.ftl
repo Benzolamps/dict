@@ -40,8 +40,6 @@ dict.dynamicForm = function (selector, url, data, prefix, initValues, requestBod
         dict.assert(property.type, 'property.type不能为空');
         dict.assert(property.name, 'property.name不能为空');
 
-        console.log(property);
-
         var $component;
 
         /* 是否是选择下拉框 */
@@ -72,7 +70,7 @@ dict.dynamicForm = function (selector, url, data, prefix, initValues, requestBod
                         .attr('name', property.name)
                         .attr('lay-skin', 'switch')
                         .attr('lay-text', '开|关')
-                        .attr('checked', property.value)
+                        .attr('checked', property.value === 'true' || property.value === true)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
                     break;

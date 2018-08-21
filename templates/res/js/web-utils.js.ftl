@@ -70,6 +70,7 @@ dict.postHref = function (url, data) {
             cache: choose('cache'),
             type: choose('type'),
             dataType: choose('dataType'),
+            traditional: true,
             contentType: options.requestBody ? 'application/json; charset=UTF-8' : choose('contentType'),
 
             data: (function () {
