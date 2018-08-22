@@ -47,7 +47,7 @@ public interface ShuffleSolutionService {
      * @param shuffleSolution 乱序方案
      * @return 乱序方案
      */
-    ShuffleSolution update(ShuffleSolution shuffleSolution);
+    ShuffleSolution update(ShuffleSolution shuffleSolution) throws ClassNotFoundException;
 
     /**
      * 删除一个乱序方案

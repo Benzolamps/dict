@@ -150,11 +150,11 @@ public interface DictFile {
         stack.push(file);
         while (!stack.isEmpty()) {
             File path = stack.pop();
-            for (File subfile : path.listFiles(f -> f.isDirectory() || filter == null || filter.test(f))) {
-                if (subfile.isDirectory()) {
-                    stack.push(subfile);
+            for (File subFile : path.listFiles(f -> f.isDirectory() || filter == null || filter.test(f))) {
+                if (subFile.isDirectory()) {
+                    stack.push(subFile);
                 } else {
-                    files.add(subfile);
+                    files.add(subFile);
                 }
             }
         }

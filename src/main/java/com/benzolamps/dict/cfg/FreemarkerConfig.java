@@ -1,5 +1,4 @@
-
-package com.benzolamps.dict.cfg.freemarker;
+package com.benzolamps.dict.cfg;
 
 import freemarker.template.Configuration;
 import freemarker.template.TemplateModelException;
@@ -7,6 +6,7 @@ import lombok.Setter;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -27,5 +27,6 @@ public class FreemarkerConfig {
     @PostConstruct
     private void setConfigure() throws TemplateModelException {
         configuration.setSharedVaribles(sharedVariables);
+        configuration.setAutoIncludes(Collections.singletonList("view/includes/main.ftl"));
     }
 }

@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
+ * 对象工具类
+ * @author Benzolamps 
+ * @version 2.1.1
  * @datetime 2018-8-22 14:57:43
  */
 public interface DictObject {
@@ -22,6 +25,10 @@ public interface DictObject {
             else if (BigInteger.class.equals(tClass)) return (T) BigInteger.valueOf(((Number) obj).longValue());
             else if (BigDecimal.class.equals(tClass)) return (T) BigDecimal.valueOf(((Number) obj).doubleValue());
             else return null;
+        } else if (boolean.class.equals(tClass) && Boolean.class.isInstance(obj)) {
+            return (T) obj;
+        } else if (char.class.equals(tClass) && Character.class.isInstance(obj)) {
+            return (T) obj;
         } else {
             return DictString.ofString(obj.toString(), tClass);
         }

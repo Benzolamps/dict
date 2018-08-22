@@ -9,6 +9,7 @@ public interface Constant {
 
     String TIME_FORMAT = "HH:mm:ss";
 
+    // language=RegExp
     String IDENTIFIER_PATTERN = "^[$_a-zA-Z][$_a-zA-Z0-9]*$";
 
     DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT + " " + TIME_FORMAT);

@@ -50,7 +50,8 @@ public class Repeater<E> implements Iterator<E> {
      * 在下一次重复之前调用
      * @param list list
      */
-    protected void beforeRepeat(List<E> list) { }
+    protected void beforeRepeat(List<E> list) {
+    }
 
     @Override
     public final boolean hasNext() {

@@ -35,6 +35,7 @@
   <component name="InspectionProjectProfileManager">
     <profile version="1.0">
       <option name="myName" value="Project Default" />
+      <inspection_tool class="CatchMayIgnoreException" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="CheckTagEmptyBody" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="ConstantConditions" enabled="false" level="WARNING" enabled_by_default="false">
         <option name="SUGGEST_NULLABLE_ANNOTATIONS" value="false" />
@@ -58,6 +59,8 @@
       <inspection_tool class="JSUnnecessarySemicolon" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="JSUnresolvedFunction" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
       <inspection_tool class="JSUnresolvedVariable" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+      <inspection_tool class="JSUnusedAssignment" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="JSUnusedLocalSymbols" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="JavaDoc" enabled="true" level="WARNING" enabled_by_default="true">
         <option name="TOP_LEVEL_CLASS_OPTIONS">
           <value>
@@ -89,6 +92,7 @@
         <option name="IGNORE_POINT_TO_ITSELF" value="false" />
         <option name="myAdditionalJavadocTags" value="datetime" />
       </inspection_tool>
+      <inspection_tool class="ReservedWordUsedAsNameJS" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="SerializableHasSerialVersionUIDField" enabled="true" level="WARNING" enabled_by_default="true">
         <option name="ignoreAnonymousInnerClasses" value="false" />
         <option name="superClassString" value="" />
@@ -98,6 +102,19 @@
         <option name="SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS" value="true" />
         <option name="SUGGEST_PACKAGE_LOCAL_FOR_TOP_CLASSES" value="true" />
         <option name="SUGGEST_PRIVATE_FOR_INNERS" value="false" />
+      </inspection_tool>
+      <inspection_tool class="WithStatementJS" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="unused" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="LOCAL_VARIABLE" value="true" />
+        <option name="FIELD" value="true" />
+        <option name="METHOD" value="true" />
+        <option name="CLASS" value="true" />
+        <option name="PARAMETER" value="true" />
+        <option name="REPORT_PARAMETER_FOR_PUBLIC_METHODS" value="true" />
+        <option name="ADD_MAINS_TO_ENTRIES" value="true" />
+        <option name="ADD_APPLET_TO_ENTRIES" value="true" />
+        <option name="ADD_SERVLET_TO_ENTRIES" value="true" />
+        <option name="ADD_NONJAVA_TO_ENTRIES" value="true" />
       </inspection_tool>
     </profile>
     <version value="1.0" />
@@ -234,6 +251,7 @@
     <dictionary name="Benzolamps">
       <words>
         <w>anno</w>
+        <w>arth</w>
         <w>benzolamps</w>
         <w>clazzes</w>
         <w>csdn</w>
@@ -247,6 +265,7 @@
         <w>nontip</w>
         <w>onfocusout</w>
         <w>qrcode</w>
+        <w>springboot</w>
         <w>sqlite</w>
         <w>tbody</w>
         <w>tencent</w>

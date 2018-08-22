@@ -30,3 +30,4 @@
 [#function class_path_yaml_parse class_path][/#function]
 [#function file_system_yaml_parse file_system][/#function]
 [#function string_yaml_parse str][/#function]
+[#include '/view/includes/main.ftl'/]

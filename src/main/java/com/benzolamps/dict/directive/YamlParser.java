@@ -1,4 +1,4 @@
-package com.benzolamps.dict.cfg.freemarker;
+package com.benzolamps.dict.directive;
 
 import com.benzolamps.dict.util.DictLambda;
 import com.benzolamps.dict.util.ResourceType;

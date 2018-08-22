@@ -12,7 +12,7 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans
   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
 >
-  <bean id="freemarkerConfig" class="com.benzolamps.dict.cfg.freemarker.FreemarkerConfig">
+  <bean id="freemarkerConfig" class="com.benzolamps.dict.cfg.FreemarkerConfig">
     <property name="sharedVariables">
       <map>
         <entry key="system_name" value="${system.name}"/>
@@ -34,24 +34,24 @@
         <entry key="hibernate_version" value="#{T(org.hibernate.Version).versionString}"/>
         <entry key="poi_version" value="#{T(org.apache.poi.Version).version}"/>
         <entry key="is_release" value="#{isRelease}"/>
-        <entry key="logger" value="#{T(org.slf4j.LoggerFactory).getLogger(T(com.benzolamps.dict.cfg.freemarker.FreemarkerConfig))}"/>
+        <entry key="logger" value="#{T(org.slf4j.LoggerFactory).getLogger(T(com.benzolamps.dict.cfg.FreemarkerConfig))}"/>
         <entry key="url_yaml_parse">
-          <bean class="com.benzolamps.dict.cfg.freemarker.YamlParser">
+          <bean class="com.benzolamps.dict.directive.YamlParser">
             <property name="resourceType" value="URL"/>
           </bean>
         </entry>
         <entry key="class_path_yaml_parse">
-          <bean class="com.benzolamps.dict.cfg.freemarker.YamlParser">
+          <bean class="com.benzolamps.dict.directive.YamlParser">
             <property name="resourceType" value="CLASS_PATH"/>
           </bean>
         </entry>
         <entry key="file_system_yaml_parse">
-          <bean class="com.benzolamps.dict.cfg.freemarker.YamlParser">
+          <bean class="com.benzolamps.dict.directive.YamlParser">
             <property name="resourceType" value="FILE_SYSTEM"/>
           </bean>
         </entry>
         <entry key="string_yaml_parse">
-          <bean class="com.benzolamps.dict.cfg.freemarker.YamlParser">
+          <bean class="com.benzolamps.dict.directive.YamlParser">
             <property name="resourceType" value="STRING"/>
           </bean>
         </entry>

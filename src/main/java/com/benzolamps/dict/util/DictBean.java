@@ -54,7 +54,6 @@ public class DictBean<B> {
         this.fields = internalGetFields();
         this.properties = internalGetProperties();
         this.annotations = Arrays.asList(type.getAnnotations());
-
     }
 
     private Collection<Method> internalGetMethods() {

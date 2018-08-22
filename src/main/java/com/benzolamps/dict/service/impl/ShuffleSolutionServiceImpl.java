@@ -14,6 +14,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -109,8 +110,8 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     }
 
     @Override
-    public ShuffleSolution update(ShuffleSolution shuffleSolution) {
-        Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) dictDynamicClass.loadDynamicClass(shuffleSolution.getStrategyClass());
+    public ShuffleSolution update(ShuffleSolution shuffleSolution) throws ClassNotFoundException {
+        Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) ClassUtils.forName(shuffleSolution.getStrategyClass(), Thread.currentThread().getContextClassLoader());
         DictBean<IShuffleStrategySetup> dictBean = new DictBean<>(strategyClass);
         Collection<DictProperty> dictProperties = dictBean.getProperties();
         Map<String, Object> properties = shuffleSolution.getProperties();

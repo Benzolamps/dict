@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
@@ -41,6 +42,8 @@ public abstract class DictApplication {
 
     private static Yaml yaml;
 
+    private static ConfigurableApplicationContext applicationContext;
+
     static {
         yaml = new Yaml();
         Map map = yaml.loadAs(tryFunc(new FileSystemResource("dictionary.yml")::getInputStream), Map.class);
@@ -74,6 +77,6 @@ public abstract class DictApplication {
      * @param args 参数
      */
     public static void main(String... args) {
-        new SpringApplicationBuilder(DictApplication.class).properties(properties).build().run(args);
+        applicationContext = new SpringApplicationBuilder(DictApplication.class).properties(properties).build().run(args);
     }
 }

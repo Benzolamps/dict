@@ -1,4 +1,4 @@
-package com.benzolamps.dict.cfg.freemarker;
+package com.benzolamps.dict.directive;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +38,6 @@ public class JsonDumper implements TemplateDirectiveModel {
     // FIXME: 线程不安全
     @Override
     public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws IOException, TemplateModelException {
-
         mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
         Assert.isTrue(params.containsKey("obj"), "obj未指定");
         Object obj = DeepUnwrap.unwrap((TemplateModel) params.get("obj"));
