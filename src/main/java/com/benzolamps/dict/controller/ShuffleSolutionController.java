@@ -61,7 +61,7 @@ public class ShuffleSolutionController extends BaseController {
             shuffleSolution = shuffleSolutionService.persist(shuffleSolution);
             return new DataVo(shuffleSolution);
         } catch (Throwable e) {
-            return new DataVo(e.getMessage(), (byte) 1);
+            return new DataVo(e + ": " + e.getMessage(), (byte) 1);
         }
     }
 
@@ -92,7 +92,7 @@ public class ShuffleSolutionController extends BaseController {
             shuffleSolution = shuffleSolutionService.update(shuffleSolution);
             return new DataVo(shuffleSolution);
         } catch (Throwable e) {
-            return new DataVo(e.getMessage(), (byte) 1);
+            return new DataVo(e + ": " + e.getMessage(), (byte) 1);
         }
     }
 
@@ -107,7 +107,7 @@ public class ShuffleSolutionController extends BaseController {
             Arrays.stream(ids).forEach(shuffleSolutionService::remove);
             return new DataVo("success", (byte) 0);
         } catch (Throwable e) {
-            return new DataVo(e.getMessage(), (byte) 1);
+            return new DataVo(e + ": " + e.getMessage(), (byte) 1);
         }
     }
 

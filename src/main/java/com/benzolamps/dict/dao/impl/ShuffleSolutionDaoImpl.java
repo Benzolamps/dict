@@ -12,9 +12,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import org.yaml.snakeyaml.Yaml;
 
+import javax.annotation.Resource;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.StringJoiner;
 
 import static com.benzolamps.dict.util.DictLambda.tryAction;
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
@@ -32,7 +35,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
 
     private ShuffleSolutions solutions;
 
-    @Value("#{new org.yaml.snakeyaml.Yaml()}")
+    @Resource
     private Yaml yaml;
 
     @Override
@@ -50,6 +53,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         return solutions.getSolutions().stream().filter(solution -> solution.getId().equals(id)).findFirst().get();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public ShuffleSolution persist(ShuffleSolution shuffleSolution) {
         Assert.notNull(shuffleSolution, "shuffle solution不能为null");
@@ -60,29 +64,12 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
             id = Math.max(id, solution.getId());
         }
         shuffleSolution.setId(id + 1);
-        for (String key : shuffleSolution.getProperties().keySet()) {
-            Object value = shuffleSolution.getProperties().get(key);
-            if (value == null) continue;
-            if ("true".equalsIgnoreCase(value.toString())) {
-                value = Boolean.TRUE;
-            } else if ("false".equalsIgnoreCase(value.toString())) {
-                value = Boolean.FALSE;
-            } else {
-                try {
-                    if (value.toString().contains(".")) {
-                        value = Double.valueOf(value.toString());
-                    } else {
-                        value = Long.valueOf(value.toString());
-                    }
-                } catch (NumberFormatException e) {
-                }
-            }
-            shuffleSolution.getProperties().put(key, value);
-        }
+        StringJoiner sj = new StringJoiner(",", "{", "}");
         solutions.getSolutions().add(shuffleSolution);
         return shuffleSolution;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public ShuffleSolution update(ShuffleSolution shuffleSolution) {
         Assert.notNull(shuffleSolution, "shuffle solution不能为null");
@@ -91,25 +78,6 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
             .filter(solution -> solution.getId().equals(shuffleSolution.getId())).findFirst().get();
         ref.setName(shuffleSolution.getName());
         ref.setProperties(shuffleSolution.getProperties());
-        for (String key : ref.getProperties().keySet()) {
-            Object value = ref.getProperties().get(key);
-            if (value == null) continue;
-            if ("true".equalsIgnoreCase(value.toString())) {
-                value = Boolean.TRUE;
-            } else if ("false".equalsIgnoreCase(value.toString())) {
-                value = Boolean.FALSE;
-            } else {
-                try {
-                    if (value.toString().contains(".")) {
-                        value = Double.valueOf(value.toString());
-                    } else {
-                        value = Long.valueOf(value.toString());
-                    }
-                } catch (NumberFormatException e) {
-                }
-            }
-            ref.getProperties().put(key, value);
-        }
         ref.setRemark(shuffleSolution.getRemark());
         ref.setStrategyClass(shuffleSolution.getStrategyClass());
         return ref;

@@ -6,9 +6,7 @@ import com.benzolamps.dict.controller.vo.DictPropertyInfoVo;
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
-import com.benzolamps.dict.util.DictBean;
-import com.benzolamps.dict.util.DictMap;
-import com.benzolamps.dict.util.DynamicClass;
+import com.benzolamps.dict.util.*;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,10 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -101,11 +96,29 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     public ShuffleSolution persist(ShuffleSolution shuffleSolution) {
+        Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) dictDynamicClass.loadDynamicClass(shuffleSolution.getStrategyClass());
+        DictBean<IShuffleStrategySetup> dictBean = new DictBean<>(strategyClass);
+        Collection<DictProperty> dictProperties = dictBean.getProperties();
+        Map<String, Object> properties = shuffleSolution.getProperties();
+        for (DictProperty dictProperty : dictProperties) {
+            String key = dictProperty.getName();
+            Class<?> type = dictProperty.getType();
+            properties.put(key, DictObject.ofObject(properties.get(key), type));
+        }
         return shuffleSolutionDao.persist(shuffleSolution);
     }
 
     @Override
     public ShuffleSolution update(ShuffleSolution shuffleSolution) {
+        Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) dictDynamicClass.loadDynamicClass(shuffleSolution.getStrategyClass());
+        DictBean<IShuffleStrategySetup> dictBean = new DictBean<>(strategyClass);
+        Collection<DictProperty> dictProperties = dictBean.getProperties();
+        Map<String, Object> properties = shuffleSolution.getProperties();
+        for (DictProperty dictProperty : dictProperties) {
+            String key = dictProperty.getName();
+            Class<?> type = dictProperty.getType();
+            properties.put(key, DictObject.ofObject(properties.get(key), type));
+        }
         return shuffleSolutionDao.update(shuffleSolution);
     }
 

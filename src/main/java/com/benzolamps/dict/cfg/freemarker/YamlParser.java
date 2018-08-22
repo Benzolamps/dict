@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.yaml.snakeyaml.Yaml;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public class YamlParser implements TemplateMethodModelEx {
     @Setter
     private ResourceType resourceType;
 
-    @Value("#{new org.yaml.snakeyaml.Yaml()}")
+    @Resource
     private Yaml yaml;
 
     public YamlParser() {

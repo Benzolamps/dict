@@ -39,8 +39,10 @@ public abstract class DictApplication {
 
     private static Properties properties;
 
+    private static Yaml yaml;
+
     static {
-        Yaml yaml = new Yaml();
+        yaml = new Yaml();
         Map map = yaml.loadAs(tryFunc(new FileSystemResource("dictionary.yml")::getInputStream), Map.class);
         properties = new Properties();
         properties.putAll(DictMap.convertToProperties(map));
@@ -59,6 +61,12 @@ public abstract class DictApplication {
     @Profile("default")
     protected boolean isNotRelease() {
         return false;
+    }
+
+    /** @return yaml */
+    @Bean("yaml")
+    protected Yaml yaml() {
+        return yaml;
     }
 
     /**
