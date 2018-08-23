@@ -1,13 +1,11 @@
 package com.benzolamps.dict;
 
+import com.benzolamps.dict.main.DictApplication;
 import org.junit.Test;
-import org.springframework.util.Assert;
 
 public class DictApplicationTests {
-
     @Test
     public void contextLoads() {
-        Assert.isTrue(true);
+        DictApplication.main();
     }
-
 }

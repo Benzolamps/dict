@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * @version 2.1.1
  * @datetime 2018-7-25 19:40:39
  */
-public abstract class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
+public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
 
     /* 实体类型 */
     private final Class<B> entityClass;

@@ -131,6 +131,64 @@ public interface DictLambda {
     }
 
     /**
+     * 3个参数无返回值的action
+     * @param <T> 参数1的类型
+     * @param <U> 参数2的类型
+     * @param <V> 参数3的类型
+     */
+    @FunctionalInterface
+    interface Action3<T, U, V> {
+        /**
+         * 忽略异常执行
+         * @param t 参数1
+         * @param u 参数2
+         * @param v 参数3
+         */
+        default void tryExecute(T t, U u, V v) {
+            tryAction(() -> execute(t, u, v));
+        }
+
+        /**
+         * 执行
+         * @param t 参数1
+         * @param u 参数2
+         * @param v 参数3
+         * @throws Throwable 异常
+         */
+        void execute(T t, U u, V v) throws Throwable;
+    }
+
+    /**
+     * 4个参数无返回值的func
+     * @param <T> 参数1的类型
+     * @param <U> 参数2的类型
+     * @param <V> 参数3的类型
+     * @param <W> 参数4的类型
+     */
+    @FunctionalInterface
+    interface Action4<T, U, V, W> {
+        /**
+         * 忽略异常执行
+         * @param t 参数1
+         * @param u 参数2
+         * @param v 参数3
+         */
+        default void tryExecute(T t, U u, V v, W w) {
+            tryAction(() -> execute(t, u, v, w));
+        }
+
+        /**
+         * 执行
+         * @param t 参数1
+         * @param u 参数2
+         * @param v 参数3
+         * @param w 参数4
+         * @throws Throwable 异常
+         */
+        void execute(T t, U u, V v, W w) throws Throwable;
+    }
+
+    /**
      * 无参有返回值func
      * @param <R> 返回值的类型
      */
@@ -221,6 +279,71 @@ public interface DictLambda {
          * @throws Throwable 异常
          */
         R execute(T t, U u) throws Throwable;
+    }
+
+    /**
+     * 3个参数有返回值的func
+     * @param <T> 参数1的类型
+     * @param <U> 参数2的类型
+     * @param <V> 参数3的类型
+     * @param <R> 返回值的类型
+     */
+    @FunctionalInterface
+    interface Func3<T, U, V, R> {
+        /**
+         * 忽略异常执行
+         * @param t 参数1
+         * @param u 参数2
+         * @param v 参数3
+         * @return 返回值
+         */
+        default R tryExecute(T t, U u, V v) {
+            return tryFunc(() -> execute(t, u, v));
+        }
+
+        /**
+         * 执行
+         * @param t 参数1
+         * @param u 参数2
+         * @param v 参数3
+         * @return 返回值
+         * @throws Throwable 异常
+         */
+        R execute(T t, U u, V v) throws Throwable;
+    }
+
+    /**
+     * 4个参数有返回值的func
+     * @param <T> 参数1的类型
+     * @param <U> 参数2的类型
+     * @param <V> 参数3的类型
+     * @param <W> 参数4的类型
+     * @param <R> 返回值的类型
+     */
+    @FunctionalInterface
+    interface Func4<T, U, V, W, R> {
+        /**
+         * 忽略异常执行
+         * @param t 参数1
+         * @param u 参数2
+         * @param v 参数3
+         * @param w 参数4
+         * @return 返回值
+         */
+        default R tryExecute(T t, U u, V v, W w) {
+            return tryFunc(() -> execute(t, u, v, w));
+        }
+
+        /**
+         * 执行
+         * @param t 参数1
+         * @param u 参数2
+         * @param v 参数3
+         * @param w 参数4
+         * @return 返回值
+         * @throws Throwable 异常
+         */
+        R execute(T t, U u, V v, W w) throws Throwable;
     }
 
     /**

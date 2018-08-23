@@ -13,6 +13,7 @@ import java.nio.charset.Charset;
 import java.util.*;
 
 import static javax.tools.JavaFileObject.Kind;
+import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 动态编译并加载目录下的全部.java文件
@@ -20,7 +21,7 @@ import static javax.tools.JavaFileObject.Kind;
  * @version 2.1.1
  * @datetime 2018-7-18 22:04:21
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class DynamicClass {
 
     /* 目录 */
@@ -45,6 +46,8 @@ public class DynamicClass {
     private static JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 
     private boolean compiled = false;
+
+    private final ClassLoader classLoader;
 
     /** @return 获取编译错误监听 */
     public DiagnosticListener<? super JavaFileObject> getDiagnosticListener() {
@@ -87,7 +90,6 @@ public class DynamicClass {
     public void compile() {
         if (!compiled && (compiled = true)) {
             StandardJavaFileManager manager = compiler.getStandardFileManager(diagnosticListener, locale, charset);
-            ClassLoader classLoader = produceClassLoader();
             Set<File> files = DictFile.deepListFiles(file, f -> f.getName().toLowerCase().endsWith(".java"));
             Iterable<? extends JavaFileObject> iterable = manager.getJavaFileObjectsFromFiles(files);
             List<String> options = Arrays.asList("-Xlint:unchecked", "-classpath", System.getProperty("java.class.path"));
@@ -97,6 +99,8 @@ public class DynamicClass {
                 throw new DictException("编译失败!");
             }
             classBytes.keySet().forEach((DictLambda.Action1<String>) key -> dynamicClassSet.add(classLoader.loadClass(key)));
+            DictSpring.removeBean("classLoader");
+            DictSpring.setBean("classLoader", classLoader);
         }
     }
 
@@ -126,21 +130,6 @@ public class DynamicClass {
         };
     }
 
-    /* 生成ClassLoader */
-    private URLClassLoader produceClassLoader() {
-        return new URLClassLoader(new URL[0], ClassUtils.getDefaultClassLoader()) {
-            @Override
-            protected Class<?> findClass(String name) throws ClassNotFoundException {
-                byte[] buf = classBytes.get(name);
-                if (buf == null) {
-                    return super.findClass(name);
-                }
-                classBytes.put(name, null);
-                return defineClass(name, buf, 0, buf.length);
-            }
-        };
-    }
-
     /**
      * 构造器
      * @param classPath 类加载路径
@@ -151,19 +140,24 @@ public class DynamicClass {
             throw new DictException("需要tools.jar");
         }
 
+        classLoader = new URLClassLoader(new URL[0], DictSpring.getBean("classLoader")) {
+            @Override
+            protected Class<?> findClass(String name) throws ClassNotFoundException {
+                byte[] buf = classBytes.get(name);
+                if (buf == null) {
+                    return super.findClass(name);
+                }
+                classBytes.put(name, null);
+                return defineClass(name, buf, 0, buf.length);
+            }
+        };
+
         file = new File(classPath);
         classBytes = new HashMap<>();
         dynamicClassSet = new HashSet<>();
     }
 
-    /**
-     * 加载一个动态的类
-     * @param className 类名
-     * @return 类对象
-     */
-    public Class<?> loadDynamicClass(String className) {
-        Assert.hasLength(className, "class name不能为null或空");
-        this.compile();
-        return dynamicClassSet.stream().filter(clazz -> className.equals(clazz.getName())).findFirst().get();
+    public static <T> Class<T> loadClass(String className) {
+        return (Class<T>) tryFunc(() -> ClassUtils.forName(className, DictSpring.getBean("classLoader")));
     }
 }

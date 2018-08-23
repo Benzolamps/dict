@@ -2,9 +2,6 @@ package com.benzolamps.dict.util;
 
 import lombok.Getter;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.Assert;
 
 import java.lang.annotation.Annotation;
@@ -176,21 +173,14 @@ public class DictBean<B> {
 
     /**
      * 根据类型跟属性获取一个即时Spring bean
-     * @param context 应用程序上下文
      * @param properties 属性
      * @return DictBean对象
      */
-    @SuppressWarnings({"deprecation", "unchecked"})
-    public B createSpringBean(ConfigurableApplicationContext context, Properties properties) {
-        Assert.notNull(context, "context不能为null");
-        properties = properties == null ? new Properties() : properties;
-        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) context.getBeanFactory();
-        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(type);
-        properties.forEach((key, value) -> beanDefinitionBuilder.addPropertyValue(DictString.toCamel(key.toString()), value));
-        beanFactory.registerBeanDefinition(FLASH_BEAN_NAME, beanDefinitionBuilder.getBeanDefinition());
-        B obj = (B) beanFactory.getBean(FLASH_BEAN_NAME);
-        beanFactory.removeBeanDefinition(FLASH_BEAN_NAME);
-        return obj;
+    public B createSpringBean(Properties properties) {
+        Assert.isTrue(instantiable(), "类必须是可实例化的");
+        B bean = DictSpring.createBean(FLASH_BEAN_NAME, type, properties);
+        DictSpring.removeBean(FLASH_BEAN_NAME);
+        return bean;
     }
 
     /**

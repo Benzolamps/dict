@@ -36,7 +36,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
      * @return GeneratedDictQuery
      */
 	protected GeneratedDictQuery<T> generateDictQuery() {
-	    return new GeneratedDictQuery<T>() { };
+	    return new GeneratedDictQuery<>();
     }
 
 	/** 构造方法 */

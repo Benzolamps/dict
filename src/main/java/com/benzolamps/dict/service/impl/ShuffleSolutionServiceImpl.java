@@ -20,6 +20,8 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.benzolamps.dict.util.DictLambda.tryFunc;
+
 /**
  * 乱序策略Service接口实现类
  * @author Benzolamps
@@ -73,9 +75,10 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     }
 
     private IShuffleStrategySetup apply(ShuffleSolution shuffleSolution) {
-        val strategyClass = dictDynamicClass.loadDynamicClass(shuffleSolution.getStrategyClass());
+        ClassLoader classLoader = DictSpring.getBean("classLoader");
+        val strategyClass = tryFunc(() -> ClassUtils.forName(shuffleSolution.getStrategyClass(), classLoader));
         Properties properties = DictMap.convertToProperties(shuffleSolution.getProperties());
-        return (IShuffleStrategySetup) new DictBean<>(strategyClass).createSpringBean(context, properties);
+        return (IShuffleStrategySetup) new DictBean<>(strategyClass).createSpringBean(properties);
     }
 
     @Override
@@ -91,13 +94,15 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ShuffleSolution find(Long id) {
         return shuffleSolutionDao.find(id);
     }
 
     @Override
+    @Transactional
     public ShuffleSolution persist(ShuffleSolution shuffleSolution) {
-        Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) dictDynamicClass.loadDynamicClass(shuffleSolution.getStrategyClass());
+        Class<IShuffleStrategySetup> strategyClass = DynamicClass.loadClass(shuffleSolution.getStrategyClass());
         DictBean<IShuffleStrategySetup> dictBean = new DictBean<>(strategyClass);
         Collection<DictProperty> dictProperties = dictBean.getProperties();
         Map<String, Object> properties = shuffleSolution.getProperties();
@@ -110,6 +115,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     }
 
     @Override
+    @Transactional
     public ShuffleSolution update(ShuffleSolution shuffleSolution) throws ClassNotFoundException {
         Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) ClassUtils.forName(shuffleSolution.getStrategyClass(), Thread.currentThread().getContextClassLoader());
         DictBean<IShuffleStrategySetup> dictBean = new DictBean<>(strategyClass);
@@ -124,6 +130,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     }
 
     @Override
+    @Transactional
     public void remove(Long shuffleSolutionId) {
         shuffleSolutionDao.remove(shuffleSolutionId);
     }
@@ -134,7 +141,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
         Assert.hasLength(className, "class name不能为null或空");
         Assert.isTrue(getAvailableCopyStrategyNames().contains(className), "class name不存在");
-        val strategyClass = dictDynamicClass.loadDynamicClass(className);
+        val strategyClass  = DynamicClass.loadClass(className);
         return DictPropertyInfoVo.applyDictPropertyInfo(strategyClass);
     }
 }
