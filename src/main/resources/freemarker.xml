@@ -33,6 +33,7 @@
         <entry key="servlet_version" value="#{servletContext.majorVersion + '.' + servletContext.minorVersion}"/>
         <entry key="hibernate_version" value="#{T(org.hibernate.Version).versionString}"/>
         <entry key="poi_version" value="#{T(org.apache.poi.Version).version}"/>
+        <!--suppress SpringElInspection -->
         <entry key="is_release" value="#{isRelease}"/>
         <entry key="logger" value="#{T(org.slf4j.LoggerFactory).getLogger(T(com.benzolamps.dict.cfg.FreemarkerConfig))}"/>
         <entry key="url_yaml_parse">
@@ -55,7 +56,9 @@
             <property name="resourceType" value="STRING"/>
           </bean>
         </entry>
-        <entry key="json_dumper" value-ref="jsonDumper"/>
+        <entry key="json_dump" value-ref="jsonDumper"/>
+        <entry key="get_dict_property" value-ref="getDictProperty"/>
+        <entry key="data_add" value-ref="dataAdd"/>
       </map>
     </property>
   </bean>

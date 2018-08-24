@@ -1,10 +1,14 @@
 package com.benzolamps.dict.bean;
 
-import lombok.*;
+import com.benzolamps.dict.component.DictPropertyInfo;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.Id;
+import javax.validation.constraints.Pattern;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
@@ -23,22 +27,27 @@ public class ShuffleSolution implements Serializable {
     private static final long serialVersionUID = 4614817880825423160L;
 
     /** id */
+    @Id
     private Long id;
 
     /** 名称 */
     @NotEmpty
-    @Length(max = 20)
+    @Length(min = 2, max = 20)
+    @Pattern(regexp = "^[0-9a-zA-Z\\u4e00-\\u9fa5]+$")
+    @DictPropertyInfo(display = "乱序方案名称")
     private String name;
 
     /** 乱序策略类 */
     @NotEmpty
+    @DictPropertyInfo(display = "乱序策略")
     private String strategyClass;
 
     /** 属性 */
-    private Map<String, Object> properties;
+    private transient Map<String, Object> properties;
 
     /** 备注 */
     @Length(max = 50)
+    @DictPropertyInfo(display = "备注")
     private String remark;
 
     @Override

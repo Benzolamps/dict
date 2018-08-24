@@ -38,13 +38,13 @@
   <script type="text/javascript">
     layui.use('table', function () {
       var table = layui.table;
-      var fields = <@json_dumper obj=fields/>;
+      var fields = <@json_dump obj=fields/>;
       fields.push({field: 'id', title: '操作', align: 'left', toolbar: '#${id}-tools'});
       table.render({
         elem: $('#${id} table'),
         page: false,
         cols: [fields],
-        data: <@json_dumper obj=values/>,
+        data: <@json_dump obj=values/>,
         id: 'shuffle-solutions'
       });
 

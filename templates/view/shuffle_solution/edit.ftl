@@ -45,7 +45,14 @@
     var $table = $('.shuffle-strategy-table');
 
     var showEdit = function (className) {
-      dict.dynamicForm($table, 'property_info.json', {className: className}, 'properties.', <@json_dumper obj = solution.properties/>);
+      dict.loadText({
+        url: 'property_info.json',
+        data: {className: '${solution.strategyClass}'},
+        dataType: 'json',
+        success: function (data) {
+          dict.dynamicForm($table, data.data, 'properties.', <@json_dump obj = solution.properties/>);
+        }
+      });
     };
 
     form.on('select(strategy-class)', function (data) {

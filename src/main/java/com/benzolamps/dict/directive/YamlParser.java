@@ -41,7 +41,7 @@ public class YamlParser implements TemplateMethodModelEx {
         Assert.notNull(resourceType, "resource type不能为空");
         Assert.notEmpty(arguments, "arguments不能为空");
         String str = arguments.get(0).toString();
-        Assert.notNull(str, "arguments[0]不能为null或空");
+        Assert.notNull(str, "str不能为null或空");
         return DictLambda.tryFunc(() -> execInternal(str));
     }
 

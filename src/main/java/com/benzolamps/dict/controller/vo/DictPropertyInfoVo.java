@@ -8,11 +8,13 @@ import com.benzolamps.dict.util.DictList;
 import com.benzolamps.dict.util.DictProperty;
 import lombok.Getter;
 import org.apache.commons.lang.enums.EnumUtils;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 
+import javax.persistence.Id;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -62,6 +64,14 @@ public class DictPropertyInfoVo extends BaseVo {
     /** 最小值 */
     @Getter
     private final Object max;
+    
+    /** 最小长度 */
+    @Getter
+    private final Long minLength;
+
+    /** 最大长度 */
+    @Getter
+    private final Long maxLength;
 
     /** 是否是过去的时间 */
     @Getter
@@ -83,6 +93,10 @@ public class DictPropertyInfoVo extends BaseVo {
     @Getter
     private final String remote;
 
+    /** 是否是id */
+    @Getter
+    private final Boolean id;
+
     /**
      * 构造器
      * @param dictProperty 自定义属性
@@ -96,12 +110,15 @@ public class DictPropertyInfoVo extends BaseVo {
         this.defaultValue = this.internalGetDefaultValue();
         this.min = this.internalGetMin();
         this.max = this.internalGetMax();
+        this.minLength = this.internalGetMinLength();
+        this.maxLength = this.internalGetMaxLength();
         this.options = this.internalGetOptions();
         this.past = this.internalIsPast();
         this.future = this.internalIsFuture();
         this.pattern = this.internalGetPattern();
         this.notEmpty = this.internalIsNotEmpty();
         this.remote = this.internalGetRemote();
+        this.id = this.internalIsId();
     }
 
     /** @return 获取展示的名称 */
@@ -143,7 +160,7 @@ public class DictPropertyInfoVo extends BaseVo {
         } else if (Date.class.isAssignableFrom(clazz)) {
             return "date";
         } else {
-            throw new UnsupportedOperationException("未实现的类型");
+            return null;
         }
     }
 
@@ -202,6 +219,22 @@ public class DictPropertyInfoVo extends BaseVo {
             }
         }
         return value;
+    }
+    
+    private Long internalGetMinLength() {
+        if (dictProperty.hasAnnotation(Length.class)) {
+            return (long) dictProperty.getAnnotation(Length.class).min();
+        }
+        
+        return null;
+    }
+
+    private Long internalGetMaxLength() {
+        if (dictProperty.hasAnnotation(Length.class)) {
+            return (long) dictProperty.getAnnotation(Length.class).max();
+        }
+
+        return null;
     }
 
     private List<?> internalGetOptions() {
@@ -263,6 +296,10 @@ public class DictPropertyInfoVo extends BaseVo {
             return dictProperty.getAnnotation(DictRemote.class).value();
         }
         return null;
+    }
+
+    private boolean internalIsId() {
+        return dictProperty.hasAnnotation(Id.class);
     }
 
     /**

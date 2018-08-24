@@ -1,13 +1,14 @@
 /**
  * Ajax动态加载表单项
  * @param selector {*} 选择器
- * @param url {string} URL
- * @param [data] {Object} 参数
- * @param [prefix] {string} 参数
- * @param initValues {Object}
- * @param [requestBody] {boolean} 是否是RequestBody
+ * @param [fields] {Object} 字段
+ * @param [prefix] {string} 前缀
+ * @param initValues {Object} 初始化值
+ * @param rules {Object} 验证规则
+ * @param messages {Object} 错误提示
+ * @param submitHandler {Function} 提交拦截器
  */
-dict.dynamicForm = function (selector, url, data, prefix, initValues, requestBody) {
+dict.dynamicForm = function (selector, fields, prefix, initValues, rules, messages, submitHandler) {
 
     initValues || (initValues = {});
 
@@ -18,8 +19,14 @@ dict.dynamicForm = function (selector, url, data, prefix, initValues, requestBod
         var name = dict.$name(selector);
         var $selector = $(selector);
 
-        /* 获取表单 */
-        $form = $selector.parentsUntil('form').last().parent();
+        var parentsUntilForm = $selector.parentsUntil('form');
+
+        if (parentsUntilForm.length == 0) {
+            $form = $selector.parent();
+        } else {
+            $form = parentsUntilForm.last().parent();
+        }
+
         dict.assert($form.is('form'), "未找到form");
 
         /* 根据选择器的元素类型生成表格 */
@@ -33,6 +40,10 @@ dict.dynamicForm = function (selector, url, data, prefix, initValues, requestBod
         }
         return $table;
     }
+
+    var $table = verifyOrAppend(selector);
+
+    $table.empty();
 
     /* 根据属性类型生成不同的表单元素 */
     var formComponent = function (property) {
@@ -48,11 +59,12 @@ dict.dynamicForm = function (selector, url, data, prefix, initValues, requestBod
                 .attr('name', property.name)
                 .addClass('layui-input')
                 .attr('required', property.notEmpty)
+                .attr('lay-filter', property.name)
                 .append($(document.createElement('option'))
                     .val('')
                     .text('请选择' + property.display)
                     .addClass('layui-input')
-            );
+                );
             for (var i = 0; i < property.options.length; i++) {
                 var option = property.options[i];
                 var $option = $(document.createElement('option'))
@@ -70,6 +82,7 @@ dict.dynamicForm = function (selector, url, data, prefix, initValues, requestBod
                         .attr('name', property.name)
                         .attr('lay-skin', 'switch')
                         .attr('lay-text', '开|关')
+                        .attr('lay-filter', property.name)
                         .attr('checked', property.value === 'true' || property.value === true)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
@@ -124,114 +137,113 @@ dict.dynamicForm = function (selector, url, data, prefix, initValues, requestBod
         return $component;
     }
 
-    dict.loadText({
-        url: url,
-        data: data,
-        dataType: 'json',
-        requestBody: requestBody,
-        success: function (data) {
-            var $table = verifyOrAppend(selector);
-            $table.empty();
+    var id;
 
-            var property = data.data;
-
-            for (var i = 0; i < data.count; i++) {
-                property[i].value = initValues[property[i].name] != null ? initValues[property[i].name] : property[i].defaultValue;
-                prefix && (property[i].name = prefix + property[i].name);
-                var $tr = $(document.createElement('tr'));
-                $table.append($tr);
-                var $th = $(document.createElement('th'));
-                $th.text(property[i].display);
-                $th.attr('title', property[i].description);
-                $tr.append($th);
-                var $td = $(document.createElement('td'));
-                var $input = formComponent(property[i]);
-                $td.append($input);
-                $tr.append($td);
-                $table.append($tr);
-            }
-
-            layui.use('form', function() {
-                layui.form.render();
-            });
-
-            $form.find('select').each(function () {
-               if ($(this).attr('required')) {
-                   $(this).next().find('input').attr('required', true);
-                   $(this).next().find('input').attr('name', $(this).attr('name'));
-                   $(this).remove();
-               }
-            });
-
-            var rules = {};
-            var messages = {};
-            for (var i = 0; i < data.count; i++) {
-
-                var itemRules = {};
-                var itemMessages = {};
-                if (property[i].notEmpty) {
-                    itemRules.required = true;
-                    itemMessages.required = property[i].display + '不能为空';
-                }
-
-                if (property[i].remote) {
-                    itemRules.remote = property[i].remote;
-                    itemMessages.remote = property[i].display + '远程验证失败';
-                }
-
-                if (property[i].email) {
-                    itemRules.email = true;
-                    itemMessages.email = property[i].display + '格式不正确';
-                }
-
-                if (property[i].url) {
-                    itemRules.url = true;
-                    itemMessages.email = property[i].display + '格式不正确';
-                }
-
-                if (property[i].type == 'float') {
-                    itemRules.number = true;
-                    itemMessages.email = property[i].display + '必须是有效的数字';
-                }
-
-                if (property[i].type == 'integer') {
-                    itemRules.integer = true;
-                    itemMessages.email = property[i].display + '必须是有效的整数';
-                }
-
-                if (property[i].max != null) {
-                    itemRules.max = property[i].max;
-                    itemMessages.max = property[i].display + '不能大于' + property[i].max;
-                }
-
-                if (property[i].min != null) {
-                    itemRules.min = property[i].min;
-                    itemMessages.min = property[i].display + '不能小于' + property[i].min;
-                }
-
-                if (property[i].minLength != null) {
-                    itemRules.minlength = property[i].minLength;
-                    itemMessages.minlength = property[i].display + '不能大于' + property[i].minLength;
-                }
-
-                if (property[i].maxLength != null) {
-                    itemRules.maxlength = property[i].maxLength;
-                    itemMessages.maxlength = property[i].display + '不能大于' + property[i].maxLength;
-                }
-
-                if (property[i].pattern) {
-                    itemRules.pattern = property[i].pattern;
-                    itemMessages.pattern = property[i].display + '格式不正确';
-                }
-
-                rules[property[i].name] = itemRules;
-
-                messages[property[i].name] = itemMessages;
-            }
-
-            dict.validateForm($form, rules, messages);
+    for (var i = 0; i < fields.length; i++) {
+        fields[i].value = initValues[fields[i].name] != null ? initValues[fields[i].name] : fields[i].defaultValue;
+        prefix && (fields[i].name = prefix + fields[i].name);
+        if (!id && fields[i].id) {
+            var $input = $(document.createElement('input'))
+                .attr('name', fields[i].name)
+                .attr('type', 'hidden')
+                .val(fields[i].value);
+            $table.append($input);
+            id = true;
+            continue;
         }
+        var $tr = $(document.createElement('tr'));
+        $table.append($tr);
+        var $th = $(document.createElement('th'));
+        $th.text(fields[i].display);
+        $th.attr('title', fields[i].description);
+        $tr.append($th);
+        var $td = $(document.createElement('td'));
+        var $input = formComponent(fields[i]);
+        $td.append($input);
+        $tr.append($td);
+        $table.append($tr);
+    }
+
+
+    layui.use('form', function() {
+        layui.form.render();
     });
+
+    $form.find('select').each(function () {
+       if ($(this).attr('required')) {
+           $(this).next().find('input').attr('required', true);
+           $(this).next().find('input').attr('name', $(this).attr('name'));
+           $(this).remove();
+       }
+    });
+
+    var rules = {};
+    var messages = {};
+    for (var i = 0; i < fields.length; i++) {
+
+        var itemRules = {};
+        var itemMessages = {};
+        if (fields[i].notEmpty) {
+            itemRules.required = true;
+            itemMessages.required = fields[i].display + '不能为空';
+        }
+
+        if (fields[i].remote) {
+            itemRules.remote = fields[i].remote;
+            itemMessages.remote = fields[i].display + '远程验证失败';
+        }
+
+        if (fields[i].email) {
+            itemRules.email = true;
+            itemMessages.email = fields[i].display + '格式不正确';
+        }
+
+        if (fields[i].url) {
+            itemRules.url = true;
+            itemMessages.email = fields[i].display + '格式不正确';
+        }
+
+        if (fields[i].type == 'float') {
+            itemRules.number = true;
+            itemMessages.email = fields[i].display + '必须是有效的数字';
+        }
+
+        if (fields[i].type == 'integer') {
+            itemRules.integer = true;
+            itemMessages.email = fields[i].display + '必须是有效的整数';
+        }
+
+        if (fields[i].max != null) {
+            itemRules.max = fields[i].max;
+            itemMessages.max = fields[i].display + '不能大于' + fields[i].max;
+        }
+
+        if (fields[i].min != null) {
+            itemRules.min = fields[i].min;
+            itemMessages.min = fields[i].display + '不能小于' + fields[i].min;
+        }
+
+        if (fields[i].minLength != null) {
+            itemRules.minlength = fields[i].minLength;
+            itemMessages.minlength = fields[i].display + '不能大于' + fields[i].minLength;
+        }
+
+        if (fields[i].maxLength != null) {
+            itemRules.maxlength = fields[i].maxLength;
+            itemMessages.maxlength = fields[i].display + '不能大于' + fields[i].maxLength;
+        }
+
+        if (fields[i].pattern) {
+            itemRules.pattern = fields[i].pattern;
+            itemMessages.pattern = fields[i].display + '格式不正确';
+        }
+
+        rules[fields[i].name] = itemRules;
+
+        messages[fields[i].name] = itemMessages;
+    }
+
+    dict.validateForm($form, $.extend(rules, arguments[4]), $.extend(messages, arguments[5]), submitHandler);
 };
 
 /**
@@ -281,6 +293,12 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
         onfocusout: false,
         onkeyup: false,
         onclick: false,
-        submitHandler: submitHandler
+        submitHandler: function () {
+            $form.find('input[type=checkbox]').each(function () {
+                $(this).val($(this).next().find('em').text().toLowerCase() == $(this).attr('lay-text').split('|')[0].toLowerCase());
+                $(this).attr('type', 'hidden');
+            });
+            return submitHandler();
+        }
     })
 };
