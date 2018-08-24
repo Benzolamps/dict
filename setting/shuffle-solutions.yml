@@ -2,8 +2,8 @@
 solutions: !!set
   ? id: 1
     name: 乱序方案1
-    properties: {unitSize: 30, unitTipRepeat: 0, unitNontipRepeat: 0, entireTipRepeat: 1,
-      entireNontipRepeat: 0, shuffled: false, shuffleSeedSpecified: false, shuffleSeed: 0}
+    properties: {unitSize: 10, unitTipRepeat: 0, unitNontipRepeat: 0, entireTipRepeat: 1,
+      entireNontipRepeat: 0, shuffled: true, shuffleSeedSpecified: false, shuffleSeed: 0}
     remark: 所有单词按顺序重复一遍
     strategyClass: rose.RoseShuffleStrategySetup
   : null
@@ -18,13 +18,6 @@ solutions: !!set
     name: 巩固复习
     properties: {unitSize: 10, unitTipRepeat: 5, unitNontipRepeat: 5, entireTipRepeat: 0,
       entireNontipRepeat: 0, shuffled: true, shuffleSeedSpecified: false, shuffleSeed: 0}
-    remark: ''
-    strategyClass: rose.RoseShuffleStrategySetup
-  : null
-  ? id: 4
-    name: 地狱级别
-    properties: {unitSize: 10, unitTipRepeat: 0, unitNontipRepeat: 1, entireTipRepeat: 0,
-      entireNontipRepeat: 5, shuffled: true, shuffleSeedSpecified: false, shuffleSeed: 0}
     remark: ''
     strategyClass: rose.RoseShuffleStrategySetup
   : null
