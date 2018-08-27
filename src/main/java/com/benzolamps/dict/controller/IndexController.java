@@ -28,7 +28,6 @@ public class IndexController extends BaseController {
      * @return ModelAndView
      */
     @GetMapping("/index.{suffix}")
-    @NavigationView
     protected ModelAndView index(@PathVariable String suffix) {
         return new ModelAndView("html".equals(suffix) ? "view/default/index" : "redirect:index.html");
     }

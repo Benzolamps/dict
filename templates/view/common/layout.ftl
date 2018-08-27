@@ -52,7 +52,7 @@
                 <dl class="layui-nav-child">
                   <#list column.children as child>
                     <dd>
-                      <a class="child-item" href="${child.href}">
+                      <a class="child-item" href="javascript:;" src="${child.href}">
                         &nbsp;&nbsp; <span class="child-title">${child.title}</span>
                       </a>
                     </dd>
@@ -65,13 +65,10 @@
       </div>
       <div id="content-div" class="layui-body">
         <#-- 内容主体区域 -->
-        <div style="padding: 15px;">
-          <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-            <ul class="layui-tab-title">
-              <li class="layui-this content-title"></li>
-            </ul>
-            <div class="layui-tab-content">
-              <#include '/${content_path}.ftl'/>
+        <div class="layui-tab tab" lay-filter="docDemoTabBrief" style="width: 100%; height: 100%">
+          <div class="layui-tab-content" style="width: 100%; height: 100%">
+            <div class="layui-tab-item layui-show" style="width: 100%; height: 100%">
+              <iframe src="system/about.html" frameborder="0" scrolling="yes" style="width: 100%; height: 100%"></iframe>
             </div>
           </div>
         </div>
@@ -81,6 +78,51 @@
         <a target="_blank" href="https://benzolamps.com">benzolamps.com</a>
       </div>
     </div>
-    <script src="${base_url}/res/js/navigation.js<#if title??>?title=${title}</#if>"></script>
   </body>
+
+  <script type="text/javascript">
+    $(function () {
+      var columns = null;
+
+      /* 请求栏目JSON */
+      dict.loadText({
+        type: "get",
+        url: '${base_url}/res/json/columns.json',
+        cache: true,
+        dataType: 'json',
+        success: function(data) {
+          columns = data;
+        }
+      });
+
+      var column = 0, child = 0;
+
+      if (localStorage.getItem('column')) {
+          column = localStorage.getItem('column');
+      }
+
+      if (localStorage.getItem('child')) {
+          child = localStorage.getItem('child');
+      }
+
+      /* 将找到的栏目设为选中 */
+      if (column >= 0 && child >= 0) {
+        var $li = $('ul.dict-nav-tree>li').eq(column);
+        $li.addClass('layui-nav-itemed');
+        var $dd = $li.find('dl.layui-nav-child>dd').eq(child);
+        $dd.addClass('layui-this');
+        var $iframe = $('iframe');
+        $iframe.attr('href', columns[column].children[child].href);
+        localStorage.setItem('column', column);
+        localStorage.setItem('child', child);
+      }
+
+      $('.child-item').click(function () {
+        var $iframe = $('iframe');
+        $iframe.attr('href', $(this).attr('src'));
+        localStorage.setItem('column', column);
+        localStorage.setItem('child', child);
+      });
+    });
+  </script>
 </html>

@@ -23,7 +23,7 @@ public class NavigationInterceptor extends HandlerInterceptorAdapter {
         if (modelAndView != null) {
             if (modelAndView.getViewName().startsWith("redirect:")) return;
             modelAndView.addObject("content_path", modelAndView.getViewName());
-            modelAndView.setViewName("view/common/layout");
+            modelAndView.setViewName("view/common/nav");
         }
     }
 }

@@ -26,7 +26,7 @@ public class DataAdd implements TemplateDirectiveModel {
         Assert.notNull(id, "id不能为null");
         Object fields = DeepUnwrap.unwrap((TemplateModel) params.get("fields"));
         Assert.notNull(fields, "fields不能为null");
-        Object values = DeepUnwrap.unwrap((TemplateModel) params.get("fields"));
+        Object values = DeepUnwrap.unwrap((TemplateModel) params.get("values"));
         if (values == null) values = Constant.EMPTY_MAP;
         Object rules = DeepUnwrap.unwrap((TemplateModel) params.get("rules"));
         if (rules == null) rules = Constant.EMPTY_MAP;
