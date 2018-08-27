@@ -28,14 +28,6 @@ public class JsonDumper implements TemplateDirectiveModel {
     @Resource
     private ObjectMapper mapper;
 
-    /* 因为ObjectMapper在writeValue完成后自动关闭Writer
-     * 而关闭之后模板文件后续内容将不再继续写入
-     * 所以写之前先把AUTO_CLOSE_TARGET属性设为false
-     * 写完成后再把属性设为true
-     * 这样后续内容仍可以写出
-     * 不过会不会存在线程不安全的问题
-     */
-    // FIXME: 线程不安全
     @Override
     public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws IOException, TemplateModelException {
         mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);

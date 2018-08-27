@@ -4,14 +4,13 @@
 <#-- @ftlvariable name="rules" type="java.util.Map" -->
 <#-- @ftlvariable name="messages" type="java.util.Map" -->
 <#-- @ftlvariable name="title" type="java.lang.String" -->
-<#-- @ftlvariable name="save" type="java.lang.String" -->
+<#-- @ftlvariable name="update" type="java.lang.String" -->
 <#-- @ftlvariable name="submit_handler" type="java.lang.String" -->
 <#-- @ftlvariable name="ready_handler" type="java.lang.String" -->
-
 <div class="layui-card">
   <div class="layui-card-header">${title}</div>
   <div class="layui-card-body">
-    <form class="layui-form" id="${id}" method="post" action="${save}">
+    <form class="layui-form" id="${id}" method="post" action="${update}">
       <table class="layui-table"></table>
       <input type="submit" value="确定" class="layui-btn layui-btn-normal" style="margin-top: 10px;">
     </form>
@@ -25,7 +24,7 @@
     var $table = $('#${id} table');
     var $tbody = $(document.createElement('tbody'));
     $table.append($tbody);
-    dict.dynamicForm($tbody, <@json_dump obj = fields ignores='handler'/>, '', {}, <@json_dump obj = rules/>, <@json_dump obj = messages/>, function () {
+    dict.dynamicForm($tbody, <@json_dump obj=fields/>, '', <@json_dump obj=values/>, <@json_dump obj=rules/>, <@json_dump obj=messages/>, function () {
       ${submit_handler}
     });
 

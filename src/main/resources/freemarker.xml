@@ -59,6 +59,7 @@
         <entry key="json_dump" value-ref="jsonDumper"/>
         <entry key="get_dict_property" value-ref="getDictProperty"/>
         <entry key="data_add" value-ref="dataAdd"/>
+        <entry key="data_edit" value-ref="dataEdit"/>
       </map>
     </property>
   </bean>

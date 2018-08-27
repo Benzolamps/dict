@@ -45,7 +45,8 @@
      * @returns {string} 名称
      */
     dict.$name = function (selector) {
-        return dict.$single(selector)[0].localName.toLowerCase();
+        var ele = dict.$single(selector)[0];
+        return ele.nodeName.toLowerCase();
     };
 
     /**

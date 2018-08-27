@@ -37,6 +37,11 @@ public class ShuffleSolution implements Serializable {
     @DictPropertyInfo(display = "乱序方案名称")
     private String name;
 
+    /** 备注 */
+    @Length(max = 50)
+    @DictPropertyInfo(display = "备注")
+    private String remark;
+
     /** 乱序策略类 */
     @NotEmpty
     @DictPropertyInfo(display = "乱序策略")
@@ -44,11 +49,6 @@ public class ShuffleSolution implements Serializable {
 
     /** 属性 */
     private transient Map<String, Object> properties;
-
-    /** 备注 */
-    @Length(max = 50)
-    @DictPropertyInfo(display = "备注")
-    private String remark;
 
     @Override
     public boolean equals(Object obj) {

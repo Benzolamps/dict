@@ -32,4 +32,5 @@
 [#function string_yaml_parse str][/#function]
 [#function get_dict_property class_name][/#function]
 [#include '/view/includes/main.ftl'/]
-[#macro data_add id fields values={} rules={} messages={} title='' submit_handle=''][/#macro]
+[#macro data_add id fields values={} rules={} messages={} title='' submit_handler='' ready_handler='' save='save.json'][/#macro]
+[#macro data_edit id fields values={} rules={} messages={} title='' submit_handler='' ready_handler='' update='update.json'][/#macro]

@@ -4,15 +4,21 @@
  * @param [fields] {Object} 字段
  * @param [prefix] {string} 前缀
  * @param initValues {Object} 初始化值
- * @param rules {Object} 验证规则
- * @param messages {Object} 错误提示
+ * @param extendedRules {Object} 验证规则
+ * @param extendedMessages {Object} 错误提示
  * @param submitHandler {Function} 提交拦截器
  */
-dict.dynamicForm = function (selector, fields, prefix, initValues, rules, messages, submitHandler) {
+dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules, extendedMessages, submitHandler) {
 
     initValues || (initValues = {});
 
     var $form;
+
+    var form;
+
+    layui.use('form', function() {
+        form = layui.form;
+    });
 
     /* 验证是否有表单包裹 */
     var verifyOrAppend = function (selector) {
@@ -74,6 +80,14 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, rules, messag
                     .addClass('layui-input');
                 $component.append($option);
             }
+
+            form.on('select(' + property.name + ')', function (data) {
+                try {
+                    eval(property.handler);
+                } catch (e) {
+                    console.log(e);
+                }
+            });
         } else {
             switch (property.type) {
                 case 'boolean': {
@@ -86,6 +100,13 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, rules, messag
                         .attr('checked', property.value === 'true' || property.value === true)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
+                    form.on('switch(' + property.name + ')', function (data) {
+                        try {
+                            eval(property.handler);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    });
                     break;
                 }
                 case 'string': {
@@ -154,7 +175,7 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, rules, messag
         var $tr = $(document.createElement('tr'));
         $table.append($tr);
         var $th = $(document.createElement('th'));
-        $th.text(fields[i].display);
+        $th.html(fields[i].display + (fields[i].notEmpty ? '<span class="required-field">&nbsp;*&nbsp;</span>' : ''));
         $th.attr('title', fields[i].description);
         $tr.append($th);
         var $td = $(document.createElement('td'));
@@ -164,10 +185,7 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, rules, messag
         $table.append($tr);
     }
 
-
-    layui.use('form', function() {
-        layui.form.render();
-    });
+    form.render();
 
     $form.find('select').each(function () {
        if ($(this).attr('required')) {
@@ -215,22 +233,22 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, rules, messag
 
         if (fields[i].max != null) {
             itemRules.max = fields[i].max;
-            itemMessages.max = fields[i].display + '不能大于' + fields[i].max;
+            itemMessages.max = fields[i].display + '不能大于 ' + fields[i].max;
         }
 
         if (fields[i].min != null) {
             itemRules.min = fields[i].min;
-            itemMessages.min = fields[i].display + '不能小于' + fields[i].min;
-        }
-
-        if (fields[i].minLength != null) {
-            itemRules.minlength = fields[i].minLength;
-            itemMessages.minlength = fields[i].display + '不能大于' + fields[i].minLength;
+            itemMessages.min = fields[i].display + '不能小于 ' + fields[i].min;
         }
 
         if (fields[i].maxLength != null) {
-            itemRules.maxlength = fields[i].maxLength;
-            itemMessages.maxlength = fields[i].display + '不能大于' + fields[i].maxLength;
+            itemRules.maxlength = fields[i].minLength;
+            itemMessages.maxlength = fields[i].display + '不能多于 ' + fields[i].maxLength + ' 个字符';
+        }
+
+        if (fields[i].minLength != null) {
+            itemRules.minlength = fields[i].maxLength;
+            itemMessages.minlength = fields[i].display + '不能少于 ' + fields[i].minLength + ' 个字符';
         }
 
         if (fields[i].pattern) {
@@ -242,8 +260,7 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, rules, messag
 
         messages[fields[i].name] = itemMessages;
     }
-
-    dict.validateForm($form, $.extend(rules, arguments[4]), $.extend(messages, arguments[5]), submitHandler);
+    dict.validateForm($form, $.extend(true, rules, extendedRules), $.extend(true, messages, extendedMessages), submitHandler);
 };
 
 /**
