@@ -4,7 +4,6 @@
   -- version: 2.1.1
   -- datetime: 2018-7-11 19:20:00
   -->
-
 <#assign accounts = url_yaml_parse('${remote_base_url}/yml/accounts.yml')/>
 <#assign about><#include '/res/yml/about.yml.ftl'/></#assign>
 <#assign about = string_yaml_parse(about)/>
@@ -13,7 +12,7 @@
     <div class="layui-card">
       <div class="layui-card-header"><h2>关于系统</h2></div>
       <div class="layui-card-body">
-      ${about.system.description}
+        ${about.system.description}
         <hr class="layui-bg-gray">
         <#list about.system.columns as column>
           <fieldset class="layui-elem-field">
@@ -28,7 +27,7 @@
     <div class="layui-card">
       <div class="layui-card-header"><h2>关于开发工具</h2></div>
       <div class="layui-card-body">
-      ${about.devtools.description}
+        ${about.devtools.description}
         <hr class="layui-bg-gray">
         <#list about.devtools.columns as column>
           <fieldset class="layui-elem-field">
@@ -111,7 +110,7 @@
           </a>
           <br><br>
           <a href="tencent://message/?uin=${accounts.qq}&Menu=yes" style="font-size: medium; color: #AAAAAA">
-          ${accounts.qq}
+            ${accounts.qq}
           </a>
         </script>
 
@@ -142,6 +141,3 @@
     </div>
   </div>
 </div>
-
-<script type="text/javascript">
-</script>

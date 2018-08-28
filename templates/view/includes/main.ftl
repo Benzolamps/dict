@@ -8,6 +8,7 @@
 <#--
   -- 压缩代码成一行
   -->
-<#function compress str>
-  <#return str?replace("^\\s+|\\s+$|\\n|\\r", "", "rm")/>
-</#function>
+<#macro compress>
+  <#assign nested><#nested/></#assign>
+  ${nested?replace("^\\s+|\\s+$|\\n|\\r", "", "rm")}
+</#macro>

@@ -58,7 +58,7 @@
             'display': '${field.display}',
             'description': '${field.description}',
             'notEmpty': ${field.notEmpty?c},
-            'handler': "${compress(select_handler)}"
+            'handler': "${select_handler}"
           }
         <#else>
           <@json_dump obj=field/>
