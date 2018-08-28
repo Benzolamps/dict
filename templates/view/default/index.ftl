@@ -26,6 +26,48 @@
       <script type="text/javascript" src="${base_url}/layui/layui.js"></script>
       <script type="text/javascript" src="${base_url}/layui/lay/modules/layer.js"></script>
       <script type="text/javascript" src="${base_url}/res/js/common.js"></script>
+      <style>
+        .dict-bg {
+          background-color: #EEEEEE !important;
+        }
+
+        .dict-column {
+          background-color: #888888 !important;
+          color: #FFFFFF
+        }
+        .dict-column:hover {
+          background-color: #999999 !important;
+          color: #EEEEEE;
+        }
+
+        .dict-column:active {
+          background-color: #AAAAAA !important;
+        }
+
+        .dict-child {
+          background-color: #BBBBBB !important;
+        }
+
+        .dict-child:hover {
+          background-color: #CCCCCC !important;
+        }
+
+        .dict-child:active {
+          background-color: #DDDDDD !important;
+        }
+
+        .layui-nav-itemd>a {
+          background-color: #AAAAAA !important;
+        }
+
+        .layui-this>a {
+          background-color: #DDDDDD !important;
+        }
+
+        .layui-nav-bar {
+          background-color: #999999 !important;
+        }
+      </style>
     </head>
     <body>
       <div class="layui-layout layui-layout-admin">
@@ -37,22 +79,22 @@
           </div>
           <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item layui-nav-itemd" lay-unselect>
-              <a style="color: #666"></a>
+              <a></a>
             </li>
           </ul>
         </div>
-        <div class="layui-side layui-bg-cyan">
+        <div class="layui-side dict-bg">
           <div class="layui-side-scroll">
             <#-- 左侧导航区域 (可配合layui已有的垂直导航) -->
-            <ul class="dict-nav-tree layui-nav layui-nav-tree layui-bg-cyan" lay-shrink="all">
+            <ul class="dict-nav-tree layui-nav layui-nav-tree" lay-shrink="all">
               <#assign column_data><#include '/res/json/columns.json.ftl'/></#assign>
                 <#list column_data?eval as column>
                   <li class="layui-nav-item">
-                    <a href="javascript:;">${column.title}</a>
+                    <a class="dict-column" href="javascript:;">${column.title}</a>
                     <dl class="layui-nav-child">
                       <#list column.children as child>
                         <dd>
-                          <a class="child-item" href="javascript:;" src="${child.href}">
+                          <a class="child-item dict-child" href="javascript:;" src="${child.href}">
                             &nbsp;&nbsp; <span class="child-title">${child.title}</span>
                           </a>
                         </dd>
