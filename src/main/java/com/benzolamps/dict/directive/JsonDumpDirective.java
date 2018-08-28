@@ -23,7 +23,7 @@ import java.util.Map;
  * @datetime 2018-7-25 21:23:40
  */
 @Component
-public class JsonDumper implements TemplateDirectiveModel {
+public class JsonDumpDirective implements TemplateDirectiveModel {
 
     @Resource
     private ObjectMapper mapper;

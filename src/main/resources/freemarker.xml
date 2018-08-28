@@ -37,29 +37,31 @@
         <entry key="is_release" value="#{isRelease}"/>
         <entry key="logger" value="#{T(org.slf4j.LoggerFactory).getLogger(T(com.benzolamps.dict.cfg.FreemarkerConfig))}"/>
         <entry key="url_yaml_parse">
-          <bean class="com.benzolamps.dict.directive.YamlParser">
+          <bean class="com.benzolamps.dict.directive.YamlParseMethod">
             <property name="resourceType" value="URL"/>
           </bean>
         </entry>
         <entry key="class_path_yaml_parse">
-          <bean class="com.benzolamps.dict.directive.YamlParser">
+          <bean class="com.benzolamps.dict.directive.YamlParseMethod">
             <property name="resourceType" value="CLASS_PATH"/>
           </bean>
         </entry>
         <entry key="file_system_yaml_parse">
-          <bean class="com.benzolamps.dict.directive.YamlParser">
+          <bean class="com.benzolamps.dict.directive.YamlParseMethod">
             <property name="resourceType" value="FILE_SYSTEM"/>
           </bean>
         </entry>
         <entry key="string_yaml_parse">
-          <bean class="com.benzolamps.dict.directive.YamlParser">
+          <bean class="com.benzolamps.dict.directive.YamlParseMethod">
             <property name="resourceType" value="STRING"/>
           </bean>
         </entry>
-        <entry key="json_dump" value-ref="jsonDumper"/>
-        <entry key="get_dict_property" value-ref="getDictProperty"/>
-        <entry key="data_add" value-ref="dataAdd"/>
-        <entry key="data_edit" value-ref="dataEdit"/>
+        <entry key="json_dump" value-ref="jsonDumpDirective"/>
+        <entry key="get_dict_property" value-ref="getDictPropertyMethod"/>
+        <entry key="data_add" value-ref="dataAddDirective"/>
+        <entry key="data_edit" value-ref="dataEditDirective"/>
+        <entry key="abbreviate" value-ref="abbreviateMethod"/>
+        <entry key="constant" value-ref="constantMethod"/>
       </map>
     </property>
   </bean>

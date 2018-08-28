@@ -4,7 +4,7 @@ system:
   name: dictionary
 
   # 系统名称
-  title: Yet Another Artifact 【YAA】
+  title: 单词神器
 
   # 主机名
   host: localhost

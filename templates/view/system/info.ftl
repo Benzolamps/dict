@@ -17,43 +17,43 @@
           <thead></thead>
           <tbody>
             <tr>
-              <th>系统名称</th>
+              <th title="系统名称">系统名称</th>
               <td>${system_title}</td>
             </tr>
             <tr>
-              <th>系统版本</th>
+              <th title="系统版本">系统版本</th>
               <td>${system_version}</td>
             </tr>
             <tr>
-              <th>当前时间</th>
+              <th title="当前时间">当前时间</th>
               <td class="date-time-text"><#include '/res/txt/current_time.txt.ftl'/></td>
             </tr>
             <tr>
-              <th>操作系统名称</th>
+              <th title="操作系统名称">操作系统名称</th>
               <td>${os_name}</td>
             </tr>
             <tr>
-              <th>操作系统版本</th>
+              <th title="操作系统版本">操作系统版本</th>
               <td>${os_version}</td>
             </tr>
             <tr>
-              <th>操作系统架构</th>
+              <th title="操作系统架构">操作系统架构</th>
               <td>${os_arth}</td>
             </tr>
             <tr>
-              <th>用户名</th>
+              <th title="用户名">用户名</th>
               <td>${user_name}</td>
             </tr>
             <tr>
-              <th>主机名</th>
+              <th title="主机名">主机名</th>
               <td>${host_name}</td>
             </tr>
             <tr>
-              <th>IP地址</th>
+              <th title="IP地址">IP地址</th>
               <td>${host_address}</td>
             </tr>
             <tr>
-              <th>浏览器信息</th>
+              <th title="浏览器信息">浏览器信息</th>
               <td><script>document.write(navigator.userAgent);</script></td>
             </tr>
           </tbody>

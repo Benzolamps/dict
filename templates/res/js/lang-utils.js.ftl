@@ -75,6 +75,29 @@ dict.generateObject = function (obj) {
             }
         });
     }
-
     return returnObj;
+}
+
+/**
+ * 字符串缩略
+ * @param str 字符串
+ * @param width 长度
+ * @param ellipsis
+ */
+dict.abbreviate = function (str, width, ellipsis) {
+    width = parseInt(width);
+    if (str == null || str.length <= 0 || width == null || isNaN(width) || isFinite(width)) return str;
+    if (ellipsis == null) ellipsis = '';
+    var chars = str.split('');
+    var returnValue;
+    for (var i = 0; i < chars.length; i++) {
+        if (width > 0) {
+            if (${regexp(constant('CHINESE_PATTERN'))}.test(chars[i])) width -= 2;
+            else width--;
+            returnValue += chars[i];
+        } else {
+            break;
+        }
+
+    }
 }

@@ -9,6 +9,10 @@
   -- 压缩代码成一行
   -->
 <#macro compress>
-  <#assign nested><#nested/></#assign>
-  ${nested?replace("^\\s+|\\s+$|\\n|\\r", "", "rm")}
+  <#local nested><#nested/></#local>
+  ${nested?replace('^\\s+|\\s+$|\\n|\\r', '', 'rm')}
 </#macro>
+
+<#function regexp pattern flag=''>
+  <#return '/${pattern}/${flag}'>
+</#function>

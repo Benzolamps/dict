@@ -5,6 +5,13 @@
   toolbar=[]
   page_enabled=true
 >
+
+  <style>
+    .layui-table-view .layui-table {
+      width: 100%;
+    }
+  </style>
+
   <#-- @ftlvariable name="toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
   <div class="layui-row">
     <form class="layui-form" id="${id}" lay-filter="${id}" onsubmit="return false;" method="post">
@@ -136,5 +143,6 @@
         }
       });
     });
+
   </script>
 </#macro>

@@ -128,7 +128,7 @@
           $('.img-handler').mouseenter(function () {
             var div = $(this).attr('div');
             var content = $('#' + div).html();
-            layer.msg(content, {
+            parent.layer.msg(content, {
               offset: 't',
               time: 0,
               anim: 2,

@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 
 /**
  * 常量
@@ -24,8 +25,17 @@ public interface Constant {
 
     DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT + " " + TIME_FORMAT);
 
-    // language=RegExp
+    /** 标识符正则表达式 */
     String IDENTIFIER_PATTERN = "^[$_a-zA-Z][$_a-zA-Z0-9]*$";
+
+    /** 中文正则表达式 */
+    String CHINESE_PATTERN = "^[\\u4e00-\\u9fa5\\ufe30-\\uffa0]$";
+
+    /** 中文、字母、数字、下划线2到20位 */
+    String CHINESE_TITLE_PATTERN = "^[_a-zA-Z0-9\\u4e00-\\u9fa5\\ufe30-\\uffa0]{2,20}$";
+
+    /** 大陆手机号 */
+    String MOBILE_PATTERN = "1[3-9][0-9]{9}";
 
     /** 空的Object数组 */
     Object[] EMPTY_OBJECT_ARRAY = new Object[0];

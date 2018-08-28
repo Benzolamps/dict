@@ -22,7 +22,7 @@ import java.util.List;
  * @datetime 2018-7-11 18:40:54
  */
 @Component
-public class YamlParser implements TemplateMethodModelEx {
+public class YamlParseMethod implements TemplateMethodModelEx {
 
     /** 资源类型 */
     @Setter
@@ -31,7 +31,7 @@ public class YamlParser implements TemplateMethodModelEx {
     @Resource
     private Yaml yaml;
 
-    public YamlParser() {
+    public YamlParseMethod() {
         this.resourceType = ResourceType.STRING;
     }
 

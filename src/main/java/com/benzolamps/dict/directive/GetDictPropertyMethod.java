@@ -18,7 +18,7 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
  * @datetime 2018-8-24 19:48:14
  */
 @Component
-public class GetDictProperty implements TemplateMethodModelEx {
+public class GetDictPropertyMethod implements TemplateMethodModelEx {
 
     @Resource
     private ClassLoader classLoader;

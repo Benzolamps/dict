@@ -31,55 +31,83 @@
           background-color: #EEEEEE !important;
         }
 
+        .dict-nav {
+          color: #333333 !important;
+          font-size: x-large;
+        }
+
         .dict-column {
-          background-color: #888888 !important;
-          color: #FFFFFF
+          background-color: #EEEEEE !important;
+          color: #333333 !important;
+          border-bottom: solid 1px #CCCCCC;
         }
         .dict-column:hover {
-          background-color: #999999 !important;
-          color: #EEEEEE;
+          background-color: #DDDDDD !important;
+          color: #222222 !important;
         }
 
         .dict-column:active {
-          background-color: #AAAAAA !important;
+          background-color: #DDDDDD !important;
+          color: #222222 !important;
         }
 
         .dict-child {
-          background-color: #BBBBBB !important;
+          background-color: #CCCCCC !important;
+          color: #333333 !important;
         }
 
         .dict-child:hover {
-          background-color: #CCCCCC !important;
+          background-color: #BBBBBB !important;
+          color: #222222 !important;
         }
 
         .dict-child:active {
-          background-color: #DDDDDD !important;
+          background-color: #BBBBBB !important;
+          color: #222222 !important;
         }
 
-        .layui-nav-itemd>a {
-          background-color: #AAAAAA !important;
+        .layui-nav-itemd>.dict-column {
+          background-color: #DDDDDD !important;
+          color: #222222 !important !important;
         }
 
-        .layui-this>a {
-          background-color: #DDDDDD !important;
+        .layui-this>.dict-child {
+          background-color: #BBBBBB !important;
+          color: #222222 !important;
         }
 
         .layui-nav-bar {
-          background-color: #999999 !important;
+          background-color: #222222 !important;
+        }
+
+        .dict-column>.layui-nav-more {
+          border-color: #222222 transparent transparent;
+        }
+
+        .layui-nav-itemed>.dict-column .layui-nav-more {
+          border-color: transparent transparent #222222 !important;
         }
       </style>
     </head>
     <body>
       <div class="layui-layout layui-layout-admin">
-        <div class="layui-header layui-bg-gray">
-          <div class="layui-logo" style="width: auto; text-align: left; padding-left: 20px">
-            <a href="${base_url}">
-            ${system_title}~&nbsp;&nbsp;${system_version}
+        <div class="layui-header" style="background-color: #FBFBFB">
+          <div class="layui-logo" style="background-color: #FFB800">
+            <a href="${base_url}" title="${system_title} ~ ${system_version}">
+              ${abbreviate('${system_title} ~ ${system_version}', 20, '...')?html}
             </a>
           </div>
           <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item layui-nav-itemd" lay-unselect>
-              <a></a>
+              <a class="dict-nav" id="toggle-nav">
+                <i class="fa fa-angle-double-left" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li class="layui-nav-item layui-nav-itemd" lay-unselect>
+              <a class="dict-nav">gfhgfh</a>
+            </li>
+            <li class="layui-nav-item layui-nav-itemd" lay-unselect>
+              <a class="dict-nav">gfhgfh</a>
             </li>
           </ul>
         </div>
@@ -105,9 +133,9 @@
             </ul>
           </div>
         </div>
-        <div id="content-div" class="layui-body" style="margin: 5px; padding: 5px;">
+        <div id="content-div" class="layui-body dict-body" style="margin: 5px; padding: 5px;">
           <#-- 内容主体区域 -->
-          <div class="layui-tab tab" lay-filter="docDemoTabBrief" style="height: 96%">
+          <div class="layui-tab tab" lay-filter="docDemoTabBrief" style="height: 95%">
             <div class="layui-tab-content" style="width: 100%; height: 100%">
               <div class="layui-tab-item layui-show" style="width: 100%; height: 100%">
                 <iframe src="javascript:;" frameborder="0" style="width: 98%; height: 100%"></iframe>
@@ -115,7 +143,7 @@
             </div>
           </div>
         </div>
-        <div class="layui-footer">
+        <div class="layui-footer" style="background-color: #FBFBFB; text-align: center">
           &copy; <a target="_blank" href="https://benzolamps.com">benzolamps.com</a>
         </div>
       </div>
@@ -147,7 +175,6 @@
           /* 将找到的栏目设为选中 */
           if (column >= 0 && child >= 0) {
             var $li = $('ul.dict-nav-tree>li').eq(column);
-            $li.addClass('layui-nav-itemed');
             var $dd = $li.find('dl.layui-nav-child>dd').eq(child);
             $dd.addClass('layui-this');
             $('iframe').attr('src', columns[column].children[child].href);
@@ -161,6 +188,30 @@
             column = $(this).parentsUntil('ul').last().prevAll().length;
             localStorage.setItem('column', column);
             localStorage.setItem('child', child);
+          });
+
+          var tipsId;
+
+          $('.child-item').mouseenter(function () {
+            tipsId = layer.tips($(this).children('span').text(), this);
+          }).mouseleave(function () {
+            if (tipsId != null) {
+              layer.close(tipsId);
+              tipsId = null;
+            }
+          });
+
+          $('#toggle-nav').click(function () {
+            if ($('.dict-bg').css('display') != 'none') {
+              $('.dict-bg').slideUp(function () {
+                $('.dict-body').animate({left: 0});
+              });
+            } else {
+              $('.dict-body').animate({left: '200px'}, 'fast', function () {
+                  $('.dict-bg').slideDown();
+                }
+              );
+            }
           });
         });
       </script>
