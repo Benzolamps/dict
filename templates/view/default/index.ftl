@@ -143,7 +143,7 @@
             </div>
           </div>
         </div>
-        <div class="layui-footer" style="background-color: #FBFBFB; text-align: center">
+        <div class="layui-footer dict-footer" style="background-color: #FBFBFB; text-align: center">
           &copy; <a target="_blank" href="https://benzolamps.com">benzolamps.com</a>
         </div>
       </div>
@@ -204,10 +204,10 @@
           $('#toggle-nav').click(function () {
             if ($('.dict-bg').css('display') != 'none') {
               $('.dict-bg').slideUp(function () {
-                $('.dict-body').animate({left: 0});
+                $('.dict-body,.dict-footer').animate({left: 0});
               });
             } else {
-              $('.dict-body').animate({left: '200px'}, 'fast', function () {
+              $('.dict-body,.dict-footer').animate({left: '200px'}, 'fast', function () {
                   $('.dict-bg').slideDown();
                 }
               );

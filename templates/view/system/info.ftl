@@ -68,35 +68,35 @@
           <thead></thead>
           <tbody>
             <tr>
-              <th>Java版本</th>
+              <th title="Java版本">Java版本</th>
               <td>${java_version}</td>
             </tr>
             <tr>
-              <th>SpringBoot版本</th>
+              <th title="SpringBoot版本">SpringBoot版本</th>
               <td>${springboot_version}</td>
             </tr>
             <tr>
-              <th>Tomcat版本</th>
+              <th title="Tomcat版本">Tomcat版本</th>
               <td>${tomcat_version}</td>
             </tr>
             <tr>
-              <th>Servlet版本</th>
+              <th title="Servlet版本">Servlet版本</th>
               <td>${servlet_version}</td>
             </tr>
             <tr>
-              <th>Freemarker版本</th>
+              <th title="Freemarker版本">Freemarker版本</th>
               <td>${.version}</td>
             </tr>
             <tr>
-              <th>Hibernate版本</th>
+              <th title="Hibernate版本">Hibernate版本</th>
               <td>${hibernate_version}</td>
             </tr>
             <tr>
-              <th>POI版本</th>
+              <th title="POI版本">POI版本</th>
               <td>${poi_version}</td>
             </tr>
             <tr>
-              <th>JQuery版本</th>
+              <th title="JQuery版本">JQuery版本</th>
               <td id="jquery-version"><script>document.write($.fn.jquery);</script></td>
             </tr>
           </tbody>
