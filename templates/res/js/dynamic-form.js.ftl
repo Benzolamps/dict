@@ -80,14 +80,6 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
                     .addClass('layui-input');
                 $component.append($option);
             }
-
-            form.on('select(' + property.name + ')', function (data) {
-                try {
-                    eval(property.handler);
-                } catch (e) {
-                    console.log(e);
-                }
-            });
         } else {
             switch (property.type) {
                 case 'boolean': {
@@ -100,13 +92,6 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
                         .attr('checked', property.value === 'true' || property.value === true)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
-                    form.on('switch(' + property.name + ')', function (data) {
-                        try {
-                            eval(property.handler);
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    });
                     break;
                 }
                 case 'string': {
@@ -242,12 +227,12 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
         }
 
         if (fields[i].maxLength != null) {
-            itemRules.maxlength = fields[i].minLength;
+            itemRules.maxlength = fields[i].maxLength;
             itemMessages.maxlength = fields[i].display + '不能多于 ' + fields[i].maxLength + ' 个字符';
         }
 
         if (fields[i].minLength != null) {
-            itemRules.minlength = fields[i].maxLength;
+            itemRules.minlength = fields[i].minLength;
             itemMessages.minlength = fields[i].display + '不能少于 ' + fields[i].minLength + ' 个字符';
         }
 

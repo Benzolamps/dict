@@ -9,8 +9,8 @@
       requestBody: true,
       success: function () {
         var index = parent.layer.getFrameIndex(window.name);
-        layer.close(index);
-        parent.location.reload(true);
+        parent.layer.close(index);
+        parent.$('iframe')[0].contentWindow.location.reload(true);
       }
     });
     return false;

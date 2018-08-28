@@ -53,7 +53,7 @@
       var refresh = $('#${id} [lay-event=refresh]');
 
       add.click(function () {
-        layer.open({
+        parent.layer.open({
           type: 2,
           content: '${add}',
           area: ['800px', '600px']
@@ -61,7 +61,7 @@
       });
 
       delMany.click(function () {
-        layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+        parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
           var checkStatus = table.checkStatus('${id}');
           var ids = checkStatus.data.map(function (value) {
             return value.id;
@@ -71,12 +71,12 @@
             data: {id: ids},
             async: true,
             success: function () {
-              layer.alert('删除成功', function () {
+              parent.layer.alert('删除成功', function () {
                 location.reload();
               });
             }
           });
-          layer.close(index);
+          parent.layer.close(index);
         });
       });
 
@@ -86,24 +86,24 @@
 
       table.on('tool(${id})', function (obj) {
         if (obj.event == 'edit') {
-          layer.open({
+          parent.layer.open({
             type: 2,
             content: '${edit}?id=' + obj.data.id,
             area: ['800px', '600px']
           });
         } else if (obj.event == 'del') {
-          layer.confirm('确定要删除这条记录吗？', {icon: 3, title: '提示'}, function (index) {
+          parent.layer.confirm('确定要删除这条记录吗？', {icon: 3, title: '提示'}, function (index) {
             dict.loadText({
               url: '${delete}',
               data: {id: obj.data.id},
               async: true,
               success: function () {
-                layer.alert('删除成功', function () {
+                parent.layer.alert('删除成功', function () {
                   location.reload();
                 });
               }
             });
-            layer.close(index);
+            parent.layer.close(index);
           });
         }
         <#if toolbar?size gt 0>

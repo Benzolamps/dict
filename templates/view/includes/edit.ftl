@@ -23,8 +23,9 @@
     var $form = $('#${id}');
     var $table = $('#${id} table');
     var $tbody = $(document.createElement('tbody'));
+    var fields = <@json_dump obj=fields/>;
     $table.append($tbody);
-    dict.dynamicForm($tbody, <@json_dump obj=fields/>, '', <@json_dump obj=values/>, <@json_dump obj=rules/>, <@json_dump obj=messages/>, function () {
+    dict.dynamicForm($tbody, fields, '', <@json_dump obj=values/>, <@json_dump obj=rules/>, <@json_dump obj=messages/>, function () {
       ${submit_handler}
     });
 
@@ -41,6 +42,20 @@
     var submit = function () {
       document.getElementById('${id}').submit();
     };
+
+    for (var i = 0; i < fields.length; i++) {
+      (function (i) {
+        if (fields[i].handler && fields[i].options) {
+          form.on('select(' + fields[i].name + ')', function (data) {
+            eval(fields[i].handler);
+          });
+        } else if (fields[i].type && fields[i].type == 'boolean') {
+          form.on('switch(' + fields[i].name + ')', function (data) {
+            eval(fields[i].handler);
+          });
+        }
+      })(i);
+    }
 
     ${ready_handler}
   });
