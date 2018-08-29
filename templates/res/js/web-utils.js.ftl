@@ -35,11 +35,11 @@ dict.postHref = function (url, data) {
         data: {},
         type: 'post',
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        error: function (request, status, error) {
+        error: function (result, status, request) {
             console.log('请求失败');
-            console.log(request);
+            console.log(result);
             console.log(status);
-            console.log(error);
+            console.log(request);
         },
         success: function (result, status, request) {
             console.log('请求成功');
@@ -78,9 +78,10 @@ dict.postHref = function (url, data) {
                 return options.requestBody ? JSON.stringify(expected) : expected;
             })(),
 
-            error: function (request, status, error) {
-                defaultOptions.error(request, status, error);
-                options.error && options.error(request, status, error);
+            error: function (request, status) {
+                var result = JSON.parse(request.responseText);
+                defaultOptions.error(result, status, request);
+                options.error && options.error(result, status, request);
             },
 
             success: function (result, status, request) {

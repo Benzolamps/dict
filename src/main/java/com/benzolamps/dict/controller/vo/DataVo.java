@@ -16,12 +16,6 @@ public class DataVo extends BaseVo {
 
     private static final long serialVersionUID = -5845261821970423570L;
 
-    /** 状态码 */
-    private final Byte code;
-
-    /** 提示信息 */
-    private final String msg;
-
     /** 数据总量 */
     private final Long count;
 
@@ -33,6 +27,7 @@ public class DataVo extends BaseVo {
      * @param data 数据
      */
     public DataVo(Object data) {
+        super(200, null);
         this.data = data;
         if (data == null) {
             this.count = null;
@@ -44,19 +39,5 @@ public class DataVo extends BaseVo {
         } else {
             this.count = null;
         }
-        this.code = 0;
-        this.msg = null;
-    }
-
-    /**
-     * 构造器
-     * @param msg 提示信息
-     * @param code 状态码
-     */
-    public DataVo(String msg, Byte code) {
-        this.data = null;
-        this.count = null;
-        this.code = code;
-        this.msg = msg == null ? "" : msg;
     }
 }

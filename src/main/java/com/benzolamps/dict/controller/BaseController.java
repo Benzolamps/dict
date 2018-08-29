@@ -1,9 +1,8 @@
 package com.benzolamps.dict.controller;
 
+import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
-import com.benzolamps.dict.dao.core.Page;
-
-import java.util.Collection;
+import com.sun.xml.internal.rngom.parse.host.Base;
 
 /**
  * 控制器基类
@@ -13,6 +12,8 @@ import java.util.Collection;
  */
 @SuppressWarnings("unused")
 public class BaseController {
+
+    protected static final BaseVo SUCCESS_VO = BaseVo.SUCCESS_VO;
 
     /**
      * 转换数据
@@ -24,12 +25,12 @@ public class BaseController {
     }
 
     /**
-     * 转换数据
-     * @param msg 消息
-     * @param code 状态码
+     * 转换提示信息
+     * @param message 提示信息
      * @return DataVo
      */
-    protected DataVo wrapperMsg(String msg, Byte code) {
-        return new DataVo(msg, code);
+    @SuppressWarnings("SameParameterValue")
+    protected BaseVo wrapperMsg(String message) {
+        return new BaseVo(200, message);
     }
 }

@@ -2,9 +2,11 @@ package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.controller.interceptor.WindowView;
+import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -57,12 +59,9 @@ public class ShuffleSolutionController extends BaseController {
     @PostMapping("/save.json")
     @ResponseBody
     protected DataVo save(@RequestBody ShuffleSolution shuffleSolution) {
-        try {
-            shuffleSolution = shuffleSolutionService.persist(shuffleSolution);
-            return new DataVo(shuffleSolution);
-        } catch (Throwable e) {
-            return new DataVo(e + ": " + e.getMessage(), (byte) 1);
-        }
+        Assert.isTrue(shuffleSolutionService.isSpare(), "只能添加 10 个乱序方案");
+        shuffleSolution = shuffleSolutionService.persist(shuffleSolution);
+        return new DataVo(shuffleSolution);
     }
 
     /**
@@ -87,13 +86,9 @@ public class ShuffleSolutionController extends BaseController {
      */
     @PostMapping("/update.json")
     @ResponseBody
-    protected DataVo update(@RequestBody ShuffleSolution shuffleSolution) {
-        try {
-            shuffleSolution = shuffleSolutionService.update(shuffleSolution);
-            return new DataVo(shuffleSolution);
-        } catch (Throwable e) {
-            return new DataVo(e + ": " + e.getMessage(), (byte) 1);
-        }
+    protected DataVo update(@RequestBody ShuffleSolution shuffleSolution) throws ClassNotFoundException {
+        shuffleSolution = shuffleSolutionService.update(shuffleSolution);
+        return wrapperData(shuffleSolution);
     }
 
     /**
@@ -102,13 +97,9 @@ public class ShuffleSolutionController extends BaseController {
      */
     @PostMapping("/delete.json")
     @ResponseBody
-    protected DataVo delete(@RequestParam("id") Long... ids) {
-        try {
-            Arrays.stream(ids).forEach(shuffleSolutionService::remove);
-            return new DataVo("success", (byte) 0);
-        } catch (Throwable e) {
-            return new DataVo(e + ": " + e.getMessage(), (byte) 1);
-        }
+    protected BaseVo delete(@RequestParam("id") Long... ids) {
+        Arrays.stream(ids).forEach(shuffleSolutionService::remove);
+        return SUCCESS_VO;
     }
 
     /**

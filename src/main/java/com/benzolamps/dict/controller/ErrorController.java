@@ -1,6 +1,8 @@
 package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.controller.interceptor.NavigationView;
+import com.benzolamps.dict.controller.vo.ErrorVo;
+import com.benzolamps.dict.util.DictObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -33,19 +36,31 @@ public class ErrorController extends BaseController implements org.springframewo
     @RequestMapping(value = "/error", produces = "text/html")
     @NavigationView
     protected ModelAndView errorHtml(HttpServletRequest request) {
-        getErrorAttributes(request, getTraceParameter(request));
-        return new ModelAndView("view/default/error", getErrorAttributes(request, getTraceParameter(request)));
+        Map<String, Object> model = getErrorAttributes(request, getTraceParameter(request));
+        return new ModelAndView("view/default/error", model);
     }
 
     @RequestMapping(value = "/error", produces = "application/json")
     @ResponseBody
-    protected ResponseEntity<Map<String, Object>> error(HttpServletRequest request) {
-        return new ResponseEntity<>(getErrorAttributes(request, getTraceParameter(request)), getStatus(request));
+    protected ResponseEntity<ErrorVo> error(HttpServletRequest request) {
+        ErrorVo errorVo = convertToErrorVo(getErrorAttributes(request, getTraceParameter(request)));
+        return new ResponseEntity<>(errorVo, getStatus(request));
     }
 
     @Override
     public String getErrorPath() {
         return ERROR_PATH;
+    }
+
+    private ErrorVo convertToErrorVo(Map<String, Object> attributes) {
+        Date timestamp = DictObject.ofObject(attributes.get("timestamp"), Date.class);
+        Integer status = DictObject.ofObject(attributes.get("status"), int.class);
+        String error = DictObject.ofObject(attributes.get("error"), String.class);
+        String exception =  DictObject.ofObject(attributes.get("exception"), String.class);
+        String message = DictObject.ofObject(attributes.get("message"), String.class);
+        String trace = DictObject.ofObject(attributes.get("trace"), String.class);
+        String path = DictObject.ofObject(attributes.get("path"), String.class);
+        return new ErrorVo(timestamp, status, error, exception, message, trace, path);
     }
 
     private boolean getTraceParameter(HttpServletRequest request) {

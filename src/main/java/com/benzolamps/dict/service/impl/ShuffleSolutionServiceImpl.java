@@ -141,7 +141,13 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
         Assert.hasLength(className, "class name不能为null或空");
         Assert.isTrue(getAvailableCopyStrategyNames().contains(className), "class name不存在");
-        val strategyClass  = DynamicClass.loadClass(className);
+        val strategyClass = DynamicClass.loadClass(className);
         return DictPropertyInfoVo.applyDictPropertyInfo(strategyClass);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isSpare() {
+        return shuffleSolutionDao.findAll().getTotal() < 10;
     }
 }

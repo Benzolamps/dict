@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.Id;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
  * @version 2.1.1
  * @datetime 2018-7-22 23:11:50
  */
-public class DictPropertyInfoVo extends BaseVo {
+public class DictPropertyInfoVo implements Serializable {
 
     private static final long serialVersionUID = -1774782907582679818L;
 

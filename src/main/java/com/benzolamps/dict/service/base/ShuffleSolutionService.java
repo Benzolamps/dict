@@ -4,6 +4,7 @@ import com.benzolamps.dict.component.IShuffleStrategySetup;
 import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.controller.vo.DictPropertyInfoVo;
 import com.benzolamps.dict.dao.core.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.Set;
@@ -61,4 +62,10 @@ public interface ShuffleSolutionService {
      * @return DictPropertyInfoVo
      */
     Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className);
+
+    /**
+     * 获取是否还可以添加乱序方案
+     * @return
+     */
+    boolean isSpare();
 }

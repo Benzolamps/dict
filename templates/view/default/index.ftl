@@ -72,7 +72,7 @@
         }
 
         .layui-this>.dict-child {
-          background-color: #BBBBBB !important;
+          background-color: #FFB800 !important;
           color: #222222 !important;
         }
 
@@ -175,6 +175,8 @@
           /* 将找到的栏目设为选中 */
           if (column >= 0 && child >= 0) {
             var $li = $('ul.dict-nav-tree>li').eq(column);
+            $li.addClass('layui-nav-itemed');
+            /* language=JQuery-CSS */
             var $dd = $li.find('dl.layui-nav-child>dd').eq(child);
             $dd.addClass('layui-this');
             $('iframe').attr('src', columns[column].children[child].href);
@@ -182,17 +184,15 @@
             localStorage.setItem('child', child);
           }
 
+          var tipsId;
+
           $('.child-item').click(function () {
             $('iframe').attr('src', $(this).attr('src'));
             child = $(this).parentsUntil('dl').last().prevAll().length;
             column = $(this).parentsUntil('ul').last().prevAll().length;
             localStorage.setItem('column', column);
             localStorage.setItem('child', child);
-          });
-
-          var tipsId;
-
-          $('.child-item').mouseenter(function () {
+          }).mouseenter(function () {
             tipsId = layer.tips($(this).children('span').text(), this);
           }).mouseleave(function () {
             if (tipsId != null) {
@@ -201,14 +201,16 @@
             }
           });
 
+          var $dictBg = $('.dict-bg');
+
           $('#toggle-nav').click(function () {
-            if ($('.dict-bg').css('display') != 'none') {
+            if ($dictBg.css('display') != 'none') {
               $('.dict-bg').slideUp(function () {
                 $('.dict-body,.dict-footer').animate({left: 0});
               });
             } else {
               $('.dict-body,.dict-footer').animate({left: '200px'}, 'fast', function () {
-                  $('.dict-bg').slideDown();
+                $dictBg.slideDown();
                 }
               );
             }

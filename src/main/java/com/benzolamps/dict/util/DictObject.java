@@ -15,6 +15,7 @@ public interface DictObject {
     static <T> T ofObject(Object obj, Class<T> tClass) {
         if (obj == null || tClass == null) return null;
         else if (tClass.isInstance(obj)) return (T) obj;
+        else if (String.class.equals(tClass) || CharSequence.class.equals(tClass)) return (T) obj.toString();
         else if (Number.class.isAssignableFrom(tClass) && Number.class.isInstance(obj)) {
             if (Byte.class.equals(tClass) || byte.class.equals(tClass)) return (T) (Byte) ((Number) obj).byteValue();
             else if (Short.class.equals(tClass) || short.class.equals(tClass)) return (T) (Short) ((Number) obj).shortValue();
