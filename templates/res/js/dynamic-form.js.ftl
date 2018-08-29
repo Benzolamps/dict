@@ -37,7 +37,7 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
 
         /* 根据选择器的元素类型生成表格 */
         var $table;
-        if (['table', 'tbody', 'thead', 'tfoot'].includes(name)) {
+        if (['table', 'tbody', 'thead', 'tfoot'].indexOf(name) > 0) {
             $table = $selector;
         } else {
             $table = $(document.createElement('table'));

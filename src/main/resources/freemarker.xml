@@ -15,6 +15,7 @@
   <bean id="freemarkerConfig" class="com.benzolamps.dict.cfg.FreemarkerConfig">
     <property name="sharedVariables">
       <map>
+        <entry key="null" value="#{null}"/>
         <entry key="system_name" value="${system.name}"/>
         <entry key="system_version" value="${system.version}"/>
         <entry key="system_title" value="${system.title}"/>
@@ -58,8 +59,6 @@
         </entry>
         <entry key="json_dump" value-ref="jsonDumpDirective"/>
         <entry key="get_dict_property" value-ref="getDictPropertyMethod"/>
-        <entry key="data_add" value-ref="dataAddDirective"/>
-        <entry key="data_edit" value-ref="dataEditDirective"/>
         <entry key="abbreviate" value-ref="abbreviateMethod"/>
         <entry key="constant" value-ref="constantMethod"/>
       </map>

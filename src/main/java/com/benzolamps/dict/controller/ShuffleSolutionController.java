@@ -59,7 +59,7 @@ public class ShuffleSolutionController extends BaseController {
     @PostMapping("/save.json")
     @ResponseBody
     protected DataVo save(@RequestBody ShuffleSolution shuffleSolution) {
-        Assert.isTrue(shuffleSolutionService.isSpare(), "只能添加 10 个乱序方案");
+        Assert.isTrue(shuffleSolutionService.isSpare(), "最多只能添加 10 个乱序方案");
         shuffleSolution = shuffleSolutionService.persist(shuffleSolution);
         return new DataVo(shuffleSolution);
     }

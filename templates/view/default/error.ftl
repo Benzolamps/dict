@@ -22,24 +22,28 @@
       <thead></thead>
       <tbody>
         <tr>
-          <td>时间戳</td>
+          <td title="时间戳">时间戳</td>
           <td>${timestamp?string('yyyy-MM-dd HH:mm:ss.SSS')}</td>
         </tr>
         <tr>
-          <td>状态码</td>
+          <td title="状态码">状态码</td>
           <td>${status}</td>
         </tr>
         <tr>
-          <td>错误信息</td>
+          <td title="错误信息">错误信息</td>
           <td>${error}</td>
         </tr>
         <tr>
-          <td>请求路径</td>
+          <td title="请求路径">请求路径</td>
           <td>${path}</td>
+        </tr>
+        <tr>
+          <td title="提示信息">提示信息</td>
+          <td>${message}</td>
         </tr>
         <#if exception?? && trace??>
           <tr>
-            <td>异常</td>
+            <td title="异常">异常</td>
             <td>${exception!''}</td>
           </tr>
           <tr>

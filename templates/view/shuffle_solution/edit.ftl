@@ -14,20 +14,28 @@
   };
 
   <#assign submit_handler>
-    (function ($form) {
-      dict.loadText({
-        url: $form.attr('action'),
-        type: $form.attr('method'),
-        data: dict.generateObject(dict.serializeObject($form)),
-        requestBody: true,
-        success: function () {
-          var index = parent.layer.getFrameIndex(window.name);
+    (function (result, status, request) {
+      var index = parent.layer.getFrameIndex(window.name);
+      parent.layer.close(index);
+      parent.$('iframe')[0].contentWindow.location.reload(true);
+    })(result, status, request);
+  </#assign>
+
+  <#assign error_handler>
+    (function (result, status, request) {
+      parent.layer.alert(result.message, {
+        icon: 2,
+        title: result.status,
+        yes: function (index) {
           parent.layer.close(index);
-          parent.$('iframe')[0].contentWindow.location.reload(true);
+          parent.layer.close(parent.layer.getFrameIndex(window.name));
+        },
+        cancel: function (index) {
+          parent.layer.close(index);
+          parent.layer.close(parent.layer.getFrameIndex(window.name));
         }
       });
-      return false;
-    })($form);
+    })(result, status, request);
   </#assign>
 
   <#assign ready_handler>
@@ -79,5 +87,6 @@
     'name': {'pattern': '乱序方案名称必须是汉字、字母、数字的组合'}
   }
   submit_handler=submit_handler
+  error_handler=error_handler
   ready_handler=ready_handler
 />

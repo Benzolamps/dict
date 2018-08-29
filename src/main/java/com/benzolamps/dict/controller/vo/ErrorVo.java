@@ -13,8 +13,9 @@ import java.util.StringJoiner;
  * @datetime 2018-8-29 09:08:35
  */
 @Getter
-@Slf4j
 public class ErrorVo extends BaseVo {
+
+    private static final long serialVersionUID = 200496462816112466L;
 
     /** 时间戳 */
     private final Date timestamp;
@@ -48,15 +49,5 @@ public class ErrorVo extends BaseVo {
         this.exception = exception;
         this.trace = trace;
         this.path = path;
-        String log = new StringJoiner("\n")
-            .add("timestamp: " + timestamp)
-            .add("status: " + status)
-            .add("error: " + error)
-            .add("exception: " + exception)
-            .add("message:" + message)
-            // .add("trace: "+ trace)
-            .add("path: " + path)
-            .toString();
-        logger.error(log);
     }
 }

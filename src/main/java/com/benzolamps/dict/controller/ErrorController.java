@@ -4,6 +4,8 @@ import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.vo.ErrorVo;
 import com.benzolamps.dict.util.DictObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ObjectUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * 错误控制器
@@ -68,7 +70,17 @@ public class ErrorController extends BaseController implements org.springframewo
     }
 
     private Map<String, Object> getErrorAttributes(HttpServletRequest request, boolean includeStackTrace) {
-        return errorAttributes.getErrorAttributes(new ServletRequestAttributes(request), includeStackTrace);
+        Map<String, Object> attributes = this.errorAttributes.getErrorAttributes(new ServletRequestAttributes(request), includeStackTrace);
+        if (attributes.get("status").equals(404)) {
+            attributes.put("message", "请求的路径不存在");
+        }
+        StringJoiner sj = new StringJoiner("\n");
+        Stream.of("timestamp", "status", "error", "exception", "message", "path")
+            .filter(attributes::containsKey)
+            .map(key -> key + ": " + Objects.toString(attributes.get(key)))
+            .forEachOrdered(sj::add);
+        logger.error(sj.toString());
+        return attributes;
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {
