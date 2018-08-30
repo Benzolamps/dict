@@ -1,0 +1,200 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <script>
+    var baseUrl = '';
+    /*${'*' + '/' + 'baseUrl = \'${base_url}/\';' + '/*'}*/
+    document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'css/login.css">');
+    document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'css/loading.css">');
+    document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'layui/css/layui.css">');
+    document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'font-awesome/css/font-awesome.min.css">');
+    document.write('<script type="text/javascript" src="' + baseUrl + 'js/jquery-3.3.1.js"><\/script>');
+    document.write('<script type="text/javascript" src="' + baseUrl + 'js/circle.js"><\/script>');
+    document.write('<script type="text/javascript" src="' + baseUrl + 'js/login.js"><\/script>');
+    document.write('<script type="text/javascript" src="' + baseUrl + 'layui/layui.js"><\/script>');
+    document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/jquery.validate.js"><\/script>');
+    document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/additional-methods.js"><\/script>');
+    document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/localization/messages_zh.js"><\/script>');
+    baseUrl = 'http://localhost:2018/dictionary-2.1.1';
+  </script>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+<div class="login-panel">
+  <div class="animation">
+    <div class="tou"></div>
+    <div id="left-hand" class="initial-left-hand"></div>
+    <div id="right-hand" class="initial-right-hand"></div>
+  </div>
+  <div class="loading">
+    <div class="loader">
+      <div class="loader-bg">
+        <span>LOADING</span>
+      </div>
+      <div class="drops">
+        <div class="drop1"></div>
+        <div class="drop2"></div>
+      </div>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
+      <defs>
+        <filter id="liquid">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
+          <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="liquid"></feColorMatrix>
+        </filter>
+      </defs>
+    </svg>
+  </div>
+  <div class="login">
+    <form class="layui-form login">
+      <table cellpadding="0" border="0" width="100%">
+        <tr>
+          <th valign="middle">
+            <i class="fa fa-user-circle" aria-hidden="true"></i>
+          </th>
+          <td valign="middle">
+            <br>
+            <input type="text" name="username" required autocomplete="off" placeholder="请输入用户名" class="layui-input username">
+            <br>
+          </td>
+        </tr>
+        <tr>
+          <th valign="middle">
+            <i class="fa fa-asterisk" aria-hidden="true"></i>
+          </th>
+          <td valign="middle">
+            <br>
+            <input type="password" name="password" required autocomplete="off" placeholder="请输入密码" class="layui-input password">
+            <br>
+          </td>
+        </tr>
+        <tr>
+          <th valign="middle">&nbsp;</th>
+          <td valign="middle">
+            <br>
+            <input type="submit" value="登录" class="layui-btn layui-btn-normal">
+            <br>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+<script>
+  layui.use(['element', 'layer', 'form'], function () {
+    window.element = layui.element;
+    window.layer = layui.layer;
+    window.form = layui.form;
+  });
+  $('form.login').validate({
+    rules: {
+      password: {
+        required: true,
+        minlength: 6,
+        maxlength: 15,
+        pattern: /^[_0-9A-Za-z]+$/
+      },
+      username: {
+        required: true,
+        minlength: 6,
+        maxlength: 15,
+        pattern: /^[_a-zA-Z0-9\u4e00-\u9fa5\ufe30-\uffa0]+$/,
+        remote: baseUrl + '/dictionary-2.1.1/user/username_exists.json'
+      }
+    },
+    messages: {
+      password: {
+        required: '密码不能为空',
+        minlength: '密码不能少于6个字符',
+        maxlength: '密码不能多于15个字符',
+        pattern: '密码中存在非法字符'
+      },
+      username: {
+        required: '用户名不能为空',
+        minlength: '用户名不能少于6个字符',
+        maxlength: '用户名不能多于15个字符',
+        pattern: '用户名中存在非法字符',
+        remote: '用户名不存在'
+      }
+    },
+    errorPlacement: function () {},
+    showErrors: function (errorMap, errorList) {
+      if (errorList.length > 0) {
+        var error = errorList[0].message;
+        var element = $(errorList[0].element);
+        layer.tips(error, element, {
+          anim: 6,
+          success: function () {
+            setTimeout(function () {
+              element.css('border-color', '#FF0033');
+            }, 200);
+          },
+          end: function () {
+            element.css('border-color', '');
+          }
+        });
+      }
+    },
+    focusInvalid: false,
+    onfocusout: false,
+    onkeyup: false,
+    onclick: false,
+    submitHandler: function () {
+      $.ajax({
+        url: baseUrl + '/user/verify.json',
+        type: 'POST',
+        data: {
+          username: $('.username').val(),
+          password: $('.password').val()
+        },
+        success: function (result) {
+          if (result) {
+            location.href = baseUrl;
+          } else {
+            layer.alert('密码错误', {
+              icon: 2,
+              title: '密码错误',
+              yes: function (index) {
+                layer.close(login);
+              }
+            });
+          }
+        }, error: function (request) {
+          var result = JSON.parse(request.responseText);
+          layer.alert(result.message, {
+            icon: 2,
+            title: result.status,
+            yes: function (index) {
+              layer.close(login);
+            }
+          });
+        }
+      });
+      return false;
+    }
+  });
+</script>
+
+<script>
+  var redirected = false;
+  var id = setInterval(function () {
+    $.ajax({
+      type: 'get',
+      url: baseUrl + "/",
+      success: function (data, s) {
+        (!redirected) && (redirected ^= true) && !function () {
+          setTimeout(function () {
+            $('div.loading').fadeOut(function () {
+              $('div.login').fadeIn();
+            });
+          }, 3000);
+        }();
+        clearInterval(id);
+      }
+    });
+  }, 1000);
+</script>
+</body>
+</html>

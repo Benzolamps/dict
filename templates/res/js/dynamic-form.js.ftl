@@ -274,20 +274,22 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
             if (errorList.length > 0) {
                 var error = errorList[0].message;
                 var element = $(errorList[0].element);
-                layer.tips(error, element, {
-                    anim: 6,
-                    success: function () {
-                        var anchor = $(document.createElement('a')).attr('name', element.attr('name'));
-                        element.before(anchor);
-                        location.replace('#' + element.attr('name'));
-                        anchor.remove();
-                        setTimeout(function () {
-                            element.css('border-color', '#FF0033');
-                        }, 200);
-                    },
-                    end: function () {
-                        element.css('border-color', '');
-                    }
+                $('html,body').animate({scrollTop: $(element).offset().top - 15}, 'fast', function () {
+                    layer.tips(error, element, {
+                        anim: 6,
+                        success: function () {
+                            <#--var anchor = $(document.createElement('a')).attr('name', element.attr('name'));
+                            element.before(anchor);
+                            location.replace('#' + element.attr('name'));
+                            anchor.remove();-->
+                            setTimeout(function () {
+                                element.css('border-color', '#FF0033');
+                            }, 200);
+                        },
+                        end: function () {
+                            element.css('border-color', '');
+                        }
+                    });
                 });
             }
         },

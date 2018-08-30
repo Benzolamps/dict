@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * 系统管理控制器
+ * 系统管理Controller
  * @author Benzolamps
  * @version 2.1.1
  * @datetime 2018-7-4 19:21:16

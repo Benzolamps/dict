@@ -19,6 +19,8 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public interface BaseDao<T extends BaseEntity> {
 
+	GeneratedDictQuery<T> generateDictQuery();
+
 	/**
 	 * 根据id获取实体对象
 	 * @param id id
@@ -107,7 +109,7 @@ public interface BaseDao<T extends BaseEntity> {
 	 * @param entity 实体对象
 	 * @return 更新后的实体对象
 	 */
-	T update(T entity);
+	T update(T entity, String... ignoreProperties);
 
 	/**
 	 * 删除实体对象

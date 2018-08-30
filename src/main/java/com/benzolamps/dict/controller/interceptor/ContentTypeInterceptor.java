@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class ContentTypeInterceptor extends HandlerInterceptorAdapter {
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String url = request.getRequestURL().toString();
         url = url.split("\\?")[0];
         int index = url.lastIndexOf(".") + 1;
@@ -28,5 +28,6 @@ public class ContentTypeInterceptor extends HandlerInterceptorAdapter {
         response.setContentType(contentType);
         response.setHeader("Cache-Control", "no-cache, must-revalidate");
         response.setHeader("Access-Control-Allow-Origin", "*");
+        return super.preHandle(request, response, handler);
     }
 }

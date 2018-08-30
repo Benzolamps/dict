@@ -3,8 +3,13 @@ package com.benzolamps.dict.dao.impl;
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.dao.base.BaseDao;
 import com.benzolamps.dict.dao.core.*;
+import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictBean;
+import com.benzolamps.dict.util.DictProperty;
 import com.benzolamps.dict.util.KeyValuePairs;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.ArrayUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
@@ -35,8 +40,9 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
      * 生成一个GeneratedDictQuery
      * @return GeneratedDictQuery
      */
-	protected GeneratedDictQuery<T> generateDictQuery() {
-	    return new GeneratedDictQuery<>();
+    @Override
+	public GeneratedDictQuery<T> generateDictQuery() {
+	    return new GeneratedDictQuery<T>(entityClass);
     }
 
 	/** 构造方法 */
@@ -144,10 +150,19 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	}
 
     @Override
-    public T update(T entity) {
+    public T update(T entity, String[] ignoreProperties) {
         Assert.notNull(entity, "entity不能为空");
         Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
-        entityManager.merge(entity);
+        if (ignoreProperties == null) ignoreProperties = Constant.EMPTY_STRING_ARRAY;
+        String[] defaultIgnore = {"id", "version", "createDate", "updateDate"};
+        T ref = find(entity.getId());
+        DictBean<T> dictBean = new DictBean<>(entityClass);
+        for (DictProperty property : dictBean.getProperties()) {
+            if (ArrayUtils.contains(ignoreProperties, property.getName()) || ArrayUtils.contains(defaultIgnore, property.getName())) {
+                continue;
+            }
+            property.set(ref, property.get(entity));
+        }
         return entity;
     }
 

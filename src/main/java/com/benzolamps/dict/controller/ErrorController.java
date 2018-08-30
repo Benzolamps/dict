@@ -22,7 +22,7 @@ import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 /**
- * 错误控制器
+ * 错误Controller
  * @author Benzolamps
  * @version 2.1.1
  * @datetime 2018-7-5 21:34:43

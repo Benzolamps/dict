@@ -44,9 +44,9 @@ public class SQLiteDialect extends Dialect {
         registerColumnType(Types.CHAR, "text");
         registerColumnType(Types.VARCHAR, "text");
         registerColumnType(Types.LONGVARCHAR, "text");
-        registerColumnType(Types.DATE, "date");
-        registerColumnType(Types.TIME, "date");
-        registerColumnType(Types.TIMESTAMP, "date");
+        registerColumnType(Types.DATE, "integer");
+        registerColumnType(Types.TIME, "integer");
+        registerColumnType(Types.TIMESTAMP, "integer");
         registerColumnType(Types.BINARY, "blob");
         registerColumnType(Types.VARBINARY, "blob");
         registerColumnType(Types.LONGVARBINARY, "blob");

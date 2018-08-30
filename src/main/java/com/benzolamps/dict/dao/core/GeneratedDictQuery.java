@@ -33,9 +33,8 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
 
     /** 构造方法 */
     @SuppressWarnings("unchecked")
-    public GeneratedDictQuery() {
-        ResolvableType resolvableType = ResolvableType.forClass(getClass());
-        entityClass = (Class<B>) resolvableType.getSuperType().getGeneric().resolve();
+    public GeneratedDictQuery(Class<B> entityClass) {
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -75,14 +74,17 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     }
 
     private String select(String field) {
-        Assert.hasLength(field, "entity manager不能为空或null");
+        Assert.hasLength(field, "field不能为空或null");
         String classSimpleName = entityClass.getSimpleName();
         String alias = DictString.toCamel(classSimpleName);
         StringJoiner jpql = new StringJoiner(" ");
         filter.build(alias);
         orders.forEach(order -> order.build(field));
-        jpql.add("select").add(alias).add("from").add(classSimpleName).add("as").add(alias);
-        jpql.add("where").add(filter.getSnippet()).add("order by");
+        jpql.add("select").add(field).add("from").add(classSimpleName).add("as").add(alias);
+        jpql.add("where").add(filter.getSnippet());
+        if (!orders.isEmpty()) {
+            jpql.add("order by");
+        }
         jpql.add(String.join(", ", orders.stream().map(Order::getSnippet).collect(Collectors.toSet())));
         return jpql.toString();
 
@@ -94,6 +96,6 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
      */
     public void setFilter(Filter filter) {
         if (filter == null) filter = new Filter();
-        filter.and(filter);
+        this.filter.and(filter);
     }
 }

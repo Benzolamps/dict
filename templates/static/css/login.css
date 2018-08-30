@@ -1,5 +1,13 @@
 @charset "UTF-8";
 
+body, canvas {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    background-color: #EEEEEE;
+}
+
 .tou {
     background: url(../img/tou.png) no-repeat;
     width: 97px;
@@ -9,8 +17,8 @@
     left: 140px;
 }
 
-.left_hand {
-    background: url(../img/left_hand.png) no-repeat;
+.left-hand {
+    background: url(../img/left-hand.png) no-repeat;
     width: 32px;
     height: 37px;
     position: absolute;
@@ -18,8 +26,8 @@
     left: 150px;
 }
 
-.right_hand {
-    background: url(../img/right_hand.png) no-repeat;
+.right-hand {
+    background: url(../img/right-hand.png) no-repeat;
     width: 32px;
     height: 37px;
     position: absolute;
@@ -27,7 +35,7 @@
     right: -64px;
 }
 
-.initial_left_hand {
+.initial-left-hand {
     background: url(../img/hand.png) no-repeat;
     width: 30px;
     height: 20px;
@@ -36,7 +44,7 @@
     left: 100px;
 }
 
-.initial_right_hand {
+.initial-right-hand {
     background: url(../img/hand.png) no-repeat;
     width: 30px;
     height: 20px;
@@ -45,7 +53,7 @@
     right: -112px;
 }
 
-.left_handing {
+.left-handing {
     background: url(../img/left-handing.png) no-repeat;
     width: 30px;
     height: 20px;
@@ -54,11 +62,40 @@
     left: 100px;
 }
 
-.right_handing {
-    background: url(../img/right_handing.png) no-repeat;
+.right-handing {
+    background: url(../img/right-handing.png) no-repeat;
     width: 30px;
     height: 20px;
     position: absolute;
     top: -12px;
     right: -112px;
+}
+
+.login-panel {
+    width: 480px;
+    height: 300px;
+    background: #ffffff;
+    position: absolute;
+    left: 50%;
+    top: 200px;
+    text-align: center;
+    margin-left: -240px;
+    border: 1px solid #e7e7e7
+}
+
+.animation {
+    width: 165px;
+    height: 96px;
+    left: 50px;
+    position: absolute;
+    z-index: 0
+}
+
+div.login {
+    width: 420px;
+    left: 30px;
+    top: 50px;
+    position: absolute;
+    z-index: 1;
+    display: none
 }

@@ -28,6 +28,7 @@
       <usages-collector id="statistics.spring.boot.mvc.usages">
         <counts>
           <entry key="RestClientRequestEditorNavigator.fromCode" value="1" />
+          <entry key="RestClientRequestRunnerNavigator.fromCode" value="1" />
         </counts>
       </usages-collector>
     </session>
@@ -38,9 +39,19 @@
       <inspection_tool class="BadExpressionStatementJS" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="CatchMayIgnoreException" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="CheckTagEmptyBody" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="CommaExpressionJS" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="ConstantConditions" enabled="false" level="WARNING" enabled_by_default="false">
         <option name="SUGGEST_NULLABLE_ANNOTATIONS" value="false" />
         <option name="DONT_REPORT_TRUE_ASSERT_STATEMENTS" value="false" />
+      </inspection_tool>
+      <inspection_tool class="CssUnknownProperty" enabled="false" level="WARNING" enabled_by_default="false">
+        <option name="myCustomPropertiesEnabled" value="false" />
+        <option name="myIgnoreVendorSpecificProperties" value="true" />
+        <option name="myCustomPropertiesList">
+          <value>
+            <list size="0" />
+          </value>
+        </option>
       </inspection_tool>
       <inspection_tool class="CssUnusedSymbol" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="Duplicates" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
@@ -266,8 +277,12 @@
         <w>itemed</w>
         <w>jpql</w>
         <w>layui</w>
+        <w>loadster</w>
         <w>maxlength</w>
         <w>minlength</w>
+        <w>mousedown</w>
+        <w>mousemove</w>
+        <w>mouseup</w>
         <w>nontip</w>
         <w>onfocusout</w>
         <w>qrcode</w>

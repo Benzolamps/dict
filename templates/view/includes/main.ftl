@@ -1,4 +1,4 @@
-<#include 'list.ftl'/>
+<#include 'data-list.ftl'/>
 <#include 'data-add.ftl'/>
 <#include 'data-edit.ftl'/>
 

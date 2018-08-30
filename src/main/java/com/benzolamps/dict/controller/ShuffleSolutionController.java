@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 import java.util.Arrays;
 
 /**
- * 乱序方案控制器
+ * 乱序方案Controller
  * @author Benzolamps
  * @version 2.1.1
  * @datetime 2018-7-26 16:13:45
@@ -46,7 +46,6 @@ public class ShuffleSolutionController extends BaseController {
     @WindowView
     protected ModelAndView add() {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/add");
-        System.out.println(shuffleSolutionService.getAvailableCopyStrategyNames());
         mv.addObject("strategies", shuffleSolutionService.getAvailableCopyStrategyNames());
         return mv;
     }
@@ -73,7 +72,6 @@ public class ShuffleSolutionController extends BaseController {
     @WindowView
     protected ModelAndView edit(Long id) {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/edit");
-        System.out.println(shuffleSolutionService.getAvailableCopyStrategyNames());
         mv.addObject("solution", shuffleSolutionService.find(id));
         mv.addObject("strategies", shuffleSolutionService.getAvailableCopyStrategyNames());
         return mv;

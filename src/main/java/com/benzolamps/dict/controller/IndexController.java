@@ -1,6 +1,5 @@
 package com.benzolamps.dict.controller;
 
-import com.benzolamps.dict.controller.interceptor.NavigationView;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 
 /**
- * 主页控制器
+ * 主页Controller
  * @author Benzolamps
  * @version 2.1.1
  * @datetime 2018-7-7 23:48:57

@@ -5,7 +5,7 @@ import com.benzolamps.dict.controller.vo.DataVo;
 import com.sun.xml.internal.rngom.parse.host.Base;
 
 /**
- * 控制器基类
+ * Controller基类
  * @author Benzolamps
  * @version 2.1.1
  * @datetime 2018-7-4 20:51:17

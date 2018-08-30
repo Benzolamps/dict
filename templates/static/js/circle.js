@@ -1,23 +1,24 @@
 $(function () {
+    // noinspection SpellCheckingInspection
     var colors = [
-        "#AAFF00",
-        "#7CD14E",
-        "#1CDCFF",
-        "#FFFF00",
-        "#FF0000",
-        "#aee137",
-        "#bef202",
-        "#00b2ff",
-        "#7fff24",
-        "#13cd4b",
-        "#c0fa38",
-        "#FF00AA",
-        "#AA00FF",
-        "#00AAFF",
-        "#222222"
+        '#AAFF00',
+        '#7CD14E',
+        '#1CDCFF',
+        '#FFFF00',
+        '#FF0000',
+        '#aee137',
+        '#bef202',
+        '#00b2ff',
+        '#7fff24',
+        '#13cd4b',
+        '#c0fa38',
+        '#FF00AA',
+        '#AA00FF',
+        '#00AAFF',
+        '#222222'
     ];
-    var canvas = document.getElementById("canvas");
-    var context = canvas.getContext("2d");
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
     var mouse = {x: 0, y: 0};
@@ -26,14 +27,14 @@ $(function () {
         mouse.y = a.pageY - canvas.offsetTop;
         mouseMove && (context.lineTo(mouseX, mouseY), context.stroke());
     }, false);
-    canvas.addEventListener("mousedown", function () {
+    canvas.addEventListener('mousedown', function () {
         mouseDown = true;
     }, false);
-    canvas.addEventListener("mouseup", function () {
+    canvas.addEventListener('mouseup', function () {
         mouseMove && (mouseMove = false);
         mouseDown && (mouseDown = false);
     }, false);
-    window.addEventListener("resize", function () {
+    window.addEventListener('resize', function () {
         canvas.height = window.innerHeight;
         canvas.width = window.innerWidth;
         cancelAnimationFrame(animate);
@@ -73,6 +74,7 @@ $(function () {
 
     var init = function () {
         for (var i = 0; i < 1e3; i++) dotsHolder.push(dots());
+
     };
 
     var animate = function () {
