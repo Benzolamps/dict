@@ -1,15 +1,15 @@
 <#-- @ftlvariable name="strategies" type="java.util.Collection<java.lang.String>" -->
 <@nothing><script type="text/javascript"></@nothing>
 <#assign submit_handler>
-  (function (result, status, request) {
+  !function (result, status, request) {
     var index = parent.layer.getFrameIndex(window.name);
     parent.layer.close(index);
     parent.$('iframe')[0].contentWindow.location.reload(true);
-  })(result, status, request);
+  }(result, status, request);
 </#assign>
 
 <#assign error_handler>
-  (function (result, status, request) {
+  !function (result, status, request) {
     parent.layer.alert(result.message, {
       icon: 2,
       title: result.status,
@@ -22,11 +22,11 @@
         parent.layer.close(parent.layer.getFrameIndex(window.name));
       }
     });
-  })(result, status, request);
+  }(result, status, request);
 </#assign>
 
 <#assign select_handler>
-  (function (data) {
+  !function (data) {
     if (data.value != null && data.value != '') {
       dict.loadText({
         url: 'property_info.json',
@@ -39,7 +39,7 @@
     } else {
       append(1).empty();
     }
-  })(data);
+  }(data);
 </#assign>
 
 <#assign fields>

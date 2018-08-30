@@ -27,7 +27,7 @@ dict.postHref = function (url, data) {
     return form;
 };
 
-(function ($, dict) {
+!function ($, dict) {
     var defaultOptions = {
         async: false,
         cache: false,
@@ -95,4 +95,4 @@ dict.postHref = function (url, data) {
         }
         return responseData;
     }
-})(jQuery, dict);
+}(jQuery, dict);

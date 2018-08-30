@@ -60,19 +60,17 @@
         document.getElementById('${id}').submit();
       };
 
-      for (var i = 0; i < fields.length; i++) {
-        (function (i) {
-          if (fields[i].handler && fields[i].options) {
-            form.on('select(' + fields[i].name + ')', function (data) {
-              eval(fields[i].handler);
-            });
-          } else if (fields[i].type && fields[i].type == 'boolean') {
-            form.on('switch(' + fields[i].name + ')', function (data) {
-              eval(fields[i].handler);
-            });
-          }
-        })(i);
-      }
+      for (var i = 0; i < fields.length; i++) !function (i) {
+        if (fields[i].handler && fields[i].options) {
+          form.on('select(' + fields[i].name + ')', function (data) {
+            eval(fields[i].handler);
+          });
+        } else if (fields[i].type && fields[i].type == 'boolean') {
+          form.on('switch(' + fields[i].name + ')', function (data) {
+            eval(fields[i].handler);
+          });
+        }
+      }(i);
 
       ${ready_handler}
     });

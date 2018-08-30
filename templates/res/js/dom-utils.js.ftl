@@ -4,7 +4,7 @@
  * @version 2.1.1
  * @datetime 2018-7-10 21:05:27
  */
-(function ($, dict) {
+!function ($, dict) {
     var defaultOptions = {
         data: {},
         interval: 1000,
@@ -82,4 +82,4 @@
         });
         return object;
     }
-})(jQuery, dict);
+}(jQuery, dict);

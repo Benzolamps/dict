@@ -8,6 +8,7 @@
 <#-- @ftlvariable name="timestamp" type="java.util.Date" -->
 <#-- @ftlvariable name="status" type="java.lang.Integer" -->
 <#-- @ftlvariable name="path" type="java.lang.String" -->
+<#-- @ftlvariable name="message" type="java.lang.String" -->
 <#-- @ftlvariable name="error" type="java.lang.String" -->
 <#-- @ftlvariable name="exception" type="java.lang.String" -->
 <#-- @ftlvariable name="trace" type="java.lang.String" -->

@@ -32,6 +32,7 @@ public interface Constant {
     String CHINESE_PATTERN = "^[\\u4e00-\\u9fa5\\ufe30-\\uffa0]$";
 
     /** 中文、字母、数字、下划线2到20位 */
+    @SuppressWarnings("SpellCheckingInspection")
     String CHINESE_TITLE_PATTERN = "^[_a-zA-Z0-9\\u4e00-\\u9fa5\\ufe30-\\uffa0]{2,20}$";
 
     /** 大陆手机号 */

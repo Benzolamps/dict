@@ -4,8 +4,6 @@ import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.vo.ErrorVo;
 import com.benzolamps.dict.util.DictObject;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +15,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
+import java.util.Objects;
+import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 /**

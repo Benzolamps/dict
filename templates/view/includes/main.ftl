@@ -2,14 +2,10 @@
 <#include 'data-add.ftl'/>
 <#include 'data-edit.ftl'/>
 
-<#--
-  -- 不做任何事情
-  -->
+<#-- 不做任何事情 -->
 <#macro nothing></#macro>
 
-<#--
-  -- 压缩代码成一行
-  -->
+<#-- 压缩代码成一行 -->
 <#macro compress>
   <#local nested><#nested/></#local>
   <#if is_release>

@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+.tou {
+    background: url(../img/tou.png) no-repeat;
+    width: 97px;
+    height: 92px;
+    position: absolute;
+    top: -87px;
+    left: 140px;
+}
+
+.left_hand {
+    background: url(../img/left_hand.png) no-repeat;
+    width: 32px;
+    height: 37px;
+    position: absolute;
+    top: -38px;
+    left: 150px;
+}
+
+.right_hand {
+    background: url(../img/right_hand.png) no-repeat;
+    width: 32px;
+    height: 37px;
+    position: absolute;
+    top: -38px;
+    right: -64px;
+}
+
+.initial_left_hand {
+    background: url(../img/hand.png) no-repeat;
+    width: 30px;
+    height: 20px;
+    position: absolute;
+    top: -12px;
+    left: 100px;
+}
+
+.initial_right_hand {
+    background: url(../img/hand.png) no-repeat;
+    width: 30px;
+    height: 20px;
+    position: absolute;
+    top: -12px;
+    right: -112px;
+}
+
+.left_handing {
+    background: url(../img/left-handing.png) no-repeat;
+    width: 30px;
+    height: 20px;
+    position: absolute;
+    top: -12px;
+    left: 100px;
+}
+
+.right_handing {
+    background: url(../img/right_handing.png) no-repeat;
+    width: 30px;
+    height: 20px;
+    position: absolute;
+    top: -12px;
+    right: -112px;
+}
