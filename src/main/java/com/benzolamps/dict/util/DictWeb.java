@@ -1,5 +1,6 @@
 package com.benzolamps.dict.util;
 
+import com.benzolamps.dict.controller.util.Constant;
 import org.springframework.util.Assert;
 
 /**
@@ -19,23 +20,23 @@ public interface DictWeb {
         Assert.hasLength(extension, "extension不能为null或空");
         switch (extension.toLowerCase()) {
             case "css":
-                return "text/css";
+                return Constant.CSS;
             case "js":
-                return "text/javascript";
+                return Constant.JS;
             case "json":
-                return "application/json";
+                return Constant.JSON;
             case "html": case "htm":
-                return "text/html";
+                return Constant.HTML;
             case "txt":
-                return "text/plain";
+                return Constant.TXT;
             case "xml": case "dtd": case "xsd":
-                return "text/xml";
+                return Constant.XML;
             case "doc": case "docx":
-                return "application/msword";
+                return Constant.DOC;
             case "xls": case "xlsx":
-                return "application/x-xls";
+                return Constant.XLS;
             default:
-                return "text/html";
+                return Constant.TXT;
         }
     }
 }

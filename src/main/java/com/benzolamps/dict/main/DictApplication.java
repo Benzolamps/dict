@@ -10,7 +10,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.yaml.snakeyaml.Yaml;
 
@@ -27,7 +26,6 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
  * @version 2.1.1
  * @datetime 2018-7-11 19:10:18
  */
-@Component
 @SpringBootApplication
 @ComponentScan(basePackages = "com.benzolamps.dict")
 @EntityScan(basePackages="com.benzolamps.dict.bean")

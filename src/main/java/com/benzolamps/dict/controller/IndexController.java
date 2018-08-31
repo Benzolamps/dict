@@ -63,4 +63,14 @@ public class IndexController extends BaseController {
         int index = url.indexOf("remote") + 6;
         return ResponseEntity.ok().body(new UrlResource(remoteBaseUrl + url.substring(index)));
     }
+
+    /**
+     * ping
+     * @return pong
+     */
+    @RequestMapping("/ping")
+    @ResponseBody
+    protected String ping() {
+        return "pong";
+    }
 }

@@ -2,6 +2,7 @@ package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.bean.User;
 import com.benzolamps.dict.service.base.UserService;
+import com.benzolamps.dict.util.Constant;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -30,14 +32,23 @@ public class UserController extends BaseController {
 
     /**
      * 登录界面
+     * @param response HttpServletResponse
+     * @param session HttpSession
+     * @throws IOException IOException
+     * @throws TemplateException TemplateException
      */
-    @ResponseBody
     @RequestMapping(value = "/login.html", method = {RequestMethod.GET, RequestMethod.POST})
-    protected String login(HttpServletResponse response) throws IOException, TemplateException {
-        Template template = configuration.getTemplate("static/login.html");
-        StringWriter stringWriter = new StringWriter();
-        template.process(null, stringWriter);
-        return stringWriter.toString().replaceAll("^\\s+|\\s+$|\\n|\\r", "");
+    protected void login(HttpServletResponse response, HttpSession session) throws IOException, TemplateException {
+        if (session.getAttribute("currentUser") != null) {
+            response.sendRedirect(baseUrl + "/");
+        } else {
+            Template template = configuration.getTemplate("static/login.html");
+            StringWriter stringWriter = new StringWriter();
+            template.process(null, stringWriter);
+            String html = stringWriter.toString().replaceAll(Constant.HTML_COMPRESS_PATTERN, "");
+            stringWriter.close();
+            response.getWriter().print(html);
+        }
     }
 
     /**
@@ -47,8 +58,27 @@ public class UserController extends BaseController {
      */
     @PostMapping("/verify.json")
     @ResponseBody
-    protected boolean verify(User user) {
-        return userService.verifyUser(user);
+    protected boolean verify(User user, HttpSession session) {
+        boolean valid = userService.verifyUser(user);
+        if (valid && session.getAttribute("currentUser") == null) {
+            user = userService.findByUsername(user.getUsername());
+            session.setAttribute("currentUser", user);
+        }
+        return valid;
+    }
+
+    /**
+     * 登出
+     * @param session HttpSession
+     * @return 登出成功
+     */
+    @PostMapping("/logout.json")
+    @ResponseBody
+    protected boolean logout(HttpSession session) {
+        if (session.getAttribute("currentUser") != null) {
+            session.removeAttribute("currentUser");
+        }
+        return true;
     }
 
     /**

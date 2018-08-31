@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
@@ -72,7 +73,7 @@ public class ErrorController extends BaseController implements org.springframewo
 
     private Map<String, Object> getErrorAttributes(HttpServletRequest request, boolean includeStackTrace) {
         Map<String, Object> attributes = this.errorAttributes.getErrorAttributes(new ServletRequestAttributes(request), includeStackTrace);
-        if (attributes.get("status").equals(404)) {
+        if (attributes.get("status").equals(HttpServletResponse.SC_NOT_FOUND)) {
             attributes.put("message", "请求的路径不存在");
         }
         StringJoiner sj = new StringJoiner("\n");

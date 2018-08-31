@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
  * @version 2.1.1
  * @datetime 2018-8-22 20:23:31
  */
+@SuppressWarnings("unused")
 @Target({})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Toolbar {

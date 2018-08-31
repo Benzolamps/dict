@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletResponse;
  * @version 2.1.1
  * @datetime 2018-7-25 22:32:04
  */
-@Component
-public class WindowInterceptor extends HandlerInterceptorAdapter {
+@Interceptor
+public class WindowInterceptor extends BaseInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
         HandlerMethod method = (HandlerMethod) handler;

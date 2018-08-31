@@ -35,7 +35,6 @@ public class YamlParseMethod implements TemplateMethodModelEx {
         this.resourceType = ResourceType.STRING;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public Object exec(List arguments) {
         Assert.notNull(resourceType, "resource type不能为空");

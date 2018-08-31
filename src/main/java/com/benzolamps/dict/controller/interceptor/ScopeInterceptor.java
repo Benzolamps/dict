@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
  * @version 2.1.1
  * @datetime 2018-7-11 18:59:40
  */
-@Component
-public class ScopeInterceptor extends HandlerInterceptorAdapter {
+@Interceptor
+public class ScopeInterceptor extends BaseInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
         if (modelAndView != null) {

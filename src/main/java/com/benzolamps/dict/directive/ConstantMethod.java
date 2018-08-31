@@ -15,6 +15,9 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * Constant Freemarker方法
+ * @author Benzolamps
+ * @version 2.1.1
+ * @datetime 2018-8-31 13:31:42
  */
 @Component
 public class ConstantMethod implements TemplateMethodModelEx {

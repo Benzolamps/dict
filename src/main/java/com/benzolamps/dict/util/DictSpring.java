@@ -7,9 +7,12 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.Assert;
 
+import java.lang.annotation.Annotation;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 import static com.benzolamps.dict.util.Constant.EMPTY_OBJECT_ARRAY;
 import static com.benzolamps.dict.util.Constant.EMPTY_PROPERTIES;
@@ -53,6 +56,19 @@ public abstract class DictSpring {
     }
 
     /**
+     * 获取具有指定注解的bean
+     * @param annotationClass 注解类型
+     * @return bean列表
+     */
+    public static List<Object> getBeansOfAnnotation(Class<? extends Annotation> annotationClass) {
+        Assert.notNull(DictSpring.applicationContext, "application context不能为null");
+        Assert.notNull(annotationClass, "annotation class不能为null");
+        DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
+        String[] names = beanFactory.getBeanNamesForAnnotation(annotationClass);
+        return Arrays.stream(names).map(beanFactory::getBean).collect(Collectors.toList());
+    }
+
+    /**
      * 根据bean的类型获取bean
      * @param requiredType 类型
      * @param <T> 类型
@@ -62,7 +78,6 @@ public abstract class DictSpring {
         Assert.notNull(DictSpring.applicationContext, "application context不能为null");
         Assert.notNull(requiredType, "required type不能为null");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
-        String[] beanDefinitionNames = beanFactory.getBeanDefinitionNames();
         Map<String, T> beans = beanFactory.getBeansOfType(requiredType);
         Assert.isTrue(beans != null && beans.size() > 0, "未找到" + requiredType.getName() + "对应的bean");
         Assert.isTrue(beans.size() == 1, requiredType.getName() + "对应的bean不唯一");

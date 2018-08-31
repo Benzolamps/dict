@@ -40,6 +40,9 @@ dict.postHref = function (url, data) {
             console.log(result);
             console.log(status);
             console.log(request);
+            if (request.status == 403) {
+                location.href = '${base_url}/user/login.html';
+            }
         },
         success: function (result, status, request) {
             console.log('请求成功');

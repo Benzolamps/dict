@@ -3,6 +3,7 @@ package com.benzolamps.dict.controller;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.sun.xml.internal.rngom.parse.host.Base;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Controller基类
@@ -14,6 +15,9 @@ import com.sun.xml.internal.rngom.parse.host.Base;
 public class BaseController {
 
     protected static final BaseVo SUCCESS_VO = BaseVo.SUCCESS_VO;
+
+    @Value("#{servletContext.contextPath}")
+    protected String baseUrl;
 
     /**
      * 转换数据
