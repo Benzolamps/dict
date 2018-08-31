@@ -7,12 +7,11 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.hibernate.validator.HibernateValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Validation;
+import javax.annotation.Resource;
 import javax.validation.Validator;
 import java.util.Arrays;
 
@@ -26,7 +25,8 @@ import java.util.Arrays;
 @Component
 public class ValidationControllerAdvice {
 
-    private Validator validator = Validation.byProvider(HibernateValidator.class).configure().buildValidatorFactory().getValidator();
+    @Resource
+    private Validator validator;
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
     private native void pointcut();

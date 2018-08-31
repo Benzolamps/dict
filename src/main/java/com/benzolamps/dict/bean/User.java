@@ -25,15 +25,29 @@ public class User extends BaseEntity {
 
     private static final long serialVersionUID = -5309444370236159463L;
 
+    /** 用户名 */
     @NotEmpty
     @Length(min = 6, max = 15)
     @Pattern(regexp = Constant.CHINESE_TITLE_PATTERN)
     @Column(nullable = false, updatable = false, unique = true)
     private String username;
 
+    /** 登录密码 */
     @NotEmpty
     @Length(min = 6, max = 15)
     @Pattern(regexp = "^[_0-9A-Za-z]+$")
     @Column(nullable = false)
     private String password;
+
+    /** 解锁密码 */
+    @Column
+    private String unlockPassword;
+
+    /** 锁定时长 */
+    @Column(nullable = false, columnDefinition = "INTEGER NOT NULL DEFAULT(60 * 60 * 2)")
+    private Long lockTime;
+
+    /** 昵称 */
+    @Column
+    private String nickName;
 }
