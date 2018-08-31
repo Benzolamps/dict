@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 import java.lang.reflect.Method;
 
 /**
- * 乱序方案切面类
+ * 乱序方案建言
  * @author Benzolamps
  * @version 2.1.1
  * @datetime 2018-7-22 23:06:27

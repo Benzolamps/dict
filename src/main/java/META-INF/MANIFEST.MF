@@ -1,38 +1,39 @@
 Manifest-Version: 1.0
-Class-Path: tomcat-juli-8.5.31.jar xmlbeans-2.3.0.jar spring-boot-star
- ter-integration-1.5.14.RELEASE.jar commons-codec-1.10.jar spring-boot
- -starter-aop-1.5.14.RELEASE.jar tomcat-annotations-api-8.5.31.jar jav
- assist-3.21.0-GA.jar mchange-commons-java-0.2.11.jar spring-boot-auto
- configure-1.5.14.RELEASE.jar hibernate-validator-5.3.6.Final.jar poi-
- ooxml-3.9.jar classmate-1.3.4.jar spring-boot-starter-freemarker-1.5.
- 14.RELEASE.jar spring-aspects-4.3.18.RELEASE.jar spring-boot-devtools
- -1.5.14.RELEASE.jar spring-boot-starter-data-jpa-1.5.14.RELEASE.jar s
- pring-boot-starter-jdbc-1.5.14.RELEASE.jar poi-ooxml-schemas-3.9.jar 
- snakeyaml-1.17.jar jandex-2.0.0.Final.jar spring-jdbc-4.3.18.RELEASE.
- jar freemarker-2.3.28.jar slf4j-api-1.7.25.jar spring-boot-1.5.14.REL
- EASE.jar spring-integration-core-4.3.17.RELEASE.jar jboss-logging-3.3
- .2.Final.jar antlr-2.7.7.jar tomcat-jdbc-8.5.31.jar logback-core-1.1.
- 11.jar spring-boot-starter-web-1.5.14.RELEASE.jar jackson-databind-2.
- 8.11.2.jar spring-aop-4.3.18.RELEASE.jar spring-boot-starter-logging-
- 1.5.14.RELEASE.jar spring-context-4.3.18.RELEASE.jar commons-beanutil
- s-1.9.3.jar hibernate-core-5.0.12.Final.jar spring-integration-java-d
- sl-1.2.3.RELEASE.jar tomcat-embed-websocket-8.5.31.jar spring-boot-st
- arter-1.5.14.RELEASE.jar jcl-over-slf4j-1.7.25.jar validation-api-1.1
- .0.Final.jar sqlite-jdbc-3.8.11.2.jar tomcat-embed-el-8.5.31.jar spri
- ng-tx-4.3.18.RELEASE.jar xml-apis-1.4.01.jar commons-collections-3.2.
- 2.jar spring-data-jpa-1.11.13.RELEASE.jar spring-core-4.3.18.RELEASE.
- jar spring-beans-4.3.18.RELEASE.jar spring-retry-1.2.2.RELEASE.jar sp
- ring-context-support-4.3.18.RELEASE.jar spring-boot-starter-tomcat-1.
- 5.14.RELEASE.jar tomcat-embed-core-8.5.31.jar javax.transaction-api-1
- .2.jar commons-lang-2.4.jar log4j-over-slf4j-1.7.25.jar hibernate-com
- mons-annotations-5.0.1.Final.jar spring-boot-configuration-processor-
- 1.5.14.RELEASE.jar spring-webmvc-4.3.18.RELEASE.jar spring-web-4.3.18
- .RELEASE.jar dom4j-1.6.1.jar reactive-streams-1.0.0.jar jackson-annot
- ations-2.8.0.jar jul-to-slf4j-1.7.25.jar jackson-core-2.8.11.jar c3p0
- -0.9.5.2.jar aspectjweaver-1.8.13.jar spring-expression-4.3.18.RELEAS
- E.jar poi-3.9.jar spring-orm-4.3.18.RELEASE.jar hibernate-jpa-2.1-api
- -1.0.0.Final.jar spring-data-commons-1.13.13.RELEASE.jar hibernate-en
- titymanager-5.0.12.Final.jar stax-api-1.0.1.jar spring-messaging-4.3.
- 18.RELEASE.jar logback-classic-1.1.11.jar
+Class-Path: spring-boot-devtools-1.5.14.RELEASE.jar validation-api-1.1
+ .0.Final.jar commons-lang-2.4.jar spring-boot-starter-integration-1.5
+ .14.RELEASE.jar spring-context-support-4.3.18.RELEASE.jar lombok-1.16
+ .22.jar spring-boot-starter-1.5.14.RELEASE.jar snakeyaml-1.17.jar jav
+ assist-3.21.0-GA.jar reactive-streams-1.0.0.jar log4j-over-slf4j-1.7.
+ 25.jar spring-boot-starter-freemarker-1.5.14.RELEASE.jar dom4j-1.6.1.
+ jar spring-boot-starter-web-1.5.14.RELEASE.jar spring-boot-configurat
+ ion-processor-1.5.14.RELEASE.jar jul-to-slf4j-1.7.25.jar aspectjweave
+ r-1.8.13.jar poi-3.9.jar ehcache-2.10.5.jar spring-boot-starter-aop-1
+ .5.14.RELEASE.jar jboss-logging-3.3.2.Final.jar javax.transaction-api
+ -1.2.jar spring-boot-starter-tomcat-1.5.14.RELEASE.jar tomcat-annotat
+ ions-api-8.5.31.jar spring-retry-1.2.2.RELEASE.jar freemarker-2.3.28.
+ jar slf4j-api-1.7.25.jar poi-ooxml-schemas-3.9.jar spring-expression-
+ 4.3.18.RELEASE.jar hibernate-jpa-2.1-api-1.0.0.Final.jar classmate-1.
+ 3.4.jar spring-boot-starter-data-jpa-1.5.14.RELEASE.jar spring-data-j
+ pa-1.11.13.RELEASE.jar spring-boot-starter-logging-1.5.14.RELEASE.jar
+  tomcat-embed-websocket-8.5.31.jar spring-aspects-4.3.18.RELEASE.jar 
+ spring-web-4.3.18.RELEASE.jar jackson-annotations-2.8.0.jar logback-c
+ lassic-1.1.11.jar commons-codec-1.10.jar tomcat-embed-core-8.5.31.jar
+  spring-boot-actuator-1.5.14.RELEASE.jar spring-data-commons-1.13.13.
+ RELEASE.jar spring-core-4.3.18.RELEASE.jar commons-beanutils-1.9.3.ja
+ r tomcat-jdbc-8.5.31.jar spring-boot-starter-jdbc-1.5.14.RELEASE.jar 
+ jackson-core-2.8.11.jar spring-tx-4.3.18.RELEASE.jar antlr-2.7.7.jar 
+ stax-api-1.0.1.jar spring-orm-4.3.18.RELEASE.jar spring-integration-j
+ ava-dsl-1.2.3.RELEASE.jar spring-boot-starter-actuator-1.5.14.RELEASE
+ .jar poi-ooxml-3.9.jar jcl-over-slf4j-1.7.25.jar xml-apis-1.4.01.jar 
+ tomcat-juli-8.5.31.jar spring-integration-core-4.3.17.RELEASE.jar spr
+ ing-aop-4.3.18.RELEASE.jar spring-context-4.3.18.RELEASE.jar spring-b
+ eans-4.3.18.RELEASE.jar hibernate-commons-annotations-5.0.1.Final.jar
+  tools.jar xmlbeans-2.3.0.jar jackson-databind-2.8.11.2.jar spring-we
+ bmvc-4.3.18.RELEASE.jar spring-jdbc-4.3.18.RELEASE.jar tomcat-embed-e
+ l-8.5.31.jar jandex-2.0.0.Final.jar commons-collections-3.2.2.jar hib
+ ernate-validator-5.3.6.Final.jar spring-boot-autoconfigure-1.5.14.REL
+ EASE.jar hibernate-core-5.0.12.Final.jar spring-messaging-4.3.18.RELE
+ ASE.jar sqlite-jdbc-3.8.11.2.jar hibernate-entitymanager-5.0.12.Final
+ .jar spring-boot-1.5.14.RELEASE.jar logback-core-1.1.11.jar
 Main-Class: com.benzolamps.dict.main.DictApplication
 

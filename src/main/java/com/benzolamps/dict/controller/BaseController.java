@@ -2,8 +2,9 @@ package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
-import com.sun.xml.internal.rngom.parse.host.Base;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 
 /**
  * Controller基类
@@ -37,4 +38,12 @@ public class BaseController {
     protected BaseVo wrapperMsg(String message) {
         return new BaseVo(200, message);
     }
+
+    @InitBinder
+    protected void initBinder(WebDataBinder binder) {
+//        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+//        validator.setProviderClass(HibernateValidator.class);
+//        binder.setValidator(validator);
+    }
+
 }

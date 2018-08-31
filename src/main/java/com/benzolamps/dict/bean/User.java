@@ -1,6 +1,5 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.DetectColumnNum;
 import com.benzolamps.dict.util.Constant;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,7 +33,7 @@ public class User extends BaseEntity {
 
     @NotEmpty
     @Length(min = 6, max = 15)
-    @Pattern(regexp = "$[_0-9A-Za-z]+^")
+    @Pattern(regexp = "^[_0-9A-Za-z]+$")
     @Column(nullable = false)
     private String password;
 }

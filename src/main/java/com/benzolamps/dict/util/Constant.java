@@ -53,6 +53,9 @@ public interface Constant {
     /** 空的Method数组 */
     Method[] EMPTY_METHOD_ARRAY = new Method[0];
 
+    /** 空的Class数组 */
+    Class[] EMPTY_CLASS_ARRAY = new Class[0];
+
     /** 空的List */
     List EMPTY_LIST = Collections.EMPTY_LIST;
 

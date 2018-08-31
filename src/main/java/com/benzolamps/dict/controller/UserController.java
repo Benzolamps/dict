@@ -6,6 +6,8 @@ import com.benzolamps.dict.util.Constant;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -68,9 +70,9 @@ public class UserController extends BaseController {
     }
 
     /**
-     * 登出
+     * 注销登录
      * @param session HttpSession
-     * @return 登出成功
+     * @return 注销登录成功
      */
     @PostMapping("/logout.json")
     @ResponseBody
