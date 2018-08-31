@@ -96,16 +96,18 @@
             </a>
           </div>
           <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item layui-nav-itemd" lay-unselect>
-              <a class="dict-nav" id="toggle-nav">
+            <li class="layui-nav-item layui-nav-itemd">
+              <a href="javascript:;" class="dict-nav" id="toggle-nav">
                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
               </a>
             </li>
-            <li class="layui-nav-item layui-nav-itemd" lay-unselect>
-              <a class="dict-nav">gfhgfh</a>
+          </ul>
+          <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item">
+              <a href="javascript:;" id="lock_screen" style="color: #333333">锁屏</a>
             </li>
-            <li class="layui-nav-item layui-nav-itemd" lay-unselect>
-              <a class="dict-nav">gfhgfh</a>
+            <li class="layui-nav-item">
+              <a href="javascript:;" id="logout" style="color: #333333">注销</a>
             </li>
           </ul>
         </div>
@@ -212,6 +214,45 @@
                 }
               );
             }
+          });
+
+          $('#lock_screen').click(function () {
+
+          });
+
+          $('#logout').click(function () {
+            dict.loadText({
+              url: '${base_url}/user/logout.json',
+              type: 'post',
+              success: function (result, status, request) {
+                if (result) {
+                  layer.alert('注销成功', {
+                    icon: 1,
+                    title: '注销成功',
+                    yes: function (index) {
+                      location.reload();
+                    }
+                  });
+                } else {
+                  layer.alert('注销失败', {
+                    icon: 2,
+                    title: '注销失败',
+                    yes: function (index) {
+                      layer.close(index);
+                    }
+                  });
+                }
+              },
+              error: function (result, status, request) {
+                layer.alert(result.message, {
+                  icon: 2,
+                  title: result.status,
+                  yes: function (index) {
+                    layer.close(index);
+                  }
+                });
+              }
+            });
           });
         });
       </script>

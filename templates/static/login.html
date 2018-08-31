@@ -20,6 +20,7 @@
       document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/jquery.validate.js"><\/script>');
       document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/additional-methods.js"><\/script>');
       document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/localization/messages_zh.js"><\/script>');
+      document.write('<script type="text/javascript" src="' + baseUrl + 'js/md5.js"><\/script>');
       baseUrl = 'http://localhost:2018/dictionary-2.1.1';
     </script>
   </head>
@@ -154,7 +155,7 @@
             },
             success: function (result) {
               if (result) {
-                location.href = baseUrl;
+                location.reload();
               } else {
                 layer.alert('密码错误', {
                   icon: 2,

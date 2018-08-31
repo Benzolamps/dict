@@ -9,7 +9,7 @@
 <#macro compress>
   <#local nested><#nested/></#local>
   <#if is_release>
-    ${nested?replace('^\\s+|\\s+$|\\n|\\r', '', 'rm')}
+    ${nested?replace(constant('HTML_COMPRESS_PATTERN'), 'rm')}
   <#else>
     <#compress>${nested}</#compress>
   </#if>

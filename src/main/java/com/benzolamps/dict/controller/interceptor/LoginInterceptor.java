@@ -1,5 +1,6 @@
 package com.benzolamps.dict.controller.interceptor;
 
+import com.benzolamps.dict.controller.ErrorController;
 import com.benzolamps.dict.controller.UserController;
 import com.benzolamps.dict.controller.util.Constant;
 import org.springframework.web.method.HandlerMethod;
@@ -19,7 +20,7 @@ public class LoginInterceptor extends BaseInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HandlerMethod method = (HandlerMethod) handler;
-        if (!method.getMethod().getDeclaringClass().equals(UserController.class)) {
+        if (!(method.getMethod().getDeclaringClass().equals(UserController.class) || method.getMethod().getDeclaringClass().equals(ErrorController.class))) {
             if (request.getSession().getAttribute("currentUser") == null) {
                 if (response.getContentType().toLowerCase().contains(Constant.HTML)) {
                     response.sendRedirect(baseUrl + "/user/login.html");

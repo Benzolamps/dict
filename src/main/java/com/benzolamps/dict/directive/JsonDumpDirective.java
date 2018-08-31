@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateDirectiveModel;
+import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
-import freemarker.template.TemplateModelException;
 import freemarker.template.utility.DeepUnwrap;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -29,7 +29,7 @@ public class JsonDumpDirective implements TemplateDirectiveModel {
     private ObjectMapper mapper;
 
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws IOException, TemplateModelException {
+    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws IOException, TemplateException {
         mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
         Assert.isTrue(params.containsKey("obj"), "obj未指定");
         Object obj = DeepUnwrap.unwrap((TemplateModel) params.get("obj"));
