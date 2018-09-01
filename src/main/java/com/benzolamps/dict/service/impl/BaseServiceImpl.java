@@ -2,18 +2,16 @@ package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.dao.base.BaseDao;
-import com.benzolamps.dict.dao.core.*;
+import com.benzolamps.dict.dao.core.Filter;
+import com.benzolamps.dict.dao.core.Order;
+import com.benzolamps.dict.dao.core.Page;
+import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.BaseService;
-import com.benzolamps.dict.util.KeyValuePairs;
-import lombok.AccessLevel;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Service基类接口实现类
@@ -48,12 +46,6 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
 
     @Override
     @Transactional(readOnly = true)
-    public T findSingle(CriteriaQuery<T> criteriaQuery) {
-        return baseDao.findSingle(criteriaQuery);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<T> findList(Filter filter, Order... orders) {
         return baseDao.findList(filter, orders);
     }
@@ -66,39 +58,14 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
 
     @Override
     @Transactional(readOnly = true)
-    public List<T> findList(String jpql, Map<String, Object> parameters) {
-        return baseDao.findList(jpql, parameters);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    @Transactional(readOnly = true)
-    public List<T> findList(String jpql, KeyValuePairs<String, Object>... parameters) {
-        return baseDao.findList(jpql, parameters);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<T> findList(CriteriaQuery<T> criteriaQuery) {
-        return baseDao.findList(criteriaQuery);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<T> findAll() {
         return baseDao.findList(null);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<T> findPage(DictQuery<T> query, Pageable pageable) {
-        return baseDao.findPage(query, pageable);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<T> findAll(Pageable pageable) {
-        return baseDao.findPage(baseDao.generateDictQuery(), pageable);
+    public Page<T> findPage(Pageable pageable) {
+        return baseDao.findPage(pageable);
     }
 
     @Override
@@ -115,7 +82,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
 
     @Override
     @Transactional
-    public T update(T entity, String[] ignoreProperties) {
+    public T update(T entity, String... ignoreProperties) {
         return baseDao.update(entity, ignoreProperties);
     }
 

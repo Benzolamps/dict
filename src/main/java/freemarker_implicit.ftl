@@ -18,6 +18,7 @@
 [#-- @ftlvariable name="springboot_version" type="java.lang.String" --]
 [#-- @ftlvariable name="tomcat_version" type="java.lang.String" --]
 [#-- @ftlvariable name="servlet_version" type="java.lang.String" --]
+[#-- @ftlvariable name="sqlite_version" type="java.lang.String" --]
 [#-- @ftlvariable name="hibernate_version" type="java.lang.String" --]
 [#-- @ftlvariable name="poi_version" type="java.lang.String" --]
 [#-- @ftlvariable name="is_release" type="java.lang.Boolean" --]
@@ -34,4 +35,5 @@
 [#function get_dict_property class_name][/#function]
 [#function abbreviate str width ellipsis][/#function]
 [#function constant var][/#function]
+[#function current_user][/#function]
 [#include '/view/includes/main.ftl'/]

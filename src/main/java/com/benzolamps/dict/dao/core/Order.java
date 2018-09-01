@@ -46,7 +46,7 @@ public class Order implements Serializable {
      * @param alias 别名
      */
     public void build(String alias) {
-        snippet = alias + direction == null ? "" : (" " + direction.name().toLowerCase());
+        snippet = alias + "." + field + ((direction == null) ? "" : (" " + direction.name().toLowerCase()));
     }
 
     /**

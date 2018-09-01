@@ -7,12 +7,9 @@ package com.benzolamps.dict.service.base;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.dao.core.*;
-import com.benzolamps.dict.util.KeyValuePairs;
 
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Service基类接口
@@ -20,6 +17,7 @@ import java.util.Map;
  * @version 2.1.1
  * @datetime 2018-7-1 21:51:17
  */
+@SuppressWarnings("unused")
 public interface BaseService<T extends BaseEntity> {
 
     /**
@@ -35,13 +33,6 @@ public interface BaseService<T extends BaseEntity> {
      * @return 实体对象
      */
     T findSingle(Filter filter);
-
-    /**
-     * 根据CriteriaQuery查找单个实体对象
-     * @param criteriaQuery CriteriaQuery
-     * @return 实体对象
-     */
-    T findSingle(CriteriaQuery<T> criteriaQuery);
 
     /**
      * 根据条件和排序获取实体对象集合
@@ -60,49 +51,17 @@ public interface BaseService<T extends BaseEntity> {
     List<T> findList(Filter filter, Collection<Order> orders);
 
     /**
-     * 根据jpql和参数获取实体对象集合
-     * @param jpql jpql
-     * @param parameters 参数
-     * @return 实体对象集合
-     */
-    List<T> findList(String jpql, Map<String, Object> parameters);
-
-    /**
-     * 根据jpql和参数获取实体对象集合
-     * @param jpql jpql
-     * @param parameters 参数
-     * @return 实体对象集合
-     */
-    @SuppressWarnings("unchecked")
-    List<T> findList(String jpql, KeyValuePairs<String, Object>... parameters);
-
-    /**
-     * 根据CriteriaQuery查找实体对象集合
-     * @param criteriaQuery CriteriaQuery
-     * @return 实体对象集合
-     */
-    List<T> findList(CriteriaQuery<T> criteriaQuery);
-
-    /**
      * 查找所有对象集合
      * @return 实体对象集合
      */
     List<T> findAll();
 
     /**
-     * 根据DictQuery和分页获取实体对象分页集合
-     * @param query DictQuery
-     * @param pageable 分页
-     * @return 实体对象分页集合
-     */
-    Page<T> findPage(DictQuery<T> query, Pageable pageable);
-
-    /**
      * 查找所有对象分页集合
      * @param pageable 分页
      * @return 实体对象分页集合
      */
-    Page<T> findAll(Pageable pageable);
+    Page<T> findPage(Pageable pageable);
 
     /**
      * 根据条件获取查询结果条数

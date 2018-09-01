@@ -2,7 +2,6 @@ package com.benzolamps.dict.dao.base;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.dao.core.*;
-import com.benzolamps.dict.util.KeyValuePairs;
 
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.Collection;
@@ -18,8 +17,6 @@ import java.util.Map;
  */
 @SuppressWarnings("unused")
 public interface BaseDao<T extends BaseEntity> {
-
-	GeneratedDictQuery<T> generateDictQuery();
 
 	/**
 	 * 根据id获取实体对象
@@ -43,6 +40,24 @@ public interface BaseDao<T extends BaseEntity> {
 	T findSingle(CriteriaQuery<T> criteriaQuery);
 
 	/**
+	 * 根据JPQL和参数查找单个实体对象
+	 * @param jpql JPQL
+	 * @param parameters 参数
+	 * @param positionParameters 位置参数
+	 * @return 实体对象
+	 */
+	T findSingle(String jpql, Map<String, Object> parameters, Object... positionParameters);
+
+	/**
+	 * 根据原生SQL和参数查找单个实体对象
+	 * @param sql SQL
+	 * @param parameters 参数
+	 * @param positionParameters 位置参数
+	 * @return 实体对象
+	 */
+	T findSingleNative(String sql, Map<String, Object> parameters, Object... positionParameters);
+
+	/**
 	 * 根据条件和排序获取实体对象集合
 	 * @param filter 条件
 	 * @param orders 排序
@@ -59,21 +74,22 @@ public interface BaseDao<T extends BaseEntity> {
 	List<T> findList(Filter filter, Collection<Order> orders);
 
 	/**
-	 * 根据jpql和参数获取实体对象集合
-	 * @param jpql jpql
+	 * 根据JPQL和参数获取实体对象集合
+	 * @param jpql JPQL
 	 * @param parameters 参数
+	 * @param positionParameters 位置参数
 	 * @return 实体对象集合
 	 */
-	List<T> findList(String jpql, Map<String, Object> parameters);
+	List<T> findList(String jpql, Map<String, Object> parameters, Object... positionParameters);
 
 	/**
-	 * 根据jpql和参数获取实体对象集合
-	 * @param jpql jpql
+	 * 根据SQL和参数获取实体对象集合
+	 * @param sql SQL
 	 * @param parameters 参数
+	 * @param positionParameters 位置参数
 	 * @return 实体对象集合
 	 */
-	@SuppressWarnings("unchecked")
-	List<T> findList(String jpql, KeyValuePairs<String, Object>... parameters);
+	List<T> findListNative(String sql, Map<String, Object> parameters, Object... positionParameters);
 
     /**
      * 根据CriteriaQuery查找实体对象集合
@@ -89,6 +105,13 @@ public interface BaseDao<T extends BaseEntity> {
 	 * @return 实体对象分页集合
 	 */
 	Page<T> findPage(DictQuery<T> query, Pageable pageable);
+
+	/**
+	 * 根据分页获取实体对象分页集合
+	 * @param pageable 分页
+	 * @return 实体对象分页集合
+	 */
+	Page<T> findPage(Pageable pageable);
 
 	/**
 	 * 根据条件获取查询结果条数
@@ -123,4 +146,33 @@ public interface BaseDao<T extends BaseEntity> {
 	 * @return 转换后的实体对象
 	 */
 	T detach(T entity);
+
+	/**
+	 * 检测实体对象是否存在
+	 * @param entity 实体对象
+	 * @return 检测结果
+	 */
+	boolean contains(T entity);
+
+	/**
+	 * 刷新实体对象
+	 * @param entity 实体对象
+	 */
+	void refresh(T entity);
+
+	/**
+	 * 根据JPQL执行语句
+	 * @param jpql JPQL
+	 * @param parameters 参数
+	 * @param positionParameters 位置参数
+	 */
+	void execute(String jpql, Map<String, Object> parameters, Object... positionParameters);
+
+	/**
+	 * 根据SQL执行语句
+	 * @param sql SQL
+	 * @param parameters 参数
+	 * @param positionParameters 位置参数
+	 */
+	void executeNative(String sql, Map<String, Object> parameters, Object... positionParameters);
 }

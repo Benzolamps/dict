@@ -88,6 +88,10 @@
               <td>${.version}</td>
             </tr>
             <tr>
+              <th title="Hibernate版本">SQLite版本</th>
+              <td>${sqlite_version}</td>
+            </tr>
+            <tr>
               <th title="Hibernate版本">Hibernate版本</th>
               <td>${hibernate_version}</td>
             </tr>

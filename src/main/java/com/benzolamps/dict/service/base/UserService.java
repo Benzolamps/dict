@@ -30,4 +30,22 @@ public interface UserService extends BaseService<User> {
      * @return 验证结果
      */
     boolean verifyUser(User user);
+
+    /**
+     * 设置当前登录用户
+     * @param user 用户
+     */
+    void setCurrent(User user);
+
+    /**
+     * 获取当前登录用户
+     * @return 用户
+     */
+    User getCurrent();
+
+    /**
+     * 修改密码
+     * @param password 密码
+     */
+    void modifyPassword(String password);
 }

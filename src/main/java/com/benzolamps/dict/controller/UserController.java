@@ -39,7 +39,7 @@ public class UserController extends BaseController {
      */
     @RequestMapping(value = "/login.html", method = {RequestMethod.GET, RequestMethod.POST})
     protected void login(HttpServletResponse response, HttpSession session) throws IOException, TemplateException {
-        if (session.getAttribute("currentUser") != null) {
+        if (userService.getCurrent() != null) {
             response.sendRedirect(baseUrl + "/");
         } else {
             Template template = configuration.getTemplate("static/login.html");
@@ -60,9 +60,9 @@ public class UserController extends BaseController {
     @ResponseBody
     protected boolean verify(User user, HttpSession session) {
         boolean valid = userService.verifyUser(user);
-        if (valid && session.getAttribute("currentUser") == null) {
+        if (valid && userService.getCurrent() == null) {
             user = userService.findByUsername(user.getUsername());
-            session.setAttribute("currentUser", user);
+            userService.setCurrent(user);
         }
         return valid;
     }
@@ -75,8 +75,8 @@ public class UserController extends BaseController {
     @PostMapping("/logout.json")
     @ResponseBody
     protected boolean logout(HttpSession session) {
-        if (session.getAttribute("currentUser") != null) {
-            session.removeAttribute("currentUser");
+        if (userService.getCurrent() != null) {
+            userService.setCurrent(null);
         }
         return true;
     }

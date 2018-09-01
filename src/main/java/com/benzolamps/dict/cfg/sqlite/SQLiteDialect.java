@@ -60,7 +60,6 @@ public class SQLiteDialect extends Dialect {
         registerFunction("random", new NoArgSQLFunction("random", StandardBasicTypes.INTEGER));
         registerFunction("round", new StandardSQLFunction("round"));
         registerFunction("substr", new StandardSQLFunction("substr", StandardBasicTypes.STRING));
-
         registerFunction("trim", new AbstractAnsiTrimEmulationFunction() {
             @Override
             protected SQLFunction resolveBothSpaceTrimFunction() {
@@ -97,6 +96,7 @@ public class SQLiteDialect extends Dialect {
                 return new SQLFunctionTemplate(StandardBasicTypes.STRING, "rtrim(?1, ?2)");
             }
         });
+
         uniqueDelegate = new SQLiteUniqueDelegate(this);
     }
 

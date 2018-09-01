@@ -39,15 +39,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
-    /** 解锁密码 */
-    @Column
-    private String unlockPassword;
-
-    /** 锁定时长 */
-    @Column(nullable = false, columnDefinition = "INTEGER NOT NULL DEFAULT(60 * 60 * 2)")
-    private Long lockTime;
-
     /** 昵称 */
     @Column
-    private String nickName;
+    private String nickname;
 }

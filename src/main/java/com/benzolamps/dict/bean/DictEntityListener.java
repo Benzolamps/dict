@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.Format;
 import com.benzolamps.dict.util.DictBean;
 import com.benzolamps.dict.util.DictLambda.Action2;
 import com.benzolamps.dict.util.DictProperty;

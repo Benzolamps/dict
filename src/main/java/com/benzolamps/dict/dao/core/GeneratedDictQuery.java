@@ -2,7 +2,6 @@ package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.util.DictString;
-import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
@@ -55,22 +54,14 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
         String classSimpleName = entityClass.getSimpleName();
         String alias = DictString.toCamel(classSimpleName);
         String jpql = select(alias);
-        TypedQuery<B> typedQuery = entityManager.createQuery(jpql, entityClass);
-        for (int i = 0; i < filter.getParameters().size(); i++) {
-            typedQuery.setParameter(i, filter.getParameters().get(i));
-        }
-        return typedQuery;
+        return DictJpa.createJpqlQuery(entityManager, jpql, entityClass, null, filter.getParameters().toArray());
     }
 
     @Override
     public TypedQuery<Long> getCountQuery(EntityManager entityManager) {
         Assert.notNull(entityManager, "entity manager不能为空");
         String jpql = select("count(*)");
-        TypedQuery<Long> typedQuery = entityManager.createQuery(jpql, Long.class);
-        for (int i = 0; i < filter.getParameters().size(); i++) {
-            typedQuery.setParameter(i, filter.getParameters().get(i));
-        }
-        return typedQuery;
+        return DictJpa.createJpqlQuery(entityManager, jpql, Long.class, null, filter.getParameters().toArray());
     }
 
     private String select(String field) {
@@ -79,12 +70,11 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
         String alias = DictString.toCamel(classSimpleName);
         StringJoiner jpql = new StringJoiner(" ");
         filter.build(alias);
-        orders.forEach(order -> order.build(field));
+        orders.add(Order.desc("id"));
+        orders.forEach(order -> order.build(alias));
         jpql.add("select").add(field).add("from").add(classSimpleName).add("as").add(alias);
         jpql.add("where").add(filter.getSnippet());
-        if (!orders.isEmpty()) {
-            jpql.add("order by");
-        }
+        jpql.add("order by");
         jpql.add(String.join(", ", orders.stream().map(Order::getSnippet).collect(Collectors.toSet())));
         return jpql.toString();
 

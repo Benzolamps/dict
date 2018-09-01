@@ -2,10 +2,10 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DetectColumnNum;
 import com.benzolamps.dict.component.ExcelHeader;
+import com.benzolamps.dict.component.Format;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Column;

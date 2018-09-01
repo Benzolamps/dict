@@ -8,11 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.annotation.Resource;
 import javax.persistence.NoResultException;
 import java.nio.charset.Charset;
-import java.util.List;
 
 /**
  * 用户Service接口实现类
@@ -23,6 +24,8 @@ import java.util.List;
 @Service
 @Transactional
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
+
+    private static final String CURRENT_USER_ATTRIBUTE = "currentUser";
 
     @Resource
     private UserDao userDao;
@@ -53,11 +56,38 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         Assert.hasLength(user.getPassword(), "password不能为null或空");
         User ref = findByUsername(user.getUsername());
         if (ref == null) return false;
-        if (!ref.getPassword().equals(encryptPassword(user.getPassword()))) return false;
-        return true;
+        return ref.getPassword().equals(encryptPassword(user.getPassword()));
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public void setCurrent(User user) {
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        if (user == null || user.isNew()) {
+            requestAttributes.removeAttribute("currentUser", RequestAttributes.SCOPE_SESSION);
+        } else {
+            userDao.refresh(user);
+            requestAttributes.setAttribute(CURRENT_USER_ATTRIBUTE, user.getId(), RequestAttributes.SCOPE_SESSION);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public User getCurrent() {
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        Integer id = (Integer) requestAttributes.getAttribute(CURRENT_USER_ATTRIBUTE, RequestAttributes.SCOPE_GLOBAL_SESSION);
+        return id == null ? null : userDao.find(id);
+    }
+
+    @Override
+    @Transactional
+    public void modifyPassword(String password) {
+        User user = getCurrent();
+        user.setPassword(encryptPassword(password));
+    }
+
+    @Override
+    @Transactional
     public User persist(User user) {
         Assert.notNull(user, "user不能为null");
         user.setPassword(encryptPassword(user.getPassword()));
@@ -65,6 +95,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     }
 
     @Override
+    @Transactional
     public User update(User user, String[] ignoreProperties) {
         Assert.notNull(user, "user不能为null");
         user.setPassword(encryptPassword(user.getPassword()));

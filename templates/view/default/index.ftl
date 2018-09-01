@@ -104,6 +104,9 @@
           </ul>
           <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
+              <a href="javascript:;" id="lock_screen" style="color: #333333">${current_user().nickname}</a>
+            </li>
+            <li class="layui-nav-item">
               <a href="javascript:;" id="lock_screen" style="color: #333333">锁屏</a>
             </li>
             <li class="layui-nav-item">
@@ -221,39 +224,59 @@
           });
 
           $('#logout').click(function () {
-            dict.loadText({
-              url: '${base_url}/user/logout.json',
-              type: 'post',
-              success: function (result, status, request) {
-                if (result) {
-                  layer.alert('注销成功', {
-                    icon: 1,
-                    title: '注销成功',
-                    yes: function (index) {
-                      location.reload();
-                    }
-                  });
-                } else {
-                  layer.alert('注销失败', {
+            layer.confirm('确定要注销吗？', {icon: 3, title: '提示'}, function (index) {
+              dict.loadText({
+                url: '${base_url}/user/logout.json',
+                type: 'post',
+                success: function (result, status, request) {
+                  if (result) {
+                    layer.alert('注销成功', {
+                      icon: 1,
+                      title: '注销成功',
+                      yes: function (index) {
+                        location.reload();
+                      }
+                    });
+                  } else {
+                    layer.alert('注销失败', {
+                      icon: 2,
+                      title: '注销失败',
+                      yes: function (index) {
+                        layer.close(index);
+                      }
+                    });
+                  }
+                },
+                error: function (result, status, request) {
+                  layer.alert(result.message, {
                     icon: 2,
-                    title: '注销失败',
+                    title: result.status,
                     yes: function (index) {
                       layer.close(index);
                     }
                   });
                 }
-              },
-              error: function (result, status, request) {
-                layer.alert(result.message, {
-                  icon: 2,
-                  title: result.status,
-                  yes: function (index) {
-                    layer.close(index);
-                  }
-                });
-              }
+              });
             });
           });
+
+/*          var lockScreenDelta = 10;
+          var lockScreenDelay = 0;
+          var interval = setInterval(function () {
+            lockScreenDelay++;
+            if (lockScreenDelay >= lockScreenDelta) {
+              alert('hhh');
+              clearInterval(interval);
+              $('body').unbind('mousedown keydown mousemove wheel');
+            }
+          }, 1000);
+
+          var rechargeLockScreen = function () {
+            lockScreenDelay = 0;
+            console.log('recharge');
+          };
+
+          $('body').bind('mousedown keydown mousemove wheel', rechargeLockScreen);*/
         });
       </script>
     </body>

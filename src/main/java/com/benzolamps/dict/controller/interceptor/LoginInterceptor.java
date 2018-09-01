@@ -3,8 +3,10 @@ package com.benzolamps.dict.controller.interceptor;
 import com.benzolamps.dict.controller.ErrorController;
 import com.benzolamps.dict.controller.UserController;
 import com.benzolamps.dict.controller.util.Constant;
+import com.benzolamps.dict.service.base.UserService;
 import org.springframework.web.method.HandlerMethod;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,11 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 @Interceptor
 public class LoginInterceptor extends BaseInterceptor {
 
+    @Resource
+    private UserService userService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HandlerMethod method = (HandlerMethod) handler;
         if (!(method.getMethod().getDeclaringClass().equals(UserController.class) || method.getMethod().getDeclaringClass().equals(ErrorController.class))) {
-            if (request.getSession().getAttribute("currentUser") == null) {
+            if (userService.getCurrent() == null) {
                 if (response.getContentType().toLowerCase().contains(Constant.HTML)) {
                     response.sendRedirect(baseUrl + "/user/login.html");
                 } else if (response.getContentType().toLowerCase().contains(Constant.JSON)) {

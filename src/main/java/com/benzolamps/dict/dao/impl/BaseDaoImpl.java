@@ -6,16 +6,13 @@ import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictBean;
 import com.benzolamps.dict.util.DictProperty;
-import com.benzolamps.dict.util.KeyValuePairs;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -36,24 +33,23 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-    /**
-     * 生成一个GeneratedDictQuery
-     * @return GeneratedDictQuery
-     */
-    @Override
-	public GeneratedDictQuery<T> generateDictQuery() {
-	    return new GeneratedDictQuery<T>(entityClass);
-    }
-
 	/** 构造方法 */
 	public BaseDaoImpl() {
 		ResolvableType resolvableType = ResolvableType.forClass(getClass());
 		entityClass = (Class<T>) resolvableType.getSuperType().getGeneric().resolve();
 	}
 
+    /**
+     * 生成一个GeneratedDictQuery
+     * @return GeneratedDictQuery
+     */
+    protected GeneratedDictQuery<T> generateDictQuery() {
+        return new GeneratedDictQuery<>(entityClass);
+    }
+
 	@Override
 	public T find(Integer id) {
-        Assert.notNull(id, "id不能为空");
+        Assert.notNull(id, "id不能为null");
 		return entityManager.find(entityClass, id);
 	}
 
@@ -66,12 +62,30 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public T findSingle(CriteriaQuery<T> criteriaQuery) {
-        Assert.notNull(criteriaQuery, "criteria query不能为空");
+        Assert.notNull(criteriaQuery, "criteria query不能为null");
 	    try {
             return entityManager.createQuery(criteriaQuery).getSingleResult();
         } catch (NoResultException | NonUniqueResultException e) {
 	        return null;
         }
+    }
+
+    @Override
+    public T findSingle(String jpql, Map<String, Object> parameters, Object... positionParameters) {
+        Assert.hasLength(jpql, "jpql不能为null或空");
+        TypedQuery<T> query = DictJpa.createJpqlQuery(entityManager, jpql, entityClass, parameters, positionParameters);
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException | NonUniqueResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public T findSingleNative(String sql, Map<String, Object> parameters, Object... positionParameters) {
+        Assert.hasLength(sql, "jpql不能为null或空");
+        List<T> results = DictJpa.createNativeQuery(entityManager, sql, entityClass, parameters, positionParameters).list();
+        return results.size() != 1 ? null : results.iterator().next();
     }
 
     @Override
@@ -96,32 +110,26 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     }
 
     @Override
-    public List<T> findList(String jpql, Map<String, Object> parameters) {
-	    Assert.hasLength(jpql, "jpql不能为空或null");
-	    logger.info("jpql: " + jpql);
-        TypedQuery<T> query = entityManager.createQuery(jpql, entityClass);
-        if (parameters != null) parameters.forEach(query::setParameter);
-        return query.getResultList();
-    }
-
-    @Override
-    public List<T> findList(String jpql, KeyValuePairs<String, Object>... parameters) {
-        Assert.hasLength(jpql, "jpql不能为空或null");
-        logger.info("jpql: " + jpql);
-        TypedQuery<T> query = entityManager.createQuery(jpql, entityClass);
-        Arrays.stream(parameters).forEach(pairs -> query.setParameter(pairs.getKey(), pairs.getValue()));
-        return query.getResultList();
-    }
-
-    @Override
     public List<T> findList(CriteriaQuery<T> criteriaQuery) {
-	    Assert.notNull(criteriaQuery, "criteria query不能为空");
+	    Assert.notNull(criteriaQuery, "criteria query不能为null");
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
 
     @Override
+    public List<T> findList(String jpql, Map<String, Object> parameters, Object... positionParameters) {
+        Assert.hasLength(jpql, "jpql不能为null或空");
+        return DictJpa.createJpqlQuery(entityManager, jpql, entityClass, parameters, positionParameters).getResultList();
+    }
+
+    @Override
+    public List<T> findListNative(String sql, Map<String, Object> parameters, Object... positionParameters) {
+        Assert.hasLength(sql, "sql不能为null或空");
+        return DictJpa.createNativeQuery(entityManager, sql, entityClass, parameters, positionParameters).list();
+    }
+
+    @Override
 	public Page<T> findPage(DictQuery<T> dictQuery, Pageable pageable) {
-        Assert.notNull(dictQuery, " dict query不能为空");
+        Assert.notNull(dictQuery, " dict query不能为null");
         dictQuery.applyOrders(pageable.getOrders().toArray(new Order[0]));
         long total = dictQuery.getCountQuery(entityManager).getSingleResult();
         if (pageable != null) pageable.getSearches().forEach(dictQuery::applySearch);
@@ -142,8 +150,13 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	}
 
     @Override
+    public Page<T> findPage(Pageable pageable) {
+        return findPage(generateDictQuery(), pageable);
+    }
+
+    @Override
 	public T persist(T entity) {
-		Assert.notNull(entity, "entity不能为空");
+		Assert.notNull(entity, "entity不能为null");
 		Assert.isTrue(entity.isNew(), "entity必须为新建对象");
 		entityManager.persist(entity);
         return entity;
@@ -151,7 +164,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public T update(T entity, String[] ignoreProperties) {
-        Assert.notNull(entity, "entity不能为空");
+        Assert.notNull(entity, "entity不能为null");
         Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
         if (ignoreProperties == null) ignoreProperties = Constant.EMPTY_STRING_ARRAY;
         String[] defaultIgnore = {"id", "version", "createDate", "updateDate"};
@@ -168,17 +181,47 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
 	public void remove(T entity) {
-        Assert.notNull(entity, "entity不能为空");
+        Assert.notNull(entity, "entity不能为null");
         Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
-	    entityManager.remove(entity);
+        if (entityManager.contains(entity)) {
+            entityManager.remove(entityManager.merge(entity));
+        }
 	}
 
 	@Override
 	public T detach(T entity) {
-        Assert.notNull(entity, "entity不能为空");
+        Assert.notNull(entity, "entity不能为null");
         Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
         entityManager.detach(entity);
 		return entity;
 	}
+
+    @Override
+    public boolean contains(T entity) {
+        Assert.notNull(entity, "entity不能为null");
+        Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
+        return find(entity.getId()) != null;
+    }
+
+    @Override
+    public void refresh(T entity) {
+        Assert.notNull(entity, "entity不能为null");
+        Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
+        if (find(entity.getId()) != entity) {
+            entityManager.refresh(entity);
+        }
+    }
+
+    @Override
+    public void execute(String jpql, Map<String, Object> parameters, Object... positionParameters) {
+        Assert.hasLength(jpql, "jpql不能为null或空");
+        DictJpa.createJpqlQuery(entityManager, jpql, parameters, positionParameters);
+    }
+
+    @Override
+    public void executeNative(String sql, Map<String, Object> parameters, Object... positionParameters) {
+        Assert.hasLength(sql, "sql不能为null或空");
+        DictJpa.executeNativeQuery(entityManager, sql, parameters, positionParameters);
+    }
 }
 
