@@ -27,9 +27,6 @@ public class MiscellaneousDirective {
 
     @Bean
     protected TemplateMethodModelEx currentUserMethod() {
-        return arguments -> {
-            System.out.println(userService.getCurrent());
-            return userService.getCurrent();
-        };
+        return arguments -> userService.getCurrent();
     }
 }

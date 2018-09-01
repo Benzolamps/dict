@@ -131,6 +131,11 @@
           <entry key="RestClientRequestRunnerNavigator.fromCode" value="24" />
         </counts>
       </usages-collector>
+      <usages-collector id="statistics.spring.boot.run.usages">
+        <counts>
+          <entry key="LiveBeansNavigationHandler.fromCode" value="1" />
+        </counts>
+      </usages-collector>
     </session>
   </component>
   <component name="InspectionProjectProfileManager">
@@ -213,7 +218,11 @@
         <option name="ignoreAnonymousInnerClasses" value="false" />
         <option name="superClassString" value="" />
       </inspection_tool>
+      <inspection_tool class="SpringElInspection" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="SpringMVCViewInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="SpringPlaceholdersInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+      <inspection_tool class="SpringXmlModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+      <inspection_tool class="ThisExpressionReferencesGlobalObjectJS" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="TrivialIf" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="WeakerAccess" enabled="false" level="WARNING" enabled_by_default="false">
         <option name="SUGGEST_PACKAGE_LOCAL_FOR_MEMBERS" value="true" />
@@ -377,10 +386,12 @@
         <w>itemd</w>
         <w>itemed</w>
         <w>jpql</w>
+        <w>keydown</w>
         <w>layui</w>
         <w>loadster</w>
         <w>maxlength</w>
         <w>minlength</w>
+        <w>mored</w>
         <w>mousedown</w>
         <w>mousemove</w>
         <w>mouseup</w>

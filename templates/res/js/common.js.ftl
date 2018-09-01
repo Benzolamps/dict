@@ -23,3 +23,7 @@ layui.use(['element', 'layer'], function () {
     window.element = layui.element;
     window.layer = layui.layer;
 });
+
+$.validator.addMethod('func', function(value, element, param) {
+  return eval('(' + param + ')(value, element)');
+}, "输入错误");

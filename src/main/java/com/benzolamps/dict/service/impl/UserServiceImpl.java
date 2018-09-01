@@ -83,7 +83,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Transactional
     public void modifyPassword(String password) {
         User user = getCurrent();
+        Assert.notNull(user, "尚未登录");
         user.setPassword(encryptPassword(password));
+        setCurrent(null);
     }
 
     @Override

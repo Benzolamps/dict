@@ -1,16 +1,19 @@
 package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.bean.User;
+import com.benzolamps.dict.controller.interceptor.WindowView;
+import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.service.base.UserService;
 import com.benzolamps.dict.util.Constant;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.StringWriter;
 
@@ -33,12 +36,11 @@ public class UserController extends BaseController {
     /**
      * 登录界面
      * @param response HttpServletResponse
-     * @param session HttpSession
      * @throws IOException IOException
      * @throws TemplateException TemplateException
      */
     @RequestMapping(value = "/login.html", method = {RequestMethod.GET, RequestMethod.POST})
-    protected void login(HttpServletResponse response, HttpSession session) throws IOException, TemplateException {
+    protected void login(HttpServletResponse response) throws IOException, TemplateException {
         if (userService.getCurrent() != null) {
             response.sendRedirect(baseUrl + "/");
         } else {
@@ -58,7 +60,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/verify.json")
     @ResponseBody
-    protected boolean verify(User user, HttpSession session) {
+    protected boolean verify(@Validated(User.Password.class) User user) {
         boolean valid = userService.verifyUser(user);
         if (valid && userService.getCurrent() == null) {
             user = userService.findByUsername(user.getUsername());
@@ -69,12 +71,11 @@ public class UserController extends BaseController {
 
     /**
      * 注销登录
-     * @param session HttpSession
      * @return 注销登录成功
      */
     @PostMapping("/logout.json")
     @ResponseBody
-    protected boolean logout(HttpSession session) {
+    protected boolean logout() {
         if (userService.getCurrent() != null) {
             userService.setCurrent(null);
         }
@@ -90,5 +91,41 @@ public class UserController extends BaseController {
     @ResponseBody
     protected boolean usernameExists(String username) {
         return userService.usernameExists(username);
+    }
+
+    /**
+     * 验证密码
+     * @param password 密码
+     * @return 验证结果
+     */
+    @RequestMapping(value = "/check_password.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    protected boolean checkPassword(@RequestParam("oldPassword") String password) {
+        User user = userService.getCurrent();
+        if (user == null) {
+            return false;
+        } else {
+            return userService.verifyUser(new User(user.getUsername(), password));
+        }
+    }
+
+    @WindowView
+    @RequestMapping(value = "/edit_password.html", method = {RequestMethod.GET, RequestMethod.POST})
+    protected ModelAndView editPassword() {
+        ModelAndView mv = new ModelAndView();
+        User user = userService.getCurrent();
+        if (user == null) {
+            mv.setViewName("redirect:login.html");
+        } else {
+            mv.setViewName("view/user/password");
+        }
+        return mv;
+    }
+
+    @PostMapping("/save_password.json")
+    @ResponseBody
+    protected BaseVo savePassword(@RequestParam("newPassword") String password) {
+        userService.modifyPassword(password);
+        return wrapperMsg("success");
     }
 }

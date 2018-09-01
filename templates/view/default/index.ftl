@@ -78,12 +78,12 @@
           background-color: #222222 !important;
         }
 
-        .dict-column>.layui-nav-more {
-          border-color: #222222 transparent transparent;
+        .layui-nav-more {
+          border-color: #222222 transparent transparent transparent !important;
         }
 
-        .layui-nav-itemed>.dict-column .layui-nav-more {
-          border-color: transparent transparent #222222 !important;
+        .layui-nav-mored,.layui-nav-itemed>.dict-column .layui-nav-more {
+          border-color: transparent transparent #222222 transparent !important;
         }
       </style>
     </head>
@@ -96,20 +96,24 @@
             </a>
           </div>
           <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item layui-nav-itemd">
+            <li class="layui-nav-item layui-nav-itemd" lay-unselect>
               <a href="javascript:;" class="dict-nav" id="toggle-nav">
                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
               </a>
             </li>
           </ul>
           <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item">
-              <a href="javascript:;" id="lock_screen" style="color: #333333">${current_user().nickname}</a>
+            <li class="layui-nav-item" lay-unselect>
+              <a href="javascript:;" id="lock_screen" style="color: #333333">${(current_user().nickname)!''} </a>
+              <dl class="layui-nav-child"> <!-- 二级菜单 -->
+                <dd><a href="javascript:;" id="password-nav">修改密码</a></dd>
+                <dd><a href="javascript:;" id="profile-nav">个人资料</a></dd>
+              </dl>
             </li>
-            <li class="layui-nav-item">
+            <li class="layui-nav-item" lay-unselect>
               <a href="javascript:;" id="lock_screen" style="color: #333333">锁屏</a>
             </li>
-            <li class="layui-nav-item">
+            <li class="layui-nav-item" lay-unselect>
               <a href="javascript:;" id="logout" style="color: #333333">注销</a>
             </li>
           </ul>
@@ -219,6 +223,14 @@
             }
           });
 
+          $('#password-nav').click(function () {
+            layer.open({
+              type: 2,
+              content: '${base_url}/user/edit_password.html',
+              area: ['500px', '500px']
+            });
+          });
+
           $('#lock_screen').click(function () {
 
           });
@@ -234,7 +246,7 @@
                       icon: 1,
                       title: '注销成功',
                       yes: function (index) {
-                        location.reload();
+                        location.reload(true);
                       }
                     });
                   } else {

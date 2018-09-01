@@ -59,6 +59,7 @@ spring:
     settings:
       number_format: '#'
 
+
   cache:
     type: ehcache
     ehcache:

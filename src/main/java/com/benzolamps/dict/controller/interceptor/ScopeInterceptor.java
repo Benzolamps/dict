@@ -1,8 +1,6 @@
 package com.benzolamps.dict.controller.interceptor;
 
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +18,7 @@ public class ScopeInterceptor extends BaseInterceptor {
         if (modelAndView != null) {
             modelAndView.addObject("request", request);
             modelAndView.addObject("response", response);
-            modelAndView.addObject("session", request.getSession());
+            modelAndView.addObject("session", request.getSession(false));
             modelAndView.addObject("application", request.getServletContext());
         }
     }

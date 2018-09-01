@@ -103,6 +103,10 @@
               <th title="JQuery版本">JQuery版本</th>
               <td id="jquery-version"><script>document.write($.fn.jquery);</script></td>
             </tr>
+            <tr>
+              <th title="Layui版本">Layui版本</th>
+              <td id="jquery-version"><script>document.write(layui.v);</script></td>
+            </tr>
           </tbody>
         </table>
       </div>

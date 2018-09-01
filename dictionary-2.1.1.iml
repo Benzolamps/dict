@@ -12,10 +12,17 @@
     </facet>
     <facet type="Spring" name="Spring">
       <configuration>
+        <fileset id="spring_boot_com.benzolamps.dict.main.DictApplication" name="DictApplication" removed="true">
+          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/main/DictApplication.java</file>
+          <file>file://$MODULE_DIR$/src/main/resources/application.yml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/application-release.yml</file>
+        </fileset>
+        <fileset id="spring-boot-dispatcherServletAutoConfiguration-mvc" name="DictApplication MVC" removed="true">
+          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/main/DictApplication.java</file>
+        </fileset>
         <fileset id="fileset" name="Spring Application Context" removed="false">
-          <dependency>spring_boot_com.benzolamps.dict.main.DictApplication</dependency>
+          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/main/DictApplication.java</file>
           <file>file://$MODULE_DIR$/src/main/resources/freemarker.xml</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/cfg/WebConfiguration.java</file>
         </fileset>
       </configuration>
     </facet>
