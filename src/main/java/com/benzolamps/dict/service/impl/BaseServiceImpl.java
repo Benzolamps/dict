@@ -59,7 +59,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional(readOnly = true)
     public List<T> findAll() {
-        return baseDao.findList(null);
+        return baseDao.findList((Filter) null);
     }
 
     @Override
@@ -90,5 +90,10 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Transactional
     public void remove(T entity) {
       baseDao.remove(entity);
+    }
+
+    @Override
+    public void remove(Integer id) {
+        baseDao.remove(find(id));
     }
 }

@@ -21,8 +21,8 @@ public final class DictEntityListener {
     private void format(BaseEntity bean) {
         DictBean<? extends BaseEntity> dictBean = new DictBean<>(bean.getClass());
         dictBean.forEachAnnotatedProperty(Format.class, (Action2<DictProperty, Format>) (property, format) -> {
-            Object value = dictBean.getMethod(format.value(), property.get(dictBean)).invoke(dictBean);
-            property.set(dictBean, value);
+            Object value = dictBean.getMethod(format.value(), property.getType()).invoke(bean, (String) property.get(bean));
+            property.set(bean, value);
         });
     }
 

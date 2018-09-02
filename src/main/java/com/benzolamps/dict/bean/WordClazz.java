@@ -27,7 +27,7 @@ public class WordClazz extends BaseEntity {
     private static final long serialVersionUID = -7259857902911189092L;
 
     /** 名字 */
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @NotEmpty
     @Length(max = 255)
     private String name;

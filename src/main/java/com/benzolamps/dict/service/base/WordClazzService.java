@@ -9,4 +9,13 @@ import com.benzolamps.dict.bean.WordClazz;
  * @datetime 2018-7-1 22:23:12
  */
 public interface WordClazzService extends BaseService<WordClazz> {
+
+    /**
+     * 通过名称查找词性
+     * @param name 名称
+     * @return 词性对象
+     */
+    WordClazz findByName(String name);
+
+    WordClazz findByIdOrName(String name);
 }

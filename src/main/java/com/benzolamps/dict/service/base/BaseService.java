@@ -89,4 +89,10 @@ public interface BaseService<T extends BaseEntity> {
      * @param entity 实体对象
      */
     void remove(T entity);
+
+    /**
+     * 删除实体对象
+     * @param id 实体对象id
+     */
+    void remove(Integer id);
 }

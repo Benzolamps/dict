@@ -52,7 +52,7 @@
         page: false,
         cols: [fields],
         data: <@json_dump obj=values/>,
-        id: 'shuffle-solutions'
+        id: '${id}'
       });
 
       var add = $('#${id} [lay-event=add]');
@@ -73,13 +73,15 @@
           var ids = checkStatus.data.map(function (value) {
             return value.id;
           });
+          console.log(checkStatus.data);
           dict.loadText({
             url: '${delete}',
             data: {id: ids},
             async: true,
             success: function () {
-              parent.layer.alert('删除成功', function () {
+              parent.layer.alert('删除成功', function (index) {
                 location.reload();
+                parent.layer.close(index);
               });
             }
           });

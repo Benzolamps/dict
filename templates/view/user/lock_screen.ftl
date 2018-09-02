@@ -36,7 +36,7 @@
                 请设置一个四位数解锁密码
               </td>
               <td>
-                <input type="password" name="password" autocomplete="off" maxlength="4" placeholder="请设置一个四位数解锁密码" class="layui-input">
+                <input type="text" name="password" autocomplete="off" required maxlength="4" placeholder="请设置一个四位数解锁密码" class="layui-input">
               </td>
             </tr>
             <tr>
@@ -66,7 +66,6 @@
     }, 5000);
   };
 
-
   if (!localStorage.getItem('password')) {
     var index = parent.layer.open({
       type: 1,
@@ -74,7 +73,7 @@
       area: ['500px', '500px'],
       cancel: function (index) {
         parent.layer.closeAll();
-      },
+      }
     });
 
     parent.dict.validateForm(parent.$('#lock'), {

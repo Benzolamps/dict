@@ -79,7 +79,7 @@
 </script>
 
 <@data_edit
-  id='shuffle_solution'
+  id='shuffle-solutions'
   title='添加乱序方案'
   fields=fields?eval
   values=solution

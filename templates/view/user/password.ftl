@@ -8,7 +8,7 @@
             请输入原密码
           </td>
           <td>
-            <input type="password" name="oldPassword" required autocomplete="off" placeholder="请输入原密码" class="layui-input">
+            <input type="password" name="oldPassword" required maxlength="15" autocomplete="off" placeholder="请输入原密码" class="layui-input">
           </td>
         </tr>
         <tr>
@@ -16,7 +16,7 @@
             请输入新密码
           </td>
           <td>
-            <input type="password" name="newPassword" required autocomplete="off" placeholder="请输入新密码" class="layui-input">
+            <input type="password" name="newPassword" required maxlength="15" autocomplete="off" placeholder="请输入新密码" class="layui-input">
           </td>
         </tr>
         <tr>
@@ -24,7 +24,7 @@
             请再次输入新密码
           </td>
           <td>
-            <input type="password" name="confirmPassword" required autocomplete="off" placeholder="请再次输入新密码" class="layui-input">
+            <input type="password" name="confirmPassword" required maxlength="15" autocomplete="off" placeholder="请再次输入新密码" class="layui-input">
           </td>
         </tr>
         <tr>

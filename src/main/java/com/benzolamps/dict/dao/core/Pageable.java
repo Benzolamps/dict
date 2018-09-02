@@ -10,12 +10,15 @@ import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.util.Set;
 
+import static com.benzolamps.dict.util.Constant.EMPTY_SET;
+
 /**
  * 分页信息
  * @author Benzolamps
  * @version 2.1.1
  * @datetime 2018-7-1 18:27:13
  */
+@SuppressWarnings("unchecked")
 @NoArgsConstructor
 public class Pageable implements Serializable {
 
@@ -46,12 +49,12 @@ public class Pageable implements Serializable {
 	/** 排序 */
 	@Getter
 	@Setter
-	private Set<Order> orders;
+	private Set<Order> orders = EMPTY_SET;
 
 	/** 搜索 */
 	@Getter
 	@Setter
-	private Set<Search> searches;
+	private Set<Search> searches = EMPTY_SET;
 
 	/**
 	 * 构造方法

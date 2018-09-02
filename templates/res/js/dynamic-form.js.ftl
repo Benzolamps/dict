@@ -88,6 +88,7 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
                 .attr('autocomplete', 'off')
                 .attr('value', property.value)
                 .attr('required', property.notEmpty)
+                .attr('maxlength', property.maxLength)
                 .addClass('layui-input')
                 .addClass('layui-textarea');
         } else {
@@ -110,6 +111,7 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
                         .attr('name', property.name)
                         .attr('placeholder', '请输入' + property.display)
                         .attr('autocomplete', 'off')
+                        .attr('maxlength', property.maxLength)
                         .attr('value', property.value)
                         .attr('required', property.notEmpty)
                         .addClass('layui-input');
@@ -120,6 +122,7 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
                         .attr('type', 'text')
                         .attr('name', property.name)
                         .attr('placeholder', '请输入' + property.display)
+                        .attr('maxlength', property.max ? String(property.max).length : 11)
                         .attr('autocomplete', 'off')
                         .attr('value', property.value)
                         .attr('required', property.notEmpty)
@@ -218,7 +221,7 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
 
         if (fields[i].type == 'float') {
             itemRules.number = true;
-            itemMessages.float = fields[i].display + '必须是有效的数字';
+            itemMessages.number = fields[i].display + '必须是有效的数字';
         }
 
         if (fields[i].type == 'integer') {

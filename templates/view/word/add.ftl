@@ -1,4 +1,4 @@
-<#-- @ftlvariable name="strategies" type="java.util.Collection<java.lang.String>" -->
+<#-- @ftlvariable name="wordClazzes" type="java.util.Collection<com.benzolamps.dict.bean.WordClazz>" -->
 <@nothing><script type="text/javascript"></@nothing>
 <#assign submit_handler>
   !function (result, status, request) {
@@ -25,36 +25,18 @@
   }(result, status, request);
 </#assign>
 
-<#assign select_handler>
-  !function (data) {
-    if (data.value != null && data.value != '') {
-      dict.loadText({
-        url: 'property_info.json',
-        data: {className: data.value},
-        dataType: 'json',
-        success: function (data) {
-          dict.dynamicForm(append(1), data.data, 'properties.');
-        }
-      });
-    } else {
-      append(1).empty();
-    }
-  }(data);
-</#assign>
-
 <#assign fields>
   [
-    <#list get_dict_property('com.benzolamps.dict.bean.ShuffleSolution') as field>
+    <#list get_dict_property('com.benzolamps.dict.controller.vo.WordVo') as field>
       <#-- @ftlvariable name="field" type="com.benzolamps.dict.controller.vo.DictPropertyInfoVo" -->
-      <#if field.name == 'strategyClass'>
+      <#if field.name == 'clazzes'>
         {
           'name': '${field.name}',
-          'type': '${field.type}',
-          'options': <@json_dump obj=strategies/>,
+          'type': 'string',
+          'options': [<#list wordClazzes as wordClazz>'${wordClazz.name}'<#sep>, </#list>],
           'display': '${field.display}',
           'description': '${field.description}',
-          'notEmpty': ${field.notEmpty?c},
-          'handler': "${select_handler}"
+          'notEmpty': ${field.notEmpty?c}
         }
       <#else>
         <@json_dump obj=field/>
@@ -70,9 +52,6 @@
   id='shuffle-solutions'
   title='添加乱序方案'
   fields=fields?eval
-  messages={
-    'name': {'pattern': '乱序方案名称必须是汉字、字母、数字的组合'}
-  }
   submit_handler=submit_handler
   error_handler=error_handler
 />

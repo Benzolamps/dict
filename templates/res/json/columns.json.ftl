@@ -27,7 +27,7 @@
     [
       {
         "title": "单词管理",
-        "href": "${base_url}/content/words.html"
+        "href": "${base_url}/word/list.html"
       },
       {
         "title": "短语管理",
