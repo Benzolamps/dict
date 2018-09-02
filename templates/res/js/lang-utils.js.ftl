@@ -80,9 +80,10 @@ dict.generateObject = function (obj) {
 
 /**
  * 字符串缩略
- * @param str 字符串
- * @param width 长度
- * @param ellipsis
+ * @param str {String} 字符串
+ * @param width {int} 长度
+ * @param ellipsis {String}
+ * @return {String}
  */
 dict.abbreviate = function (str, width, ellipsis) {
     width = parseInt(width);
@@ -100,4 +101,18 @@ dict.abbreviate = function (str, width, ellipsis) {
         }
 
     }
+}
+
+/**
+ * 加密字符串
+ * @param str 字符串
+ * @return {String}
+ */
+dict.encrypt = function (str) {
+    dict.assert(str, "str不能为null");
+
+    for (var i = 0; i < 6; i++) {
+        str = hex_md5(str);
+    }
+    return str;
 }

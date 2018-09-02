@@ -18,12 +18,27 @@ $.ajaxSetup({async: false});
 $.getScript('${base_url}/res/js/lang-utils.js');
 $.getScript('${base_url}/res/js/web-utils.js');
 $.getScript('${base_url}/res/js/dom-utils.js');
+$.getScript('${base_url}/res/js/dynamic-form.js');
+$.getScript('${base_url}/js/md5.js');
 
 layui.use(['element', 'layer'], function () {
     window.element = layui.element;
     window.layer = layui.layer;
+    layer.config({
+        title: false,
+        resize: false,
+        move: false,
+        closeBtn: 2
+    });
 });
 
 $.validator.addMethod('func', function(value, element, param) {
   return eval('(' + param + ')(value, element)');
 }, "输入错误");
+
+$('*').not('input[type=text] textarea').css({
+    '-webkit-user-select': 'none',
+    '-moz-user-select': 'none',
+    '-ms-user-select': 'none',
+    'user-select': 'none'
+});

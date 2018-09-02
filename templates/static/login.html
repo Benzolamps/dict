@@ -155,6 +155,7 @@
             },
             success: function (result) {
               if (result) {
+                localStorage.removeItem('password');
                 location.reload(true);
               } else {
                 layer.alert('密码错误', {

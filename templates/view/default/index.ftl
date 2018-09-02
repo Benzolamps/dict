@@ -18,7 +18,6 @@
       <link rel="stylesheet" type="text/css" href="${base_url}/font-awesome/css/font-awesome.min.css"/>
       <link rel="stylesheet" type="text/css" href="${base_url}/res/css/common.css"/>
       <script type="text/javascript" src="${base_url}/js/jquery-3.3.1.js"></script>
-      <script type="text/javascript" src="${base_url}/js/jquery.cookie.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/jquery.validate.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/additional-methods.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/localization/messages_zh.js"></script>
@@ -111,7 +110,7 @@
               </dl>
             </li>
             <li class="layui-nav-item" lay-unselect>
-              <a href="javascript:;" id="lock_screen" style="color: #333333">锁屏</a>
+              <a href="javascript:;" id="lock-screen-nav" style="color: #333333">锁屏</a>
             </li>
             <li class="layui-nav-item" lay-unselect>
               <a href="javascript:;" id="logout" style="color: #333333">注销</a>
@@ -231,8 +230,16 @@
             });
           });
 
-          $('#lock_screen').click(function () {
-
+          $('#lock-screen-nav').click(function () {
+            layer.open({
+              type: 2,
+              content: '${base_url}/user/lock_screen.html',
+              area: ['500px', '500px'],
+              anim: 5,
+              title: false,
+              closeBtn: 0,
+              shade: [0.8, '#393D49']
+            });
           });
 
           $('#logout').click(function () {
@@ -289,6 +296,21 @@
           };
 
           $('body').bind('mousedown keydown mousemove wheel', rechargeLockScreen);*/
+
+          if (null != localStorage.getItem('password')) {
+            $('*').css('pointer-events', 'none');
+            setTimeout(function () {
+              layer.open({
+                type: 2,
+                content: '${base_url}/user/lock_screen.html',
+                area: ['500px', '500px'],
+                anim: 5,
+                title: false,
+                closeBtn: 0,
+                shade: [0.8, '#393D49']
+              });
+            }, 500);
+          }
         });
       </script>
     </body>

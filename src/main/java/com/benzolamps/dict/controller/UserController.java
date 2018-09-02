@@ -60,7 +60,7 @@ public class UserController extends BaseController {
      */
     @PostMapping("/verify.json")
     @ResponseBody
-    protected boolean verify(@Validated(User.Password.class) User user) {
+    protected boolean verify(@Validated(User.PasswordGroup.class) User user) {
         boolean valid = userService.verifyUser(user);
         if (valid && userService.getCurrent() == null) {
             user = userService.findByUsername(user.getUsername());
@@ -109,6 +109,7 @@ public class UserController extends BaseController {
         }
     }
 
+
     @WindowView
     @RequestMapping(value = "/edit_password.html", method = {RequestMethod.GET, RequestMethod.POST})
     protected ModelAndView editPassword() {
@@ -125,7 +126,21 @@ public class UserController extends BaseController {
     @PostMapping("/save_password.json")
     @ResponseBody
     protected BaseVo savePassword(@RequestParam("newPassword") String password) {
-        userService.modifyPassword(password);
+        User user = userService.getCurrent();
+        userService.savePassword(user, password);
         return wrapperMsg("success");
+    }
+
+    @WindowView
+    @RequestMapping(value = "/lock_screen.html", method = {RequestMethod.GET, RequestMethod.POST})
+    protected ModelAndView lockScreen() {
+        ModelAndView mv = new ModelAndView();
+        User user = userService.getCurrent();
+//        if (user == null) {
+//            mv.setViewName("redirect:login.html");
+//        } else {
+            mv.setViewName("view/user/lock_screen");
+//        }
+        return mv;
     }
 }

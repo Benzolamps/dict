@@ -115,6 +115,7 @@
   </component>
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/templates/static/js/jquery.gesture.password.js" charset="UTF-8" />
   </component>
   <component name="EntryPointsManager">
     <list size="3">
@@ -222,6 +223,7 @@
       <inspection_tool class="SpringMVCViewInspection" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="SpringPlaceholdersInspection" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="SpringXmlModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+      <inspection_tool class="SqlNoDataSourceInspection" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="ThisExpressionReferencesGlobalObjectJS" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="TrivialIf" enabled="false" level="WARNING" enabled_by_default="false" />
       <inspection_tool class="WeakerAccess" enabled="false" level="WARNING" enabled_by_default="false">
@@ -379,8 +381,10 @@
         <w>anno</w>
         <w>arth</w>
         <w>benzolamps</w>
+        <w>canplaythrough</w>
         <w>clazzes</w>
         <w>csdn</w>
+        <w>flickity</w>
         <w>gitee</w>
         <w>iframe</w>
         <w>itemd</w>
@@ -393,11 +397,15 @@
         <w>minlength</w>
         <w>mored</w>
         <w>mousedown</w>
+        <w>mouseenter</w>
         <w>mousemove</w>
         <w>mouseup</w>
         <w>nontip</w>
         <w>onfocusout</w>
+        <w>orbitron</w>
+        <w>pkgd</w>
         <w>qrcode</w>
+        <w>scanlines</w>
         <w>springboot</w>
         <w>sqlite</w>
         <w>tbody</w>

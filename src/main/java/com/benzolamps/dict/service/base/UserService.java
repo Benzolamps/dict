@@ -47,5 +47,6 @@ public interface UserService extends BaseService<User> {
      * 修改密码
      * @param password 密码
      */
-    void modifyPassword(String password);
+    void savePassword(User user, String password);
+
 }

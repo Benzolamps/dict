@@ -1,5 +1,12 @@
 $(function () {
 
+    $('*').not('input[type=text] textarea').css({
+        '-webkit-user-select': 'none',
+        '-moz-user-select': 'none',
+        '-ms-user-select': 'none',
+        'user-select': 'none'
+    });
+
     var password = $('.password');
     var leftHand = $('#left-hand');
     var rightHand = $('#right-hand');

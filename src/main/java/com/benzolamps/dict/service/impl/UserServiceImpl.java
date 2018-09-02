@@ -75,15 +75,14 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Transactional(readOnly = true)
     public User getCurrent() {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        Integer id = (Integer) requestAttributes.getAttribute(CURRENT_USER_ATTRIBUTE, RequestAttributes.SCOPE_GLOBAL_SESSION);
+        Integer id = (Integer) requestAttributes.getAttribute(CURRENT_USER_ATTRIBUTE, RequestAttributes.SCOPE_SESSION);
         return id == null ? null : userDao.find(id);
     }
 
     @Override
     @Transactional
-    public void modifyPassword(String password) {
-        User user = getCurrent();
-        Assert.notNull(user, "尚未登录");
+    public void savePassword(User user, String password) {
+        userDao.refresh(user);
         user.setPassword(encryptPassword(password));
         setCurrent(null);
     }
@@ -99,7 +98,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Override
     @Transactional
     public User update(User user, String[] ignoreProperties) {
-        Assert.notNull(user, "user不能为null");
+        userDao.refresh(user);
         user.setPassword(encryptPassword(user.getPassword()));
         return super.update(user, ignoreProperties);
     }

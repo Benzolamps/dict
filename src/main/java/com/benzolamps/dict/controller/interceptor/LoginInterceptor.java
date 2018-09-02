@@ -1,6 +1,7 @@
 package com.benzolamps.dict.controller.interceptor;
 
 import com.benzolamps.dict.controller.ErrorController;
+import com.benzolamps.dict.controller.IndexController;
 import com.benzolamps.dict.controller.UserController;
 import com.benzolamps.dict.controller.util.Constant;
 import com.benzolamps.dict.service.base.UserService;
@@ -25,7 +26,11 @@ public class LoginInterceptor extends BaseInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HandlerMethod method = (HandlerMethod) handler;
-        if (!(method.getMethod().getDeclaringClass().equals(UserController.class) || method.getMethod().getDeclaringClass().equals(ErrorController.class))) {
+        if (!(
+            method.getMethod().getDeclaringClass().equals(UserController.class) ||
+            method.getMethod().getDeclaringClass().equals(ErrorController.class) ||
+            method.getMethod().getDeclaringClass().equals(IndexController.class) && method.getMethod().getName().equals("ping")
+        )) {
             if (userService.getCurrent() == null) {
                 if (response.getContentType().toLowerCase().contains(Constant.HTML)) {
                     response.sendRedirect(baseUrl + "/user/login.html");

@@ -2,8 +2,8 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.util.Constant;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -33,20 +33,20 @@ public class User extends BaseEntity {
         setPassword(password);
     }
 
-    public interface Password {
+    public interface PasswordGroup {
     }
 
     /** 用户名 */
     @NotEmpty
-    @Length(min = 6, max = 15, groups = {Password.class, Default.class})
-    @Pattern(regexp = Constant.CHINESE_TITLE_PATTERN, groups = {Password.class, Default.class})
+    @Length(min = 6, max = 15, groups = {PasswordGroup.class, Default.class})
+    @Pattern(regexp = Constant.CHINESE_TITLE_PATTERN, groups = {PasswordGroup.class, Default.class})
     @Column(nullable = false, updatable = false, unique = true)
     private String username;
 
     /** 登录密码 */
     @NotEmpty
-    @Length(min = 6, max = 15, groups = Password.class)
-    @Pattern(regexp = "^[_0-9A-Za-z]+$", groups = Password.class)
+    @Length(min = 6, max = 15, groups = PasswordGroup.class)
+    @Pattern(regexp = "^[_0-9A-Za-z]+$", groups = PasswordGroup.class)
     @Column(nullable = false)
     private String password;
 
