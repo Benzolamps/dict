@@ -67,6 +67,7 @@ public class WordController extends BaseController {
     @PostMapping("/save.json")
     @ResponseBody
     protected DataVo save(@RequestBody WordVo wordVo) {
+        wordVo.setLibrary(1);
         Word word = WordVo.convertToWord(wordVo);
         word = wordService.persist(word);
         wordVo = WordVo.convertFromWord(word);

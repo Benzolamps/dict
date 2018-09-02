@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.ExcelHeader;
+import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictSpring;
@@ -73,6 +74,11 @@ public class WordVo implements Serializable {
     private String definition;
 
     /**
+     * 词库
+     */
+    private transient Integer library;
+
+    /**
      * 将WordVo转换为Word
      * @param wordVo wordVo
      * @return word
@@ -80,6 +86,7 @@ public class WordVo implements Serializable {
     public static Word convertToWord(WordVo wordVo) {
         Assert.notNull(wordVo, "word vo不能为null");
         WordClazzService wordClazzService = DictSpring.getBean(WordClazzService.class);
+        LibraryService libraryService = DictSpring.getBean(LibraryService.class);
         Word word = new Word();
         word.setId(wordVo.getId());
         word.setIndex(wordVo.getIndex());
@@ -87,6 +94,7 @@ public class WordVo implements Serializable {
         word.setBritishPronunciation(wordVo.getBritishPronunciation());
         word.setAmericanPronunciation(wordVo.getAmericanPronunciation());
         word.setDefinition(wordVo.getDefinition());
+        word.setLibrary(libraryService.find(wordVo.getLibrary()));
         String[] clazzArray;
         if (wordVo.getClazzes() instanceof CharSequence) {
             clazzArray = new String[] {wordVo.getClazzes().toString()};
@@ -121,6 +129,7 @@ public class WordVo implements Serializable {
         wordVo.setAmericanPronunciation(word.getAmericanPronunciation());
         wordVo.setPrototype(word.getPrototype());
         wordVo.setClazzes(word.getClazzes().stream().map(WordClazz::getName).toArray(String[]::new));
+        wordVo.setLibrary(word.getLibrary().getId());
         return wordVo;
     }
 }
