@@ -28,17 +28,13 @@ layui.use(['element', 'layer'], function () {
         title: false,
         resize: false,
         move: false,
-        closeBtn: 2
+        closeBtn: 2,
+        yes: function (index) {
+            layer.close(index);
+        }
     });
 });
 
 $.validator.addMethod('func', function(value, element, param) {
   return eval('(' + param + ')(value, element)');
 }, "输入错误");
-
-$('*').not('input[type=text] textarea').css({
-    '-webkit-user-select': 'none',
-    '-moz-user-select': 'none',
-    '-ms-user-select': 'none',
-    'user-select': 'none'
-});

@@ -59,8 +59,9 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
 
         var $component;
 
-        /* 是否是选择下拉框 */
-        if (property.options) {
+        if (property.readonly) {
+            $component = $(document.createElement('span')).text(property.value);
+        } else if (property.options) {
             $component = $(document.createElement('select'))
                 .attr('name', property.name)
                 .addClass('layui-input')
@@ -80,6 +81,15 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
                     .addClass('layui-input');
                 $component.append($option);
             }
+        } else if (property.textArea) {
+            $component = $(document.createElement('textarea'))
+                .attr('name', property.name)
+                .attr('placeholder', '请输入' + property.display)
+                .attr('autocomplete', 'off')
+                .attr('value', property.value)
+                .attr('required', property.notEmpty)
+                .addClass('layui-input')
+                .addClass('layui-textarea');
         } else {
             switch (property.type) {
                 case 'boolean': {

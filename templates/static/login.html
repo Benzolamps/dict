@@ -2,13 +2,13 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=0.8"/>
     <script>
       if (parent !== this) {
           parent.location.replace(location.href);
       }
-      var baseUrl = '';
-      /*${'*' + '/' + 'baseUrl = \'${base_url}/\';' + '/*'}*/
+      var baseUrl = '${base_url}/';
+      /*<@nothing>*/ baseUrl = ''; /*</@nothing>*/
       document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'css/login.css">');
       document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'css/loading.css">');
       document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'layui/css/layui.css">');
@@ -20,8 +20,7 @@
       document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/jquery.validate.js"><\/script>');
       document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/additional-methods.js"><\/script>');
       document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/localization/messages_zh.js"><\/script>');
-      document.write('<script type="text/javascript" src="' + baseUrl + 'js/md5.js"><\/script>');
-      baseUrl = 'http://localhost:2018/dictionary-2.1.1';
+      /*<@nothing>*/ baseUrl = 'http://localhost:2018/dictionary-2.1.1'; /*</@nothing>*/
     </script>
   </head>
   <body>
@@ -91,6 +90,15 @@
         window.element = layui.element;
         window.layer = layui.layer;
         window.form = layui.form;
+        layer.config({
+            title: false,
+            resize: false,
+            move: false,
+            closeBtn: 2,
+            yes: function (index) {
+                layer.close(index);
+            }
+        });
       });
       $('form.login').validate({
         rules: {
@@ -156,7 +164,7 @@
             success: function (result) {
               if (result) {
                 localStorage.removeItem('password');
-                location.reload(true);
+                location.replace(baseUrl);
               } else {
                 layer.alert('密码错误', {
                   icon: 2,

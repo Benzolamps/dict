@@ -119,6 +119,7 @@ public class DictProperty {
     public boolean isValid() {
         return field != null
             && !Modifier.isTransient(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())
+            && !hasAnnotation(DictIgnore.class)
             && get != null && set != null;
     }
 

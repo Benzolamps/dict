@@ -1,9 +1,12 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.DictPropertyInfo;
+import com.benzolamps.dict.component.DictReadonly;
 import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictIgnore;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -11,7 +14,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
-import javax.validation.groups.Default;
 
 /**
  * 用户实体类
@@ -33,24 +35,31 @@ public class User extends BaseEntity {
         setPassword(password);
     }
 
-    public interface PasswordGroup {
+    public interface LoginGroup {
     }
 
     /** 用户名 */
-    @NotEmpty
-    @Length(min = 6, max = 15, groups = {PasswordGroup.class, Default.class})
-    @Pattern(regexp = Constant.CHINESE_TITLE_PATTERN, groups = {PasswordGroup.class, Default.class})
+    @NotEmpty(groups = LoginGroup.class)
+    @Length(min = 6, max = 15, groups = LoginGroup.class)
+    @Pattern(regexp = Constant.CHINESE_TITLE_PATTERN, groups = LoginGroup.class)
+    @DictReadonly
     @Column(nullable = false, updatable = false, unique = true)
+    @DictPropertyInfo(display = "用户名")
     private String username;
 
     /** 登录密码 */
-    @NotEmpty
-    @Length(min = 6, max = 15, groups = PasswordGroup.class)
-    @Pattern(regexp = "^[_0-9A-Za-z]+$", groups = PasswordGroup.class)
+    @NotEmpty(groups = LoginGroup.class)
+    @Length(min = 6, max = 15, groups = LoginGroup.class)
+    @Pattern(regexp = "^[_0-9A-Za-z]+$", groups = LoginGroup.class)
     @Column(nullable = false)
+    @DictIgnore
     private String password;
 
     /** 昵称 */
-    @Column
+    @NotEmpty
+    @Length(min = 1, max = 15)
+    @Pattern(regexp = Constant.CHINESE_TITLE_PATTERN)
+    @Column(nullable = false)
+    @DictPropertyInfo(display = "昵称", description = "昵称必须是汉字、数字、字母、下划线、短横线的组合")
     private String nickname;
 }

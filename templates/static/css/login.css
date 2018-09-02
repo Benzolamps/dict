@@ -1,11 +1,18 @@
 @charset "UTF-8";
 
-body, canvas {
+body,canvas {
     overflow-y: hidden;
     overflow-x: hidden;
     width: 100%;
     margin: 0;
     background-color: #EEEEEE;
+}
+
+:not(input),input[type=password] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .tou {

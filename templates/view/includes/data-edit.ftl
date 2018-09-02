@@ -22,7 +22,6 @@
       </form>
     </div>
   </div>
-  <script type="text/javascript" src="${base_url}/res/js/dynamic-form.js"></script>
   <script type="text/javascript">
     layui.use('form', function () {
       var form = layui.form;

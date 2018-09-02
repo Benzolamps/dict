@@ -1,6 +1,7 @@
 package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DictPropertyInfo;
+import com.benzolamps.dict.component.DictTextArea;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -39,6 +40,7 @@ public class ShuffleSolution implements Serializable {
 
     /** 备注 */
     @Length(max = 50)
+    @DictTextArea
     @DictPropertyInfo(display = "备注")
     private String remark;
 

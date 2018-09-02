@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.util.DictIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -31,19 +32,23 @@ public abstract class BaseEntity implements Serializable {
     /** 版本 */
     @Version
     @Column(nullable = false)
+    @DictIgnore
     protected Integer version;
 
     /** 创建时间 */
     @Column(nullable = false, updatable = false)
+    @DictIgnore
     protected Date createDate;
 
     /** 修改时间 */
     @Column(nullable = false)
+    @DictIgnore
     protected Date modifyDate;
 
     /** 备注 */
     @Column
     @Length(max = 255)
+    @DictIgnore
     protected String remark;
 
     /** @return 判断是否为新建对象 */

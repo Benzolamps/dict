@@ -1,8 +1,6 @@
 package com.benzolamps.dict.controller.vo;
 
-import com.benzolamps.dict.component.DictOptions;
-import com.benzolamps.dict.component.DictPropertyInfo;
-import com.benzolamps.dict.component.DictRemote;
+import com.benzolamps.dict.component.*;
 import com.benzolamps.dict.util.DictBean;
 import com.benzolamps.dict.util.DictList;
 import com.benzolamps.dict.util.DictProperty;
@@ -98,6 +96,14 @@ public class DictPropertyInfoVo implements Serializable {
     @Getter
     private final Boolean id;
 
+    /** 是否只读 */
+    @Getter
+    private final Boolean readonly;
+
+    /** 是否使用TextArea */
+    @Getter
+    private final Boolean textArea;
+
     /**
      * 构造器
      * @param dictProperty 自定义属性
@@ -120,6 +126,8 @@ public class DictPropertyInfoVo implements Serializable {
         this.notEmpty = this.internalIsNotEmpty();
         this.remote = this.internalGetRemote();
         this.id = this.internalIsId();
+        this.readonly = this.internalIsReadonly();
+        this.textArea = this.internalIsTextArea();
     }
 
     /** @return 获取展示的名称 */
@@ -301,6 +309,14 @@ public class DictPropertyInfoVo implements Serializable {
 
     private boolean internalIsId() {
         return dictProperty.hasAnnotation(Id.class);
+    }
+
+    private boolean internalIsReadonly() {
+        return dictProperty.hasAnnotation(DictReadonly.class);
+    }
+
+    private boolean internalIsTextArea() {
+        return dictProperty.hasAnnotation(DictTextArea.class);
     }
 
     /**

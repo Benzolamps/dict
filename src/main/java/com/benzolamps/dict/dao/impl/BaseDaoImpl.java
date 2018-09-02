@@ -204,15 +204,6 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     }
 
     @Override
-    public void refresh(T entity) {
-        Assert.notNull(entity, "entity不能为null");
-        Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
-        if (find(entity.getId()) != entity) {
-            entityManager.refresh(entity);
-        }
-    }
-
-    @Override
     public void execute(String jpql, Map<String, Object> parameters, Object... positionParameters) {
         Assert.hasLength(jpql, "jpql不能为null或空");
         DictJpa.createJpqlQuery(entityManager, jpql, parameters, positionParameters);

@@ -13,7 +13,7 @@
   <html lang="zh-CN">
     <head>
       <meta charset="utf-8"/>
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=0.8"/>
       <link rel="stylesheet" type="text/css" href="${base_url}/layui/css/layui.css"/>
       <link rel="stylesheet" type="text/css" href="${base_url}/font-awesome/css/font-awesome.min.css"/>
       <link rel="stylesheet" type="text/css" href="${base_url}/res/css/common.css"/>
@@ -90,45 +90,44 @@
       <div class="layui-layout layui-layout-admin">
         <div class="layui-header" style="background-color: #FBFBFB">
           <div class="layui-logo" style="background-color: #FFB800">
-            <a href="${base_url}" title="${system_title} ~ ${system_version}">
+            <a onclick="location.reload(true);" title="${system_title} ~ ${system_version}" >
               ${abbreviate('${system_title} ~ ${system_version}', 20, '...')?html}
             </a>
           </div>
           <ul class="layui-nav layui-layout-left">
             <li class="layui-nav-item layui-nav-itemd" lay-unselect>
-              <a href="javascript:;" class="dict-nav" id="toggle-nav">
+              <a class="dict-nav" id="toggle-nav">
                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
               </a>
             </li>
           </ul>
           <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" lay-unselect>
-              <a href="javascript:;" id="lock_screen" style="color: #333333">${(current_user().nickname)!''} </a>
-              <dl class="layui-nav-child"> <!-- 二级菜单 -->
-                <dd><a href="javascript:;" id="password-nav">修改密码</a></dd>
-                <dd><a href="javascript:;" id="profile-nav">个人资料</a></dd>
+              <a id="lock_screen" style="color: #333333">${(current_user().nickname)!''} </a>
+              <dl class="layui-nav-child">
+                <dd><a id="password-nav">修改密码</a></dd>
+                <dd><a id="profile-nav">个人资料</a></dd>
               </dl>
             </li>
             <li class="layui-nav-item" lay-unselect>
-              <a href="javascript:;" id="lock-screen-nav" style="color: #333333">锁屏</a>
+              <a id="lock-screen-nav" style="color: #333333">锁屏</a>
             </li>
             <li class="layui-nav-item" lay-unselect>
-              <a href="javascript:;" id="logout" style="color: #333333">注销</a>
+              <a id="logout" style="color: #333333">注销</a>
             </li>
           </ul>
         </div>
         <div class="layui-side dict-bg">
           <div class="layui-side-scroll">
-            <#-- 左侧导航区域 (可配合layui已有的垂直导航) -->
             <ul class="dict-nav-tree layui-nav layui-nav-tree" lay-shrink="all">
               <#assign column_data><#include '/res/json/columns.json.ftl'/></#assign>
                 <#list column_data?eval as column>
                   <li class="layui-nav-item">
-                    <a class="dict-column" href="javascript:;">${column.title}</a>
+                    <a class="dict-column">${column.title}</a>
                     <dl class="layui-nav-child">
                       <#list column.children as child>
                         <dd>
-                          <a class="child-item dict-child" href="javascript:;" src="${child.href}">
+                          <a class="child-item dict-child" src="${child.href}">
                             &nbsp;&nbsp; <span class="child-title">${child.title}</span>
                           </a>
                         </dd>
@@ -140,7 +139,6 @@
           </div>
         </div>
         <div id="content-div" class="layui-body dict-body" style="margin: 5px; padding: 5px;">
-          <#-- 内容主体区域 -->
           <div class="layui-tab tab" lay-filter="docDemoTabBrief" style="height: 95%">
             <div class="layui-tab-content" style="width: 100%; height: 100%">
               <div class="layui-tab-item layui-show" style="width: 100%; height: 100%">
@@ -150,7 +148,7 @@
           </div>
         </div>
         <div class="layui-footer dict-footer" style="background-color: #FBFBFB; text-align: center">
-          &copy; <a target="_blank" href="https://benzolamps.com">benzolamps.com</a>
+          &copy; <a target="_blank">benzolamps.com</a>
         </div>
       </div>
       <script type="text/javascript">
@@ -279,36 +277,18 @@
             });
           });
 
-/*          var lockScreenDelta = 10;
-          var lockScreenDelay = 0;
-          var interval = setInterval(function () {
-            lockScreenDelay++;
-            if (lockScreenDelay >= lockScreenDelta) {
-              alert('hhh');
-              clearInterval(interval);
-              $('body').unbind('mousedown keydown mousemove wheel');
-            }
-          }, 1000);
-
-          var rechargeLockScreen = function () {
-            lockScreenDelay = 0;
-            console.log('recharge');
-          };
-
-          $('body').bind('mousedown keydown mousemove wheel', rechargeLockScreen);*/
+          $('#profile-nav').click(function () {
+            layer.open({
+              type: 2,
+              content: '${base_url}/user/profile.html',
+              area: ['800px', '600px']
+            });
+          });
 
           if (null != localStorage.getItem('password')) {
             $('*').css('pointer-events', 'none');
             setTimeout(function () {
-              layer.open({
-                type: 2,
-                content: '${base_url}/user/lock_screen.html',
-                area: ['500px', '500px'],
-                anim: 5,
-                title: false,
-                closeBtn: 0,
-                shade: [0.8, '#393D49']
-              });
+              $('#lock-screen-nav').trigger('click');
             }, 500);
           }
         });

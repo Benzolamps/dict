@@ -155,12 +155,6 @@ public interface BaseDao<T extends BaseEntity> {
 	boolean contains(T entity);
 
 	/**
-	 * 刷新实体对象
-	 * @param entity 实体对象
-	 */
-	void refresh(T entity);
-
-	/**
 	 * 根据JPQL执行语句
 	 * @param jpql JPQL
 	 * @param parameters 参数

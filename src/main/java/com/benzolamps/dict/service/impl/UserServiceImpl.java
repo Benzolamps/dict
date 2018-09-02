@@ -66,7 +66,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         if (user == null || user.isNew()) {
             requestAttributes.removeAttribute("currentUser", RequestAttributes.SCOPE_SESSION);
         } else {
-            userDao.refresh(user);
             requestAttributes.setAttribute(CURRENT_USER_ATTRIBUTE, user.getId(), RequestAttributes.SCOPE_SESSION);
         }
     }
@@ -82,7 +81,6 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Override
     @Transactional
     public void savePassword(User user, String password) {
-        userDao.refresh(user);
         user.setPassword(encryptPassword(password));
         setCurrent(null);
     }
@@ -98,18 +96,20 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Override
     @Transactional
     public User update(User user, String[] ignoreProperties) {
-        userDao.refresh(user);
-        user.setPassword(encryptPassword(user.getPassword()));
+        if (user.getPassword() != null) {
+            user.setPassword(encryptPassword(user.getPassword()));
+        }
         return super.update(user, ignoreProperties);
     }
 
     private String encryptPassword(String password) {
         Assert.hasLength(password, "password不能为null或空");
-        String one = DigestUtils.md5DigestAsHex(password.getBytes(Charset.forName("UTF-8")));
-        String two = DigestUtils.md5DigestAsHex(one.getBytes(Charset.forName("UTF-8")));
-        String three = DigestUtils.md5DigestAsHex(two.getBytes(Charset.forName("UTF-8")));
-        String four = DigestUtils.md5DigestAsHex(three.getBytes(Charset.forName("UTF-8")));
-        String five = DigestUtils.md5DigestAsHex(four.getBytes(Charset.forName("UTF-8")));
-        return DigestUtils.md5DigestAsHex(five.getBytes(Charset.forName("UTF-8")));
+        Charset charset = Charset.forName("UTF-8");
+        String one = DigestUtils.md5DigestAsHex(password.getBytes(charset));
+        String two = DigestUtils.md5DigestAsHex(one.getBytes(charset));
+        String three = DigestUtils.md5DigestAsHex(two.getBytes(charset));
+        String four = DigestUtils.md5DigestAsHex(three.getBytes(charset));
+        String five = DigestUtils.md5DigestAsHex(four.getBytes(charset));
+        return DigestUtils.md5DigestAsHex(five.getBytes(charset));
     }
 }

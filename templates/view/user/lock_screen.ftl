@@ -1,4 +1,3 @@
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=0.8"/>
 <link rel='stylesheet prefetch' href='${base_url}/flickity/font/orbitron-bold.css'>
 <link rel='stylesheet prefetch' href='${base_url}/flickity/font/Share-TechMono.css'>
 <link rel='stylesheet prefetch' href='${base_url}/flickity/css/flickity.css'>
@@ -37,7 +36,7 @@
                 请设置一个四位数解锁密码
               </td>
               <td>
-                <input type="password" name="password" required autocomplete="off" maxlength="4" placeholder="请设置一个四位数解锁密码" class="layui-input">
+                <input type="password" name="password" autocomplete="off" maxlength="4" placeholder="请设置一个四位数解锁密码" class="layui-input">
               </td>
             </tr>
             <tr>
