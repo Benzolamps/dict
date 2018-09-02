@@ -164,24 +164,18 @@
             success: function (result) {
               if (result) {
                 localStorage.removeItem('password');
-                location.replace(baseUrl);
+                location.replace(baseUrl + "/user/login.html");
               } else {
                 layer.alert('密码错误', {
                   icon: 2,
-                  title: '密码错误',
-                  yes: function (index) {
-                    layer.close(index);
-                  }
+                  title: '密码错误'
                 });
               }
             }, error: function (request) {
               var result = JSON.parse(request.responseText);
               layer.alert(result.message, {
                 icon: 2,
-                title: result.status,
-                yes: function (index) {
-                  layer.close(index);
-                }
+                title: result.status
               });
             }
           });

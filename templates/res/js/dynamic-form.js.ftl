@@ -213,17 +213,17 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
 
         if (fields[i].url) {
             itemRules.url = true;
-            itemMessages.email = fields[i].display + '格式不正确';
+            itemMessages.url = fields[i].display + '格式不正确';
         }
 
         if (fields[i].type == 'float') {
             itemRules.number = true;
-            itemMessages.email = fields[i].display + '必须是有效的数字';
+            itemMessages.float = fields[i].display + '必须是有效的数字';
         }
 
         if (fields[i].type == 'integer') {
             itemRules.integer = true;
-            itemMessages.email = fields[i].display + '必须是有效的整数';
+            itemMessages.integer = fields[i].display + '必须是有效的整数';
         }
 
         if (fields[i].max != null) {
@@ -276,7 +276,12 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
             $select.remove();
         }
     });
-    $form.validate({
+    var validator = $form.validate();
+    rules = $.extend(true, validator.dicRules, rules);
+    messages = $.extend(true, validator.dictMessages, messages);
+    console.log(validator);
+    validator.destroy();
+    validator = $form.validate({
         rules: rules,
         messages: messages,
         errorPlacement: dict.nothing,
@@ -288,10 +293,6 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
                     layer.tips(error, element, {
                         anim: 6,
                         success: function () {
-                            <#--var anchor = $(document.createElement('a')).attr('name', element.attr('name'));
-                            element.before(anchor);
-                            location.replace('#' + element.attr('name'));
-                            anchor.remove();-->
                             setTimeout(function () {
                                 element.css('border-color', '#FF0033');
                             }, 200);
@@ -315,4 +316,6 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
             return submitHandler();
         }
     })
+    validator.dictRules = rules;
+    validator.dictMessages = messages;
 };

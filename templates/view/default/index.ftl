@@ -257,20 +257,14 @@
                   } else {
                     layer.alert('注销失败', {
                       icon: 2,
-                      title: '注销失败',
-                      yes: function (index) {
-                        layer.close(index);
-                      }
+                      title: '注销失败'
                     });
                   }
                 },
                 error: function (result, status, request) {
                   layer.alert(result.message, {
                     icon: 2,
-                    title: result.status,
-                    yes: function (index) {
-                      layer.close(index);
-                    }
+                    title: result.status
                   });
                 }
               });
