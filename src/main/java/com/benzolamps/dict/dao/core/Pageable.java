@@ -8,6 +8,9 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import static com.benzolamps.dict.util.Constant.EMPTY_SET;
@@ -49,7 +52,7 @@ public class Pageable implements Serializable {
 	/** 排序 */
 	@Getter
 	@Setter
-	private Set<Order> orders = EMPTY_SET;
+	private List<Order> orders = new LinkedList<>();
 
 	/** 搜索 */
 	@Getter

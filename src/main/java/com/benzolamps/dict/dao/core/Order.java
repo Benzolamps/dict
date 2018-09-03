@@ -66,4 +66,9 @@ public class Order implements Serializable {
     public static Order asc(String field) {
         return new Order(field, Direction.ASC);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj) || obj instanceof Order && ((Order) obj).direction.equals(direction) && ((Order) obj).field.equals(field);
+    }
 }

@@ -4,7 +4,6 @@ id='words'
 fields=[
   {'type': 'numbers'},
   {'type': 'checkbox'},
-  {'field': 'index', 'title': '索引', 'sort': true},
   {'field': 'prototype', 'title': '单词原形', 'sort': true},
   {'field': 'britishPronunciation', 'title': '英式发音', 'sort': true},
   {'field': 'americanPronunciation', 'title': '英式发音', 'sort': true},

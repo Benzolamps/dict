@@ -10,7 +10,6 @@ import com.benzolamps.dict.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -52,7 +51,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
 
     @Override
     @Transactional(readOnly = true)
-    public List<T> findList(Filter filter, Collection<Order> orders) {
+    public List<T> findList(Filter filter, List<Order> orders) {
         return baseDao.findList(filter, orders);
     }
 

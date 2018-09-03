@@ -34,12 +34,6 @@ public class WordVo implements Serializable {
     @Id
     private Integer id;
 
-    /** 索引 */
-    @ExcelHeader(value = 0, range = @ExcelHeader.Range(min = 1))
-    @NotNull
-    @DictPropertyInfo(display = "索引")
-    private Integer index;
-
     /** 单词原形 */
     @ExcelHeader(value = 1, notEmpty = true)
     @NotEmpty
@@ -77,6 +71,12 @@ public class WordVo implements Serializable {
      * 词库
      */
     private transient Integer library;
+
+    /** 索引 */
+    @ExcelHeader(value = 0, range = @ExcelHeader.Range(min = 1))
+    @NotNull
+    @DictPropertyInfo(display = "索引")
+    private Integer index;
 
     /**
      * 将WordVo转换为Word

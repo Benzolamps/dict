@@ -4,7 +4,7 @@ system:
   name: dictionary
 
   # 系统名称
-  title: 单词神器
+  title: 万聪英语
 
   # 主机名
   host: localhost

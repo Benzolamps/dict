@@ -4,6 +4,8 @@ import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictReadonly;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +28,7 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"createDate", "modifyDate", "version", "remark"})
 public class User extends BaseEntity {
 
     private static final long serialVersionUID = -5309444370236159463L;
@@ -53,6 +56,7 @@ public class User extends BaseEntity {
     @Pattern(regexp = "^[_0-9A-Za-z]+$", groups = LoginGroup.class)
     @Column(nullable = false)
     @DictIgnore
+    @JsonIgnore
     private String password;
 
     /** 昵称 */

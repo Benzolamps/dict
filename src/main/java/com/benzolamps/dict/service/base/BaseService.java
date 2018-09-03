@@ -6,9 +6,11 @@
 package com.benzolamps.dict.service.base;
 
 import com.benzolamps.dict.bean.BaseEntity;
-import com.benzolamps.dict.dao.core.*;
+import com.benzolamps.dict.dao.core.Filter;
+import com.benzolamps.dict.dao.core.Order;
+import com.benzolamps.dict.dao.core.Page;
+import com.benzolamps.dict.dao.core.Pageable;
 
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -48,7 +50,7 @@ public interface BaseService<T extends BaseEntity> {
      * @param orders 排序
      * @return 实体对象集合
      */
-    List<T> findList(Filter filter, Collection<Order> orders);
+    List<T> findList(Filter filter, List<Order> orders);
 
     /**
      * 查找所有对象集合

@@ -63,7 +63,7 @@ public class Page<B> implements Serializable {
      * 获取排序
      * @return 排序
      */
-    public Set<Order> getOrders() {
+    public List<Order> getOrders() {
         return pageable.getOrders();
     }
 
