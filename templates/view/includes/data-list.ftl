@@ -133,12 +133,12 @@
 
       table.on('checkbox(${id})', function (obj) {
         var checkStatus = table.checkStatus('${id}');
-        if (delMany.attr('disabled') && obj.checked) {
+        if (delMany.attr('disabled') && checkStatus.data.length > 0) {
           delMany.removeClass('layui-disabled');
           delMany.removeClass('layui-btn-disabled');
           delMany.addClass('layui-btn-danger');
           delMany.attr('disabled', false);
-        } else if (!delMany.attr('disabled') && checkStatus.data.length < 1) {
+        } else {
           delMany.removeClass('layui-btn-danger');
           delMany.addClass('layui-disabled');
           delMany.addClass('layui-btn-disabled');
