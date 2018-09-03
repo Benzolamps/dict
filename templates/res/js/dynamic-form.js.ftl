@@ -282,7 +282,7 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
     var validator = $form.validate();
     rules = $.extend(true, validator.dicRules, rules);
     messages = $.extend(true, validator.dictMessages, messages);
-    console.log(validator);
+    submitHandler = dict.extendsFunction(validator.dictSubmitHandler, submitHandler);
     validator.destroy();
     validator = $form.validate({
         rules: rules,
@@ -321,4 +321,5 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
     })
     validator.dictRules = rules;
     validator.dictMessages = messages;
+    validator.dictSubmitHandler = submitHandler;
 };

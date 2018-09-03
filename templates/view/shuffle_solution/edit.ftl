@@ -80,7 +80,7 @@
 
 <@data_edit
   id='shuffle-solutions'
-  title='添加乱序方案'
+  title='修改乱序方案'
   fields=fields?eval
   values=solution
   messages={

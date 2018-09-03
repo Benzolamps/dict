@@ -96,6 +96,7 @@ public class WordController extends BaseController {
     @PostMapping("/update.json")
     @ResponseBody
     protected DataVo update(@RequestBody WordVo wordVo) {
+        wordVo.setLibrary(1);
         Word word = WordVo.convertToWord(wordVo);
         word = wordService.update(word);
         wordVo = WordVo.convertFromWord(word);

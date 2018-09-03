@@ -1,3 +1,4 @@
+<#-- @ftlvariable name="word" type="com.benzolamps.dict.bean.Word" -->
 <#-- @ftlvariable name="wordClazzes" type="java.util.Collection<com.benzolamps.dict.bean.WordClazz>" -->
 <@nothing><script type="text/javascript"></@nothing>
 <#assign submit_handler>
@@ -48,10 +49,11 @@
 <@nothing>;</@nothing>
 <@nothing></script></@nothing>
 
-<@data_add
+<@data_edit
   id='words'
-  title='添加单词'
+  title='修改单词'
   fields=fields?eval
+  values=word
   submit_handler=submit_handler
   error_handler=error_handler
 />

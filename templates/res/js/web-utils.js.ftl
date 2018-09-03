@@ -67,6 +67,8 @@ dict.postHref = function (url, data) {
             return options[key] ? options[key] : defaultOptions[key];
         };
 
+        console.log(options.data);
+
         $.ajax({
             url: options.url,
             async: choose('async'),

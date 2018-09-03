@@ -107,8 +107,9 @@
               data: {id: obj.data.id},
               async: true,
               success: function () {
-                parent.layer.alert('删除成功', function () {
+                parent.layer.alert('删除成功', function (index) {
                   location.reload();
+                  parent.layer.close(index);
                 });
               }
             });

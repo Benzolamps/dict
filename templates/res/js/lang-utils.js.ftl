@@ -7,6 +7,7 @@
 
 /** nothing function */
 dict.nothing = function () {
+    return !1;
 };
 
 /**
@@ -43,7 +44,7 @@ dict.format = function (source, params) {
  */
 dict.quote = function (str) {
     return '"' + str + '"';
-}
+};
 
 /**
  * 用单引号包裹字符串
@@ -51,8 +52,8 @@ dict.quote = function (str) {
  * @return {string}
  */
 dict.singleQuote = function (str) {
-    return '\'' + str + '\'';
-}
+    return "'" + str + "'";
+};
 
 /**
  * 将有点分隔的key的对象转换为对象
@@ -76,7 +77,7 @@ dict.generateObject = function (obj) {
         });
     }
     return returnObj;
-}
+};
 
 /**
  * 字符串缩略
@@ -101,7 +102,7 @@ dict.abbreviate = function (str, width, ellipsis) {
         }
 
     }
-}
+};
 
 /**
  * 加密字符串
@@ -115,4 +116,24 @@ dict.encrypt = function (str) {
         str = hex_md5(str);
     }
     return str;
-}
+};
+
+/**
+ * 合并两个方法, 先执行func1, 再执行fun2, fun2的返回值作为整体的返回值
+ * @param func1 {Function}
+ * @param func2 {Function}
+ * @returns {function(): *}
+ */
+dict.extendsFunction = function (func1, func2) {
+    if (!func1 || 'function' != typeof func1) {
+        func1 = dict.nothing;
+    }
+    if (!func2 || 'function' != typeof func2) {
+        func2 = dict.nothing;
+    }
+
+    return function () {
+        func1.apply(this, arguments);
+        return func2.apply(this, arguments);
+    };
+};
