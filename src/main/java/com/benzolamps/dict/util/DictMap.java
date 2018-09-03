@@ -1,5 +1,8 @@
 package com.benzolamps.dict.util;
 
+import org.apache.commons.lang.StringUtils;
+import org.springframework.util.Assert;
+
 import java.util.*;
 
 /**
@@ -44,4 +47,17 @@ public interface DictMap {
 
         return properties;
     }
+
+    /**
+     * 通过YAML字符串构建一个Map
+     * @param yaml YAML
+     * @return map
+     */
+    static Map yamlMap(String yaml) {
+        if (StringUtils.isEmpty(yaml)) {
+            return Constant.EMPTY_MAP;
+        }
+        return Constant.YAML.loadAs(yaml, Map.class);
+    }
+    
 }

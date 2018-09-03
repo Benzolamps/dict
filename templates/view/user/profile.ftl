@@ -9,15 +9,7 @@
     !function (result, status, request) {
       parent.layer.alert(result.message, {
         icon: 2,
-        title: result.status,
-        yes: function (index) {
-          parent.layer.close(index);
-          parent.layer.close(parent.layer.getFrameIndex(window.name));
-        },
-        cancel: function (index) {
-          parent.layer.close(index);
-          parent.layer.close(parent.layer.getFrameIndex(window.name));
-        }
+        title: result.status
       });
     }(result, status, request);
   </#assign>

@@ -24,7 +24,7 @@
         setInterval(function () {
             $element.load(options.url, options.data, options.complete);
         }, interval);
-    }
+    };
 
     /**
      * 实时加载当前时间到DOM元素
@@ -37,7 +37,7 @@
         options.pattern || (options.pattern = 'yyyy年M月d日 H时mm分ss秒');
         options.data = {pattern: options.pattern};
         dict.rtText(selector, options);
-    }
+    };
 
     /**
      * 获取元素名称
@@ -77,9 +77,17 @@
                 value = [value];
                 value.push(item.value);
             } else {
-                object[item.name] = item.value;
+                var $checkbox = $form.find('input[name="' + item.name + '"][type=checkbox]');
+                if ($checkbox.is('.dict-switch')) {
+                    object[item.name] = eval(item.value);
+                } else if ($checkbox.is('.dict-checkbox')) {
+                    object[item.name] = [item.value];
+                } else {
+                    object[item.name] = item.value;
+                }
             }
         });
+        console.log(object);
         return object;
     }
 }(jQuery, dict);

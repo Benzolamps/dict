@@ -1,18 +1,16 @@
 package com.benzolamps.dict.directive;
 
+import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictLambda;
 import com.benzolamps.dict.util.ResourceType;
 import freemarker.template.TemplateMethodModelEx;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
-import org.yaml.snakeyaml.Yaml;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -27,9 +25,6 @@ public class YamlParseMethod implements TemplateMethodModelEx {
     /** 资源类型 */
     @Setter
     private ResourceType resourceType;
-
-    @Resource
-    private Yaml yaml;
 
     public YamlParseMethod() {
         this.resourceType = ResourceType.STRING;
@@ -47,13 +42,13 @@ public class YamlParseMethod implements TemplateMethodModelEx {
     private Object execInternal(String str) throws Exception {
         switch (resourceType) {
             case STRING:
-                return yaml.load(str);
+                return Constant.YAML.load(str);
             case URL:
-                return yaml.load(new UrlResource(str).getInputStream());
+                return Constant.YAML.load(new UrlResource(str).getInputStream());
             case CLASS_PATH:
-                return yaml.load(new ClassPathResource(str).getInputStream());
+                return Constant.YAML.load(new ClassPathResource(str).getInputStream());
             case FILE_SYSTEM:
-                return yaml.load(new FileSystemResource(str).getInputStream());
+                return Constant.YAML.load(new FileSystemResource(str).getInputStream());
             default:
                 return null;
         }

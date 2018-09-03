@@ -2,6 +2,7 @@ package com.benzolamps.dict.util;
 
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
+import org.yaml.snakeyaml.Yaml;
 
 import java.lang.reflect.Method;
 import java.text.DateFormat;
@@ -67,6 +68,9 @@ public interface Constant {
 
     /** 空的Map */
     Map EMPTY_MAP = Collections.EMPTY_MAP;
+
+    /** Yaml */
+    Yaml YAML = new Yaml();
 
     /** 空的Properties */
     Properties EMPTY_PROPERTIES = ((Supplier<Properties>) () -> {

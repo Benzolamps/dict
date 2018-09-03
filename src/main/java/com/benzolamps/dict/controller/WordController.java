@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 /**
  * 单词Controller
@@ -42,8 +41,7 @@ public class WordController extends BaseController {
     protected ModelAndView list(Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/word/list");
         Page<Word> words = wordService.findPage(pageable);
-        Page<WordVo> wordVos = new Page<>(words.getContent().stream().map(WordVo::convertFromWord).collect(Collectors.toList()), words.getTotal(), pageable);
-        mv.addObject("page", wordVos);
+        mv.addObject("page", words);
         return mv;
     }
 

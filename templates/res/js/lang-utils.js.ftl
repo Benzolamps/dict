@@ -70,7 +70,7 @@ dict.generateObject = function (obj) {
             dict.assert(/^[$_a-z][$_a-z0-9]*$/i.test(item), '标识符不符合规范');
             variable += '.' + item;
             if (index == layers.length - 1) {
-                eval(dict.format('{0} = {1};', variable, dict.singleQuote(obj[key])));
+                eval(dict.format('{0} = {1};', variable, 'obj[key]'));
             } else if (!eval(variable)) {
                 eval(dict.format('{0} = {1};', variable, '{}'));
             }

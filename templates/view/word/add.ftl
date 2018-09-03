@@ -12,15 +12,7 @@
   !function (result, status, request) {
     parent.layer.alert(result.message, {
       icon: 2,
-      title: result.status,
-      yes: function (index) {
-        parent.layer.close(index);
-        parent.layer.close(parent.layer.getFrameIndex(window.name));
-      },
-      cancel: function (index) {
-        parent.layer.close(index);
-        parent.layer.close(parent.layer.getFrameIndex(window.name));
-      }
+      title: result.status
     });
   }(result, status, request);
 </#assign>
@@ -33,10 +25,15 @@
         {
           'name': '${field.name}',
           'type': 'string',
-          'options': [<#list wordClazzes as wordClazz>'${wordClazz.name}'<#sep>, </#list>],
+          'options': [
+            <#list wordClazzes as wordClazz>
+              {'id': ${wordClazz.id}, 'value': '${wordClazz.name}'}<#sep>,
+            </#list>
+          ],
+          'multiple': true,
           'display': '${field.display}',
           'description': '${field.description}',
-          'notEmpty': ${field.notEmpty?c}
+          'notEmpty': ${field.notEmpty???c}
         }
       <#else>
         <@json_dump obj=field/>

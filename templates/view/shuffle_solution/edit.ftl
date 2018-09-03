@@ -25,15 +25,7 @@
     !function (result, status, request) {
       parent.layer.alert(result.message, {
         icon: 2,
-        title: result.status,
-        yes: function (index) {
-          parent.layer.close(index);
-          parent.layer.close(parent.layer.getFrameIndex(window.name));
-        },
-        cancel: function (index) {
-          parent.layer.close(index);
-          parent.layer.close(parent.layer.getFrameIndex(window.name));
-        }
+        title: result.status
       });
     }(result, status, request);
   </#assign>
@@ -62,10 +54,14 @@
           {
             'name': '${field.name}',
             'type': '${field.type}',
-            'options': <@json_dump obj=strategies/>,
+            'options': [
+              <#list strategies as strategy>
+                {'id': '${strategy}', 'value': '${strategy}'}<#sep>,
+              </#list>
+            ],
             'display': '${field.display}',
             'description': '${field.description}',
-            'notEmpty': ${field.notEmpty?c},
+            'notEmpty': ${field.notEmpty???c},
             'handler': "${select_handler}"
           }
         <#else>

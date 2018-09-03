@@ -117,7 +117,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Override
     @Transactional
     public ShuffleSolution update(ShuffleSolution shuffleSolution) throws ClassNotFoundException {
-        Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) ClassUtils.forName(shuffleSolution.getStrategyClass(), Thread.currentThread().getContextClassLoader());
+        Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) ClassUtils.forName(shuffleSolution.getStrategyClass(), DictSpring.getBean(ClassLoader.class));
         DictBean<IShuffleStrategySetup> dictBean = new DictBean<>(strategyClass);
         Collection<DictProperty> dictProperties = dictBean.getProperties();
         Map<String, Object> properties = shuffleSolution.getProperties();

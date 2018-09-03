@@ -1,5 +1,6 @@
 package com.benzolamps.dict.main;
 
+import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictMap;
 import com.benzolamps.dict.util.DictSpring;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +12,6 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.yaml.snakeyaml.Yaml;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,15 +40,13 @@ public interface DictApplication {
      * @param args 参数
      */
     static void main(String... args) {
-        Yaml yaml = new Yaml();
-        Map map = yaml.loadAs(tryFunc(new FileSystemResource("dictionary.yml")::getInputStream), Map.class);
+        Map map = Constant.YAML.loadAs(tryFunc(new FileSystemResource("dictionary.yml")::getInputStream), Map.class);
         Properties properties = new Properties();
         properties.putAll(DictMap.convertToProperties(map));
         System.getProperties().forEach(properties::putIfAbsent);
         new SpringApplicationBuilder(DictApplication.class).properties(properties).initializers(applicationContext -> {
             DictSpring.setApplicationContext(applicationContext);
             DictSpring.setBean("classLoader", applicationContext.getClassLoader());
-            DictSpring.setBean("yaml", yaml);
             List<String> profiles = Arrays.asList(applicationContext.getEnvironment().getActiveProfiles());
             DictSpring.setBean("isRelease", profiles.contains("release"));
         }).build().run(args);

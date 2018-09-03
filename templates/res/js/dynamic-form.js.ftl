@@ -37,7 +37,7 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
 
         /* 根据选择器的元素类型生成表格 */
         var $table;
-        if (['table', 'tbody', 'thead', 'tfoot'].indexOf(name) > 0) {
+        if (['table', 'tbody', 'thead', 'tfoot'].indexOf(name) > -1) {
             $table = $selector;
         } else {
             $table = $(document.createElement('table'));
@@ -62,24 +62,45 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
         if (property.readonly) {
             $component = $(document.createElement('span')).text(property.value);
         } else if (property.options) {
-            $component = $(document.createElement('select'))
-                .attr('name', property.name)
-                .addClass('layui-input')
-                .attr('required', property.notEmpty)
-                .attr('lay-filter', property.name)
-                .append($(document.createElement('option'))
-                    .val('')
-                    .text('请选择' + property.display)
+            if (!property.multiple) {
+                $component = $(document.createElement('select'))
+                    .attr('name', property.name)
                     .addClass('layui-input')
-                );
-            for (var i = 0; i < property.options.length; i++) {
-                var option = property.options[i];
-                var $option = $(document.createElement('option'))
-                    .attr('value', option)
-                    .text(option)
-                    .attr('selected', property.options[i] == property.value)
-                    .addClass('layui-input');
-                $component.append($option);
+                    .attr('required', property.notEmpty)
+                    .attr('lay-filter', property.name)
+                    .append($(document.createElement('option'))
+                        .val('')
+                        .text('请选择' + property.display)
+                        .addClass('layui-input')
+                    );
+                for (var i = 0; i < property.options.length; i++) {
+                    var option = property.options[i];
+                    var $option = $(document.createElement('option'))
+                        .val(option.id)
+                        .text(option.value)
+                        .attr('selected', option.id == property.value)
+                        .addClass('layui-input');
+                    $component.append($option);
+                }
+            } else {
+                $component = $(document.createElement('div'));
+                for (var i = 0; i < property.options.length; i++) {
+                    var option = property.options[i];
+                    var $option = $(document.createElement('div'))
+                        .css('padding', '5px')
+                        .css('display', 'inline-block')
+                        .append($(document.createElement('input'))
+                            .attr('name', property.name)
+                            .attr('type', 'checkbox')
+                            .attr('title', option.value)
+                            .attr('checked', property.value != null && property.value.indexOf(option.id) > -1)
+                            .attr('lay-skin', 'primary')
+                            .attr('option-id', option.id)
+                            .addClass('layui-input')
+                            .addClass('dict-checkbox')
+                        );
+                    $component.append($option);
+                }
             }
         } else if (property.textArea) {
             $component = $(document.createElement('textarea'))
@@ -102,7 +123,8 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
                         .attr('lay-filter', property.name)
                         .attr('checked', property.value === 'true' || property.value === true)
                         .attr('required', property.notEmpty)
-                        .addClass('layui-input');
+                        .addClass('layui-input')
+                        .addClass('dict-switch');
                     break;
                 }
                 case 'string': {
@@ -312,9 +334,21 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
         onkeyup: false,
         onclick: false,
         submitHandler: function () {
-            $form.find('input[type=checkbox]').each(function () {
-                $(this).val($(this).next().find('em').text().toLowerCase() == $(this).attr('lay-text').split('|')[0].toLowerCase());
-                $(this).attr('type', 'hidden');
+            $form.find('input[type=checkbox].dict-switch').each(function () {
+                var $next = $(this).next();
+                if ($next.is('.layui-form-checked')) {
+                    $(this).val('true');
+                } else {
+                    $(this).val('false');
+                }
+            });
+            $form.find('input[type=checkbox].dict-checkbox').each(function () {
+                var $next = $(this).next();
+                if ($next.is('.layui-form-checked')) {
+                    $(this).val($(this).attr('option-id'));
+                } else {
+                    $(this).val(null);
+                }
             });
             return submitHandler();
         }

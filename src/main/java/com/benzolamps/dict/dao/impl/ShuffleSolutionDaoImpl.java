@@ -5,18 +5,16 @@ import com.benzolamps.dict.bean.ShuffleSolutions;
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
+import com.benzolamps.dict.util.Constant;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import org.yaml.snakeyaml.Yaml;
 
-import javax.annotation.Resource;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 import java.util.StringJoiner;
 
 import static com.benzolamps.dict.util.DictLambda.tryAction;
@@ -34,9 +32,6 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     private FileSystemResource resource;
 
     private ShuffleSolutions solutions;
-
-    @Resource
-    private Yaml yaml;
 
     @Override
     public Page<ShuffleSolution> findAll() {
@@ -93,11 +88,11 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
 
     @Override
     public void reload() {
-        solutions = tryFunc(() -> yaml.loadAs(resource.getInputStream(), ShuffleSolutions.class));
+        solutions = tryFunc(() -> Constant.YAML.loadAs(resource.getInputStream(), ShuffleSolutions.class));
     }
 
     @Override
     public void flush() {
-        tryAction(() -> yaml.dump(solutions, new FileWriter(resource.getFile())));
+        tryAction(() -> Constant.YAML.dump(solutions, new FileWriter(resource.getFile())));
     }
 }

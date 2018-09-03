@@ -1,5 +1,7 @@
 package com.benzolamps.dict.util;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,5 +37,17 @@ public interface DictList {
         }
 
         return list;
+    }
+
+    /**
+     * 通过YAML字符串构建一个List
+     * @param yaml YAML
+     * @return list
+     */
+    static List yamlList(String yaml) {
+        if (StringUtils.isEmpty(yaml)) {
+            return Constant.EMPTY_LIST;
+        }
+        return Constant.YAML.loadAs(yaml, List.class);
     }
 }

@@ -6,7 +6,6 @@ import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.ExcelHeader;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.WordClazzService;
-import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictSpring;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -56,9 +55,9 @@ public class WordVo implements Serializable {
     private String britishPronunciation;
 
     /** 词性 */
-    @NotNull
+    @NotEmpty
     @DictPropertyInfo(display = "词性")
-    private Object clazzes;
+    private Object[] clazzes;
 
     /** 词义 */
     @ExcelHeader(value = 5, notEmpty = true)
@@ -95,19 +94,11 @@ public class WordVo implements Serializable {
         word.setAmericanPronunciation(wordVo.getAmericanPronunciation());
         word.setDefinition(wordVo.getDefinition());
         word.setLibrary(libraryService.find(wordVo.getLibrary()));
-        String[] clazzArray;
-        if (wordVo.getClazzes() instanceof CharSequence) {
-            clazzArray = new String[] {wordVo.getClazzes().toString()};
-        } else if (wordVo.getClazzes() instanceof String[]) {
-            clazzArray = (String[]) wordVo.getClazzes();
-        } else {
-            clazzArray = Constant.EMPTY_STRING_ARRAY;
-        }
-        word.setClazzes(Arrays.stream(clazzArray).map(clazz -> {
-            WordClazz wordClazz = wordClazzService.findByIdOrName(clazz);
+        word.setClazzes(Arrays.stream(wordVo.getClazzes()).map(clazz -> {
+            WordClazz wordClazz = wordClazzService.findByIdOrName(clazz.toString());
             if (wordClazz == null) {
                 wordClazz = new WordClazz();
-                wordClazz.setName(clazz);
+                wordClazz.setName(clazz.toString());
             }
             return wordClazz;
         }).collect(Collectors.toSet()));
@@ -128,7 +119,7 @@ public class WordVo implements Serializable {
         wordVo.setBritishPronunciation(word.getBritishPronunciation());
         wordVo.setAmericanPronunciation(word.getAmericanPronunciation());
         wordVo.setPrototype(word.getPrototype());
-        wordVo.setClazzes(word.getClazzes().stream().map(WordClazz::getName).toArray(String[]::new));
+        wordVo.setClazzes(word.getClazzes().stream().map(WordClazz::getId).toArray(Integer[]::new));
         wordVo.setLibrary(word.getLibrary().getId());
         return wordVo;
     }

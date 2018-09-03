@@ -3,6 +3,7 @@ package com.benzolamps.dict.controller.vo;
 import com.benzolamps.dict.component.*;
 import com.benzolamps.dict.util.DictBean;
 import com.benzolamps.dict.util.DictList;
+import com.benzolamps.dict.util.DictMap;
 import com.benzolamps.dict.util.DictProperty;
 import lombok.Getter;
 import org.apache.commons.lang.enums.EnumUtils;
@@ -56,6 +57,10 @@ public class DictPropertyInfoVo implements Serializable {
     @Getter
     private final Collection<?> options;
 
+    /** 是否多选 */
+    @Getter
+    private final Boolean multiple;
+
     /** 最大值 */
     @Getter
     private final Object min;
@@ -74,11 +79,11 @@ public class DictPropertyInfoVo implements Serializable {
 
     /** 是否是过去的时间 */
     @Getter
-    private boolean past;
+    private final Boolean past;
 
     /** 是否是将来的时间 */
     @Getter
-    private final boolean future;
+    private final Boolean future;
 
     /** 正则表达式 */
     @Getter
@@ -86,7 +91,7 @@ public class DictPropertyInfoVo implements Serializable {
 
     /** 字符串是否可为空 */
     @Getter
-    private final boolean notEmpty;
+    private final Boolean notEmpty;
 
     /** 远程验证 */
     @Getter
@@ -120,14 +125,15 @@ public class DictPropertyInfoVo implements Serializable {
         this.minLength = this.internalGetMinLength();
         this.maxLength = this.internalGetMaxLength();
         this.options = this.internalGetOptions();
-        this.past = this.internalIsPast();
-        this.future = this.internalIsFuture();
+        this.multiple = this.internalIsMultiple() ? true : null;
+        this.past = this.internalIsPast() ? true : null;
+        this.future = this.internalIsFuture() ? true : null;
         this.pattern = this.internalGetPattern();
-        this.notEmpty = this.internalIsNotEmpty();
+        this.notEmpty = this.internalIsNotEmpty() ? true : null;
         this.remote = this.internalGetRemote();
-        this.id = this.internalIsId();
-        this.readonly = this.internalIsReadonly();
-        this.textArea = this.internalIsTextArea();
+        this.id = this.internalIsId() ? true : null;
+        this.readonly = this.internalIsReadonly() ? true : null;
+        this.textArea = this.internalIsTextArea() ? true : null;
     }
 
     /** @return 获取展示的名称 */
@@ -142,27 +148,30 @@ public class DictPropertyInfoVo implements Serializable {
     }
 
     private String internalGetType() {
-        Class<?> clazz = dictProperty.getType();
-        if (String.class.equals(clazz)) {
+        Class clazz = dictProperty.getType();
+        if (Arrays.asList(
+            String.class, CharSequence.class,
+            String[].class, CharSequence[].class
+        ).contains(clazz)) {
             return "string";
-        } else if (Arrays.<Class<?>> asList(
-            Byte.class, byte.class,
-            Short.class, short.class,
-            Integer.class, int.class,
-            Long.class, long.class,
-            BigInteger.class
+        } else if (Arrays.asList(
+            Byte.class, byte.class, Byte[].class, byte[].class,
+            Short.class, short.class, Short[].class, short[].class,
+            Integer.class, int.class, Integer[].class, int[].class,
+            Long.class, long.class, Long[].class, long[].class,
+            BigInteger.class, BigInteger[].class
         ).contains(clazz)) {
             return "integer";
-        } else if (Arrays.<Class<?>> asList(
-            Float.class, float.class,
-            Double.class, double.class,
-            Number.class,
-            BigDecimal.class
+        } else if (Arrays.asList(
+            Float.class, float.class, Float[].class, float[].class,
+            Double.class, double.class, Double[].class, double[].class,
+            Number.class, Number[].class,
+            BigDecimal.class, BigDecimal[].class
         ).contains(clazz)) {
             return "float";
-        } else if (Arrays.<Class<?>> asList(Boolean.class, boolean.class).contains(clazz)) {
+        } else if (Arrays.asList(Boolean.class, boolean.class, Boolean[].class, boolean[].class).contains(clazz)) {
             return "boolean";
-        } else if (Arrays.<Class<?>> asList(Character.class, char.class).contains(clazz)) {
+        } else if (Arrays.asList(Character.class, char.class, Character[].class, char[].class).contains(clazz)) {
             return "char";
         } else if (Enum.class.isAssignableFrom(clazz)) {
             return "enum";
@@ -247,15 +256,16 @@ public class DictPropertyInfoVo implements Serializable {
     }
 
     private List<?> internalGetOptions() {
+        Collection<?> collection = null;
         if (Arrays.asList("string", "integer", "float", "char", "date").contains(getType())) {
             if (dictProperty.hasAnnotation(DictOptions.class)) {
                 Stream<String> values = Arrays.stream(dictProperty.getAnnotation(DictOptions.class).value());
                 if ("integer".equals(getType())) {
-                    return values.map(Long::valueOf).sorted().collect(Collectors.toList());
+                    collection = values.map(Long::valueOf).sorted().collect(Collectors.toList());
                 } else if ("float".equals(getType())) {
-                    return values.map(Double::valueOf).sorted().collect(Collectors.toList());
+                    collection = values.map(Double::valueOf).sorted().collect(Collectors.toList());
                 } else {
-                    return values.sorted().collect(Collectors.toList());
+                    collection = values.sorted().collect(Collectors.toList());
                 }
             } else if ("integer".equals(getType()) || "char".equals(getType())) {
                 if (getMax() != null && getMin() != null) {
@@ -263,22 +273,30 @@ public class DictPropertyInfoVo implements Serializable {
                         long max = (Long) getMax();
                         long min = (Long) getMin();
                         if (max - min > 0 && max - min <= 100) {
-                            return DictList.range(min, max + 1);
+                            collection = DictList.range(min, max + 1);
                         }
                     } else if ("char".equals(getType())) {
                         char max = (Character) getMax();
                         char min = (Character) getMin();
                         if (max - min > 0 && max - min <= 100) {
-                            return DictList.range(min, max + 1).stream().map(chr -> String.valueOf((char) (long) chr)).collect(Collectors.toList());
+                            collection = DictList.range(min, max + 1).stream().map(chr -> String.valueOf((char) (long) chr)).collect(Collectors.toList());
                         }
                     }
                 }
             }
         } else if ("enum".equals(getType())) {
             List<?> enumList = EnumUtils.getEnumList(dictProperty.getType());
-            return enumList.stream().map(Object::toString).collect(Collectors.toList());
+            collection = enumList.stream().map(Object::toString).collect(Collectors.toList());
+        }
+        if (collection != null) {
+            return collection.stream().map(item ->
+                DictMap.yamlMap(String.format("{id: %s, value: %s}", item, item))).collect(Collectors.toList());
         }
         return null;
+    }
+
+    private boolean internalIsMultiple() {
+        return dictProperty.getType().isArray() && getOptions() != null;
     }
 
     private boolean internalIsPast() {

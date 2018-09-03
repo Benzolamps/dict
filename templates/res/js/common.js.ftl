@@ -35,6 +35,6 @@ layui.use(['element', 'layer'], function () {
     });
 });
 
-$.validator.addMethod('func', function(value, element, param) {
-  return eval('(' + param + ')(value, element)');
-}, "输入错误");
+Array.prototype.toString = function () {
+    return this.join('，');
+};
