@@ -21,20 +21,30 @@ $.getScript('${base_url}/res/js/dom-utils.js');
 $.getScript('${base_url}/res/js/dynamic-form.js');
 $.getScript('${base_url}/js/md5.js');
 
-layui.use(['element', 'layer'], function () {
-    window.element = layui.element;
-    window.layer = layui.layer;
-    layer.config({
-        title: false,
-        resize: false,
-        move: false,
-        closeBtn: 2,
-        yes: function (index) {
-            layer.close(index);
-        }
-    });
-});
+!function () {
+    Array.prototype.toString = function () {
+        return this.join('，');
+    };
 
-Array.prototype.toString = function () {
-    return this.join('，');
-};
+    this.models = ['element', 'layer', 'form', 'table', 'code'];
+    this.loadLayui = function () {
+        $.each(models, function (index, value) {
+            window[value] || (window[value] = layui[value]);
+        });
+
+        layer && layer.config({
+            title: false,
+            resize: false,
+            move: false,
+            closeBtn: 2,
+            yes: function (index) {
+                layer.close(index);
+            }
+        });
+    };
+    layui.use(models, function () {
+        loadLayui();
+    });
+    this.loadLayui();
+}();
+

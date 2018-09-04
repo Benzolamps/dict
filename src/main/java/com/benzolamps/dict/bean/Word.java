@@ -27,7 +27,6 @@ public class Word extends BaseElement {
     private static final long serialVersionUID = -7799252559204665509L;
 
     /** 单词原形 */
-    @ExcelHeader(value = 1, notEmpty = true)
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 255)
@@ -35,7 +34,6 @@ public class Word extends BaseElement {
 
     /** 美式发音 */
     @Format("replaceString")
-    @ExcelHeader(value = 3, notEmpty = true)
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 255)
@@ -43,7 +41,6 @@ public class Word extends BaseElement {
 
     /** 英式发音 */
     @Format("replaceString")
-    @ExcelHeader(value = 2, notEmpty = true)
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 255)
@@ -56,7 +53,6 @@ public class Word extends BaseElement {
 
     /** 词义 */
     @Format("replaceString")
-    @ExcelHeader(value = 5, notEmpty = true)
     @Column
     @NotEmpty
     @Length(max = 255)

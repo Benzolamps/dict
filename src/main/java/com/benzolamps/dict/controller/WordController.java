@@ -10,10 +10,13 @@ import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.service.base.WordService;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -109,6 +112,28 @@ public class WordController extends BaseController {
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
         Arrays.stream(ids).forEach(wordService::remove);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 导入单词界面
+     * @return ModelAndView
+     */
+    @RequestMapping(value = "/file.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @WindowView
+    protected ModelAndView importWordsView() {
+        return new ModelAndView("view/word/import");
+    }
+
+    /**
+     * 导入单词
+     * @param file 文件
+     * @return 导入成功
+     */
+    @PostMapping("/import.json")
+    @ResponseBody
+    protected BaseVo importWords(MultipartFile file) throws IOException {
+        wordService.importWords(new InputStreamResource(file.getInputStream()));
         return SUCCESS_VO;
     }
 }

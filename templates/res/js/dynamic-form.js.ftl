@@ -14,12 +14,6 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
 
     var $form;
 
-    var form;
-
-    layui.use('form', function() {
-        form = layui.form;
-    });
-
     /* 验证是否有表单包裹 */
     var verifyOrAppend = function (selector) {
         var name = dict.$name(selector);

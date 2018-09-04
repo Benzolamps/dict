@@ -19,7 +19,11 @@
         <i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 刷新
       </button>
       <#list head_toolbar as tool>
-        <button class="layui-btn layui-btn-primary layui-btn-disabled layui-btn-sm" lay-event="head-toolbar-${tool_index}" <#if tool.needSelected?? && tool.needSelected>disabled</#if>>
+        <button
+          class="layui-btn layui-btn-primary <#if tool.needSelected?? && tool.needSelected>layui-btn-disabled </#if>layui-btn-sm"
+          lay-event="head-toolbar-${tool_index}"
+          <#if tool.needSelected?? && tool.needSelected>disabled</#if>
+        >
           ${tool.html}
         </button>
       </#list>
@@ -48,8 +52,6 @@
   </script>
 
   <script type="text/javascript">
-    layui.use('table', function () {
-      var table = layui.table;
       var fields = <@json_dump obj=fields/>;
       fields.push({field: 'id', title: '操作', align: 'left', toolbar: '#${id}-tools'});
       table.render({
@@ -101,9 +103,9 @@
       <#list head_toolbar as tool>
         $('#${id} [lay-event=head-toolbar-${tool_index}]').click(function () {
           var checkStatus = table.checkStatus('${id}');
-          with (data = checkStatus.data) {
+          !function (data, element) {
             ${tool.handler}
-          }
+          }(checkStatus.data, this);
         });
       </#list>
 
@@ -135,9 +137,9 @@
             switch (obj.event) {
               <#list toolbar as tool>
                 case 'toolbar-${tool_index}':
-                  with (obj.data) {
+                  !function (data) {
                     ${tool.handler}
-                  }
+                  }(obj.data);
                   break;
               </#list>
             }
@@ -159,6 +161,5 @@
           needSelected.attr('disabled', true);
         }
       });
-    });
   </script>
 </#macro>

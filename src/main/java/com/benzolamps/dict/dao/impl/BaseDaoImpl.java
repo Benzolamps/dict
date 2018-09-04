@@ -49,7 +49,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
 	@Override
 	public T find(Integer id) {
-        Assert.notNull(id, "id不能为null");
+        if (id == null) return null;
 		return entityManager.find(entityClass, id);
 	}
 
@@ -57,7 +57,11 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	public T findSingle(Filter filter) {
 		GeneratedDictQuery<T> query = generateDictQuery();
 		query.setFilter(filter);
-		return query.getTypedQuery(entityManager).getSingleResult();
+        try {
+            return query.getTypedQuery(entityManager).getSingleResult();
+        } catch (NoResultException | NonUniqueResultException e) {
+            return null;
+        }
 	}
 
     @Override

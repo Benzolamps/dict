@@ -188,11 +188,11 @@ public class DictBean<B> {
      * @param properties 属性
      * @return DictBean对象
      */
-    public B createBean(Properties properties) {
+    public B createBean(Map<String, Object> properties) {
         Assert.isTrue(instantiable(), "类必须是可实例化的");
         final B obj = BeanUtils.instantiate(type);
-        properties = properties == null ? new Properties() : properties;
-        properties.forEach((key, value) -> getProperty(key.toString()).set(obj, value));
+        properties = properties == null ? Constant.EMPTY_MAP : properties;
+        properties.forEach((key, value) -> getProperty(key).set(obj, value));
         return obj;
     }
 

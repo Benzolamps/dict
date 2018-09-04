@@ -23,55 +23,52 @@
     </div>
   </div>
   <script type="text/javascript">
-    layui.use('form', function () {
-      var form = layui.form;
-      var $form = $('#${id}');
-      var $table = $('#${id} table');
-      var $tbody = $(document.createElement('tbody'));
-      var fields = <@json_dump obj=fields/>;
-      $table.append($tbody);
-      dict.dynamicForm($tbody, fields, '', <@json_dump obj=values/>, <@json_dump obj=rules/>, <@json_dump obj=messages/>, function () {
-        dict.loadText({
-          url: $form.attr('action'),
-          type: $form.attr('method'),
-          data: dict.generateObject(dict.serializeObject($form)),
-          requestBody: ${request_body?c},
-          success: function (result, status, request) {
-            ${submit_handler}
-          }, error: function (result, status, request) {
-            ${error_handler}
-          }
-        });
-        return false;
+    var $form = $('#${id}');
+    var $table = $('#${id} table');
+    var $tbody = $(document.createElement('tbody'));
+    var fields = <@json_dump obj=fields/>;
+    $table.append($tbody);
+    dict.dynamicForm($tbody, fields, '', <@json_dump obj=values/>, <@json_dump obj=rules/>, <@json_dump obj=messages/>, function () {
+      dict.loadText({
+        url: $form.attr('action'),
+        type: $form.attr('method'),
+        data: dict.generateObject(dict.serializeObject($form)),
+        requestBody: ${request_body?c},
+        success: function (result, status, request) {
+          ${submit_handler}
+        }, error: function (result, status, request) {
+          ${error_handler}
+        }
       });
-
-      var append = function (index) {
-        if ($table.find('tbody').length > index) {
-          return $table.find('tbody').eq(index);
-        } else {
-          var $tbody = $(document.createElement('tbody'));
-          $table.append($tbody);
-          return $tbody;
-        }
-      };
-
-      var submit = function () {
-        document.getElementById('${id}').submit();
-      };
-
-      for (var i = 0; i < fields.length; i++) !function (i) {
-        if (fields[i].handler && fields[i].options) {
-          form.on('select(' + fields[i].name + ')', function (data) {
-            eval(fields[i].handler);
-          });
-        } else if (fields[i].type && fields[i].type == 'boolean') {
-          form.on('switch(' + fields[i].name + ')', function (data) {
-            eval(fields[i].handler);
-          });
-        }
-      }(i);
-
-      ${ready_handler}
+      return false;
     });
+
+    var append = function (index) {
+      if ($table.find('tbody').length > index) {
+        return $table.find('tbody').eq(index);
+      } else {
+        var $tbody = $(document.createElement('tbody'));
+        $table.append($tbody);
+        return $tbody;
+      }
+    };
+
+    var submit = function () {
+      document.getElementById('${id}').submit();
+    };
+
+    for (var i = 0; i < fields.length; i++) !function (i) {
+      if (fields[i].handler && fields[i].options) {
+        form.on('select(' + fields[i].name + ')', function (data) {
+          eval(fields[i].handler);
+        });
+      } else if (fields[i].type && fields[i].type == 'boolean') {
+        form.on('switch(' + fields[i].name + ')', function (data) {
+          eval(fields[i].handler);
+        });
+      }
+    }(i);
+
+    ${ready_handler}
   </script>
 </#macro>

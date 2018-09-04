@@ -1,6 +1,5 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.ExcelHeader;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +21,6 @@ public abstract class BaseElement extends BaseEntity {
     private static final long serialVersionUID = -3019993342620190686L;
 
     /** 索引 */
-    @ExcelHeader(value = 0, range = @ExcelHeader.Range(min = 1))
     @Column(nullable = false, updatable = false, name = "indexes")
     @NotNull
     protected Integer index;
@@ -40,7 +38,7 @@ public abstract class BaseElement extends BaseEntity {
     @SuppressWarnings("unused")
     public String replaceString(String str) {
         return str == null ? null : str
-            .replaceAll("[\\s\\u00a0]+", "")
+            .replaceAll("[ \\s\\u00a0]+", "")
             .replaceAll("（", "(")
             .replaceAll("）", ")")
             .replaceAll("[,，]+", ",")

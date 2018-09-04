@@ -3,7 +3,6 @@ package com.benzolamps.dict.controller.vo;
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.component.DictPropertyInfo;
-import com.benzolamps.dict.component.ExcelHeader;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictSpring;
@@ -13,7 +12,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.Assert;
 
 import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -34,21 +32,18 @@ public class WordVo implements Serializable {
     private Integer id;
 
     /** 单词原形 */
-    @ExcelHeader(value = 1, notEmpty = true)
     @NotEmpty
     @Length(max = 255)
     @DictPropertyInfo(display = "单词原形")
     private String prototype;
 
     /** 美式发音 */
-    @ExcelHeader(value = 3, notEmpty = true)
     @NotEmpty
     @Length(max = 255)
     @DictPropertyInfo(display = "美式发音")
     private String americanPronunciation;
 
     /** 英式发音 */
-    @ExcelHeader(value = 2, notEmpty = true)
     @NotEmpty
     @Length(max = 255)
     @DictPropertyInfo(display = "英式发音")
@@ -60,20 +55,15 @@ public class WordVo implements Serializable {
     private Object[] clazzes;
 
     /** 词义 */
-    @ExcelHeader(value = 5, notEmpty = true)
     @NotEmpty
     @Length(max = 255)
     @DictPropertyInfo(display = "词义")
     private String definition;
 
-    /**
-     * 词库
-     */
+    /** 词库 */
     private transient Integer library;
 
     /** 索引 */
-    @ExcelHeader(value = 0, range = @ExcelHeader.Range(min = 1))
-    @NotNull
     @DictPropertyInfo(display = "索引")
     private Integer index;
 

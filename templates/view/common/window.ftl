@@ -20,7 +20,7 @@
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/jquery.validate.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/additional-methods.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/localization/messages_zh.js"></script>
-      <script type="text/javascript" src="${base_url}/layui/layui.js"></script>
+      <script type="text/javascript" src="${base_url}/layui/layui.all.js"></script>
       <script type="text/javascript" src="${base_url}/res/js/common.js"></script>
     </head>
     <body>

@@ -6,17 +6,39 @@
     <#list page.content as word>
       {
         'id': ${word.id},
-        'prototype': '${word.prototype}',
-        'britishPronunciation': '${word.britishPronunciation}',
-        'americanPronunciation': '${word.americanPronunciation}',
-        'clazzes': [<#list word.clazzes as clazz>'${clazz.name}'<#sep>, </#list>],
-        'definition': '${word.definition}'
+        'prototype': "${word.prototype?json_string}",
+        'britishPronunciation': "${word.britishPronunciation?json_string}",
+        'americanPronunciation': "${word.americanPronunciation?json_string}",
+        'clazzes': [<#list word.clazzes as clazz>"${clazz.name?json_string}"<#sep>, </#list>],
+        'definition': "${word.definition?json_string}"
       }
     </#list>
   ]
 </#assign>
-<@nothing></script></@nothing>
 
+<#assign file_upload>
+  var button = $(document.createElement('button'))
+    .css('display', 'hidden');
+  var upload = layui.upload;
+
+  //执行实例
+  var uploadInst = upload.render({
+    elem: button,
+    url: '${base_url}/word/import.json',
+    accept: 'file',
+    acceptMime: 'application/x-xls',
+    exts: 'xls|xlsx',
+    done: function (res) {
+      //上传完毕回调
+    },
+    error: function () {
+      //请求异常回调
+    }
+  });
+
+  button.trigger('click');
+</#assign>
+<@nothing></script></@nothing>
 <@data_list
   id='words'
   fields=[
@@ -34,9 +56,8 @@
   delete='${base_url}/word/delete.json'
   head_toolbar=[
     {
-      'html': 'hhh',
-      'handler': 'console.log(this);',
-      'needSelected': true
+      'html': '<i class="layui-icon" style="font-size: 20px;">&#xe60a;</i> 导入单词',
+      'handler': file_upload
     }
   ]
   page_enabled=true

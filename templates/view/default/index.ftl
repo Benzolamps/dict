@@ -152,7 +152,8 @@
         </div>
       </div>
       <script type="text/javascript">
-        $(function () {
+        layui.use(['element', 'layer', 'form', 'table', 'code'], function () {
+
           var columns = null;
 
           /* 请求栏目JSON */
