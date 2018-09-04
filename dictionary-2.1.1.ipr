@@ -404,6 +404,7 @@
         <w>canplaythrough</w>
         <w>clazzes</w>
         <w>csdn</w>
+        <w>exts</w>
         <w>flickity</w>
         <w>gitee</w>
         <w>iframe</w>
@@ -434,6 +435,7 @@
         <w>thead</w>
         <w>wechat</w>
         <w>weibo</w>
+        <w>xlsx</w>
         <w>yaml</w>
       </words>
     </dictionary>

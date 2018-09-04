@@ -6,11 +6,11 @@
     <#list page.content as word>
       {
         'id': ${word.id},
-        'prototype': "${word.prototype?json_string}",
-        'britishPronunciation': "${word.britishPronunciation?json_string}",
-        'americanPronunciation': "${word.americanPronunciation?json_string}",
-        'clazzes': [<#list word.clazzes as clazz>"${clazz.name?json_string}"<#sep>, </#list>],
-        'definition': "${word.definition?json_string}"
+        'prototype': <@json_dump obj=word.prototype/>,
+        'britishPronunciation': <@json_dump obj=word.britishPronunciation/>,
+        'americanPronunciation': <@json_dump obj=word.americanPronunciation/>,
+        'clazzes': [<#list word.clazzes as clazz><@json_dump obj=clazz.name/><#sep>, </#list>],
+        'definition': <@json_dump obj=word.definition/>
       }
     </#list>
   ]
@@ -19,20 +19,22 @@
 <#assign file_upload>
   var button = $(document.createElement('button'))
     .css('display', 'hidden');
-  var upload = layui.upload;
-
-  //执行实例
-  var uploadInst = upload.render({
+  layui.upload.render({
     elem: button,
     url: '${base_url}/word/import.json',
     accept: 'file',
     acceptMime: 'application/x-xls',
     exts: 'xls|xlsx',
     done: function (res) {
-      //上传完毕回调
+      console.log(arguments);
+      parent.$('iframe')[0].contentWindow.location.reload(true);
     },
     error: function () {
-      //请求异常回调
+      console.log(arguments)
+      parent.layer.alert('错误', {
+        icon: 2,
+        title: '错误'
+      });
     }
   });
 
