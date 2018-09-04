@@ -116,16 +116,6 @@ public class WordController extends BaseController {
     }
 
     /**
-     * 导入单词界面
-     * @return ModelAndView
-     */
-    @RequestMapping(value = "/file.html", method = {RequestMethod.GET, RequestMethod.POST})
-    @WindowView
-    protected ModelAndView importWordsView() {
-        return new ModelAndView("view/word/import");
-    }
-
-    /**
      * 导入单词
      * @param file 文件
      * @return 导入成功
