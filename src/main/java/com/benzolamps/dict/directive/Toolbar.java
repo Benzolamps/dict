@@ -20,4 +20,7 @@ public @interface Toolbar {
 
     /** 事件处理器 */
     String getHandler();
+
+    /** 当有选择时可用 */
+    boolean getNeedSelected();
 }

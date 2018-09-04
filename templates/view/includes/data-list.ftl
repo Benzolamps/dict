@@ -3,25 +3,30 @@
   add='add.html' edit='edit.html' delete='delete.json'
   add_enabled=true edit_enabled=true delete_enabled=true
   toolbar=[]
+  head_toolbar=[]
   page_enabled=true
 >
-
+  <#-- @ftlvariable name="toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
+  <#-- @ftlvariable name="head_toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
   <style>
     .layui-table-view .layui-table {
       width: 100%;
     }
   </style>
-
-  <#-- @ftlvariable name="toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
   <div class="layui-row">
     <form class="layui-form" id="${id}" lay-filter="${id}" onsubmit="return false;" method="post">
       <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="refresh">
         <i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 刷新
       </button>
-      <button class="layui-btn layui-btn-warm layui-btn-sm add" lay-event="add">
+      <#list head_toolbar as tool>
+        <button class="layui-btn layui-btn-primary layui-btn-disabled layui-btn-sm" lay-event="head-toolbar-${tool_index}" <#if tool.needSelected?? && tool.needSelected>disabled</#if>>
+          ${tool.html}
+        </button>
+      </#list>
+      <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="add">
         <i class="layui-icon" style="font-size: 20px;">&#xe654;</i> 添加
       </button>
-      <button class="layui-btn layui-btn-disabled layui-btn-sm" lay-event="delMany" disabled>
+      <button class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-sm" lay-event="delMany" disabled>
         <i class="layui-icon" style="font-size: 20px;">&#xe640;</i> 删除
       </button>
       <table class="layui-table" lay-filter="${id}"></table>
@@ -93,6 +98,15 @@
         location.reload();
       });
 
+      <#list head_toolbar as tool>
+        $('#${id} [lay-event=head-toolbar-${tool_index}]').click(function () {
+          var checkStatus = table.checkStatus('${id}');
+          with (data = checkStatus.data) {
+            ${tool.handler}
+          }
+        });
+      </#list>
+
       table.on('tool(${id})', function (obj) {
         if (obj.event == 'edit') {
           parent.layer.open({
@@ -131,21 +145,20 @@
         </#if>
       });
 
+      var needSelected = $('#${id}>button:disabled');
+
       table.on('checkbox(${id})', function (obj) {
         var checkStatus = table.checkStatus('${id}');
-        if (delMany.attr('disabled') && checkStatus.data.length > 0) {
-          delMany.removeClass('layui-disabled');
-          delMany.removeClass('layui-btn-disabled');
-          delMany.addClass('layui-btn-danger');
-          delMany.attr('disabled', false);
+        if (needSelected.attr('disabled') && checkStatus.data.length > 0) {
+          needSelected.removeClass('layui-disabled');
+          needSelected.removeClass('layui-btn-disabled');
+          needSelected.attr('disabled', false);
         } else {
-          delMany.removeClass('layui-btn-danger');
-          delMany.addClass('layui-disabled');
-          delMany.addClass('layui-btn-disabled');
-          delMany.attr('disabled', true);
+          needSelected.addClass('layui-disabled');
+          needSelected.addClass('layui-btn-disabled');
+          needSelected.attr('disabled', true);
         }
       });
     });
-
   </script>
 </#macro>
