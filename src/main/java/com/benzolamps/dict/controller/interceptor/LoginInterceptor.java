@@ -37,6 +37,7 @@ public class LoginInterceptor extends BaseInterceptor {
                 } else if (response.getContentType().toLowerCase().contains(Constant.JSON)) {
                     response.sendError(HttpServletResponse.SC_FORBIDDEN);
                 }
+                return false;
             }
         }
         return super.preHandle(request, response, handler);

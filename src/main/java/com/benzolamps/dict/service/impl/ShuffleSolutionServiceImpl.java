@@ -29,7 +29,7 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
  * @datetime 2018-7-19 21:16:36
  */
 @SuppressWarnings("unchecked")
-@Service
+@Service("shuffleSolutionService")
 public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     private static final String CACHE_NAME = "shuffle_solution";

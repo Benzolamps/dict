@@ -15,7 +15,7 @@ import javax.annotation.Resource;
  * @version 2.1.1
  * @datetime 2018-7-1 22:24:02
  */
-@Service
+@Service("wordClazzService")
 public class WordClazzServiceImpl extends BaseServiceImpl<WordClazz> implements WordClazzService {
 
     @Resource

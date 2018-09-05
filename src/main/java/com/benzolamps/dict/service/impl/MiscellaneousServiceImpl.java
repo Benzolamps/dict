@@ -3,6 +3,7 @@ package com.benzolamps.dict.service.impl;
 import com.benzolamps.dict.dao.base.MiscellaneousDao;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -13,12 +14,14 @@ import javax.annotation.Resource;
  * @datetime 2018-9-1 11:26:51
  */
 @Service("miscellaneousService")
+@Transactional
 public class MiscellaneousServiceImpl implements MiscellaneousService {
 
     @Resource
     private MiscellaneousDao miscellaneousDao;
 
     @Override
+    @Transactional(readOnly = true)
     public String getSQLiteVersion() {
         return miscellaneousDao.getSQLiteVersion();
     }

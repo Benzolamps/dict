@@ -33,13 +33,18 @@ public class User extends BaseEntity {
 
     private static final long serialVersionUID = -5309444370236159463L;
 
+    /**
+     * 构造器
+     * @param username 用户名
+     * @param password 密码
+     */
     public User(String username, String password) {
         setUsername(username);
         setPassword(password);
     }
 
-    public interface LoginGroup {
-    }
+    /** 登录、注册验证组 */
+    public interface LoginGroup { }
 
     /** 用户名 */
     @NotEmpty(groups = LoginGroup.class)
@@ -50,7 +55,7 @@ public class User extends BaseEntity {
     @DictPropertyInfo(display = "用户名")
     private String username;
 
-    /** 登录密码 */
+    /** 密码 */
     @NotEmpty(groups = LoginGroup.class)
     @Length(min = 6, max = 15, groups = LoginGroup.class)
     @Pattern(regexp = "^[_0-9A-Za-z]+$", groups = LoginGroup.class)

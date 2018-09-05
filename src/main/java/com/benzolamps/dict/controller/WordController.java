@@ -123,7 +123,7 @@ public class WordController extends BaseController {
     @PostMapping("/import.json")
     @ResponseBody
     protected BaseVo importWords(MultipartFile file) throws IOException {
-        wordService.importWords(new InputStreamResource(file.getInputStream()));
-        return SUCCESS_VO;
+        int count = wordService.imports(new InputStreamResource(file.getInputStream()));
+        return wrapperData(count);
     }
 }

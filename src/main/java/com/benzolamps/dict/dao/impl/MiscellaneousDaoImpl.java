@@ -14,7 +14,7 @@ import java.util.List;
  * @version 2.1.1
  * @datetime 2018-9-1 11:24:01
  */
-@Repository
+@Repository("miscellaneousDao")
 public class MiscellaneousDaoImpl implements MiscellaneousDao {
 
     @PersistenceContext

@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  * @version 2.1.1
  * @datetime 2018-8-30 20:49:58
  */
-@Repository
+@Repository("userDao")
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 }

@@ -9,4 +9,10 @@ import com.benzolamps.dict.bean.Library;
  * @datetime 2018-7-1 22:25:03
  */
 public interface LibraryService extends BaseService<Library> {
+
+    /**
+     * 获取当前词库
+     * @return 词库
+     */
+    Library getCurrent();
 }

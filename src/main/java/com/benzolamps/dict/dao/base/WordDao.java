@@ -11,7 +11,7 @@ import java.util.List;
  * @version 2.1.1
  * @datetime 2018-7-1 22:12:24
  */
-public interface WordDao extends BaseDao<Word> {
+public interface WordDao extends BaseElementDao<Word> {
 
     List<Word> searchWords(Integer start, Integer end, String definition, WordClazz clazz);
 }

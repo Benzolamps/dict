@@ -21,7 +21,7 @@ import java.nio.charset.Charset;
  * @version 2.1.1
  * @datetime 2018-8-30 21:40:22
  */
-@Service
+@Service("userService")
 @Transactional
 public class UserServiceImpl extends BaseServiceImpl<User> implements UserService {
 

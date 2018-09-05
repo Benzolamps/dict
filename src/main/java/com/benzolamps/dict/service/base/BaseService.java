@@ -11,6 +11,7 @@ import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -80,6 +81,19 @@ public interface BaseService<T extends BaseEntity> {
     T persist(T entity);
 
     /**
+     * 保存实体对象
+     * @param entities 实体对象
+     */
+    @SuppressWarnings("unchecked")
+    void persist(T... entities);
+
+    /**
+     * 保存实体对象
+     * @param entities 实体对象
+     */
+    void persist(Collection<T> entities);
+
+    /**
      * 更新实体对象
      * @param entity 实体对象
      * @return 更新后的实体对象
@@ -87,14 +101,27 @@ public interface BaseService<T extends BaseEntity> {
     T update(T entity, String... ignoreProperties);
 
     /**
-     * 删除实体对象
-     * @param entity 实体对象
+     * 更新实体对象
+     * @param entities 实体对象
      */
-    void remove(T entity);
+    void update(Collection<T> entities, String... ignoreProperties);
 
     /**
      * 删除实体对象
-     * @param id 实体对象id
+     * @param entities 实体对象
      */
-    void remove(Integer id);
+    @SuppressWarnings("unchecked")
+    void remove(T... entities);
+
+    /**
+     * 删除实体对象
+     * @param ids 实体对象id
+     */
+    void remove(Integer... ids);
+
+    /**
+     * 删除实体对象
+     * @param entities 实体对象
+     */
+    void remove(Collection<T> entities);
 }

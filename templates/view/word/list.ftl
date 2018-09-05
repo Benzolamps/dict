@@ -1,5 +1,9 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Word>" -->
 
+<form id="upload-form" method="post" action="import.json" enctype="multipart/form-data" style="display: none;">
+  <input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+</form>
+
 <@nothing><script type="text/javascript"></@nothing>
 <#assign values>
   [
@@ -15,30 +19,39 @@
     </#list>
   ]
 </#assign>
-
 <#assign file_upload>
-  var button = $(document.createElement('button'))
-    .css('display', 'hidden');
-  layui.upload.render({
-    elem: button,
-    url: '${base_url}/word/import.json',
-    accept: 'file',
-    acceptMime: 'application/x-xls',
-    exts: 'xls|xlsx',
-    done: function (res) {
-      console.log(arguments);
-      parent.$('iframe')[0].contentWindow.location.reload(true);
-    },
-    error: function () {
-      console.log(arguments)
-      parent.layer.alert('错误', {
-        icon: 2,
-        title: '错误'
+  $('#upload-form input').trigger('click');
+  $('#upload-form input').unbind('change');
+  $('#upload-form input').change(function () {
+    var loader = parent.layer.load();
+    setTimeout(function () {
+      var startTime = new Date().getTime();
+      $('#upload-form').ajaxSubmit({
+        success: function (result, status, request) {
+          var endTime = new Date().getTime();
+          parent.layer.close(loader);
+          parent.layer.alert('导入单词成功, 共导入 ' + result.data + ' 个单词, 用时 ' + Math.round((endTime - startTime) * 0.001, 3) + ' 秒', {
+            icon: 1,
+            title: '导入单词成功',
+            yes: function (index) {
+              parent.$('iframe')[0].contentWindow.location.reload(true);
+              parent.layer.close(index);
+            }
+          });
+        },
+        error: function (request) {
+          parent.layer.close(loader);
+          var result = JSON.parse(request.responseText);
+          parent.layer.alert(result.message, {
+            icon: 2,
+            anim: 6,
+            title: result.status
+          });
+        }
       });
-    }
+    }, 500);
   });
 
-  button.trigger('click');
 </#assign>
 <@nothing></script></@nothing>
 <@data_list

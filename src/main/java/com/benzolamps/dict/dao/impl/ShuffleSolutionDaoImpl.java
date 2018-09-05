@@ -24,7 +24,7 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
  * 乱序方案Dao接口实现类
  */
 @SuppressWarnings("deprecation")
-@Repository
+@Repository("shuffleSolutionDao")
 public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
 
     /* 乱序方案配置文件 */

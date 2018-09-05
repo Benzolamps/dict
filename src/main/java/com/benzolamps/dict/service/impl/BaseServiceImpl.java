@@ -10,6 +10,8 @@ import com.benzolamps.dict.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -19,7 +21,6 @@ import java.util.List;
  * @version 2.1.1
  * @datetime 2018-7-1 21:52:46
  */
-@SuppressWarnings("deprecation")
 @Transactional
 public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
@@ -27,8 +28,8 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
 
     @Autowired
     @Transactional(readOnly = true)
-    protected void setBaseDao(BaseDao<T> baseDao) {
-        this.baseDao = baseDao;
+    protected void setBaseElementDao(BaseDao<T> baseElementDao) {
+        this.baseDao = baseElementDao;
     }
 
     @Override
@@ -74,9 +75,22 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     }
 
     @Override
-    @Transactional
     public T persist(T entity) {
         return baseDao.persist(entity);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @Transactional
+    public void persist(T... entities) {
+        Arrays.stream(entities).forEach(baseDao::persist);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @Transactional
+    public void persist(Collection<T> entities) {
+        entities.forEach(baseDao::persist);
     }
 
     @Override
@@ -86,13 +100,26 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     }
 
     @Override
+    public void update(Collection<T> entities, String... ignoreProperties) {
+        entities.forEach(entity -> baseDao.update(entity, ignoreProperties));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
     @Transactional
-    public void remove(T entity) {
-      baseDao.remove(entity);
+    public void remove(T... entities) {
+        Arrays.stream(entities).forEach(baseDao::remove);
     }
 
     @Override
-    public void remove(Integer id) {
-        baseDao.remove(find(id));
+    public void remove(Integer... ids) {
+        Arrays.stream(ids).forEach(id -> baseDao.remove(this.find(id)));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    @Transactional
+    public void remove(Collection<T> entities) {
+        entities.forEach(baseDao::remove);
     }
 }

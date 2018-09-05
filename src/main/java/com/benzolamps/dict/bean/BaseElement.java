@@ -1,7 +1,11 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.ExcelHeader;
+import com.benzolamps.dict.component.Format;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -25,6 +29,21 @@ public abstract class BaseElement extends BaseEntity {
     @NotNull
     protected Integer index;
 
+    /** 原形 */
+    @ExcelHeader(value = 1, notEmpty = true)
+    @Column(nullable = false)
+    @NotEmpty
+    @Length(max = 255)
+    private String prototype;
+
+    /** 词义 */
+    @Format("replaceString")
+    @ExcelHeader(value = 2, notEmpty = true)
+    @Column(nullable = false)
+    @NotEmpty
+    @Length(max = 255)
+    private String definition;
+
     /** 词库 */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "library", nullable = false, updatable = false)
@@ -37,12 +56,12 @@ public abstract class BaseElement extends BaseEntity {
     /** @return 用于实体类中字段的格式 */
     @SuppressWarnings("unused")
     public String replaceString(String str) {
-        return str == null ? null : str
+        return str == null ? "" : str
             .replaceAll("[ \\s\\u00a0]+", "")
-            .replaceAll("（", "(")
-            .replaceAll("）", ")")
-            .replaceAll("[,，]+", ",")
-            .replaceAll("[;；]+", ";")
+            .replace("(", "（")
+            .replace(")", "）")
+            .replaceAll("[,，]+", "，")
+            .replaceAll("[;；]+", "；")
             .replaceAll("(^；+)|(；+$)|(^，+)|(，+$)", "");
     }
 }

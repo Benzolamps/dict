@@ -3,13 +3,11 @@ package com.benzolamps.dict.controller.vo;
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.component.CellFormat;
+import com.benzolamps.dict.component.DetectColumnNum;
 import com.benzolamps.dict.component.ExcelHeader;
-import com.benzolamps.dict.service.base.WordClazzService;
-import com.benzolamps.dict.util.DictSpring;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -20,7 +18,8 @@ import java.util.Set;
  * @datetime 2018-9-2 23:09:08
  */
 @Data
-public class WordExcelVo implements Serializable {
+@DetectColumnNum(6)
+public class WordExcelVo implements BaseElementVo<Word> {
 
     private static final long serialVersionUID = -2201903558371038672L;
 
@@ -49,28 +48,21 @@ public class WordExcelVo implements Serializable {
     @ExcelHeader(value = 5, notEmpty = true)
     private String definition;
 
-    /**
-     * 将WordExcelVo转换为word
-     * @param wordExcelVo wordExcelVo
-     * @return word
-     */
-    public static Word convertToWord(WordExcelVo wordExcelVo) {
+    @Override
+    public Word convertToElement() {
         Word word = new Word();
-        word.setPrototype(wordExcelVo.getPrototype());
-        word.setAmericanPronunciation(wordExcelVo.getAmericanPronunciation());
-        word.setBritishPronunciation(wordExcelVo.getBritishPronunciation());
-        word.setDefinition(wordExcelVo.getDefinition());
-        word.setIndex(wordExcelVo.getIndex());
-        WordClazzService wordClazzService = DictSpring.getBean(WordClazzService.class);
-        String[] clazzes = wordExcelVo.getClazzes().split("[ \\s\\u00a0]*[,，;；][ \\s\\u00a0]*");
+        word.setPrototype(this.getPrototype());
+        word.setAmericanPronunciation(this.getAmericanPronunciation());
+        word.setBritishPronunciation(this.getBritishPronunciation());
+        word.setDefinition(this.getDefinition());
+        word.setIndex(this.getIndex());
+        String[] clazzes = this.getClazzes().split("[ \\s\\u00a0]*[,，;；][ \\s\\u00a0]*");
         Set<WordClazz> wordClazzes = new LinkedHashSet<>();
-        for (String clazz : clazzes) {
-            WordClazz wordClazz = wordClazzService.findByIdOrName(clazz);
-            if (wordClazz == null) {
-                wordClazz = new WordClazz();
-                wordClazz.setName(clazz);
-                wordClazz = wordClazzService.persist(wordClazz);
-            }
+        for (int i = 0; i < clazzes.length; i++) {
+            String clazz = clazzes[i];
+            WordClazz wordClazz = new WordClazz();
+            wordClazz.setName(clazz);
+            wordClazz.setId(i);
             wordClazzes.add(wordClazz);
         }
         word.setClazzes(wordClazzes);

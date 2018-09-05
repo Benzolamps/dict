@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
  * @version 2.1.1
  * @datetime 2018-7-1 23:01:56
  */
-@Repository
+@Repository("phraseDao")
 public class PhraseDaoImpl extends BaseDaoImpl<Phrase> implements PhraseDao {
 
 }

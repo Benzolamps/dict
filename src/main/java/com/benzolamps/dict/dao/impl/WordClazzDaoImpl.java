@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  * @version 2.1.1
  * @datetime 2018-7-1 22:14:43
  */
-@Repository
+@Repository("wordClazzDao")
 public class WordClazzDaoImpl extends BaseDaoImpl<WordClazz> implements WordClazzDao {
 }
