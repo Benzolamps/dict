@@ -20,10 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.io.InputStream;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
@@ -68,7 +65,55 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         Library current = libraryService.getCurrent();
         Assert.notNull(current, "未选择词库");
         element.setLibrary(current);
-        return super.persist(element);
+        Filter filter = Filter.eq("library", current).and(Filter.eq("prototype", element.getPrototype()));
+        int count = count(filter).intValue();
+        if (count == 0) {
+            return super.persist(element);
+        } else {
+            BaseElement ref = findSingle(filter);
+            element.setId(ref.getId());
+            return update(element);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void persist(T... elements) {
+        this.persist(Arrays.asList(elements));
+    }
+
+    @Override
+    public void persist(Collection<T> elements) {
+        Library current = libraryService.getCurrent();
+        Assert.notNull(current, "未选择词库");
+        List<T> elementList = new LinkedList<>(elements);
+        elementList.removeIf(element -> baseElementDao.findPrototypes(current).contains(element.getPrototype()));
+        elementList.removeIf(element -> elementList.stream().filter(e -> e.getPrototype().equals(element.getPrototype())).count() > 1);
+        elementList.forEach(element -> element.setLibrary(current));
+        elements.removeAll(elementList);
+        // elements.forEach(this::persist);
+        super.persist(elementList);
+    }
+
+    @Override
+    public void update(Collection<T> entities, String... ignoreProperties) {
+        super.update(entities, ignoreProperties);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void remove(T... entities) {
+        super.remove(entities);
+    }
+
+    @Override
+    public void remove(Integer... ids) {
+        super.remove(ids);
+    }
+
+    @Override
+    public void remove(Collection<T> entities) {
+        super.remove(entities);
     }
 
     @Override
@@ -82,8 +127,6 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     @Override
     @Transactional
     public int imports(Resource resource) {
-        Library current = libraryService.getCurrent();
-        Assert.notNull(current, "未选择词库");
         InputStream stream = tryFunc(resource::getInputStream);
         Workbook workbook = DictExcel.inputStreamToWorkbook(stream);
         Sheet sheet = workbook.getSheetAt(0);
@@ -92,22 +135,12 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         for (int i = 1; i <= sheet.getLastRowNum(); i++) {
             BaseElementVo<T> baseElementVo = DictExcel.excelRowToObject(sheet.getRow(i), elementVoClass);
             T element = baseElementVo.convertToElement();
-            element.setLibrary(current);
             elements.add(element);
         }
-        Set<String> notContains = baseElementDao.findNotContainsPrototype(elements.stream()
-            .map(BaseElement::getPrototype).collect(Collectors.toSet()), current);
-        elements.removeIf(element ->
-            !notContains.contains(element.getPrototype()) ||
-            elements.stream().filter(e -> e.getPrototype().equals(element.getPrototype())).count() > 1);
-        this.persist(elements);
-        return elements.size();
-    }
-
-    @Override
-    public boolean contains(String prototype) {
-        Library library = libraryService.getCurrent();
-        Assert.notNull(library, "未选择词库");
-        return count(Filter.eq("library", library).and(Filter.eq("prototype", prototype))) > 0;
+        try {
+            return elements.size();
+        } finally {
+            this.persist(elements);
+        }
     }
 }

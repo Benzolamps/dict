@@ -18,6 +18,4 @@ public interface BaseElementService<T extends BaseElement> extends BaseService<T
      * @return 导入的个数
      */
     int imports(Resource resource);
-
-    boolean contains(String prototype);
 }

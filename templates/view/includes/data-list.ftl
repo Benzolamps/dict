@@ -5,7 +5,7 @@
   toolbar=[]
   head_toolbar=[]
   page_enabled=false
-  search=""
+  search=[]
 >
   <#-- @ftlvariable name="toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
   <#-- @ftlvariable name="head_toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
@@ -42,11 +42,12 @@
       </div>
 
       <#-- 筛选 -->
-      <div id="${id}-search" class="layui-container">
-        <div class="layui-row layui-col-space10">
-          ${search}
+      <#if search?size gt 0>
+        <div id="${id}-search" class="layui-container">
+          <div class="layui-row layui-col-space10">
+          </div>
         </div>
-      </div>
+      </#if>
 
       <#-- 表格主体 -->
       <table class="layui-table" lay-filter="${id}"></table>

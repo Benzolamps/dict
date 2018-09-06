@@ -15,9 +15,8 @@ public interface BaseElementDao<T extends BaseElement> extends BaseDao<T> {
 
     /**
      * 获取不存在的单词或短语原形
-     * @param prototypes 原形
      * @param library 词库
      * @return 不存在的单词或短语原形
      */
-    Set<String> findNotContainsPrototype(Set<String> prototypes, Library library);
+    Set<String> findPrototypes(Library library);
 }

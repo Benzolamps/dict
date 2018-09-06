@@ -70,6 +70,7 @@
         var $form = $(selector);
         var object = {};
         $.each($form.serializeArray(), function (index, item) {
+            if (item.value == null || item.value == '') return;
             var value = object[item.name];
             if (value && $.isArray(value)) {
                 value.push(item.value);

@@ -231,7 +231,25 @@ dict.postInitForm = function (form, fields, extendedRules, extendedMessages, sub
 
         messages[fields[i].name] = itemMessages;
     }
-    dict.validateForm($form, $.extend(true, rules, extendedRules), $.extend(true, messages, extendedMessages), submitHandler);
+    dict.validateForm($form, $.extend(true, rules, extendedRules), $.extend(true, messages, extendedMessages), function () {
+        $form.find('input[type=checkbox].dict-switch').each(function () {
+            var $next = $(this).next();
+            if ($next.is('.layui-form-checked')) {
+                $(this).val('true');
+            } else {
+                $(this).val('false');
+            }
+        });
+        $form.find('input[type=checkbox].dict-checkbox').each(function () {
+            var $next = $(this).next();
+            if ($next.is('.layui-form-checked')) {
+                $(this).val($(this).attr('option-id'));
+            } else {
+                $(this).val(null);
+            }
+        });
+        return submitHandler();
+    });
 };
 
 /**
@@ -312,6 +330,28 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
 };
 
 /**
+ * 表单搜索项
+ * @param form
+ * @param selector
+ * @param initValues
+ * @param extendedRules
+ * @param extendedMessages
+ * @param submitHandler
+ */
+dict.dynamicSearch = function (form, selector, initValues, extendedRules, extendedMessages, submitHandler) {
+    var $form = $(form);
+    var $div = $(selector);
+    for (var i = 0; i < fields.length; i++) {
+        fields[i].value = initValues[fields[i].name] != null ? initValues[fields[i].name] : fields[i].defaultValue;
+        var $subDiv = $(document.createElement('div'))
+            .addClass('layui-col-md2')
+            .append(dict.produceFormItem(fields[i]));
+        $div.append($subDiv);
+    }
+    dict.postInitForm($form, fields, extendedRules, extendedMessages, submitHandler);
+}
+
+/**
  * 验证表单
  * @param selector {*} 选择器
  * @param [rules] {Object} 验证规则
@@ -320,15 +360,6 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
  */
 dict.validateForm = function (selector, rules, messages, submitHandler) {
     var $form = $(selector);
-    $form.find('select').each(function () {
-        var $select = $(this);
-        if ($select.attr('required')) {
-            var $input = $select.next().find('input');
-            $input.attr('required', true);
-            $input.attr('name', $select.attr('name'));
-            $select.remove();
-        }
-    });
     var validator = $form.validate();
     rules = $.extend(true, validator.dicRules, rules);
     messages = $.extend(true, validator.dictMessages, messages);
@@ -361,25 +392,7 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
         onfocusout: false,
         onkeyup: false,
         onclick: false,
-        submitHandler: function () {
-            $form.find('input[type=checkbox].dict-switch').each(function () {
-                var $next = $(this).next();
-                if ($next.is('.layui-form-checked')) {
-                    $(this).val('true');
-                } else {
-                    $(this).val('false');
-                }
-            });
-            $form.find('input[type=checkbox].dict-checkbox').each(function () {
-                var $next = $(this).next();
-                if ($next.is('.layui-form-checked')) {
-                    $(this).val($(this).attr('option-id'));
-                } else {
-                    $(this).val(null);
-                }
-            });
-            return submitHandler();
-        }
+        submitHandler: submitHandler
     })
     validator.dictRules = rules;
     validator.dictMessages = messages;
