@@ -20,9 +20,10 @@
   ]
 </#assign>
 <#assign file_upload>
-  $('#upload-form input').trigger('click');
-  $('#upload-form input').unbind('change');
-  $('#upload-form input').change(function () {
+  var $file = $('#upload-form input');
+  $file.trigger('click');
+  $file.unbind('change');
+  $file.change(function () {
     var loader = parent.layer.load();
     setTimeout(function () {
       var startTime = new Date().getTime();
@@ -30,7 +31,7 @@
         success: function (result, status, request) {
           var endTime = new Date().getTime();
           parent.layer.close(loader);
-          parent.layer.alert('导入单词成功, 共导入 ' + result.data + ' 个单词, 用时 ' + Math.round((endTime - startTime) * 0.001, 3) + ' 秒', {
+          parent.layer.alert('导入单词成功, 共导入 ' + result.data + ' 个单词, 用时 ' + ((endTime - startTime) * 0.001).toFixed(3) + ' 秒', {
             icon: 1,
             title: '导入单词成功',
             yes: function (index) {
@@ -65,6 +66,7 @@
     {'field': 'clazzes', 'title': '词性', 'sort': true},
     {'field': 'definition', 'title': '词义', 'sort': true}
   ]
+  page=page
   values=values?eval
   add='${base_url}/word/add.html'
   edit='${base_url}/word/edit.html'

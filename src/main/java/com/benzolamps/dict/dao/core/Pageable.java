@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import java.io.Serializable;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -64,6 +63,7 @@ public class Pageable implements Serializable {
 	 * @param pageNumber 页码
 	 * @param pageSize 每页记录数
 	 */
+	@SuppressWarnings("unused")
 	public Pageable(Integer pageNumber, Integer pageSize) {
 		if (pageNumber != null) {
 			setPageNumber(pageNumber);

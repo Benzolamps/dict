@@ -26,7 +26,7 @@ $.getScript('${base_url}/js/md5.js');
         return this.join('，');
     };
 
-    this.models = ['element', 'layer', 'form', 'table', 'code'];
+    this.models = ['element', 'layer', 'form', 'table', 'code', 'laypage'];
     this.loadLayui = function () {
         $.each(models, function (index, value) {
             window[value] || (window[value] = layui[value]);

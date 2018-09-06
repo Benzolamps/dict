@@ -8,7 +8,7 @@
     {'field': 'strategyClass', 'title': '随机策略名称', 'sort': true},
     {'field': 'remark', 'title': '备注', 'sort': true}
   ]
-  values=page.content
+  page=page
   add='${base_url}/shuffle_solution/add.html'
   edit='${base_url}/shuffle_solution/edit.html'
   delete='${base_url}/shuffle_solution/delete.json'
