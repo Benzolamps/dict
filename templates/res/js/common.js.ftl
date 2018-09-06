@@ -46,5 +46,9 @@ $.getScript('${base_url}/js/md5.js');
         loadLayui();
     });
     this.loadLayui();
+
+    $.validator.addMethod('func', function(value, element, param) {
+        return eval('(' + param + ')(value, element)');
+    }, "输入错误");
 }();
 

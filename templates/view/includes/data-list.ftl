@@ -5,6 +5,7 @@
   toolbar=[]
   head_toolbar=[]
   page_enabled=false
+  search=""
 >
   <#-- @ftlvariable name="toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
   <#-- @ftlvariable name="head_toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
@@ -16,6 +17,8 @@
   </style>
   <div class="layui-row">
     <form class="layui-form" id="${id}" lay-filter="${id}" onsubmit="this.action = location.href;" method="post">
+
+      <#-- 头部工具栏 -->
       <div class="head-toolbar">
         <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="refresh" type="button">
           <i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 刷新
@@ -37,12 +40,25 @@
           <i class="layui-icon" style="font-size: 20px;">&#xe640;</i> 删除
         </button>
       </div>
-      <table class="layui-table" lay-filter="${id}"></table>
-      <div id="${id}-page"></div>
-      <div id="${id}-page-info">
-        <input name="pageSize" type="hidden" value="${page.pageSize}">
-        <input name="pageNumber" type="hidden" value="${page.pageNumber}">
+
+      <#-- 筛选 -->
+      <div id="${id}-search" class="layui-container">
+        <div class="layui-row layui-col-space10">
+          ${search}
+        </div>
       </div>
+
+      <#-- 表格主体 -->
+      <table class="layui-table" lay-filter="${id}"></table>
+
+      <#-- 分页 -->
+      <#if page_enabled>
+        <div id="${id}-page"></div>
+        <div id="${id}-page-info">
+          <span name="pageSize" value="${page.pageSize}"></span>
+          <span name="pageNumber" value="${page.pageNumber}"></span>
+        </div>
+      </#if>
     </form>
   </div>
 
@@ -70,24 +86,26 @@
       cols: [fields],
       data: <@json_dump obj=values/>,
       id: '${id}',
-      height: $(document).height() - 120
+      height: 'full-200'
     });
 
-    laypage.render({
-      elem: '${id}-page',
-      count: ${page.total},
-      curr: ${page.pageNumber},
-      limit: ${page.pageSize},
-      limits: [10, 20, 30],
-      jump: function (obj, first) {
-        if (!first) {
-          console.log(obj);
-          $('#${id}-page-info [name=pageSize]').val(obj.limit);
-          $('#${id}-page-info [name=pageNumber]').val(obj.curr);
-          $('#${id}').submit();
+    <#if page_enabled>
+      laypage.render({
+        elem: '${id}-page',
+        count: ${page.total},
+        curr: ${page.pageNumber},
+        limit: ${page.pageSize},
+        limits: [10, 20, 30],
+        jump: function (obj, first) {
+          if (!first) {
+            console.log(obj);
+            $('#${id}-page-info [name=pageSize]').val(obj.limit);
+            $('#${id}-page-info [name=pageNumber]').val(obj.curr);
+            $('#${id}').submit();
+          }
         }
-      }
-    });
+      });
+    </#if>
 
     var add = $('#${id} [lay-event=add]');
     var delMany = $('#${id} [lay-event=delMany]');

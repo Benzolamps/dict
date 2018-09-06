@@ -1,212 +1,163 @@
 /**
- * Ajax动态加载表单项
- * @param selector {*} 选择器
- * @param [fields] {Object} 字段
- * @param [prefix] {string} 前缀
- * @param initValues {Object} 初始化值
- * @param extendedRules {Object} 验证规则
- * @param extendedMessages {Object} 错误提示
- * @param submitHandler {Function} 提交拦截器
+ * 根据属性生成一个表单元素
+ * @param property 属性
+ * @return {*}
  */
-dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules, extendedMessages, submitHandler) {
+dict.produceFormItem = function (property) {
+    dict.assert(property, 'property不能为空');
+    dict.assert(property.type, 'property.type不能为空');
+    dict.assert(property.name, 'property.name不能为空');
 
-    initValues || (initValues = {});
+    var $component;
 
-    var $form;
-
-    /* 验证是否有表单包裹 */
-    var verifyOrAppend = function (selector) {
-        var name = dict.$name(selector);
-        var $selector = $(selector);
-
-        var parentsUntilForm = $selector.parentsUntil('form');
-
-        if (parentsUntilForm.length == 0) {
-            $form = $selector.parent();
-        } else {
-            $form = parentsUntilForm.last().parent();
-        }
-
-        dict.assert($form.is('form'), "未找到form");
-
-        /* 根据选择器的元素类型生成表格 */
-        var $table;
-        if (['table', 'tbody', 'thead', 'tfoot'].indexOf(name) > -1) {
-            $table = $selector;
-        } else {
-            $table = $(document.createElement('table'));
-            $table.addClass('layui-table');
-            $selector.append($table);
-        }
-        return $table;
-    }
-
-    var $table = verifyOrAppend(selector);
-
-    $table.empty();
-
-    /* 根据属性类型生成不同的表单元素 */
-    var formComponent = function (property) {
-        dict.assert(property, 'property不能为空');
-        dict.assert(property.type, 'property.type不能为空');
-        dict.assert(property.name, 'property.name不能为空');
-
-        var $component;
-
-        if (property.readonly) {
-            $component = $(document.createElement('span')).text(property.value);
-        } else if (property.options) {
-            if (!property.multiple) {
-                $component = $(document.createElement('select'))
-                    .attr('name', property.name)
-                    .addClass('layui-input')
-                    .attr('required', property.notEmpty)
-                    .attr('lay-filter', property.name)
-                    .append($(document.createElement('option'))
-                        .val('')
-                        .text('请选择' + property.display)
-                        .addClass('layui-input')
-                    );
-                for (var i = 0; i < property.options.length; i++) {
-                    var option = property.options[i];
-                    var $option = $(document.createElement('option'))
-                        .val(option.id)
-                        .text(option.value)
-                        .attr('selected', option.id == property.value)
-                        .addClass('layui-input');
-                    $component.append($option);
-                }
-            } else {
-                $component = $(document.createElement('div'));
-                for (var i = 0; i < property.options.length; i++) {
-                    var option = property.options[i];
-                    var $option = $(document.createElement('div'))
-                        .css('padding', '5px')
-                        .css('display', 'inline-block')
-                        .append($(document.createElement('input'))
-                            .attr('name', property.name)
-                            .attr('type', 'checkbox')
-                            .attr('title', option.value)
-                            .attr('checked', property.value != null && property.value.indexOf(option.id) > -1)
-                            .attr('lay-skin', 'primary')
-                            .attr('option-id', option.id)
-                            .addClass('layui-input')
-                            .addClass('dict-checkbox')
-                        );
-                    $component.append($option);
-                }
-            }
-        } else if (property.textArea) {
-            $component = $(document.createElement('textarea'))
+    if (property.readonly) {
+        $component = $(document.createElement('span')).text(property.value);
+    } else if (property.options) {
+        if (!property.multiple) {
+            $component = $(document.createElement('select'))
                 .attr('name', property.name)
-                .attr('placeholder', '请输入' + property.display)
-                .attr('autocomplete', 'off')
-                .attr('value', property.value)
-                .attr('required', property.notEmpty)
-                .attr('maxlength', property.maxLength)
                 .addClass('layui-input')
-                .addClass('layui-textarea');
+                .attr('required', property.notEmpty)
+                .attr('lay-filter', property.name)
+                .append($(document.createElement('option'))
+                    .val('')
+                    .text('请选择' + property.display)
+                    .addClass('layui-input')
+                );
+            for (var i = 0; i < property.options.length; i++) {
+                var option = property.options[i];
+                var $option = $(document.createElement('option'))
+                    .val(option.id)
+                    .text(option.value)
+                    .attr('selected', option.id == property.value)
+                    .addClass('layui-input');
+                $component.append($option);
+            }
         } else {
-            switch (property.type) {
-                case 'boolean': {
-                    $component = $(document.createElement('input'))
+            $component = $(document.createElement('div'));
+            for (var i = 0; i < property.options.length; i++) {
+                var option = property.options[i];
+                var $option = $(document.createElement('div'))
+                    .css('padding', '5px')
+                    .css('display', 'inline-block')
+                    .append($(document.createElement('input'))
+                        .attr('name', property.name)
                         .attr('type', 'checkbox')
-                        .attr('name', property.name)
-                        .attr('lay-skin', 'switch')
-                        .attr('lay-text', '开|关')
-                        .attr('lay-filter', property.name)
-                        .attr('checked', property.value === 'true' || property.value === true)
-                        .attr('required', property.notEmpty)
+                        .attr('title', option.value)
+                        .attr('checked', property.value != null && property.value.indexOf(option.id) > -1)
+                        .attr('lay-skin', 'primary')
+                        .attr('option-id', option.id)
+                        .attr('required', true)
                         .addClass('layui-input')
-                        .addClass('dict-switch');
-                    break;
-                }
-                case 'string': {
-                    $component = $(document.createElement('input'))
-                        .attr('type', 'text')
-                        .attr('name', property.name)
-                        .attr('placeholder', '请输入' + property.display)
-                        .attr('autocomplete', 'off')
-                        .attr('maxlength', property.maxLength)
-                        .attr('value', property.value)
-                        .attr('required', property.notEmpty)
-                        .addClass('layui-input');
-                    break;
-                }
-                case 'integer': {
-                    $component = $(document.createElement('input'))
-                        .attr('type', 'text')
-                        .attr('name', property.name)
-                        .attr('placeholder', '请输入' + property.display)
-                        .attr('maxlength', property.max ? String(property.max).length : 11)
-                        .attr('autocomplete', 'off')
-                        .attr('value', property.value)
-                        .attr('required', property.notEmpty)
-                        .addClass('layui-input');
-                    break;
-                }
-                case 'float': {
-                    $component = $(document.createElement('input'))
-                        .attr('type', 'text')
-                        .attr('name', property.name)
-                        .attr('placeholder', '请输入' + property.display)
-                        .attr('autocomplete', 'off')
-                        .attr('value', property.value)
-                        .attr('required', property.notEmpty)
-                        .addClass('layui-input');
-                    break;
-                }
-                case 'date': {
-                    $component = $(document.createElement('input'))
-                        .attr('type', 'text')
-                        .attr('name', property.name)
-                        .attr('placeholder', '请输入' + property.display)
-                        .attr('autocomplete', 'off')
-                        .attr('value', property.value)
-                        .attr('required', property.notEmpty)
-                        .addClass('layui-input');
-                    break;
-                }
+                        .addClass('dict-checkbox')
+                    );
+                $component.append($option);
             }
         }
-        return $component;
-    }
-
-    var id;
-
-    for (var i = 0; i < fields.length; i++) {
-        fields[i].value = initValues[fields[i].name] != null ? initValues[fields[i].name] : fields[i].defaultValue;
-        prefix && (fields[i].name = prefix + fields[i].name);
-        if (!id && fields[i].id) {
-            var $input = $(document.createElement('input'))
-                .attr('name', fields[i].name)
-                .attr('type', 'hidden')
-                .val(fields[i].value);
-            $table.append($input);
-            id = true;
-            continue;
+    } else if (property.textArea) {
+        $component = $(document.createElement('textarea'))
+            .attr('name', property.name)
+            .attr('placeholder', '请输入' + property.display)
+            .attr('autocomplete', 'off')
+            .attr('value', property.value)
+            .attr('required', property.notEmpty)
+            .attr('maxlength', property.maxLength)
+            .addClass('layui-input')
+            .addClass('layui-textarea');
+    } else {
+        switch (property.type) {
+            case 'boolean': {
+                $component = $(document.createElement('input'))
+                    .attr('type', 'checkbox')
+                    .attr('name', property.name)
+                    .attr('lay-skin', 'switch')
+                    .attr('lay-text', '开|关')
+                    .attr('lay-filter', property.name)
+                    .attr('checked', property.value === 'true' || property.value === true)
+                    .attr('required', property.notEmpty)
+                    .addClass('layui-input')
+                    .addClass('dict-switch');
+                break;
+            }
+            case 'string': {
+                $component = $(document.createElement('input'))
+                    .attr('type', 'text')
+                    .attr('name', property.name)
+                    .attr('placeholder', '请输入' + property.display)
+                    .attr('autocomplete', 'off')
+                    .attr('maxlength', property.maxLength)
+                    .attr('value', property.value)
+                    .attr('required', property.notEmpty)
+                    .addClass('layui-input');
+                break;
+            }
+            case 'integer': {
+                $component = $(document.createElement('input'))
+                    .attr('type', 'text')
+                    .attr('name', property.name)
+                    .attr('placeholder', '请输入' + property.display)
+                    .attr('maxlength', property.max ? String(property.max).length : 11)
+                    .attr('autocomplete', 'off')
+                    .attr('value', property.value)
+                    .attr('required', property.notEmpty)
+                    .addClass('layui-input');
+                break;
+            }
+            case 'float': {
+                $component = $(document.createElement('input'))
+                    .attr('type', 'text')
+                    .attr('name', property.name)
+                    .attr('placeholder', '请输入' + property.display)
+                    .attr('autocomplete', 'off')
+                    .attr('value', property.value)
+                    .attr('required', property.notEmpty)
+                    .addClass('layui-input');
+                break;
+            }
+            case 'date': {
+                $component = $(document.createElement('input'))
+                    .attr('type', 'text')
+                    .attr('name', property.name)
+                    .attr('placeholder', '请输入' + property.display)
+                    .attr('autocomplete', 'off')
+                    .attr('value', property.value)
+                    .attr('required', property.notEmpty)
+                    .addClass('layui-input');
+                break;
+            }
         }
-        var $tr = $(document.createElement('tr'));
-        $table.append($tr);
-        var $th = $(document.createElement('th'));
-        $th.html(fields[i].display + (fields[i].notEmpty ? '<span class="required-field">&nbsp;*&nbsp;</span>' : ''));
-        $th.attr('title', fields[i].description);
-        $tr.append($th);
-        var $td = $(document.createElement('td'));
-        var $input = formComponent(fields[i]);
-        $td.append($input);
-        $tr.append($td);
-        $table.append($tr);
     }
+    return $component;
+};
 
-    form.render();
-
+/**
+ * 表单生成后处理
+ */
+dict.postInitForm = function (form, fields, extendedRules, extendedMessages, submitHandler) {
+    layui.form.render();
+    var $form = $(form);
     $form.find('select').each(function () {
-       if ($(this).attr('required')) {
-           $(this).next().find('input').attr('required', true);
-           $(this).next().find('input').attr('name', $(this).attr('name'));
-           $(this).remove();
-       }
+        if ($(this).attr('required')) {
+            $(this).next().find('input').attr('required', true);
+            $(this).next().find('input').attr('name', $(this).attr('name'));
+            $(this).remove();
+        }
+    });
+
+    $form.find('input[type=checkbox].dict-checkbox').each(function () {
+        if ($(this).attr('required') && !$(this).parent().parent().children().eq(0).is('input')) {
+            $(this).parent().parent().children().eq(0).before($(document.createElement('input'))
+                .css({
+                    'width': $(this).parent().parent().width() + 'px',
+                    'height': $(this).parent().parent().height() + 'px',
+                    'position': 'absolute',
+                    'background-color': 'transparent',
+                    'pointer-events': 'none'
+                })
+                .addClass('layui-input')
+                .attr('name', $(this).attr('name'))
+            );
+        }
     });
 
     var rules = {};
@@ -216,8 +167,14 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
         var itemRules = {};
         var itemMessages = {};
         if (fields[i].notEmpty) {
-            itemRules.required = true;
-            itemMessages.required = fields[i].display + '不能为空';
+            if (fields[i].options && fields[i].multiple) {
+                var selector = '[name=' + fields[i].name + ']+.layui-form-checked';
+                itemRules.func = 'function () {return $(' + dict.singleQuote(selector) + ').length > 0;}';
+                itemMessages.func = fields[i].display + '不能为空';
+            } else {
+                itemRules.required = true;
+                itemMessages.required = fields[i].display + '不能为空';
+            }
         }
 
         if (fields[i].remote) {
@@ -275,6 +232,83 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
         messages[fields[i].name] = itemMessages;
     }
     dict.validateForm($form, $.extend(true, rules, extendedRules), $.extend(true, messages, extendedMessages), submitHandler);
+};
+
+/**
+ * Ajax动态加载表单项
+ * @param selector {*} 选择器
+ * @param [fields] {Object} 字段
+ * @param [prefix] {string} 前缀
+ * @param initValues {Object} 初始化值
+ * @param extendedRules {Object} 验证规则
+ * @param extendedMessages {Object} 错误提示
+ * @param submitHandler {Function} 提交拦截器
+ */
+dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules, extendedMessages, submitHandler) {
+
+    initValues || (initValues = {});
+
+    var $form;
+
+    /* 验证是否有表单包裹 */
+    var verifyOrAppend = function (selector) {
+        var name = dict.$name(selector);
+        var $selector = $(selector);
+
+        var parentsUntilForm = $selector.parentsUntil('form');
+
+        if (parentsUntilForm.length == 0) {
+            $form = $selector.parent();
+        } else {
+            $form = parentsUntilForm.last().parent();
+        }
+
+        dict.assert($form.is('form'), "未找到form");
+
+        /* 根据选择器的元素类型生成表格 */
+        var $table;
+        if (['table', 'tbody', 'thead', 'tfoot'].indexOf(name) > -1) {
+            $table = $selector;
+        } else {
+            $table = $(document.createElement('table'));
+            $table.addClass('layui-table');
+            $selector.append($table);
+        }
+        return $table;
+    }
+
+    var $table = verifyOrAppend(selector);
+
+    $table.empty();
+
+    var id;
+
+    for (var i = 0; i < fields.length; i++) {
+        fields[i].value = initValues[fields[i].name] != null ? initValues[fields[i].name] : fields[i].defaultValue;
+        prefix && (fields[i].name = prefix + fields[i].name);
+        if (!id && fields[i].id) {
+            var $input = $(document.createElement('input'))
+                .attr('name', fields[i].name)
+                .attr('type', 'hidden')
+                .val(fields[i].value);
+            $table.append($input);
+            id = true;
+            continue;
+        }
+        var $tr = $(document.createElement('tr'));
+        $table.append($tr);
+        var $th = $(document.createElement('th'));
+        $th.html(fields[i].display + (fields[i].notEmpty ? '<span class="required-field">&nbsp;*&nbsp;</span>' : ''));
+        $th.attr('title', fields[i].description);
+        $th.css({'min-width': '100px', 'max-width': '200px'});
+        $tr.append($th);
+        var $td = $(document.createElement('td'));
+        var $input = dict.produceFormItem(fields[i]);
+        $td.append($input);
+        $tr.append($td);
+        $table.append($tr);
+    }
+    dict.postInitForm($form, fields, extendedRules, extendedMessages, submitHandler);
 };
 
 /**

@@ -41,7 +41,7 @@ public class WordController extends BaseController {
      */
     @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
     @NavigationView
-    protected ModelAndView list(Pageable pageable) {
+    protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/word/list");
         Page<Word> words = wordService.findPage(pageable);
         mv.addObject("page", words);
