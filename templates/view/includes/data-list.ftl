@@ -6,6 +6,8 @@
   head_toolbar=[]
   page_enabled=false
   search=[]
+  rules=[]
+  messages=[]
 >
   <#-- @ftlvariable name="toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
   <#-- @ftlvariable name="head_toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
@@ -16,8 +18,7 @@
     }
   </style>
   <div class="layui-row">
-    <form class="layui-form" id="${id}" lay-filter="${id}" onsubmit="this.action = location.href;" method="post">
-
+    <form class="layui-form" id="${id}" lay-filter="${id}" onsubmit="return false;" method="post">
       <#-- 头部工具栏 -->
       <div class="head-toolbar">
         <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="refresh" type="button">
@@ -43,8 +44,8 @@
 
       <#-- 筛选 -->
       <#if search?size gt 0>
-        <div id="${id}-search" class="layui-container">
-          <div class="layui-row layui-col-space10">
+        <div class="layui-container" style="margin: 10px auto">
+          <div id="${id}-search" class="layui-row layui-col-space10">
           </div>
         </div>
       </#if>
@@ -56,10 +57,16 @@
       <#if page_enabled>
         <div id="${id}-page"></div>
         <div id="${id}-page-info">
-          <span name="pageSize" value="${page.pageSize}"></span>
-          <span name="pageNumber" value="${page.pageNumber}"></span>
+          <span name="pageSize"></span>
+          <span name="pageNumber"></span>
         </div>
       </#if>
+
+      <#-- 排序 -->
+      <div id="${id}-order-info">
+        <span name="field"></span>
+        <span name="direction"></span>
+      </div>
     </form>
   </div>
 
@@ -87,7 +94,13 @@
       cols: [fields],
       data: <@json_dump obj=values/>,
       id: '${id}',
-      height: 'full-200'
+      height: 'full-200',
+      <#if page.orders?size gt 0>
+        initSort: {
+          field: '${page.orders[0].field}',
+          type: '${page.orders[0].direction}'
+        }
+      </#if>
     });
 
     <#if page_enabled>
@@ -102,7 +115,7 @@
             console.log(obj);
             $('#${id}-page-info [name=pageSize]').val(obj.limit);
             $('#${id}-page-info [name=pageNumber]').val(obj.curr);
-            $('#${id}').submit();
+            execute();
           }
         }
       });
@@ -143,7 +156,7 @@
     });
 
     refresh.click(function () {
-      location.reload();
+      execute();
     });
 
     <#list head_toolbar as tool>
@@ -207,5 +220,87 @@
         needSelected.attr('disabled', true);
       }
     });
+
+    table.on('sort(${id})', function (obj) {
+      $('#${id}-order-info [name=field]').val(obj.field);
+      $('#${id}-order-info [name=direction]').val(obj.type);
+      execute();
+    });
+
+    var $form = $('#${id}');
+    var $pageInfo = $form.find('#${id}-page-info');
+    var $orderInfo = $form.find('#${id}-order-info');
+
+    var searchValues = <@json_dump obj=page.searches/>;
+
+    var searchValueMap = {};
+
+    $.each(searchValues, function (index, value) {
+      searchValueMap[value.field] = value.value;
+    });
+
+    dict.dynamicSearch($form, $('#${id}-search'), <@json_dump obj=search/>, searchValueMap, <@json_dump obj=rules/>, <@json_dump obj=messages/>, dict.nothing);
+
+    $('#${id}-search').append($(
+      '<div class="layui-col-md2" style="height: 100%" >\n' +
+      '<button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="search" type="button">\n' +
+      '<i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 搜索\n' +
+      '</button>' +
+      '</div>'
+    ).click(function () {
+      $pageInfo.find('[name=pageNumber]').val(1);
+      execute();
+    }));
+
+    <#if page_enabled>
+      $pageInfo.find('[name=pageSize]').val(#{page.pageSize});
+      $pageInfo.find('[name=pageNumber]').val(#{page.pageNumber});
+    </#if>
+
+    $pageInfo.find('[name=field]').val('${page.orders[0].field}');
+    $pageInfo.find('[name=direction]').val('${page.orders[0].direction}');
+
+    var execute = function () {
+
+      var data = {};
+
+      <#if page_enabled>
+        data.pageSize = $pageInfo.find('[name=pageSize]').val();
+        data.pageNumber = $pageInfo.find('[name=pageNumber]').val();
+      </#if>
+
+      data.orders = [
+        {
+          field: $orderInfo.find('[name=field]').val(),
+          direction: $orderInfo.find('[name=direction]').val().toUpperCase()
+        }
+      ];
+      if (data.orders[0].field == null || data.orders[0].field == undefined || data.orders[0].field == '') data.orders = [];
+
+
+      var searchesMap = dict.generateObject(dict.serializeObject($form));
+      data.searches = [];
+
+      $.each(searchesMap, function (key, value) {
+        data.searches.push({field: key, value: value});
+      });
+
+      dict.loadText({
+        url: 'list.html',
+        requestBody: true,
+        type: 'POST',
+        data: data,
+        success: function (result, status, request) {
+          document.open();
+          document.write(result);
+        },
+        error: function (result, status, request) {
+          parent.layer.alert(result.message, {
+            icon: 2,
+            title: result.status
+          });
+        }
+      });
+    };
   </script>
 </#macro>

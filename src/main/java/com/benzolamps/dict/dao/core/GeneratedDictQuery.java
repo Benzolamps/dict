@@ -44,7 +44,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     @Override
     public void applySearch(Search search) {
         if (search != null) {
-            filter.and(Filter.like(search.getField(), '%' + String.valueOf(search.getValue()) + '%'));
+            filter.and(Filter.likeIgnoreCase(search.getField(), '%' + String.valueOf(search.getValue()) + '%'));
         }
     }
 

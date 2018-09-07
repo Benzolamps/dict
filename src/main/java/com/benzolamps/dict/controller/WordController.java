@@ -44,6 +44,7 @@ public class WordController extends BaseController {
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/word/list");
         Page<Word> words = wordService.findPage(pageable);
+        mv.addObject("wordClazzes", wordClazzService.findAll());
         mv.addObject("page", words);
         return mv;
     }

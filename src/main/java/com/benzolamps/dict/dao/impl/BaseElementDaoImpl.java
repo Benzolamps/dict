@@ -13,6 +13,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 单词或短语类的基类Dao接口实现类
+ * @author Benzolamps
+ * @version 2.1.1
+ * @datetime 2018-9-5 22:45:47
+ */
 @SuppressWarnings("unchecked")
 public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> implements BaseElementDao<T> {
 

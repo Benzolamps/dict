@@ -21,7 +21,7 @@ dict.produceFormItem = function (property) {
                 .attr('lay-filter', property.name)
                 .append($(document.createElement('option'))
                     .val('')
-                    .text('请选择' + property.display)
+                    .text(property.display)
                     .addClass('layui-input')
                 );
             for (var i = 0; i < property.options.length; i++) {
@@ -83,7 +83,7 @@ dict.produceFormItem = function (property) {
                 $component = $(document.createElement('input'))
                     .attr('type', 'text')
                     .attr('name', property.name)
-                    .attr('placeholder', '请输入' + property.display)
+                    .attr('placeholder', property.display)
                     .attr('autocomplete', 'off')
                     .attr('maxlength', property.maxLength)
                     .attr('value', property.value)
@@ -95,7 +95,7 @@ dict.produceFormItem = function (property) {
                 $component = $(document.createElement('input'))
                     .attr('type', 'text')
                     .attr('name', property.name)
-                    .attr('placeholder', '请输入' + property.display)
+                    .attr('placeholder', property.display)
                     .attr('maxlength', property.max ? String(property.max).length : 11)
                     .attr('autocomplete', 'off')
                     .attr('value', property.value)
@@ -107,7 +107,7 @@ dict.produceFormItem = function (property) {
                 $component = $(document.createElement('input'))
                     .attr('type', 'text')
                     .attr('name', property.name)
-                    .attr('placeholder', '请输入' + property.display)
+                    .attr('placeholder', property.display)
                     .attr('autocomplete', 'off')
                     .attr('value', property.value)
                     .attr('required', property.notEmpty)
@@ -118,7 +118,7 @@ dict.produceFormItem = function (property) {
                 $component = $(document.createElement('input'))
                     .attr('type', 'text')
                     .attr('name', property.name)
-                    .attr('placeholder', '请输入' + property.display)
+                    .attr('placeholder', property.display)
                     .attr('autocomplete', 'off')
                     .attr('value', property.value)
                     .attr('required', property.notEmpty)
@@ -231,6 +231,7 @@ dict.postInitForm = function (form, fields, extendedRules, extendedMessages, sub
 
         messages[fields[i].name] = itemMessages;
     }
+
     dict.validateForm($form, $.extend(true, rules, extendedRules), $.extend(true, messages, extendedMessages), function () {
         $form.find('input[type=checkbox].dict-switch').each(function () {
             var $next = $(this).next();
@@ -333,12 +334,13 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
  * 表单搜索项
  * @param form
  * @param selector
+ * @param fields
  * @param initValues
  * @param extendedRules
  * @param extendedMessages
  * @param submitHandler
  */
-dict.dynamicSearch = function (form, selector, initValues, extendedRules, extendedMessages, submitHandler) {
+dict.dynamicSearch = function (form, selector, fields, initValues, extendedRules, extendedMessages, submitHandler) {
     var $form = $(form);
     var $div = $(selector);
     for (var i = 0; i < fields.length; i++) {

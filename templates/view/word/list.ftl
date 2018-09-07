@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Word>" -->
+<#-- @ftlvariable name="wordClazzes" type="java.util.Collection<com.benzolamps.dict.bean.WordClazz>" -->
 
 <form id="upload-form" method="post" action="import.json" enctype="multipart/form-data" style="display: none;">
   <input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
@@ -78,4 +79,16 @@
     }
   ]
   page_enabled=true
+  search=[
+    {
+      'name': 'prototype',
+      'display': '单词原形',
+      'type': 'string'
+    },
+    {
+      'name': 'definition',
+      'display': '词义',
+      'type': 'string'
+    }
+  ]
 />
