@@ -1,6 +1,7 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.Phrase;
+import com.benzolamps.dict.controller.vo.PhraseExcelVo;
 import com.benzolamps.dict.service.base.PhraseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,5 +14,5 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("phraseService")
 @Transactional
-public class PhraseServiceImpl extends BaseServiceImpl<Phrase> implements PhraseService {
+public class PhraseServiceImpl extends BaseElementServiceImpl<Phrase, PhraseExcelVo> implements PhraseService {
 }

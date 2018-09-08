@@ -31,7 +31,7 @@
       },
       {
         "title": "短语管理",
-        "href": "${base_url}/content/phrases.html"
+        "href": "${base_url}/phrase/list.html"
       },
       {
         "title": "词库管理",

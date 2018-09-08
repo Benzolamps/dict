@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
  * @datetime 2018-7-1 23:01:56
  */
 @Repository("phraseDao")
-public class PhraseDaoImpl extends BaseDaoImpl<Phrase> implements PhraseDao {
+public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseDao {
 
 }

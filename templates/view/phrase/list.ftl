@@ -8,14 +8,11 @@
 <@nothing><script type="text/javascript"></@nothing>
 <#assign values>
   [
-    <#list page.content as word>
+    <#list page.content as phrase>
       {
-        'id': ${word.id},
-        'prototype': <@json_dump obj=word.prototype/>,
-        'britishPronunciation': <@json_dump obj=word.britishPronunciation/>,
-        'americanPronunciation': <@json_dump obj=word.americanPronunciation/>,
-        'clazzes': [<#list word.clazzes as clazz><@json_dump obj=clazz.name/><#sep>, </#list>],
-        'definition': <@json_dump obj=word.definition/>
+        'id': ${phrase.id},
+        'prototype': <@json_dump obj=phrase.prototype/>,
+        'definition': <@json_dump obj=phrase.definition/>
       }
     </#list>
   ]
@@ -25,23 +22,13 @@
   [
     {
       'name': 'prototype',
-      'display': '单词原形',
+      'display': '短语原形',
       'type': 'string'
     },
     {
       'name': 'definition',
       'display': '词义',
       'type': 'string'
-    },
-    {
-      'name': 'clazzes',
-      'display': '词性',
-      'type': 'string',
-      'options': [
-        <#list wordClazzes as wordClazz>
-          {'id': ${wordClazz.id}, 'value': '${wordClazz.name}'}<#sep>,
-        </#list>
-      ]
     }
   ]
 </#assign>
@@ -58,9 +45,9 @@
         success: function (result, status, request) {
           var endTime = new Date().getTime();
           parent.layer.close(loader);
-          parent.layer.alert('导入单词成功, 共导入 ' + result.data + ' 个单词, 用时 ' + ((endTime - startTime) * 0.001).toFixed(3) + ' 秒', {
+          parent.layer.alert('导入短语成功, 共导入 ' + result.data + ' 个短语, 用时 ' + ((endTime - startTime) * 0.001).toFixed(3) + ' 秒', {
             icon: 1,
-            title: '导入单词成功',
+            title: '导入短语成功',
             yes: function (index) {
               parent.$('iframe')[0].contentWindow.location.reload(true);
               parent.layer.close(index);
@@ -86,20 +73,17 @@
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
-    {'field': 'prototype', 'title': '单词原形', 'sort': true},
-    {'field': 'britishPronunciation', 'title': '英式发音', 'sort': true},
-    {'field': 'americanPronunciation', 'title': '英式发音', 'sort': true},
-    {'field': 'clazzes', 'title': '词性', 'sort': true},
+    {'field': 'prototype', 'title': '短语原形', 'sort': true},
     {'field': 'definition', 'title': '词义', 'sort': true}
   ]
   page=page
   values=values?eval
-  add='${base_url}/word/add.html'
-  edit='${base_url}/word/edit.html'
-  delete='${base_url}/word/delete.json'
+  add='${base_url}/phrase/add.html'
+  edit='${base_url}/phrase/edit.html'
+  delete='${base_url}/phrase/delete.json'
   head_toolbar=[
     {
-      'html': '<i class="layui-icon" style="font-size: 20px;">&#xe60a;</i> 导入单词',
+      'html': '<i class="layui-icon" style="font-size: 20px;">&#xe60a;</i> 导入短语',
       'handler': file_upload
     }
   ]

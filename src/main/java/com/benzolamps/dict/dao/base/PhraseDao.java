@@ -8,5 +8,5 @@ import com.benzolamps.dict.bean.Phrase;
  * @version 2.1.1
  * @datetime 2018-7-1 22:17:54
  */
-public interface PhraseDao extends BaseDao<Phrase> {
+public interface PhraseDao extends BaseElementDao<Phrase> {
 }
