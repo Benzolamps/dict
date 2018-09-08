@@ -28,15 +28,19 @@ public interface DictQuery<B extends BaseEntity> {
 
     /**
      * 获取结果集查询
-     * @param entityManager EntityManager
      * @return 结果集查询
      */
-    TypedQuery<B> getTypedQuery(EntityManager entityManager);
+    TypedQuery<B> getTypedQuery();
 
     /**
      * 获取总条数查询
-     * @param entityManager EntityManager
      * @return 总条数查询
      */
-    TypedQuery<Long> getCountQuery(EntityManager entityManager);
+    TypedQuery<Long> getCountQuery();
+
+    /**
+     * 设置EntityManager
+     * @param entityManager EntityManager
+     */
+    void setEntityManager(EntityManager entityManager);
 }

@@ -20,6 +20,31 @@
     </#list>
   ]
 </#assign>
+
+<#assign search>
+[
+    {
+      'name': 'prototype',
+      'display': '单词原形',
+      'type': 'string'
+    },
+      {
+        'name': 'definition',
+        'display': '词义',
+        'type': 'string'
+      },
+      {
+        'name': 'clazzes',
+        'display': '词性',
+        'type': 'string',
+        'options': [
+          <#list wordClazzes as wordClazz>
+            {'id': ${wordClazz.id}, 'value': '${wordClazz.name}'}<#sep>,
+          </#list>
+        ]
+      }
+  ]
+</#assign>
 <#assign file_upload>
   var $file = $('#upload-form input');
   $file.trigger('click');
@@ -53,7 +78,6 @@
       });
     }, 500);
   });
-
 </#assign>
 <@nothing></script></@nothing>
 <@data_list
@@ -79,16 +103,5 @@
     }
   ]
   page_enabled=true
-  search=[
-    {
-      'name': 'prototype',
-      'display': '单词原形',
-      'type': 'string'
-    },
-    {
-      'name': 'definition',
-      'display': '词义',
-      'type': 'string'
-    }
-  ]
+  search=search?eval
 />

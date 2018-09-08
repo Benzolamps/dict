@@ -291,7 +291,7 @@
         type: 'POST',
         data: data,
         success: function (result, status, request) {
-          document.open();
+          document.close();
           document.write(result);
         },
         error: function (result, status, request) {

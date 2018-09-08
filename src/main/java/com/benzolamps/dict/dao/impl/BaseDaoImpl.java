@@ -44,7 +44,9 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
      * @return GeneratedDictQuery
      */
     protected GeneratedDictQuery<T> generateDictQuery() {
-        return new GeneratedDictQuery<>(entityClass);
+        GeneratedDictQuery<T> query = new GeneratedDictQuery<>(entityClass);
+        query.setEntityManager(entityManager);
+        return query;
     }
 
 	@Override
@@ -58,7 +60,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 		GeneratedDictQuery<T> query = generateDictQuery();
 		query.setFilter(filter);
         try {
-            return query.getTypedQuery(entityManager).getSingleResult();
+            return query.getTypedQuery().getSingleResult();
         } catch (NoResultException | NonUniqueResultException e) {
             return null;
         }
@@ -96,7 +98,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     public Long count(Filter filter) {
         GeneratedDictQuery<T> query = generateDictQuery();
         query.setFilter(filter);
-        return query.getCountQuery(entityManager).getSingleResult();
+        return query.getCountQuery().getSingleResult();
     }
 
     @Override
@@ -104,7 +106,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
         GeneratedDictQuery<T> query = generateDictQuery();
         query.setFilter(filter);
         query.applyOrders(orders);
-        return query.getTypedQuery(entityManager).getResultList();
+        return query.getTypedQuery().getResultList();
 	}
 
     @Override
@@ -134,10 +136,11 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     @Override
 	public Page<T> findPage(DictQuery<T> dictQuery, Pageable pageable) {
         Assert.notNull(dictQuery, " dict query不能为null");
+        dictQuery.setEntityManager(entityManager);
         dictQuery.applyOrders(pageable.getOrders().toArray(new Order[0]));
         if (pageable != null) pageable.getSearches().forEach(dictQuery::applySearch);
-        long total = dictQuery.getCountQuery(entityManager).getSingleResult();
-        TypedQuery<T> typedQuery = dictQuery.getTypedQuery(entityManager);
+        long total = dictQuery.getCountQuery().getSingleResult();
+        TypedQuery<T> typedQuery = dictQuery.getTypedQuery();
         if (pageable != null) {
             if (pageable.getPageNumber() != -1) {
                 int totalPages = (int) Math.ceil((double) total / (double) pageable.getPageSize());

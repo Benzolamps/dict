@@ -12,6 +12,4 @@ import java.util.List;
  * @datetime 2018-7-1 22:12:24
  */
 public interface WordDao extends BaseElementDao<Word> {
-
-    List<Word> searchWords(Integer start, Integer end, String definition, WordClazz clazz);
 }

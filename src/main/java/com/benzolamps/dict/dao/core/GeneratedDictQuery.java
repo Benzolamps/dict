@@ -2,6 +2,7 @@ package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.util.DictString;
+import lombok.Setter;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
@@ -30,6 +31,9 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     /* 筛选 */
     private final Filter filter = new Filter();
 
+    @Setter
+    private EntityManager entityManager;
+
     /** 构造方法 */
     @SuppressWarnings("unchecked")
     public GeneratedDictQuery(Class<B> entityClass) {
@@ -49,7 +53,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     }
 
     @Override
-    public TypedQuery<B> getTypedQuery(EntityManager entityManager) {
+    public TypedQuery<B> getTypedQuery() {
         Assert.notNull(entityManager, "entity manager不能为空");
         String classSimpleName = entityClass.getSimpleName();
         String alias = DictString.toCamel(classSimpleName);
@@ -58,7 +62,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     }
 
     @Override
-    public TypedQuery<Long> getCountQuery(EntityManager entityManager) {
+    public TypedQuery<Long> getCountQuery() {
         Assert.notNull(entityManager, "entity manager不能为空");
         String jpql = select("count(*)");
         return DictJpa.createJpqlQuery(entityManager, jpql, Long.class, null, filter.getParameters().toArray());
