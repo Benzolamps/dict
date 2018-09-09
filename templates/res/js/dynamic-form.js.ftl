@@ -11,7 +11,13 @@ dict.produceFormItem = function (property) {
     var $component;
 
     if (property.readonly && property.value) {
-        $component = $(document.createElement('span')).text(property.value);
+        $component = $(document.createElement('input'))
+            .attr('type', 'text')
+            .attr('name', property.name)
+            .attr('value', property.value)
+            .attr('readonly', true)
+            .css('pointer-events', 'none')
+            .addClass('layui-input');
     } else if (property.options) {
         if (!property.multiple) {
             $component = $(document.createElement('select'))
@@ -178,7 +184,10 @@ dict.postInitForm = function (form, fields, extendedRules, extendedMessages, sub
         }
 
         if (fields[i].remote) {
-            itemRules.remote = fields[i].remote;
+            itemRules.remote = {
+                url: '${base_url}' + fields[i].remote,
+                ignore: fields[i].value
+            };
             itemMessages.remote = fields[i].display + '远程验证失败';
         }
 
@@ -317,7 +326,8 @@ dict.dynamicForm = function (selector, fields, prefix, initValues, extendedRules
         var $tr = $(document.createElement('tr'));
         $table.append($tr);
         var $th = $(document.createElement('th'));
-        $th.html(fields[i].display + (fields[i].notEmpty ? '<span class="required-field">&nbsp;*&nbsp;</span>' : ''));
+        var requiredField = fields[i].notEmpty && !(fields[i].readonly && fields[i].value);
+        $th.html(fields[i].display + (requiredField ? '<span class="required-field">&nbsp;*&nbsp;</span>' : ''));
         $th.attr('title', fields[i].description);
         $th.css({'min-width': '100px', 'max-width': '200px'});
         $tr.append($th);

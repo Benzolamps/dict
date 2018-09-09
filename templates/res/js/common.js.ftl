@@ -49,6 +49,25 @@ Array.prototype.toString = function () {
 }();
 
 $.validator.addMethod('func', function(value, element, param) {
-    return eval('(' + param + ')(value, element)');
+    return eval('(' + param + ').call(this, value, element, param)');
 }, "输入错误");
+
+$.validator.addMethod('constant', function(value, element, param) {
+    return value == param;
+}, "输入错误");
+
+$.validator.methods.remote = function(value, element, param) {
+    return $.validator.methods.constant.call(this, value, element, param.ignore) ||
+        dict.loadText({
+            url: param.url,
+            type: 'get',
+            cache: true,
+            data: new (function () {
+                this[element.name] = value;
+            }),
+            async: false
+        }) == 'true'
+};
+
+
 

@@ -143,4 +143,9 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
             this.persist(elements);
         }
     }
+
+    @Override
+    public boolean prototypeExists(String prototype) {
+        return count(Filter.eq("prototype", prototype)) > 0;
+    }
 }

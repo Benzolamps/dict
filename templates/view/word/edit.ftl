@@ -33,4 +33,9 @@
   title='修改单词'
   fields=fields?eval
   values=word
+  messages={
+      'prototype': {
+      'remote': '该单词已存在'
+    }
+  }
 />

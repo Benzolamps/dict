@@ -4,4 +4,9 @@
   title='修改短语'
   fields=get_dict_property('com.benzolamps.dict.controller.vo.PhraseVo')
   values=phrase
+  messages={
+      'prototype': {
+      'remote': '该短语已存在'
+    }
+  }
 />

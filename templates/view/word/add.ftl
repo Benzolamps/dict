@@ -31,4 +31,9 @@
   id='words'
   title='添加单词'
   fields=fields?eval
+  messages={
+      'prototype': {
+      'remote': '该单词已存在'
+    }
+  }
 />

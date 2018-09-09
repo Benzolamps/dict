@@ -92,9 +92,12 @@
         return object;
     }
 
+
     /**
      * 重新加载页面
      * @param [forcedReload] {boolean}
      */
-    dict.reload = location.reload;
+    dict.reload = function (forcedReload) {
+        location.reload(forcedReload);
+    };
 }(jQuery, dict);

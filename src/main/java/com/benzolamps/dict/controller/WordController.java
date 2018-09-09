@@ -126,4 +126,15 @@ public class WordController extends BaseController {
         int count = wordService.imports(new InputStreamResource(file.getInputStream()));
         return wrapperData(count);
     }
+
+    /**
+     * 检测单词是否已存在
+     * @param prototype 单词原形
+     * @return 检测结果
+     */
+    @RequestMapping(value = "/prototype_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    protected boolean prototypeNotExists(String prototype) {
+        return !wordService.prototypeExists(prototype);
+    }
 }

@@ -18,4 +18,11 @@ public interface BaseElementService<T extends BaseElement> extends BaseService<T
      * @return 导入的个数
      */
     int imports(Resource resource);
+
+    /**
+     * 单词原形或短语原形是否存在
+     * @param prototype 原形
+     * @return 结果
+     */
+    boolean prototypeExists(String prototype);
 }

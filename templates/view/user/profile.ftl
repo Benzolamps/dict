@@ -6,4 +6,5 @@
   messages={
   'nickname': {'pattern': '昵称中存在非法字符'}
   }
+  submit_handler="parent.dict.reload(true);"
 />

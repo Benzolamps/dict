@@ -118,4 +118,16 @@ public class PhraseController extends BaseController {
         int count = phraseService.imports(new InputStreamResource(file.getInputStream()));
         return wrapperData(count);
     }
+
+
+    /**
+     * 检测短语是否已存在
+     * @param prototype 短语原形
+     * @return 检测结果
+     */
+    @RequestMapping(value = "/prototype_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    protected boolean prototypeExists(String prototype) {
+        return !phraseService.prototypeExists(prototype);
+    }
 }

@@ -39,7 +39,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
 
     @Override
     public void applyOrder(Order order) {
-        this.orders.add(order);
+        this.orders.add(new Order.IgnoreCaseOrder(order.getField(), order.getDirection()));
     }
 
     @Override

@@ -319,7 +319,7 @@
       });
     };
 
-    if (dict.reload == location.reload) {
+    if (!dict.reload.callArray) {
       dict.reload = dict.extendsFunction(null, execute);
     } else if (dict.reload.callArray.indexOf(execute) < 0) {
       dict.reload = dict.extendsFunction(dict.reload, execute);
