@@ -61,7 +61,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     @Override
     public TypedQuery<Long> getCountQuery() {
         Assert.notNull(entityManager, "entity manager不能为空");
-        String jpql = select("count(*)");
+        String jpql = select("count(1)");
         return DictJpa.createJpqlQuery(entityManager, jpql, Long.class, null, filter.getParameters().toArray());
     }
 
@@ -71,7 +71,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
         String alias = DictString.toCamel(entityClass.getSimpleName());
         StringJoiner jpql = new StringJoiner(" ");
         filter.build(alias);
-        Order defaultOrder = Order.desc("id");
+        Order defaultOrder = Order.descIgnoreCase("id");
         if (!orders.contains(defaultOrder)) orders.add(defaultOrder);
         orders.forEach(order -> order.build(alias));
         jpql.add("select").add(field).add("from").add(className).add("as").add(alias);
@@ -81,12 +81,8 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
         return jpql.toString();
     }
 
-    /***
-     * 设置条件
-     * @param filter 条件
-     */
-    public void setFilter(Filter filter) {
-        if (filter == null) filter = new Filter();
-        this.filter.and(filter);
+    @Override
+    public Filter getFilter() {
+        return filter;
     }
 }

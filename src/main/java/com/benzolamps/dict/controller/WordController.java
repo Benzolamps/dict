@@ -8,9 +8,11 @@ import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.controller.vo.WordVo;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
+import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.service.base.WordService;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,6 +36,9 @@ public class WordController extends BaseController {
     @Resource
     private WordClazzService wordClazzService;
 
+    @Resource
+    private LibraryService libraryService;
+
     /**
      * 列出所有单词
      * @return ModelAndView
@@ -41,10 +46,15 @@ public class WordController extends BaseController {
     @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
-        ModelAndView mv = new ModelAndView("view/word/list");
-        Page<Word> words = wordService.findPage(pageable);
-        mv.addObject("wordClazzes", wordClazzService.findAll());
-        mv.addObject("page", words);
+        ModelAndView mv = new ModelAndView();
+        if (libraryService.count() > 0) {
+            mv.setViewName("view/word/list");
+            Page<Word> words = wordService.findPage(pageable);
+            mv.addObject("wordClazzes", wordClazzService.findAll());
+            mv.addObject("page", words);
+        } else {
+            mv.setViewName("view/library/lack");
+        }
         return mv;
     }
 
@@ -55,6 +65,7 @@ public class WordController extends BaseController {
     @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView add() {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         ModelAndView mv = new ModelAndView("view/word/add");
         mv.addObject("wordClazzes", wordClazzService.findAll());
         return mv;
@@ -68,7 +79,7 @@ public class WordController extends BaseController {
     @PostMapping("/save.json")
     @ResponseBody
     protected DataVo save(@RequestBody WordVo wordVo) {
-        wordVo.setLibrary(1);
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Word word = WordVo.convertToWord(wordVo);
         word = wordService.persist(word);
         wordVo = WordVo.convertFromWord(word);
@@ -83,6 +94,7 @@ public class WordController extends BaseController {
     @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         ModelAndView mv = new ModelAndView("view/word/edit");
         mv.addObject("word", WordVo.convertFromWord(wordService.find(id)));
         mv.addObject("wordClazzes", wordClazzService.findAll());
@@ -97,7 +109,7 @@ public class WordController extends BaseController {
     @PostMapping("/update.json")
     @ResponseBody
     protected DataVo update(@RequestBody WordVo wordVo) {
-        wordVo.setLibrary(1);
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Word word = WordVo.convertToWord(wordVo);
         word = wordService.update(word);
         wordVo = WordVo.convertFromWord(word);
@@ -111,6 +123,7 @@ public class WordController extends BaseController {
     @PostMapping("/delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         wordService.remove(ids);
         return SUCCESS_VO;
     }
@@ -123,6 +136,7 @@ public class WordController extends BaseController {
     @PostMapping("/import.json")
     @ResponseBody
     protected BaseVo importWords(MultipartFile file) throws IOException {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         int count = wordService.imports(new InputStreamResource(file.getInputStream()));
         return wrapperData(count);
     }
@@ -135,6 +149,7 @@ public class WordController extends BaseController {
     @RequestMapping(value = "/prototype_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     protected boolean prototypeNotExists(String prototype) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return !wordService.prototypeExists(prototype);
     }
 }

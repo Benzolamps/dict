@@ -66,6 +66,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional(readOnly = true)
     public Page<T> findPage(Pageable pageable) {
+        pageable.getOrders().add(Order.desc("id"));
         return baseDao.findPage(pageable);
     }
 

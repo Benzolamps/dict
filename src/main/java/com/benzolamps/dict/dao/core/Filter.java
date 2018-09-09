@@ -3,7 +3,6 @@ package com.benzolamps.dict.dao.core;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 
 /**
@@ -23,12 +22,13 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public Filter and(Filter another) {
-        Assert.notNull(another, "another不能为null");
-        if (!another.isEmpty()) {
-            if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
-            this.add(new OperatorSnippet("and ("));
-            this.addAll(another);
-            this.add(new OperatorSnippet(")"));
+        if (another != null) {
+            if (!another.isEmpty()) {
+                if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
+                this.add(new OperatorSnippet("and ("));
+                this.addAll(another);
+                this.add(new OperatorSnippet(")"));
+            }
         }
         return this;
     }
@@ -39,12 +39,13 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public Filter or(Filter another) {
-        Assert.notNull(another, "another不能为null");
-        if (!another.isEmpty()) {
-            if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
-            this.add(new OperatorSnippet("or ("));
-            this.addAll(another);
-            this.add(new OperatorSnippet(")"));
+        if (another != null) {
+            if (!another.isEmpty()) {
+                if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
+                this.add(new OperatorSnippet("or ("));
+                this.addAll(another);
+                this.add(new OperatorSnippet(")"));
+            }
         }
         return this;
     }
@@ -289,7 +290,7 @@ public class Filter extends SnippetResolver {
      */
     public static Filter in(String field, Collection value) {
         Assert.hasLength(field, "field不能为null或空");
-        if (value == null) value = new HashSet<>();
+        if (value == null) return new Filter().not();
         return binary(field, "in", value);
     }
 
@@ -301,7 +302,7 @@ public class Filter extends SnippetResolver {
      */
     public static Filter inIgnoreCase(String field, Collection<String> value) {
         Assert.hasLength(field, "field不能为null或空");
-        if (value == null) value = new HashSet<>();
+        if (value == null) return new Filter().not();
         else value = value.stream().map(String::toLowerCase).collect(Collectors.toSet());
         return (Filter) new Filter()
             .addSnippet(new OperatorSnippet("lower("))
@@ -318,7 +319,7 @@ public class Filter extends SnippetResolver {
      */
     public static Filter notIn(String field, Collection value) {
         Assert.hasLength(field, "field不能为null或空");
-        if (value == null) value = new HashSet<>();
+        if (value == null) return new Filter();
         return binary(field, "not in", value);
     }
 
@@ -330,7 +331,7 @@ public class Filter extends SnippetResolver {
      */
     public static Filter notInIgnoreCase(String field, Collection<String> value) {
         Assert.hasLength(field, "field不能为null或空");
-        if (value == null) value = new HashSet<>();
+        if (value == null) return new Filter();
         else value = value.stream().map(String::toLowerCase).collect(Collectors.toSet());
         return (Filter) new Filter()
             .addSnippet(new OperatorSnippet("lower("))
@@ -338,6 +339,38 @@ public class Filter extends SnippetResolver {
             .addSnippet(new OperatorSnippet(") not in"))
             .addSnippet(value);
     }
+
+    /**
+     * member of
+     * @param field 字段
+     * @param value 值
+     * @return Filter
+     */
+    public static Filter memberOf(String field, Object value) {
+        Assert.hasLength(field, "field不能为null或空");
+        if (value == null) return new Filter().not();
+        return (Filter) new Filter()
+            .addSnippet(value)
+            .addSnippet(new OperatorSnippet("member of"))
+            .addSnippet(new FieldSnippet(field));
+    }
+
+    /**
+     * not member of
+     * @param field 字段
+     * @param value 值
+     * @return Filter
+     */
+    public static Filter notMemberOf(String field, Object value) {
+        Assert.hasLength(field, "field不能为null或空");
+        if (value == null) return new Filter();
+        return (Filter) new Filter()
+            .addSnippet(value)
+            .addSnippet(new OperatorSnippet("not member of"))
+            .addSnippet(new FieldSnippet(field));
+    }
+
+
 
     /**
      * between and

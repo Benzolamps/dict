@@ -4,7 +4,6 @@ import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
-import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictSpring;
 import lombok.Data;
@@ -35,7 +34,7 @@ public class WordVo implements Serializable {
     /** 单词原形 */
     @NotEmpty
     @Length(max = 255)
-    @DictPropertyInfo(display = "单词原形")
+    @DictPropertyInfo(display = "单词")
     @DictRemote("/word/prototype_not_exists.json")
     private String prototype;
 
@@ -62,9 +61,6 @@ public class WordVo implements Serializable {
     @DictPropertyInfo(display = "词义")
     private String definition;
 
-    /** 词库 */
-    private transient Integer library;
-
     /** 索引 */
     @DictPropertyInfo(display = "索引")
     private Integer index;
@@ -77,7 +73,6 @@ public class WordVo implements Serializable {
     public static Word convertToWord(WordVo wordVo) {
         Assert.notNull(wordVo, "word vo不能为null");
         WordClazzService wordClazzService = DictSpring.getBean(WordClazzService.class);
-        LibraryService libraryService = DictSpring.getBean(LibraryService.class);
         Word word = new Word();
         word.setId(wordVo.getId());
         word.setIndex(wordVo.getIndex());
@@ -85,7 +80,6 @@ public class WordVo implements Serializable {
         word.setBritishPronunciation(wordVo.getBritishPronunciation());
         word.setAmericanPronunciation(wordVo.getAmericanPronunciation());
         word.setDefinition(wordVo.getDefinition());
-        word.setLibrary(libraryService.find(wordVo.getLibrary()));
         word.setClazzes(Arrays.stream(wordVo.getClazzes()).map(clazz -> {
             WordClazz wordClazz = wordClazzService.findByIdOrName(clazz.toString());
             if (wordClazz == null) {
@@ -112,7 +106,6 @@ public class WordVo implements Serializable {
         wordVo.setAmericanPronunciation(word.getAmericanPronunciation());
         wordVo.setPrototype(word.getPrototype());
         wordVo.setClazzes(word.getClazzes().stream().map(WordClazz::getId).toArray(Integer[]::new));
-        wordVo.setLibrary(word.getLibrary().getId());
         return wordVo;
     }
 }

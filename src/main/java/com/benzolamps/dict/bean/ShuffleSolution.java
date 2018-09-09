@@ -35,7 +35,7 @@ public class ShuffleSolution implements Serializable {
     @NotEmpty
     @Length(min = 2, max = 20)
     @Pattern(regexp = "^[0-9a-zA-Z\\u4e00-\\u9fa5]+$")
-    @DictPropertyInfo(display = "乱序方案名称")
+    @DictPropertyInfo(display = "名称")
     private String name;
 
     /** 备注 */

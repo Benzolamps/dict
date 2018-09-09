@@ -31,7 +31,7 @@ public class PhraseVo implements Serializable {
     /** 短语原形 */
     @NotEmpty
     @Length(max = 255)
-    @DictPropertyInfo(display = "短语原形")
+    @DictPropertyInfo(display = "短语")
     @DictRemote("/phrase/prototype_not_exists.json")
     private String prototype;
 
@@ -40,9 +40,6 @@ public class PhraseVo implements Serializable {
     @Length(max = 255)
     @DictPropertyInfo(display = "词义")
     private String definition;
-
-    /** 词库 */
-    private transient Integer library;
 
     /** 索引 */
     @DictPropertyInfo(display = "索引")
@@ -61,7 +58,6 @@ public class PhraseVo implements Serializable {
         phrase.setIndex(phraseVo.getIndex());
         phrase.setPrototype(phraseVo.getPrototype());
         phrase.setDefinition(phraseVo.getDefinition());
-        phrase.setLibrary(libraryService.find(phraseVo.getLibrary()));
         return phrase;
     }
 
@@ -77,7 +73,6 @@ public class PhraseVo implements Serializable {
         phraseVo.setIndex(phrase.getIndex());
         phraseVo.setDefinition(phrase.getDefinition());
         phraseVo.setPrototype(phrase.getPrototype());
-        phraseVo.setLibrary(phrase.getLibrary().getId());
         return phraseVo;
     }
 }

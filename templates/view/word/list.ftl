@@ -25,7 +25,7 @@
   [
     {
       'name': 'prototype',
-      'display': '单词原形',
+      'display': '单词',
       'type': 'string'
     },
     {
@@ -86,7 +86,7 @@
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
-    {'field': 'prototype', 'title': '单词原形', 'sort': true},
+    {'field': 'prototype', 'title': '单词', 'sort': true},
     {'field': 'britishPronunciation', 'title': '英式发音', 'sort': true},
     {'field': 'americanPronunciation', 'title': '英式发音', 'sort': true},
     {'field': 'clazzes', 'title': '词性'},

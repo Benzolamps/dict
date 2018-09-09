@@ -65,9 +65,9 @@ dict.produceFormItem = function (property) {
             .attr('name', property.name)
             .attr('placeholder', '请输入' + property.display)
             .attr('autocomplete', 'off')
-            .attr('value', property.value)
             .attr('required', property.notEmpty)
             .attr('maxlength', property.maxLength)
+            .text(property.value)
             .addClass('layui-input')
             .addClass('layui-textarea');
     } else {

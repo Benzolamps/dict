@@ -114,6 +114,42 @@ public interface BaseDao<T extends BaseEntity> {
 	Page<T> findPage(Pageable pageable);
 
 	/**
+	 * 根据条件和排序获取实体对象集合
+	 * @param count 个数
+	 * @param filter 条件
+	 * @param orders 排序
+	 * @return 实体对象集合
+	 */
+	List<T> findCount(int count, Filter filter, Order... orders);
+
+	/**
+	 * 根据条件和排序获取实体对象集合
+	 * @param count 个数
+	 * @param filter 条件
+	 * @param orders 排序
+	 * @return 实体对象集合
+	 */
+	List<T> findCount(int count, Filter filter, Collection<Order> orders);
+
+	/**
+	 * 根据CriteriaQuery查找实体对象集合
+	 * @param count 个数
+	 * @param criteriaQuery CriteriaQuery
+	 * @return 实体对象集合
+	 */
+	List<T> findCount(int count, CriteriaQuery<T> criteriaQuery);
+
+	/**
+	 * 根据JPQL和参数获取实体对象集合
+	 * @param count 个数
+	 * @param jpql JPQL
+	 * @param parameters 参数
+	 * @param positionParameters 位置参数
+	 * @return 实体对象集合
+	 */
+	List<T> findCount(int count, String jpql, Map<String, Object> parameters, Object... positionParameters);
+
+	/**
 	 * 根据条件获取查询结果条数
 	 * @param filter 条件
 	 * @return 查询结果条数

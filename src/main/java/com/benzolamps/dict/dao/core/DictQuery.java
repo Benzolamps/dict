@@ -43,4 +43,10 @@ public interface DictQuery<B extends BaseEntity> {
      * @param entityManager EntityManager
      */
     void setEntityManager(EntityManager entityManager);
+
+    /**
+     * 获取筛选
+     * @return 筛选
+     */
+    Filter getFilter();
 }

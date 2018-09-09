@@ -50,6 +50,8 @@
   title='添加乱序方案'
   fields=fields?eval
   messages={
-    'name': {'pattern': '乱序方案名称必须是汉字、字母、数字的组合'}
+    'name': {
+      'pattern': '名称必须是汉字、字母、数字的组合'
+    }
   }
 />

@@ -1,6 +1,5 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.ExcelHeader;
 import com.benzolamps.dict.component.Format;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,15 +29,13 @@ public abstract class BaseElement extends BaseEntity {
     protected Integer index;
 
     /** 原形 */
-    @ExcelHeader(value = 1, notEmpty = true)
-    @Column(nullable = false, updatable = false, unique = true)
+    @Column(nullable = false, unique = true)
     @NotEmpty
     @Length(max = 255)
     private String prototype;
 
     /** 词义 */
     @Format("replaceString")
-    @ExcelHeader(value = 2, notEmpty = true)
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 255)

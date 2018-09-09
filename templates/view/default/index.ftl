@@ -101,6 +101,19 @@
                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
               </a>
             </li>
+            <li class="layui-nav-item" lay-unselect>
+              <a style="color: #333333">当前词库：${current_library().name}</a>
+              <dl class="layui-nav-child">
+                <#list all_libraries() as library>
+                  <#-- @ftlvariable name="library" type="com.benzolamps.dict.bean.Library" -->
+                  <dd<#if current_library() == library> class="layui-this"</#if>>
+                    <a onclick="changeCurrentLibrary(${library.id});">
+                      ${library.name}
+                    </a>
+                  </dd>
+                </#list>
+              </dl>
+            </li>
           </ul>
           <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" lay-unselect>
@@ -248,20 +261,13 @@
                 url: '${base_url}/user/logout.json',
                 type: 'post',
                 success: function (result, status, request) {
-                  if (result) {
-                    layer.alert('注销成功', {
-                      icon: 1,
-                      title: '注销成功',
-                      yes: function (index) {
-                        dict.reload(true);
-                      }
-                    });
-                  } else {
-                    layer.alert('注销失败', {
-                      icon: 2,
-                      title: '注销失败'
-                    });
-                  }
+                  layer.alert('注销成功', {
+                    icon: 1,
+                    title: '注销成功',
+                    yes: function (index) {
+                      dict.reload(true);
+                    }
+                  });
                 },
                 error: function (result, status, request) {
                   layer.alert(result.message, {
@@ -288,6 +294,25 @@
             }, 500);
           }
         });
+
+        var changeCurrentLibrary = function (id) {
+          setTimeout(function () {
+            dict.loadText({
+              url: '${base_url}/library/change_current.json',
+              type: 'get',
+              data: {id: id},
+              success: function () {
+                dict.reload(true);
+              },
+              error: function (result) {
+                layer.alert(result.message, {
+                  icon: 2,
+                  title: result.status
+                });
+              }
+            });
+          }, 500);
+        }
       </script>
     </body>
   </html>

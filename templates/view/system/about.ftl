@@ -1,9 +1,3 @@
-<#--
-  -- 关于我们界面
-  -- author: Benzolamps
-  -- version: 2.1.1
-  -- datetime: 2018-7-11 19:20:00
-  -->
 <#assign accounts = url_yaml_parse('${remote_base_url}/yml/accounts.yml')/>
 <#assign about><#include '/res/yml/about.yml.ftl'/></#assign>
 <#assign about = string_yaml_parse(about)/>

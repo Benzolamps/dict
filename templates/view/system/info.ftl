@@ -1,10 +1,3 @@
-<#--
-  -- 系统信息界面
-  -- author: Benzolamps
-  -- version: 2.1.1
-  -- datetime: 2018-7-11 19:19:16
-  -->
-
 <div class="layui-row">
   <div class="layui-col-xs6">
     <div class="layui-card">

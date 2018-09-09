@@ -15,22 +15,18 @@
 <#assign title>程序出问题了</#assign>
 <div class="layui-card">
   <div class="layui-card-body">
+    <blockquote class="layui-elem-quote">
+      请求出错啦！&nbsp;&nbsp;&nbsp;&nbsp;
+      <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back();">
+        <i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 返回
+      </button>
+    </blockquote>
     <div class="layui-row">
       <table class="layui-table">
         <colgroup>
           <col width="30">
           <col width="70">
         </colgroup>
-        <thead>
-          <tr>
-            <th colspan="2">
-              请求出错啦!! &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back(); return false;">
-                <i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 返回
-              </button>
-            </th>
-          </tr>
-        </thead>
         <tbody>
           <tr>
             <td title="时间戳">时间戳</td>

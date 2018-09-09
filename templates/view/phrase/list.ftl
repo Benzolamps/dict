@@ -22,7 +22,7 @@
   [
     {
       'name': 'prototype',
-      'display': '短语原形',
+      'display': '短语',
       'type': 'string'
     },
     {
@@ -69,11 +69,11 @@
 </#assign>
 <@nothing></script></@nothing>
 <@data_list
-  id='words'
+  id='phrases'
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
-    {'field': 'prototype', 'title': '短语原形', 'sort': true},
+    {'field': 'prototype', 'title': '短语', 'sort': true},
     {'field': 'definition', 'title': '词义', 'sort': true}
   ]
   page=page

@@ -4,10 +4,7 @@ import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.controller.vo.BaseElementVo;
 import com.benzolamps.dict.dao.base.BaseElementDao;
-import com.benzolamps.dict.dao.core.Filter;
-import com.benzolamps.dict.dao.core.Order;
-import com.benzolamps.dict.dao.core.Page;
-import com.benzolamps.dict.dao.core.Pageable;
+import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.service.base.BaseElementService;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.util.DictExcel;
@@ -34,6 +31,7 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
  */
 public abstract class BaseElementServiceImpl<T extends BaseElement, R extends BaseElementVo<T>>
     extends BaseServiceImpl<T> implements BaseElementService<T> {
+
     @javax.annotation.Resource
     private LibraryService libraryService;
 
@@ -47,6 +45,8 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         this.baseElementDao = baseElementDao;
     }
 
+
+    /** 构造器 */
     @SuppressWarnings("unchecked")
     public BaseElementServiceImpl() {
         ResolvableType resolvableType = ResolvableType.forClass(getClass());
@@ -57,6 +57,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     @Transactional(readOnly = true)
     public Page<T> findPage(Pageable pageable) {
         pageable.getOrders().add(Order.asc("index"));
+        pageable.getFilter().and(Filter.eq("library", libraryService.getCurrent()));
         return super.findPage(pageable);
     }
 
@@ -65,12 +66,10 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         Library current = libraryService.getCurrent();
         Assert.notNull(current, "未选择词库");
         element.setLibrary(current);
-        Filter filter = Filter.eq("library", current).and(Filter.eq("prototype", element.getPrototype()));
-        int count = count(filter).intValue();
-        if (count == 0) {
+        if (!prototypeExists(element.getPrototype())) {
             return super.persist(element);
         } else {
-            BaseElement ref = findSingle(filter);
+            BaseElement ref = findByPrototype(element.getPrototype());
             element.setId(ref.getId());
             return update(element);
         }
@@ -91,7 +90,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         elementList.removeIf(element -> elementList.stream().filter(e -> e.getPrototype().equals(element.getPrototype())).count() > 1);
         elementList.forEach(element -> element.setLibrary(current));
         elements.removeAll(elementList);
-        // elements.forEach(this::persist);
+        this.update(elements);
         super.persist(elementList);
     }
 
@@ -120,8 +119,10 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     public T update(T element, String... ignoreProperties) {
         Library current = libraryService.getCurrent();
         Assert.notNull(current, "未选择词库");
-        element.setLibrary(current);
-        return super.update(element, ignoreProperties);
+        String[] ignoreProperties1 = new String[ignoreProperties.length + 1];
+        System.arraycopy(ignoreProperties, 0, ignoreProperties1, 1, ignoreProperties.length);
+        ignoreProperties1[0] = "library";
+        return super.update(element, ignoreProperties1);
     }
 
     @Override
@@ -146,6 +147,13 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
 
     @Override
     public boolean prototypeExists(String prototype) {
-        return count(Filter.eq("prototype", prototype)) > 0;
+        Library current = libraryService.getCurrent();
+        return count(Filter.eq("prototype", prototype).and(Filter.eq("library", current))) > 0;
+    }
+
+    @Override
+    public T findByPrototype(String prototype) {
+        Library current = libraryService.getCurrent();
+        return findSingle(Filter.eq("prototype", prototype).and(Filter.eq("library", current)));
     }
 }

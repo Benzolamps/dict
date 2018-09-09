@@ -62,7 +62,9 @@
   fields=fields?eval
   values=solution
   messages={
-    'name': {'pattern': '乱序方案名称必须是汉字、字母、数字的组合'}
+    'name': {
+      'pattern': '乱序方案名称必须是汉字、字母、数字的组合'
+    }
   }
   ready_handler=ready_handler
 />

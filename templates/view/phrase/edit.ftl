@@ -6,7 +6,7 @@
   values=phrase
   messages={
       'prototype': {
-      'remote': '该短语已存在'
+      'remote': '短语已存在'
     }
   }
 />

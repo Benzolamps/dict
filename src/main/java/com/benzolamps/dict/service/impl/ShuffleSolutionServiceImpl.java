@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
 import com.benzolamps.dict.controller.vo.DictPropertyInfoVo;
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
+import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
 import com.benzolamps.dict.util.*;
@@ -90,7 +91,9 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Override
     @Transactional(readOnly = true)
     public Page<ShuffleSolution> findAll() {
-        return shuffleSolutionDao.findAll();
+        Page<ShuffleSolution> shuffleSolutions = shuffleSolutionDao.findAll();
+        shuffleSolutions.getOrders().add(Order.desc("id"));
+        return shuffleSolutions;
     }
 
     @Override

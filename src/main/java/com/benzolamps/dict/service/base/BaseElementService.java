@@ -25,4 +25,11 @@ public interface BaseElementService<T extends BaseElement> extends BaseService<T
      * @return 结果
      */
     boolean prototypeExists(String prototype);
+
+    /**
+     * 通过原形查找单词或短语
+     * @param prototype 原形
+     * @return 单词或短语
+     */
+    T findByPrototype(String prototype);
 }

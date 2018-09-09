@@ -36,4 +36,6 @@
 [#function abbreviate str width ellipsis][/#function]
 [#function constant var][/#function]
 [#function current_user][/#function]
+[#function current_library][/#function]
+[#function all_libraries][/#function]
 [#include '/view/includes/main.ftl'/]

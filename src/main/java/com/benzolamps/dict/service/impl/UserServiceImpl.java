@@ -56,7 +56,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
         Assert.hasLength(user.getPassword(), "password不能为null或空");
         User ref = findByUsername(user.getUsername());
         if (ref == null) return false;
-        return ref.getPassword().equals(encryptPassword(user.getPassword()));
+        return ref.getPassword().equalsIgnoreCase(encryptPassword(user.getPassword()));
     }
 
     @Override

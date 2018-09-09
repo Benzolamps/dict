@@ -1,6 +1,7 @@
 package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.util.DictMath;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -57,6 +58,11 @@ public class Pageable implements Serializable {
 	@Getter
 	@Setter
 	private Set<Search> searches = EMPTY_SET;
+
+	/** 筛选 */
+	@Getter
+	@JsonIgnore
+	private Filter filter = new Filter();
 
 	/**
 	 * 构造方法

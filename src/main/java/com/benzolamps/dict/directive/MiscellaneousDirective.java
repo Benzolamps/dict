@@ -1,5 +1,6 @@
 package com.benzolamps.dict.directive;
 
+import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.service.base.UserService;
 import freemarker.template.TemplateMethodModelEx;
@@ -25,8 +26,21 @@ public class MiscellaneousDirective {
     @Resource
     private UserService userService;
 
+    @Resource
+    private LibraryService libraryService;
+
     @Bean
     protected TemplateMethodModelEx currentUserMethod() {
         return arguments -> userService.getCurrent();
+    }
+
+    @Bean
+    protected TemplateMethodModelEx currentLibraryMethod() {
+        return arguments -> libraryService.getCurrent();
+    }
+
+    @Bean
+    protected TemplateMethodModelEx allLibrariesMethod() {
+        return arguments -> libraryService.findAll();
     }
 }

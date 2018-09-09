@@ -35,7 +35,7 @@
       },
       {
         "title": "词库管理",
-        "href": "${base_url}/content/libraries.html"
+        "href": "${base_url}/library/list.html"
       },
       {
         "title": "单词分组管理",

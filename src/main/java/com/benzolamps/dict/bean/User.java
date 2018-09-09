@@ -12,9 +12,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -71,4 +69,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     @DictPropertyInfo(display = "昵称", description = "昵称必须是汉字、数字、字母、下划线、短横线的组合")
     private String nickname;
+
+    /** 词库 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "library")
+    private Library library;
 }

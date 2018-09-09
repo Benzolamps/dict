@@ -54,7 +54,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	@Override
 	public T findSingle(Filter filter) {
 		GeneratedDictQuery<T> query = generateDictQuery();
-		query.setFilter(filter);
+        query.getFilter().and(filter);
         try {
             return query.getTypedQuery().getSingleResult();
         } catch (NoResultException | NonUniqueResultException e) {
@@ -93,14 +93,14 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     @Override
     public Long count(Filter filter) {
         GeneratedDictQuery<T> query = generateDictQuery();
-        query.setFilter(filter);
+        query.getFilter().and(filter);
         return query.getCountQuery().getSingleResult();
     }
 
     @Override
 	public List<T> findList(Filter filter, Order... orders) {
         GeneratedDictQuery<T> query = generateDictQuery();
-        query.setFilter(filter);
+        query.getFilter().and(filter);
         Arrays.stream(orders).forEach(query::applyOrder);
         return query.getTypedQuery().getResultList();
 	}
@@ -134,7 +134,10 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
         Assert.notNull(dictQuery, " dict query不能为null");
         dictQuery.setEntityManager(entityManager);
         pageable.getOrders().forEach(dictQuery::applyOrder);
-        if (pageable != null) pageable.getSearches().forEach(dictQuery::applySearch);
+        if (pageable != null) {
+            pageable.getSearches().forEach(dictQuery::applySearch);
+            dictQuery.getFilter().and(pageable.getFilter());
+        }
         long total = dictQuery.getCountQuery().getSingleResult();
         TypedQuery<T> typedQuery = dictQuery.getTypedQuery();
         if (pageable != null) {
@@ -155,6 +158,34 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     @Override
     public Page<T> findPage(Pageable pageable) {
         return findPage(generateDictQuery(), pageable);
+    }
+
+    @Override
+    public List<T> findCount(int count, Filter filter, Order... orders) {
+        GeneratedDictQuery<T> query = generateDictQuery();
+        query.getFilter().and(filter);
+        Arrays.stream(orders).forEach(query::applyOrder);
+        return query.getTypedQuery().setMaxResults(count).getResultList();
+    }
+
+    @Override
+    public List<T> findCount(int count, Filter filter, Collection<Order> orders) {
+        Order[] orderArray = orders == null ? new Order[0] : orders.toArray(new Order[0]);
+        return findCount(count, filter, orderArray);
+    }
+
+    @Override
+    public List<T> findCount(int count, CriteriaQuery<T> criteriaQuery) {
+        Assert.notNull(criteriaQuery, "criteria query不能为null");
+        return entityManager.createQuery(criteriaQuery).setMaxResults(count).getResultList();
+    }
+
+    @Override
+    public List<T> findCount(int count, String jpql, Map<String, Object> parameters, Object... positionParameters) {
+        Assert.hasLength(jpql, "jpql不能为null或空");
+        return DictJpa.createJpqlQuery(entityManager, jpql, entityClass, parameters, positionParameters)
+            .setMaxResults(count)
+            .getResultList();
     }
 
     @Override

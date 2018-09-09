@@ -52,12 +52,12 @@
                 title || title.trim().length > 0 || (title = children[j].title);
                 /* 将找到的栏目设为选中 */
                 if (column >= 0 && child >= 0) {
-                  parent.$('.layui-nav-itemed').removeClass('layui-nav-itemed');
-                  parent.$('.layui-this').removeClass('layui-this');
                   var $li = parent.$('ul.dict-nav-tree>li').eq(column);
+                  $li.parent().find('.layui-nav-itemed').removeClass('layui-nav-itemed');
                   $li.addClass('layui-nav-itemed');
                   /* language=JQuery-CSS */
                   var $dd = $li.find('dl.layui-nav-child>dd').eq(child);
+                  $dd.parent().find('.layui-this').removeClass('layui-this');
                   $dd.addClass('layui-this');
                   localStorage.setItem('column', column);
                   localStorage.setItem('child', child);

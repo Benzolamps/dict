@@ -8,8 +8,10 @@ import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.controller.vo.PhraseVo;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
+import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.PhraseService;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,6 +32,9 @@ public class PhraseController extends BaseController {
     @Resource
     private PhraseService phraseService;
 
+    @Resource
+    private LibraryService libraryService;
+
     /**
      * 列出所有短语
      * @return ModelAndView
@@ -37,9 +42,14 @@ public class PhraseController extends BaseController {
     @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
-        ModelAndView mv = new ModelAndView("view/phrase/list");
-        Page<Phrase> phrases = phraseService.findPage(pageable);
-        mv.addObject("page", phrases);
+        ModelAndView mv = new ModelAndView();
+        if (libraryService.count() > 0) {
+            mv.setViewName("view/phrase/list");
+            Page<Phrase> phrases = phraseService.findPage(pageable);
+            mv.addObject("page", phrases);
+        } else {
+            mv.setViewName("view/library/lack");
+        }
         return mv;
     }
 
@@ -50,6 +60,7 @@ public class PhraseController extends BaseController {
     @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView add() {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return new ModelAndView("view/phrase/add");
     }
 
@@ -61,7 +72,7 @@ public class PhraseController extends BaseController {
     @PostMapping("/save.json")
     @ResponseBody
     protected DataVo save(@RequestBody PhraseVo phraseVo) {
-        phraseVo.setLibrary(1);
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Phrase phrase = PhraseVo.convertToPhrase(phraseVo);
         phrase = phraseService.persist(phrase);
         phraseVo = PhraseVo.convertFromPhrase(phrase);
@@ -76,6 +87,7 @@ public class PhraseController extends BaseController {
     @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         ModelAndView mv = new ModelAndView("view/phrase/edit");
         mv.addObject("phrase", PhraseVo.convertFromPhrase(phraseService.find(id)));
         return mv;
@@ -89,7 +101,7 @@ public class PhraseController extends BaseController {
     @PostMapping("/update.json")
     @ResponseBody
     protected DataVo update(@RequestBody PhraseVo phraseVo) {
-        phraseVo.setLibrary(1);
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Phrase phrase = PhraseVo.convertToPhrase(phraseVo);
         phrase = phraseService.update(phrase);
         phraseVo = PhraseVo.convertFromPhrase(phrase);
@@ -103,6 +115,7 @@ public class PhraseController extends BaseController {
     @PostMapping("/delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         phraseService.remove(ids);
         return SUCCESS_VO;
     }
@@ -115,6 +128,7 @@ public class PhraseController extends BaseController {
     @PostMapping("/import.json")
     @ResponseBody
     protected BaseVo importPhrases(MultipartFile file) throws IOException {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         int count = phraseService.imports(new InputStreamResource(file.getInputStream()));
         return wrapperData(count);
     }
@@ -128,6 +142,7 @@ public class PhraseController extends BaseController {
     @RequestMapping(value = "/prototype_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     protected boolean prototypeExists(String prototype) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return !phraseService.prototypeExists(prototype);
     }
 }

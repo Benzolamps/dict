@@ -66,7 +66,7 @@ $.validator.methods.remote = function(value, element, param) {
                 this[element.name] = value;
             }),
             async: false
-        }) == 'true'
+        }) != 'false'
 };
 
 
