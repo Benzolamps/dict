@@ -13,23 +13,6 @@
     });
   };
 
-  <#assign submit_handler>
-    !function (result, status, request) {
-      var index = parent.layer.getFrameIndex(window.name);
-      parent.layer.close(index);
-      parent.$('iframe')[0].contentWindow.location.reload(true);
-    }(result, status, request);
-  </#assign>
-
-  <#assign error_handler>
-    !function (result, status, request) {
-      parent.layer.alert(result.message, {
-        icon: 2,
-        title: result.status
-      });
-    }(result, status, request);
-  </#assign>
-
   <#assign ready_handler>
     <#if solution.strategyClass??>
       showEdit(append(1), '${solution.strategyClass}');
@@ -71,7 +54,6 @@
       </#list>
     ]
   </#assign>
-  <@nothing>;</@nothing>
 </script>
 
 <@data_edit
@@ -82,7 +64,5 @@
   messages={
     'name': {'pattern': '乱序方案名称必须是汉字、字母、数字的组合'}
   }
-  submit_handler=submit_handler
-  error_handler=error_handler
   ready_handler=ready_handler
 />

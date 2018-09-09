@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * 短语Controller
@@ -104,7 +103,7 @@ public class PhraseController extends BaseController {
     @PostMapping("/delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
-        Arrays.stream(ids).forEach(phraseService::remove);
+        phraseService.remove(ids);
         return SUCCESS_VO;
     }
 

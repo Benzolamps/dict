@@ -2,8 +2,8 @@ package com.benzolamps.dict.dao.core;
 
 import org.springframework.util.Assert;
 
-import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 /**
@@ -12,59 +12,10 @@ import java.util.stream.Collectors;
  * @version 2.1.1
  * @datetime 2018-7-25 19:17:46
  */
-@SuppressWarnings({"unused", "SpellCheckingInspection"})
-public class Filter implements Serializable {
+@SuppressWarnings("SpellCheckingInspection")
+public class Filter extends SnippetResolver {
 
     private static final long serialVersionUID = -2317957195936033587L;
-
-    /* 操作符代码片段 */
-    private static class OperatorSnippet {
-
-        private final String operator;
-
-        OperatorSnippet(String operator) {
-            this.operator = operator;
-        }
-
-        @Override
-        public String toString() {
-            return operator;
-        }
-    }
-
-    /* 字段代码片段 */
-    private static class FieldSnippet {
-        private final String field;
-
-        FieldSnippet(String field) {
-            this.field = field;
-        }
-
-        @Override
-        public String toString() {
-            return field;
-        }
-    }
-
-    /* 代码片段 */
-    private List<Object> snippets;
-
-    /* 参数 */
-    private List<Object> parameters;
-
-    /* 代码条件片段 */
-    private StringJoiner snippet;
-
-    /** 构造方法 */
-    public Filter() {
-        snippets = new ArrayList<>();
-    }
-
-    /* 添加一个片段 */
-    private Filter addSnippet(Object obj) {
-        snippets.add(obj);
-        return this;
-    }
 
     /**
      * 与
@@ -73,11 +24,11 @@ public class Filter implements Serializable {
      */
     public Filter and(Filter another) {
         Assert.notNull(another, "another不能为null");
-        if (!another.snippets.isEmpty()) {
-            if (snippets.isEmpty()) snippets.add(new OperatorSnippet("1 = 1"));
-            snippets.add(new OperatorSnippet("and ("));
-            snippets.addAll(another.snippets);
-            snippets.add(new OperatorSnippet(")"));
+        if (!another.isEmpty()) {
+            if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
+            this.add(new OperatorSnippet("and ("));
+            this.addAll(another);
+            this.add(new OperatorSnippet(")"));
         }
         return this;
     }
@@ -89,11 +40,11 @@ public class Filter implements Serializable {
      */
     public Filter or(Filter another) {
         Assert.notNull(another, "another不能为null");
-        if (!another.snippets.isEmpty()) {
-            if (snippets.isEmpty()) snippets.add(new OperatorSnippet("1 = 1"));
-            snippets.add(new OperatorSnippet("or ("));
-            snippets.addAll(another.snippets);
-            snippets.add(new OperatorSnippet(")"));
+        if (!another.isEmpty()) {
+            if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
+            this.add(new OperatorSnippet("or ("));
+            this.addAll(another);
+            this.add(new OperatorSnippet(")"));
         }
         return this;
     }
@@ -103,9 +54,9 @@ public class Filter implements Serializable {
      * @return Filter
      */
     public Filter not() {
-        if (snippets.isEmpty()) snippets.add(new OperatorSnippet("1 = 1"));
-        snippets.add(0, new OperatorSnippet("not ("));
-        snippets.add(new OperatorSnippet(")"));
+        if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
+        this.add(0, new OperatorSnippet("not ("));
+        this.add(new OperatorSnippet(")"));
         return this;
     }
 
@@ -114,48 +65,21 @@ public class Filter implements Serializable {
      * @param alias 别名
      */
     @SuppressWarnings("deprecation")
+    @Override
     public void build(String alias) {
-        Assert.hasLength(alias, "alias不能为null或空");
-        if (snippets.isEmpty()) snippets.add(new OperatorSnippet("1 = 1"));
-        parameters = new ArrayList<>();
-        snippet = new StringJoiner(" ");
-        for (Object snippet : snippets) {
-            if (snippet instanceof OperatorSnippet) {
-                this.snippet.add(snippet.toString());
-            } else if (snippet instanceof FieldSnippet) {
-                this.snippet.add(alias + "." + snippet.toString());
-            } else {
-                this.snippet.add("?" + parameters.size());
-                parameters.add(snippet);
-            }
-        }
-    }
-
-    /**
-     * 获取代码片段
-     * @return 代码片段
-     */
-    public String getSnippet() {
-        return snippet.toString();
-    }
-
-    /**
-     * 获取参数集合
-     * @return 参数集合
-     */
-    public List<Object> getParameters() {
-        return parameters;
+        if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
+        super.build(alias);
     }
 
     private static Filter binary(String field, String operator, Object value) {
-        return new Filter()
+        return (Filter) new Filter()
             .addSnippet(new FieldSnippet(field))
             .addSnippet(new OperatorSnippet(operator))
             .addSnippet(value);
     }
 
     private static Filter binaryIgnoreCase(String field, String operator, Object value) {
-        return new Filter()
+        return (Filter) new Filter()
             .addSnippet(new OperatorSnippet("lower("))
             .addSnippet(new FieldSnippet(field))
             .addSnippet(new OperatorSnippet(") " + operator + " lower("))
@@ -379,7 +303,7 @@ public class Filter implements Serializable {
         Assert.hasLength(field, "field不能为null或空");
         if (value == null) value = new HashSet<>();
         else value = value.stream().map(String::toLowerCase).collect(Collectors.toSet());
-        return new Filter()
+        return (Filter) new Filter()
             .addSnippet(new OperatorSnippet("lower("))
             .addSnippet(new FieldSnippet(field))
             .addSnippet(new OperatorSnippet(") in"))
@@ -408,7 +332,7 @@ public class Filter implements Serializable {
         Assert.hasLength(field, "field不能为null或空");
         if (value == null) value = new HashSet<>();
         else value = value.stream().map(String::toLowerCase).collect(Collectors.toSet());
-        return new Filter()
+        return (Filter) new Filter()
             .addSnippet(new OperatorSnippet("lower("))
             .addSnippet(new FieldSnippet(field))
             .addSnippet(new OperatorSnippet(") not in"))
@@ -426,7 +350,7 @@ public class Filter implements Serializable {
         Assert.hasLength(field, "field不能为null或空");
         Assert.notNull(left, "left不能为null");
         Assert.notNull(right, "right不能为null");
-        return new Filter()
+        return (Filter) new Filter()
             .addSnippet(new FieldSnippet(field))
             .addSnippet(new OperatorSnippet("between"))
             .addSnippet(left)
@@ -445,7 +369,7 @@ public class Filter implements Serializable {
         Assert.hasLength(field, "field不能为null或空");
         Assert.hasLength(left, "left不能为null或空");
         Assert.hasLength(right, "right不能为null或空");
-        return new Filter()
+        return (Filter) new Filter()
             .addSnippet(new OperatorSnippet("lower("))
             .addSnippet(new FieldSnippet(field))
             .addSnippet(new OperatorSnippet(") between lower("))
@@ -462,7 +386,7 @@ public class Filter implements Serializable {
      */
     public static Filter isNull(String field) {
         Assert.hasLength(field, "field不能为null或空");
-        return new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is null"));
+        return (Filter) new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is null"));
     }
 
     /**
@@ -472,6 +396,6 @@ public class Filter implements Serializable {
      */
     public static Filter isNotNull(String field) {
         Assert.hasLength(field, "field不能为null或空");
-        return new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is not null"));
+        return (Filter) new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is not null"));
     }
 }

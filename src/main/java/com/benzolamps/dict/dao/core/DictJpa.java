@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -23,14 +22,14 @@ import java.util.Map;
 public class DictJpa {
 
     /**
-     *
-     * @param entityManager
-     * @param jpql
-     * @param tClass
-     * @param parameters
-     * @param positionParameters
-     * @param <T>
-     * @return
+     * 创建一个JPQL查询
+     * @param entityManager EntityManager
+     * @param jpql JPQL
+     * @param tClass 类型
+     * @param parameters 参数
+     * @param positionParameters 位置参数
+     * @param <T> 类型
+     * @return TypedQuery
      */
     @SuppressWarnings("unchecked")
     public static <T> TypedQuery<T> createJpqlQuery(
@@ -54,8 +53,15 @@ public class DictJpa {
         return query;
     }
 
+    /**
+     * 执行一个JPQL语句
+     * @param entityManager EntityManager
+     * @param jpql JPQL
+     * @param parameters 参数
+     * @param positionParameters 位置参数
+     */
     @SuppressWarnings("unchecked")
-    public static void createJpqlQuery(
+    public static void executeJpqlQuery(
             EntityManager entityManager,
             String jpql,
             Map<String, Object> parameters,
@@ -74,6 +80,15 @@ public class DictJpa {
         query.executeUpdate();
     }
 
+    /**
+     * 创建一个原生SQL查询
+     * @param entityManager EntityManager
+     * @param sql SQL
+     * @param tClass 类型
+     * @param parameters 参数
+     * @param positionParameters 位置参数
+     * @return org.hibernate.Query
+     */
     @SuppressWarnings("unchecked")
     public static org.hibernate.Query createNativeQuery(
             EntityManager entityManager,
@@ -101,6 +116,13 @@ public class DictJpa {
         }
     }
 
+    /**
+     * 执行一个原生SQL语句
+     * @param entityManager EntityManager
+     * @param sql SQL
+     * @param parameters 参数
+     * @param positionParameters 位置参数
+     */
     @SuppressWarnings("unchecked")
     public static void executeNativeQuery(
             EntityManager entityManager,

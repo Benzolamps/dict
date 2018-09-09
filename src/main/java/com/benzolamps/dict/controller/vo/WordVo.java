@@ -3,6 +3,7 @@ package com.benzolamps.dict.controller.vo;
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.component.DictPropertyInfo;
+import com.benzolamps.dict.component.DictReadonly;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictSpring;
@@ -35,6 +36,7 @@ public class WordVo implements Serializable {
     @NotEmpty
     @Length(max = 255)
     @DictPropertyInfo(display = "单词原形")
+    @DictReadonly
     private String prototype;
 
     /** 美式发音 */

@@ -91,7 +91,7 @@
       <div class="layui-layout layui-layout-admin">
         <div class="layui-header" style="background-color: #FBFBFB">
           <div class="layui-logo" style="background-color: #FFB800">
-            <a onclick="location.reload(true);" title="${system_title} ~ ${system_version}" >
+            <a onclick="location.dict(true);" title="${system_title} ~ ${system_version}" >
               ${abbreviate('${system_title} ~ ${system_version}', 20, '...')?html}
             </a>
           </div>
@@ -253,7 +253,7 @@
                       icon: 1,
                       title: '注销成功',
                       yes: function (index) {
-                        location.reload(true);
+                        dict.reload(true);
                       }
                     });
                   } else {

@@ -2,6 +2,7 @@ package com.benzolamps.dict.controller.vo;
 
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.component.DictPropertyInfo;
+import com.benzolamps.dict.component.DictReadonly;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.util.DictSpring;
 import lombok.Data;
@@ -31,6 +32,7 @@ public class PhraseVo implements Serializable {
     @NotEmpty
     @Length(max = 255)
     @DictPropertyInfo(display = "短语原形")
+    @DictReadonly
     private String prototype;
 
     /** 词义 */

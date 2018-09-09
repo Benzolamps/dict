@@ -91,4 +91,10 @@
         console.log(object);
         return object;
     }
+
+    /**
+     * 重新加载页面
+     * @param [forcedReload] {boolean}
+     */
+    dict.reload = location.reload;
 }(jQuery, dict);

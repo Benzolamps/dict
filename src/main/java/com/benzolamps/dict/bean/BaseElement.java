@@ -31,7 +31,7 @@ public abstract class BaseElement extends BaseEntity {
 
     /** 原形 */
     @ExcelHeader(value = 1, notEmpty = true)
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false, unique = true)
     @NotEmpty
     @Length(max = 255)
     private String prototype;

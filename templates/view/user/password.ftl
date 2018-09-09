@@ -90,7 +90,7 @@
           icon: 1,
           title: '注销成功',
           yes: function (index) {
-            parent.location.reload(true);
+            parent.dict.reload(true);
           }
         });
       },

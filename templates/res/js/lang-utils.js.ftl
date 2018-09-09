@@ -132,8 +132,31 @@ dict.extendsFunction = function (func1, func2) {
         func2 = dict.nothing;
     }
 
-    return function () {
-        func1.apply(this, arguments);
-        return func2.apply(this, arguments);
+    var extended = function () {
+        var returnValue;
+        for (var i = 0; i < extended.callArray.length; i++) {
+            returnValue = extended.callArray[i].apply(this, arguments);
+        }
+        return returnValue;
     };
+
+    extended.callArray = [];
+
+    if (func1.callArray) {
+        for (var i = 0; i < func1.callArray.length; i++) {
+            extended.callArray.push(func1.callArray[i]);
+        }
+    } else {
+        extended.callArray.push(func1);
+    }
+
+    if (func2.callArray) {
+        for (var i = 0; i < func2.callArray.length; i++) {
+            extended.callArray.push(func2.callArray[i]);
+        }
+    } else {
+        extended.callArray.push(func2);
+    }
+
+    return extended;
 };

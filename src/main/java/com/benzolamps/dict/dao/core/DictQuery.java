@@ -16,9 +16,9 @@ public interface DictQuery<B extends BaseEntity> {
 
     /**
      * 应用排序
-     * @param orders 排序
+     * @param order 排序
      */
-    void applyOrders(Order... orders);
+    void applyOrder(Order order);
 
     /**
      * 应用搜索

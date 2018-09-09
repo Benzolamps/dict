@@ -16,8 +16,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -40,16 +40,14 @@ public class WordDaoImpl extends BaseElementDaoImpl<Word> implements WordDao {
 
             private CriteriaBuilder criteriaBuilder;
 
-            private LinkedList<DictLambda.Action3<CriteriaQuery, Root, AtomicReference<Predicate>>> consumers = new LinkedList<>();
+            private List<DictLambda.Action3<CriteriaQuery, Root, AtomicReference<Predicate>>> consumers = new ArrayList<>();
 
             @Override
-            public void applyOrders(Order... orders) {
+            public void applyOrder(Order order) {
                 consumers.add((query, root, restriction) -> query.orderBy(
-                    Arrays.stream(orders)
-                        .map(order -> order.getDirection().equals(Order.Direction.DESC) ?
-                            criteriaBuilder.desc(root.get(order.getField())) :
-                            criteriaBuilder.asc(root.get(order.getField())))
-                        .toArray(javax.persistence.criteria.Order[]::new))
+                    order.getDirection().equals(Order.Direction.DESC) ?
+                        criteriaBuilder.desc(criteriaBuilder.lower(root.get(order.getField()))) :
+                        criteriaBuilder.asc(criteriaBuilder.lower(root.get(order.getField()))))
                 );
             }
 

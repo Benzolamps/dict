@@ -3,9 +3,7 @@ package com.benzolamps.dict.dao.impl;
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.dao.base.BaseDao;
 import com.benzolamps.dict.dao.core.*;
-import com.benzolamps.dict.util.Constant;
-import com.benzolamps.dict.util.DictBean;
-import com.benzolamps.dict.util.DictProperty;
+import com.benzolamps.dict.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.core.ResolvableType;
@@ -13,9 +11,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Dao基类接口实现类
@@ -105,7 +101,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	public List<T> findList(Filter filter, Order... orders) {
         GeneratedDictQuery<T> query = generateDictQuery();
         query.setFilter(filter);
-        query.applyOrders(orders);
+        Arrays.stream(orders).forEach(query::applyOrder);
         return query.getTypedQuery().getResultList();
 	}
 
@@ -137,7 +133,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	public Page<T> findPage(DictQuery<T> dictQuery, Pageable pageable) {
         Assert.notNull(dictQuery, " dict query不能为null");
         dictQuery.setEntityManager(entityManager);
-        dictQuery.applyOrders(pageable.getOrders().toArray(new Order[0]));
+        pageable.getOrders().forEach(dictQuery::applyOrder);
         if (pageable != null) pageable.getSearches().forEach(dictQuery::applySearch);
         long total = dictQuery.getCountQuery().getSingleResult();
         TypedQuery<T> typedQuery = dictQuery.getTypedQuery();
@@ -187,11 +183,19 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     }
 
     @Override
-	public void remove(T entity) {
-        Assert.notNull(entity, "entity不能为null");
-        Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
-        if (entityManager.contains(entity)) {
+	public void remove(Collection<T> entities) {
+        Assert.notEmpty(entities, "entities不能为null或空");
+        /*if (entityManager.contains(entity)) {
             entityManager.remove(entityManager.merge(entity));
+        }*/
+        Assert.isTrue(entities.stream().noneMatch(BaseEntity::isNew), "entity不能是新建对象");
+        String className = entityClass.getName();
+        String alias = DictString.toCamel(entityClass.getSimpleName());
+        String jpql = "delete from " + className + " as " + alias + " where " + alias + " in ?0";
+        entities = new ArrayList<>(entities);
+        for (int i = 0; i < entities.size(); i += 100) {
+            List<T> sublist = ((List<T>) entities).subList(i, DictMath.limit(i + 100, i, entities.size()));
+            DictJpa.executeJpqlQuery(entityManager, jpql, null, sublist);
         }
 	}
 
@@ -213,7 +217,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     @Override
     public void execute(String jpql, Map<String, Object> parameters, Object... positionParameters) {
         Assert.hasLength(jpql, "jpql不能为null或空");
-        DictJpa.createJpqlQuery(entityManager, jpql, parameters, positionParameters);
+        DictJpa.executeJpqlQuery(entityManager, jpql, parameters, positionParameters);
     }
 
     @Override

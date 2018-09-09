@@ -21,11 +21,11 @@ $.getScript('${base_url}/res/js/dom-utils.js');
 $.getScript('${base_url}/res/js/dynamic-form.js');
 $.getScript('${base_url}/js/md5.js');
 
-!function () {
-    Array.prototype.toString = function () {
-        return this.join('，');
-    };
+Array.prototype.toString = function () {
+    return this.join('，');
+};
 
+!function () {
     this.models = ['element', 'layer', 'form', 'table', 'code', 'laypage'];
     this.loadLayui = function () {
         $.each(models, function (index, value) {
@@ -46,9 +46,9 @@ $.getScript('${base_url}/js/md5.js');
         loadLayui();
     });
     this.loadLayui();
-
-    $.validator.addMethod('func', function(value, element, param) {
-        return eval('(' + param + ')(value, element)');
-    }, "输入错误");
 }();
+
+$.validator.addMethod('func', function(value, element, param) {
+    return eval('(' + param + ')(value, element)');
+}, "输入错误");
 

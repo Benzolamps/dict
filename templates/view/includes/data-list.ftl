@@ -17,6 +17,7 @@
       width: 100%;
     }
   </style>
+  <script type="text/javascript"></script>
   <div class="layui-row">
     <form class="layui-form" id="${id}" lay-filter="${id}" onsubmit="return false;" method="post">
       <#-- 头部工具栏 -->
@@ -97,10 +98,12 @@
       height: 'full-200',
       <#if page.orders?size gt 0>
         initSort: {
-          field: '${page.orders[0].field}',
-          type: '${page.orders[0].direction}'
+          field: '${page.orders[0].getField()}',
+          type: '${page.orders[0].getDirection()?lower_case}'
         }
-      </#if>
+      </#if>,
+      loading: true
+
     });
 
     <#if page_enabled>
@@ -109,7 +112,8 @@
         count: ${page.total},
         curr: ${page.pageNumber},
         limit: ${page.pageSize},
-        limits: [10, 20, 30],
+        limits: [10, 20, 30, 50, 100, 200, 500, 1000],
+        layout: ['count', 'prev', 'page', 'next', 'skip', 'limit'],
         jump: function (obj, first) {
           if (!first) {
             console.log(obj);
@@ -146,8 +150,14 @@
           async: true,
           success: function () {
             parent.layer.alert('删除成功', function (index) {
-              location.reload();
               parent.layer.close(index);
+              dict.reload();
+            });
+          },
+          error: function (result, status, request) {
+            parent.layer.alert(result.message, {
+              icon: 2,
+              title: result.status
             });
           }
         });
@@ -183,8 +193,14 @@
             async: true,
             success: function () {
               parent.layer.alert('删除成功', function (index) {
-                location.reload();
                 parent.layer.close(index);
+                dict.reload();
+              });
+            },
+            error: function (result, status, request) {
+              parent.layer.alert(result.message, {
+                icon: 2,
+                title: result.status
               });
             }
           });
@@ -223,8 +239,9 @@
 
     table.on('sort(${id})', function (obj) {
       $('#${id}-order-info [name=field]').val(obj.field);
-      $('#${id}-order-info [name=direction]').val(obj.type);
+      $('#${id}-order-info [name=direction]').val(obj.type.toUpperCase());
       execute();
+      return false;
     });
 
     var $form = $('#${id}');
@@ -257,11 +274,10 @@
       $pageInfo.find('[name=pageNumber]').val(#{page.pageNumber});
     </#if>
 
-    $pageInfo.find('[name=field]').val('${page.orders[0].field}');
-    $pageInfo.find('[name=direction]').val('${page.orders[0].direction}');
+    $orderInfo.find('[name=field]').val('${page.orders[0].field}');
+    $orderInfo.find('[name=direction]').val('${page.orders[0].direction}');
 
-    var execute = function () {
-
+    var execute = function (forcedReload) {
       var data = {};
 
       <#if page_enabled>
@@ -272,13 +288,13 @@
       data.orders = [
         {
           field: $orderInfo.find('[name=field]').val(),
-          direction: $orderInfo.find('[name=direction]').val().toUpperCase()
+          direction: $orderInfo.find('[name=direction]').val()
         }
       ];
       if (data.orders[0].field == null || data.orders[0].field == undefined || data.orders[0].field == '') data.orders = [];
 
 
-      var searchesMap = dict.generateObject(dict.serializeObject($form));
+      var searchesMap = dict.generateObject(dict.serializeObject($form)).search;
       data.searches = [];
 
       $.each(searchesMap, function (key, value) {
@@ -289,7 +305,7 @@
         url: 'list.html',
         requestBody: true,
         type: 'POST',
-        data: data,
+        data: forcedReload ? null : data,
         success: function (result, status, request) {
           document.close();
           document.write(result);
@@ -302,5 +318,11 @@
         }
       });
     };
+
+    if (dict.reload == location.reload) {
+      dict.reload = dict.extendsFunction(null, execute);
+    } else if (dict.reload.callArray.indexOf(execute) < 0) {
+      dict.reload = dict.extendsFunction(dict.reload, execute);
+    }
   </script>
 </#macro>

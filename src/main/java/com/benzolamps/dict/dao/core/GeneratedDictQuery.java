@@ -7,10 +7,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,7 +23,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     private final Class<B> entityClass;
 
     /* 排序 */
-    private List<Order> orders = new LinkedList<>();
+    private List<Order> orders = new ArrayList<>();
 
     /* 筛选 */
     private final Filter filter = new Filter();
@@ -41,8 +38,8 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     }
 
     @Override
-    public void applyOrders(Order... orders) {
-        this.orders = Arrays.stream(orders).collect(Collectors.toList());
+    public void applyOrder(Order order) {
+        this.orders.add(order);
     }
 
     @Override
@@ -75,7 +72,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
         StringJoiner jpql = new StringJoiner(" ");
         filter.build(alias);
         Order defaultOrder = Order.desc("id");
-        if (!orders.contains(defaultOrder)) orders.add(Order.desc("id"));
+        if (!orders.contains(defaultOrder)) orders.add(defaultOrder);
         orders.forEach(order -> order.build(alias));
         jpql.add("select").add(field).add("from").add(className).add("as").add(alias);
         jpql.add("where").add(filter.getSnippet());

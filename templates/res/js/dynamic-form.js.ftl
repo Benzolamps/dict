@@ -10,7 +10,7 @@ dict.produceFormItem = function (property) {
 
     var $component;
 
-    if (property.readonly) {
+    if (property.readonly && property.value) {
         $component = $(document.createElement('span')).text(property.value);
     } else if (property.options) {
         if (!property.multiple) {
@@ -345,6 +345,7 @@ dict.dynamicSearch = function (form, selector, fields, initValues, extendedRules
     var $div = $(selector);
     for (var i = 0; i < fields.length; i++) {
         fields[i].value = initValues[fields[i].name] != null ? initValues[fields[i].name] : fields[i].defaultValue;
+        fields[i].name = 'search.' + fields[i].name;
         var $subDiv = $(document.createElement('div'))
             .addClass('layui-col-md2')
             .append(dict.produceFormItem(fields[i]));

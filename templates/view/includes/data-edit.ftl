@@ -35,8 +35,16 @@
         data: dict.generateObject(dict.serializeObject($form)),
         requestBody: ${request_body?c},
         success: function (result, status, request) {
+          var index = parent.layer.getFrameIndex(window.name);
+          parent.layer.close(index);
+          parent.$('iframe')[0].contentWindow.dict.reload();
           ${submit_handler}
-        }, error: function (result, status, request) {
+        },
+        error: function (result, status, request) {
+          parent.layer.alert(result.message, {
+            icon: 2,
+            title: result.status
+          });
           ${error_handler}
         }
       });

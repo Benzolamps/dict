@@ -11,13 +11,10 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public interface DictExcel {
 
@@ -73,20 +70,26 @@ public interface DictExcel {
             }
 
             /* 判断非空 */
-            if (excelHeader.notEmpty() && (value == null || value.toString().isEmpty())) {
+            if (excelHeader.notEmpty() && (value == null || value.toString().trim().isEmpty())) {
                 throw new ExcelFormatException("单元格内容不能为空", row.getRowNum(), index);
             }
 
             /* 判断数字范围 */
             if (excelHeader.cellFormat() == CellFormat.INTEGER || excelHeader.cellFormat() == CellFormat.DOUBLE) {
-                double dbValue = Number.class.cast(value).doubleValue();
-                if (dbValue < excelHeader.range().min() || dbValue > excelHeader.range().max()) {
-                    throw new ExcelFormatException(
-                        "数字范围应该介于 "
-                            + excelHeader.range().min() + " 和 "
-                            + excelHeader.range().max() + " 之间, 得到 " + value,
-                        row.getRowNum(), index);
+                if (value != null) {
+                    double dbValue = Number.class.cast(value).doubleValue();
+                    if (dbValue < excelHeader.range().min() || dbValue > excelHeader.range().max()) {
+                        throw new ExcelFormatException(
+                            "数字范围应该介于 "
+                                + excelHeader.range().min() + " 和 "
+                                + excelHeader.range().max() + " 之间, 得到 " + value,
+                            row.getRowNum(), index);
+                    }
                 }
+            }
+
+            if (excelHeader.cellFormat() == CellFormat.STRING) {
+                value = value.toString().trim();
             }
 
             /* 给属性赋值 */

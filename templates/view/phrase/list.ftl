@@ -49,7 +49,7 @@
             icon: 1,
             title: '导入短语成功',
             yes: function (index) {
-              parent.$('iframe')[0].contentWindow.location.reload(true);
+              parent.$('iframe')[0].contentWindow.dict.reload(true);
               parent.layer.close(index);
             }
           });

@@ -62,7 +62,7 @@
             icon: 1,
             title: '导入单词成功',
             yes: function (index) {
-              parent.$('iframe')[0].contentWindow.location.reload(true);
+              parent.$('iframe')[0].contentWindow.dict.reload(true);
               parent.layer.close(index);
             }
           });
@@ -89,7 +89,7 @@
     {'field': 'prototype', 'title': '单词原形', 'sort': true},
     {'field': 'britishPronunciation', 'title': '英式发音', 'sort': true},
     {'field': 'americanPronunciation', 'title': '英式发音', 'sort': true},
-    {'field': 'clazzes', 'title': '词性', 'sort': true},
+    {'field': 'clazzes', 'title': '词性'},
     {'field': 'definition', 'title': '词义', 'sort': true}
   ]
   page=page

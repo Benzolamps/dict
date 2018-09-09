@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service基类接口实现类
@@ -108,18 +109,18 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional
     public void remove(T... entities) {
-        Arrays.stream(entities).forEach(baseDao::remove);
+        baseDao.remove(Arrays.asList(entities));
     }
 
     @Override
     public void remove(Integer... ids) {
-        Arrays.stream(ids).forEach(id -> baseDao.remove(this.find(id)));
+        baseDao.remove(Arrays.stream(ids).map(this::find).collect(Collectors.toList()));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     @Transactional
     public void remove(Collection<T> entities) {
-        entities.forEach(baseDao::remove);
+        baseDao.remove(entities);
     }
 }

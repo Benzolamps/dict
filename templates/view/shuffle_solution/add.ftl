@@ -1,22 +1,5 @@
 <#-- @ftlvariable name="strategies" type="java.util.Collection<java.lang.String>" -->
 <@nothing><script type="text/javascript"></@nothing>
-<#assign submit_handler>
-  !function (result, status, request) {
-    var index = parent.layer.getFrameIndex(window.name);
-    parent.layer.close(index);
-    parent.$('iframe')[0].contentWindow.location.reload(true);
-  }(result, status, request);
-</#assign>
-
-<#assign error_handler>
-  !function (result, status, request) {
-    parent.layer.alert(result.message, {
-      icon: 2,
-      title: result.status
-    });
-  }(result, status, request);
-</#assign>
-
 <#assign select_handler>
   !function (data) {
     if (data.value != null && data.value != '') {
@@ -60,7 +43,6 @@
     </#list>
   ]
 </#assign>
-<@nothing>;</@nothing>
 <@nothing></script></@nothing>
 
 <@data_add
@@ -70,6 +52,4 @@
   messages={
     'name': {'pattern': '乱序方案名称必须是汉字、字母、数字的组合'}
   }
-  submit_handler=submit_handler
-  error_handler=error_handler
 />
