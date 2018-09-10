@@ -17,7 +17,7 @@
       },
       {
         "title": "清除缓存",
-        "href": "${base_url}/system/clear.html"
+        "href": "${base_url}/system/clean.html"
       }
     ]
   },

@@ -29,7 +29,7 @@ public abstract class BaseElement extends BaseEntity {
     protected Integer index;
 
     /** 原形 */
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     @NotEmpty
     @Length(max = 255)
     private String prototype;
@@ -45,10 +45,6 @@ public abstract class BaseElement extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "library", nullable = false, updatable = false)
     protected Library library;
-
-    /* 已掌握该单词 (短语) 的学生 */
-    @Transient
-    protected Set<Student> masteredStudents;
 
     /** @return 用于实体类中字段的格式 */
     @SuppressWarnings("unused")

@@ -101,19 +101,21 @@
                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
               </a>
             </li>
-            <li class="layui-nav-item" lay-unselect>
-              <a style="color: #333333">当前词库：${current_library().name}</a>
-              <dl class="layui-nav-child">
-                <#list all_libraries() as library>
-                  <#-- @ftlvariable name="library" type="com.benzolamps.dict.bean.Library" -->
-                  <dd<#if current_library() == library> class="layui-this"</#if>>
-                    <a onclick="changeCurrentLibrary(${library.id});">
-                      ${library.name}
-                    </a>
-                  </dd>
-                </#list>
-              </dl>
-            </li>
+            <#if current_library()??>
+              <li class="layui-nav-item" lay-unselect>
+                <a style="color: #333333">当前词库：${current_library().name}</a>
+                <dl class="layui-nav-child">
+                  <#list all_libraries() as library>
+                    <#-- @ftlvariable name="library" type="com.benzolamps.dict.bean.Library" -->
+                    <dd<#if current_library() == library> class="layui-this"</#if>>
+                      <a onclick="changeCurrentLibrary(${library.id});">
+                        ${library.name}
+                      </a>
+                    </dd>
+                  </#list>
+                </dl>
+              </li>
+            </#if>
           </ul>
           <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" lay-unselect>

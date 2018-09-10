@@ -57,8 +57,9 @@
       $('#upload-form').ajaxSubmit({
         success: function (result, status, request) {
           var endTime = new Date().getTime();
+          var delta = ((endTime - startTime) * 0.001).toFixed(3);
           parent.layer.close(loader);
-          parent.layer.alert('导入单词成功, 共导入 ' + result.data + ' 个单词, 用时 ' + ((endTime - startTime) * 0.001).toFixed(3) + ' 秒', {
+          parent.layer.alert('导入单词成功，共导入 ' + result.data + ' 个单词<br>用时 ' + delta + ' 秒', {
             icon: 1,
             title: '导入单词成功',
             yes: function (index) {

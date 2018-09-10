@@ -16,7 +16,7 @@ import java.util.Set;
  * @datetime 2018-6-5 21:10:34
  */
 @Entity
-@Table(name = "dict_word", uniqueConstraints = @UniqueConstraint(name = "word_unique", columnNames = {"library", "prototype"}))
+@Table(name = "dict_word", uniqueConstraints = @UniqueConstraint(name = "uk_word", columnNames = {"library", "prototype"}))
 @Getter
 @Setter
 public class Word extends BaseElement {
@@ -42,7 +42,7 @@ public class Word extends BaseElement {
     @JoinTable(name = "dict_wc", joinColumns = @JoinColumn(name = "word"), inverseJoinColumns = @JoinColumn(name = "clazz"))
     private Set<WordClazz> clazzes;
 
-    /** 已掌握的学生 */
+    /** 已掌握该单词的学生 */
     @ManyToMany(mappedBy = "masteredWords")
     protected Set<Student> masteredStudents;
 }

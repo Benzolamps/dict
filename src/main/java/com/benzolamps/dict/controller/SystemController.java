@@ -1,10 +1,15 @@
 package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.controller.interceptor.NavigationView;
+import com.benzolamps.dict.controller.vo.BaseVo;
+import com.benzolamps.dict.service.base.MiscellaneousService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.annotation.Resource;
 
 /**
  * 系统管理Controller
@@ -15,6 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 @RestController
 @RequestMapping("system/")
 public class SystemController extends BaseController {
+
+    @Resource
+    private MiscellaneousService miscellaneousService;
 
     /**
      * 系统信息界面
@@ -44,5 +52,28 @@ public class SystemController extends BaseController {
     @GetMapping("/settings.html")
     protected ModelAndView settings() {
         return new ModelAndView("view/system/settings");
+    }
+
+    /**
+     * 清理缓存界面
+     * @return ModelAndView
+     */
+    @NavigationView
+    @GetMapping("/clean.html")
+    protected ModelAndView clean() {
+        ModelAndView mv = new ModelAndView("view/system/clean");
+        mv.addObject("size", miscellaneousService.databaseFileSize());
+        return mv;
+    }
+
+    /**
+     * vacuum
+     * @return ModelAndView
+     */
+    @ResponseBody
+    @GetMapping("/vacuum.json")
+    protected BaseVo vacuum() {
+        miscellaneousService.vacuum();
+        return SUCCESS_VO;
     }
 }

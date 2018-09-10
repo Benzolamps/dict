@@ -2,6 +2,7 @@
   id fields page values=page.content
   add='add.html' edit='edit.html' delete='delete.json'
   add_enabled=true edit_enabled=true delete_enabled=true
+  delete_confirm=''
   toolbar=[]
   head_toolbar=[]
   page_enabled=false
@@ -116,7 +117,6 @@
         layout: ['count', 'prev', 'page', 'next', 'skip', 'limit'],
         jump: function (obj, first) {
           if (!first) {
-            console.log(obj);
             $('#${id}-page-info [name=pageSize]').val(obj.limit);
             $('#${id}-page-info [name=pageNumber]').val(obj.curr);
             execute();
@@ -138,12 +138,11 @@
     });
 
     delMany.click(function () {
-      parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+      var process = function (index) {
         var checkStatus = table.checkStatus('${id}');
         var ids = checkStatus.data.map(function (value) {
           return value.id;
         });
-        console.log(checkStatus.data);
         dict.loadText({
           url: '${delete}',
           data: {id: ids},
@@ -162,12 +161,17 @@
           }
         });
         parent.layer.close(index);
+      };
+      parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+        <#if delete_confirm != ''>
+          parent.layer.confirm('${delete_confirm}', {icon: 3, title: '提示'}, process);
+        <#else>
+          process(index);
+        </#if>
       });
     });
 
-    refresh.click(function () {
-      execute();
-    });
+    refresh.click(execute);
 
     <#list head_toolbar as tool>
       $('#${id} [lay-event=head-toolbar-${tool_index}]').click(function () {
@@ -186,7 +190,7 @@
           area: ['800px', '600px']
         });
       } else if (obj.event == 'del') {
-        parent.layer.confirm('确定要删除这条记录吗？', {icon: 3, title: '提示'}, function (index) {
+        var process = function (index) {
           dict.loadText({
             url: '${delete}',
             data: {id: obj.data.id},
@@ -205,6 +209,15 @@
             }
           });
           parent.layer.close(index);
+        };
+
+        parent.layer.confirm('确定要删除这条记录吗？', {icon: 3, title: '提示'}, function (index) {
+          <#if delete_confirm != ''>
+            parent.layer.close(index);
+            parent.layer.confirm('${delete_confirm}', {icon: 3, title: '提示'}, process);
+          <#else>
+            process(index);
+          </#if>
         });
       }
       <#if toolbar?size gt 0>
@@ -256,7 +269,15 @@
       searchValueMap[value.field] = value.value;
     });
 
-    dict.dynamicSearch($form, $('#${id}-search'), <@json_dump obj=search/>, searchValueMap, <@json_dump obj=rules/>, <@json_dump obj=messages/>, dict.nothing);
+    dict.dynamicSearch(
+      $form,
+      $('#${id}-search'),
+      <@json_dump obj=search/>,
+      searchValueMap,
+      <@json_dump obj=rules/>,
+      <@json_dump obj=messages/>,
+      dict.nothing
+    );
 
     $('#${id}-search').append($(
       '<div class="layui-col-md2" style="height: 100%" >\n' +

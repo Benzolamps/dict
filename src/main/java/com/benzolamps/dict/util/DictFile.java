@@ -1,23 +1,14 @@
 package com.benzolamps.dict.util;
 
-import com.benzolamps.dict.component.CellFormat;
-import com.benzolamps.dict.component.DetectColumnNum;
-import com.benzolamps.dict.component.ExcelHeader;
-import com.benzolamps.dict.exception.DictException;
-import com.benzolamps.dict.exception.ExcelFormatException;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.util.*;
+import java.io.File;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.Stack;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * 用于操作文件的类
@@ -52,5 +43,21 @@ public interface DictFile {
         }
 
         return files;
+    }
+
+    /**
+     * 将long型转换为文件大小字符串
+     * @param size 大小
+     * @return 字符串
+     */
+    static String fileSizeStr(long size) {
+        String[] unit = {"B", "KB", "MB", "GB", "TB", "PB"};
+        int i = 0;
+        double doubleSize = size;
+        while (i < 5 && doubleSize >= 1024) {
+            i++;
+            doubleSize /= 1024.0;
+        }
+        return new BigDecimal(doubleSize).setScale(2, BigDecimal.ROUND_HALF_UP) + " " + unit[i];
     }
 }

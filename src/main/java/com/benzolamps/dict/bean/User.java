@@ -26,7 +26,6 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({"createDate", "modifyDate", "version", "remark"})
 public class User extends BaseEntity {
 
     private static final long serialVersionUID = -5309444370236159463L;

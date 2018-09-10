@@ -12,6 +12,7 @@
   edit='${base_url}/library/edit.html'
   delete='${base_url}/library/delete.json'
   page_enabled=true
+  delete_confirm='删除词库将会删除其中的所有单词和短语，确定要继续吗？'
   search=[
     {
       'name': 'name',

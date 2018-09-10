@@ -3,13 +3,9 @@ package com.benzolamps.dict.bean;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 /**
@@ -20,6 +16,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "dict_word_clazz")
+@SequenceGenerator(name = "sequenceGenerator", sequenceName = "seq_word_clazz")
 @Getter
 @Setter
 public class WordClazz extends BaseEntity {

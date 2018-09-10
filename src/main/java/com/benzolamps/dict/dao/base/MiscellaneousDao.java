@@ -12,4 +12,9 @@ public interface MiscellaneousDao {
      * @return SQLite版本
      */
     String getSQLiteVersion();
+
+    /**
+     * vacuum
+     */
+    void vacuum();
 }

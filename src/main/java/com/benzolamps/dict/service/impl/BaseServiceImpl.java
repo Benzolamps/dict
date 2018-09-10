@@ -110,12 +110,12 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional
     public void remove(T... entities) {
-        baseDao.remove(Arrays.asList(entities));
+        this.remove(Arrays.asList(entities));
     }
 
     @Override
     public void remove(Integer... ids) {
-        baseDao.remove(Arrays.stream(ids).map(this::find).collect(Collectors.toList()));
+        this.remove(Arrays.stream(ids).map(this::find).collect(Collectors.toList()));
     }
 
     @SuppressWarnings("unchecked")

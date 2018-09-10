@@ -1,14 +1,12 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.DetectColumnNum;
-import com.benzolamps.dict.component.ExcelHeader;
-import com.benzolamps.dict.component.Format;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.Set;
 
 /**
@@ -18,15 +16,14 @@ import java.util.Set;
  * @datetime 2018-6-5 21:10:34
  */
 @Entity
-@Table(name = "dict_phrase", uniqueConstraints = @UniqueConstraint(name = "phrase_unique", columnNames = {"library", "prototype"}))
-@DetectColumnNum(3)
+@Table(name = "dict_phrase", uniqueConstraints = @UniqueConstraint(name = "uk_phrase", columnNames = {"library", "prototype"}))
 @Getter
 @Setter
 public class Phrase extends BaseElement {
 
     private static final long serialVersionUID = 5771542562398020839L;
 
-    /** 已掌握的学生 */
+    /** 已掌握该短语的学生 */
     @ManyToMany(mappedBy = "masteredPhrases")
     protected Set<Student> masteredStudents;
 }

@@ -140,6 +140,7 @@ public class DictJpa {
         for (int i = 0; i < bound; i++) {
             query.setParameter(i, positionParameters[i]);
         }
+
         query.executeUpdate();
     }
 }

@@ -13,4 +13,15 @@ public interface MiscellaneousService {
      * @return SQLite版本
      */
     String getSQLiteVersion();
+
+    /**
+     * 获取数据库文件的大小
+     * @return 数据库文件的大小
+     */
+    String databaseFileSize();
+
+    /**
+     * vacuum
+     */
+    void vacuum();
 }

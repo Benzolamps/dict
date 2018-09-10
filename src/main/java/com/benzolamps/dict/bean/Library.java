@@ -47,12 +47,12 @@ public class Library extends BaseEntity {
     /** 词库中的单词 */
     @JsonIgnore
     @DictIgnore
-    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Word> words;
 
     /** 词库中的短语 */
     @JsonIgnore
-    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL, orphanRemoval = true)
     @DictIgnore
     private Set<Phrase> phrases;
 
