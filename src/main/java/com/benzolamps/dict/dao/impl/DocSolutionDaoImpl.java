@@ -28,7 +28,7 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
 public class DocSolutionDaoImpl implements DocSolutionDao {
 
     /* 乱序方案配置文件 */
-    @Value("template/doc/config.yml")
+    @Value("templates/doc/config.yml")
     private FileSystemResource resource;
 
     private DocSolutions solutions;

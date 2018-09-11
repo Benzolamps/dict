@@ -1,58 +1,65 @@
-baseProperties:
-  chinese_font_family: 宋体
-  english_font_family: Times New Roman
-  font_size: 21
-  line_height: 300
-  show_separators: true
-  insert_blank_line_between_words: false
-  definition_arranges_vertically: false
-  table_border_color: "#AAAAAA"
-solutions:
-  - id: 0
+!!com.benzolamps.dict.bean.DocSolutions
+baseProperties: {chinese_font_family: 宋体, english_font_family: Times New Roman, font_size: 21,
+  line_height: 300, show_separators: true, insert_blank_line_between_words: false,
+  definition_arranges_vertically: false, table_border_color: '#AAAAAA'}
+solutions: !!set
+  ? exportFor: WORD
+    id: 0
     name: 单词生词表
-    path: doc/universe/new_words.doc.ftl
-    remark: 单词生词表
     needHeader: true
-    exportFor: WORD
     needShuffle: false
     order: 0
-  - id: 1
+    path: doc/universe/new_words.doc.ftl
+    properties: {}
+    remark: 单词生词表
+  : null
+  ? exportFor: WORD
+    id: 1
     name: 单词抄写表
-    path: doc/universe/copy_words.doc.ftl
-    remark: 单词抄写表
     needHeader: true
-    exportFor: WORD
     needShuffle: true
     order: 1
-  - id: 2
+    path: doc/universe/copy_words.doc.ftl
+    properties: {}
+    remark: 单词抄写表
+  : null
+  ? exportFor: WORD
+    id: 2
     name: 单词排查表
-    path: doc/universe/check_words.doc.ftl
-    remark: 单词排查表
     needHeader: true
-    exportFor: WORD
     needShuffle: false
     order: 2
-  - id: 3
+    path: doc/universe/check_words.doc.ftl
+    properties: {}
+    remark: 单词排查表
+  : null
+  ? exportFor: PHRASE
+    id: 3
     name: 短语生词表
-    path: doc/universe/new_phrases.doc.ftl
-    remark: 短语生词表
     needHeader: true
-    exportFor: PHRASE
     needShuffle: false
     order: 3
-  - id: 4
+    path: doc/universe/new_phrases.doc.ftl
+    properties: {}
+    remark: 短语生词表
+  : null
+  ? exportFor: PHRASE
+    id: 4
     name: 短语抄写表
-    path: doc/universe/copy_phrases.doc.ftl
-    remark: 单词生词表
     needHeader: true
-    exportFor: PHRASE
     needShuffle: true
     order: 4
-  - id: 5
+    path: doc/universe/copy_phrases.doc.ftl
+    properties: {}
+    remark: 单词生词表
+  : null
+  ? exportFor: PHRASE
+    id: 5
     name: 短语排查表
-    path: doc/universe/check_phrases.doc.ftl
-    remark: 短语排查表
     needHeader: true
-    exportFor: PHRASE
     needShuffle: false
     order: 5
+    path: doc/universe/check_phrases.doc.ftl
+    properties: {}
+    remark: 短语排查表
+  : null

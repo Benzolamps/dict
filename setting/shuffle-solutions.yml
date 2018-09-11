@@ -3,7 +3,8 @@ solutions: !!set
   ? id: 0
     name: 默认
     order: 0
-    properties: {}
+    properties: {unitSize: 15, unitTipRepeat: 2, unitNontipRepeat: 1, entireTipRepeat: 2,
+      entireNontipRepeat: 1, shuffleSeed: 0, shuffled: null, shuffleSeedSpecified: null}
     remark: 乱序方案用于导出抄写表
     strategyClass: rose.RoseShuffleStrategySetup
   : null

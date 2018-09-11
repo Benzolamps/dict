@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
+import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,9 @@ public class ShuffleSolutionController extends BaseController {
      * @return ModelAndView
      */
     @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
-    protected ModelAndView list() {
+    protected ModelAndView list(Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/list");
-        mv.addObject("page", shuffleSolutionService.findAll());
+        mv.addObject("page", shuffleSolutionService.findPage(pageable));
         return mv;
     }
 
