@@ -4,6 +4,7 @@ import com.benzolamps.dict.util.AddOnlyList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -13,7 +14,8 @@ import java.util.stream.Stream;
  * @version 2.1.1
  * @datetime 2018-9-9 16:31:38
  */
-public class SnippetResolver {
+@SuppressWarnings("unused")
+public class SnippetResolver implements Serializable {
 
     private static final long serialVersionUID = 3374190442609095665L;
 

@@ -15,7 +15,6 @@ import org.springframework.util.Assert;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.StringJoiner;
 
 import static com.benzolamps.dict.util.DictLambda.tryAction;
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
@@ -23,7 +22,6 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
 /**
  * 乱序方案Dao接口实现类
  */
-@SuppressWarnings("deprecation")
 @Repository("shuffleSolutionDao")
 public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
 
@@ -59,7 +57,6 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
             id = Math.max(id, solution.getId());
         }
         shuffleSolution.setId(id + 1);
-        StringJoiner sj = new StringJoiner(",", "{", "}");
         solutions.getSolutions().add(shuffleSolution);
         return shuffleSolution;
     }

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * @version 2.1.1
  * @datetime 2018-7-25 19:17:46
  */
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"unused", "SpellCheckingInspection"})
 public class Filter extends SnippetResolver {
 
     private static final long serialVersionUID = -2317957195936033587L;

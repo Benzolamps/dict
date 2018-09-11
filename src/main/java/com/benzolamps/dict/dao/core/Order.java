@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
  * @version 2.1.1
  * @datetime 2018-7-25 19:44:14
  */
+@SuppressWarnings("unused")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Order extends SnippetResolver {

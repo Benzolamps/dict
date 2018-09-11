@@ -11,7 +11,6 @@ import com.benzolamps.dict.util.*;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -42,9 +41,6 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     /* 可用的乱序策略Class */
     @Value("#{new java.util.HashSet()}")
     private Set<Class<IShuffleStrategySetup>> availableStrategySetups;
-
-    @javax.annotation.Resource
-    private ConfigurableApplicationContext context;
 
     @javax.annotation.Resource
     private ShuffleSolutionDao shuffleSolutionDao;
