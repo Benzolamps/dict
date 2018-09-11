@@ -2,6 +2,7 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictTextArea;
+import com.benzolamps.dict.util.DictIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,7 +30,7 @@ public class ShuffleSolution implements Serializable {
 
     /** id */
     @Id
-    private Long id;
+    private Integer id;
 
     /** 名称 */
     @NotEmpty
@@ -43,6 +44,10 @@ public class ShuffleSolution implements Serializable {
     @DictTextArea
     @DictPropertyInfo(display = "备注")
     private String remark;
+
+    /** 排序 */
+    @DictIgnore
+    private Integer order;
 
     /** 乱序策略类 */
     @NotEmpty
@@ -64,12 +69,5 @@ public class ShuffleSolution implements Serializable {
             return false;
         }
         return Objects.equals(getId(), ((ShuffleSolution) obj).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        int hashCode = 17;
-        hashCode += getId() != null ? getId().hashCode() * 31 : 0;
-        return hashCode;
     }
 }

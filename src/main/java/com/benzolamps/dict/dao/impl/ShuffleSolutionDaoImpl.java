@@ -3,6 +3,7 @@ package com.benzolamps.dict.dao.impl;
 import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.bean.ShuffleSolutions;
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
+import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.util.Constant;
@@ -12,9 +13,9 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import java.io.File;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 import static com.benzolamps.dict.util.DictLambda.tryAction;
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
@@ -29,21 +30,30 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     @Value("setting/shuffle-solutions.yml")
     private FileSystemResource resource;
 
+    /* 默认乱序方案配置文件 */
+    @Value("#{dictProperties.universePath}/default.yml")
+    private FileSystemResource defaultResource;
+
     private ShuffleSolutions solutions;
 
     @Override
-    public Page<ShuffleSolution> findAll() {
-        Collection<ShuffleSolution> shuffleSolutions = solutions.getSolutions();
-        Pageable pageable = new Pageable();
+    public List<ShuffleSolution> findAll() {
+        return new ArrayList<>(solutions.getSolutions());
+    }
+
+    @Override
+    public Page<ShuffleSolution> findPage(Pageable pageable) {
+        List<ShuffleSolution> shuffleSolutions = this.findAll();
         pageable.setPageSize(10);
         pageable.setPageNumber(1);
+        pageable.getOrders().add(Order.desc("id"));
         return new Page<>(new ArrayList<>(shuffleSolutions), (long) shuffleSolutions.size(), pageable);
     }
 
     @Override
-    public ShuffleSolution find(Long id) {
+    public ShuffleSolution find(Integer id) {
         Assert.notNull(id, "id不能为null");
-        return solutions.getSolutions().stream().filter(solution -> solution.getId().equals(id)).findFirst().get();
+        return solutions.getSolutions().stream().filter(solution -> solution.getId().equals(id)).findFirst().orElse(null);
     }
 
     @SuppressWarnings("unchecked")
@@ -52,10 +62,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         Assert.notNull(shuffleSolution, "shuffle solution不能为null");
         Assert.isNull(shuffleSolution.getId(), "shuffle solution必须为新建对象");
 
-        Long id = 0L;
-        for (val solution : solutions.getSolutions()) {
-            id = Math.max(id, solution.getId());
-        }
+        Integer id = solutions.getSolutions().stream().mapToInt(ShuffleSolution::getId).max().orElse(-1);
         shuffleSolution.setId(id + 1);
         solutions.getSolutions().add(shuffleSolution);
         return shuffleSolution;
@@ -76,20 +83,40 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     }
 
     @Override
-    public void remove(final Long shuffleSolutionId) {
+    public void remove(final Integer shuffleSolutionId) {
         Assert.notNull(shuffleSolutionId, "shuffle solution id不能为null");
         val ref = solutions.getSolutions().stream()
             .filter(solution -> solution.getId().equals(shuffleSolutionId)).findFirst().get();
         solutions.getSolutions().remove(ref);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void reload() {
-        solutions = tryFunc(() -> Constant.YAML.loadAs(resource.getInputStream(), ShuffleSolutions.class));
+        if (resource.exists()) {
+            solutions = tryFunc(() -> Constant.YAML.loadAs(resource.getInputStream(), ShuffleSolutions.class));
+        }
+
+        if (solutions == null) {
+            solutions = new ShuffleSolutions();
+        }
+
+        Set<ShuffleSolution> shuffleSolutions = solutions.getSolutions();
+
+        if (shuffleSolutions == null) {
+            solutions.setSolutions(shuffleSolutions = new HashSet<>());
+        }
+
+        if (shuffleSolutions.isEmpty()) {
+            shuffleSolutions.add(tryFunc(() -> Constant.YAML.loadAs(defaultResource.getInputStream(), ShuffleSolution.class)));
+        }
     }
 
     @Override
     public void flush() {
-        tryAction(() -> Constant.YAML.dump(solutions, new FileWriter(resource.getFile())));
+        File file = resource.getFile();
+        if (file.exists() || file.getParentFile().mkdirs() && tryFunc(file::createNewFile)) {
+            tryAction(() -> Constant.YAML.dump(solutions, new FileWriter(file)));
+        }
     }
 }

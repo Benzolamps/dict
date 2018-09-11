@@ -4,8 +4,8 @@ import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
 import com.benzolamps.dict.controller.vo.DictPropertyInfoVo;
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
-import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.dao.core.Page;
+import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
 import com.benzolamps.dict.util.*;
 import lombok.val;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
- * 乱序策略Service接口实现类
+ * 乱序方案Service接口实现类
  * @author Benzolamps
  * @version 2.1.1
  * @datetime 2018-7-19 21:16:36
@@ -80,21 +80,34 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
-    public IShuffleStrategySetup getSolutionInstanceAt(Long id) {
+    public IShuffleStrategySetup getSolutionInstanceAt(Integer id) {
         return apply(shuffleSolutionDao.find(id));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ShuffleSolution> findAll() {
-        Page<ShuffleSolution> shuffleSolutions = shuffleSolutionDao.findAll();
-        shuffleSolutions.getOrders().add(Order.desc("id"));
+    public List<ShuffleSolution> findAll() {
+        List<ShuffleSolution> shuffleSolutions = shuffleSolutionDao.findAll();
+        shuffleSolutions.sort((o1, o2) -> {
+            if (Objects.equals(o1, o2)) {
+                return 0;
+            }
+            if (o1 == null ^ o2 == null) {
+                return o1 == null ? -1 : 1;
+            }
+            return o1.getOrder() - o2.getOrder();
+        });
         return shuffleSolutions;
     }
 
     @Override
+    public Page<ShuffleSolution> findPage(Pageable pageable) {
+        return shuffleSolutionDao.findPage(pageable);
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public ShuffleSolution find(Long id) {
+    public ShuffleSolution find(Integer id) {
         return shuffleSolutionDao.find(id);
     }
 
@@ -130,7 +143,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional
-    public void remove(Long shuffleSolutionId) {
+    public void remove(Integer shuffleSolutionId) {
         shuffleSolutionDao.remove(shuffleSolutionId);
     }
 
@@ -140,13 +153,21 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
         Assert.hasLength(className, "class name不能为null或空");
         Assert.isTrue(getAvailableStrategyNames().contains(className), "class name不存在");
-        val strategyClass = DynamicClass.loadClass(className);
+        Class strategyClass = DynamicClass.loadClass(className);
         return DictPropertyInfoVo.applyDictPropertyInfo(strategyClass);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean isSpare() {
-        return shuffleSolutionDao.findAll().getTotal() < 10;
+        return shuffleSolutionDao.findAll().size() < 10;
+    }
+
+    @Override
+    @Transactional
+    public void use(Integer id) {
+        ShuffleSolution solution = find(id);
+        Integer order = findAll().stream().mapToInt(ShuffleSolution::getOrder).max().orElse(0);
+        solution.setOrder(order + 1);
     }
 }

@@ -1,0 +1,6 @@
+id: 0
+name: 默认
+properties: {}
+order: 0
+remark: 乱序方案用于导出抄写表
+strategyClass: rose.RoseShuffleStrategySetup

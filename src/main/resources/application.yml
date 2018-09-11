@@ -5,7 +5,7 @@ dict:
     version: 2.1.1
     console_encoding: GBK
     remote_base_url: http://benzolamps.oss-cn-beijing.aliyuncs.com
-    universe_path: universe/
+    universe_path: templates/java/universe
     jdbc_file: dictionary.db
 spring:
   datasource:
@@ -24,7 +24,7 @@ spring:
     async:
       request_timeout: 30000
   resources:
-    static_locations: file:templates/static/
+    static_locations: file:templates/static
   jackson:
     time_zone: GMT+8
     date_format: yyyy-MM-dd HH:mm:ss

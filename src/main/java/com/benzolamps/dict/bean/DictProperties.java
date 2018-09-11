@@ -1,8 +1,11 @@
-package com.benzolamps.dict.cfg;
+package com.benzolamps.dict.bean;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+
+import java.io.Serializable;
 
 /**
  * 自定义配置项
@@ -13,7 +16,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration("dictProperties")
 @ConfigurationProperties(prefix = "dict.system")
 @Data
-public class DictProperties {
+public class DictProperties implements Serializable {
+
+    private static final long serialVersionUID = 2388800158030381132L;
 
     /** 系统名称 */
     private String name;

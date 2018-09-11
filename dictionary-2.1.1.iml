@@ -16,6 +16,7 @@
           <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/main/DictApplication.java</file>
           <file>file://$MODULE_DIR$/src/main/resources/application.yml</file>
           <file>file://$MODULE_DIR$/src/main/resources/application-release.yml</file>
+          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/bean/DictProperties.java</file>
         </fileset>
         <fileset id="spring-boot-dispatcherServletAutoConfiguration-mvc" name="DictApplication MVC" removed="true">
           <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/main/DictApplication.java</file>

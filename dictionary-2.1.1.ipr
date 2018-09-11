@@ -350,6 +350,7 @@
         <w>clazzes</w>
         <w>csdn</w>
         <w>exts</w>
+        <w>fareast</w>
         <w>flickity</w>
         <w>gitee</w>
         <w>iframe</w>
@@ -395,6 +396,7 @@
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="TemplateDataLanguageMappings">
+    <file url="file://$PROJECT_DIR$/templates/doc" dialect="XML" />
     <file url="file://$PROJECT_DIR$/templates/res/css" dialect="CSS" />
     <file url="file://$PROJECT_DIR$/templates/res/js" dialect="JavaScript" />
     <file url="file://$PROJECT_DIR$/templates/res/json" dialect="JSON" />

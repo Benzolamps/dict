@@ -39,3 +39,13 @@
 [#function current_library][/#function]
 [#function all_libraries][/#function]
 [#include '/view/includes/main.ftl'/]
+
+[#-- for Word --]
+[#-- @ftlvariable name="chinese_font_family" type="java.lang.String" --]
+[#-- @ftlvariable name="english_font_family" type="java.lang.String" --]
+[#-- @ftlvariable name="font_size" type="java.lang.String" --]
+[#-- @ftlvariable name="line_height" type="java.lang.String" --]
+[#-- @ftlvariable name="show_separators" type="java.lang.Boolean" --]
+[#-- @ftlvariable name="insert_blank_line_between_words" type="java.lang.Boolean" --]
+[#-- @ftlvariable name="definition_arranges_vertically" type="java.lang.Boolean" --]
+[#-- @ftlvariable name="table_border_color" type="java.lang.String" --]

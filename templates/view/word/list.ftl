@@ -82,6 +82,7 @@
   });
 </#assign>
 <@nothing></script></@nothing>
+
 <@data_list
   id='words'
   fields=[

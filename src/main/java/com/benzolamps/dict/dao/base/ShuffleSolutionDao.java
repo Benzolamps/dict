@@ -2,6 +2,9 @@ package com.benzolamps.dict.dao.base;
 
 import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.dao.core.Page;
+import com.benzolamps.dict.dao.core.Pageable;
+
+import java.util.List;
 
 /**
  * 乱序方案Dao接口
@@ -12,14 +15,18 @@ import com.benzolamps.dict.dao.core.Page;
 public interface ShuffleSolutionDao {
 
     /** @return 获取全部乱序方案 */
-    Page<ShuffleSolution> findAll();
+    List<ShuffleSolution> findAll();
+
+
+    /** @return 获取全部乱序方案 */
+    Page<ShuffleSolution> findPage(Pageable pageable);
 
     /**
-     * 根据id寻找乱序方案
+     * 根据id查找乱序方案
      * @param id id
      * @return 乱序方案
      */
-    ShuffleSolution find(Long id);
+    ShuffleSolution find(Integer id);
 
     /**
      * 保存一个乱序方案
@@ -39,12 +46,11 @@ public interface ShuffleSolutionDao {
      * 删除一个乱序方案
      * @param shuffleSolutionId 乱序方案id
      */
-    void remove(final Long shuffleSolutionId);
+    void remove(final Integer shuffleSolutionId);
 
     /** 重新加载 */
     void reload();
 
     /** 保存 */
     void flush();
-
 }

@@ -1,5 +1,2 @@
 logging:
   config: classpath:logback-spring-release.xml
-server:
-  port: 80
-  context_path: /

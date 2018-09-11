@@ -5,7 +5,6 @@ import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,7 +20,6 @@ import java.util.Arrays;
  */
 @RestController
 @RequestMapping("shuffle_solution/")
-@Slf4j
 public class ShuffleSolutionController extends BaseController {
 
     @Resource
@@ -70,7 +68,7 @@ public class ShuffleSolutionController extends BaseController {
      */
     @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
-    protected ModelAndView edit(Long id) {
+    protected ModelAndView edit(Integer id) {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/edit");
         mv.addObject("solution", shuffleSolutionService.find(id));
         mv.addObject("strategies", shuffleSolutionService.getAvailableStrategyNames());
@@ -95,7 +93,7 @@ public class ShuffleSolutionController extends BaseController {
      */
     @PostMapping("/delete.json")
     @ResponseBody
-    protected BaseVo delete(@RequestParam("id") Long... ids) {
+    protected BaseVo delete(@RequestParam("id") Integer... ids) {
         Arrays.stream(ids).forEach(shuffleSolutionService::remove);
         return SUCCESS_VO;
     }
