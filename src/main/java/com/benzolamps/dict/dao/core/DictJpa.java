@@ -1,16 +1,26 @@
 package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
+import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictSpring;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.util.Assert;
+import org.springframework.util.ClassUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Map;
+
+import static com.benzolamps.dict.util.DictLambda.tryAction;
 
 /**
  * Jpql工具类
@@ -140,7 +150,48 @@ public class DictJpa {
         for (int i = 0; i < bound; i++) {
             query.setParameter(i, positionParameters[i]);
         }
-
         query.executeUpdate();
+    }
+
+    /**
+     * 执行一个无事务的原生SQL语句
+     * @param sql SQL
+     * @param positionParameters 位置参数
+     */
+    public static void executeNonTransactionNativeQuery(String sql, Object... positionParameters) {
+        Assert.hasLength(sql, "sql不能为null或空");
+        logger.info("sql: " + sql);
+        DataSourceProperties dataSourceProperties = DictSpring.getBean(DataSourceProperties.class);
+        Connection connection = null;
+        PreparedStatement statement = null;
+        SQLException exception = null;
+        try {
+            tryAction(() -> ClassUtils.forName(dataSourceProperties.getDriverClassName(), DictSpring.getBean(ClassLoader.class)));
+            connection = DriverManager.getConnection(dataSourceProperties.getUrl());
+            statement = connection.prepareStatement(sql);
+            for (int index = 0; index < positionParameters.length; index++) {
+                statement.setObject(index + 1, positionParameters[index]);
+            }
+            statement.execute();
+        } catch (SQLException e) {
+            exception = e;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    exception = e;
+                } finally {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        exception = e;
+                    }
+                }
+            }
+        }
+        if (exception != null) {
+            throw new DictException(exception);
+        }
     }
 }
