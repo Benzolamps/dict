@@ -7,17 +7,14 @@ dict:
     remote_base_url: http://benzolamps.oss-cn-beijing.aliyuncs.com
     universe_path: universe/
     jdbc_file: dictionary.db
-
 spring:
   datasource:
     driver_class_name: org.sqlite.JDBC
     url: jdbc:sqlite:${dict.system.jdbc_file}
-
   jpa:
     show_sql: false
     generate_ddl: true
     database_platform: com.benzolamps.dict.cfg.sqlite.SQLiteDialect
-
   mvc:
     view:
       prefix:
@@ -26,50 +23,38 @@ spring:
       enabled: false
     async:
       request_timeout: 30000
-
   resources:
     static_locations: file:templates/static/
-
   jackson:
-
     time_zone: GMT+8
-
     date_format: yyyy-MM-dd HH:mm:ss
-
     serialization:
       indent_output: true
       fail_on_empty_beans: false
     defaultPropertyInclusion: NON_EMPTY
     deserialization:
       fail_on_unknown_properties: false
-
     parser:
       allow_unquoted_control_chars: true
       allow_single_quotes: true
-
   http:
     encoding:
       force: true
-
   freemarker:
     template_loader_path: file:templates
     settings:
       number_format: '#'
-
   cache:
     type: ehcache
     ehcache:
       config: classpath:ehcache.xml
-
 server:
   port: 2018
   context_path: /${dict.system.name}-${dict.system.version}
   tomcat:
     uri-encoding: UTF-8
-
 logging:
   config: classpath:logback-spring.xml
-
 endpoints:
   shutdown:
     enabled: true
