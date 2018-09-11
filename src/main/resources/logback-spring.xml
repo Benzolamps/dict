@@ -3,8 +3,8 @@
   logback 配置 - default
 -->
 <configuration>
-  <springProperty scope="context" name="title" source="system.title"/>
-  <springProperty scope="context" name="version" source="system.version"/>
+  <springProperty scope="context" name="title" source="dict.system.title"/>
+  <springProperty scope="context" name="version" source="dict.system.version"/>
 
   <!-- 向控制台输出日志 -->
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

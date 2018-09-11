@@ -35,7 +35,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     private static final String CACHE_NAME = "shuffle_solution";
 
     /* 动态类加载器 */
-    @Value("#{new com.benzolamps.dict.util.DynamicClass('${system.universe_path}')}")
+    @Value("#{new com.benzolamps.dict.util.DynamicClass(dictProperties.universePath)}")
     private DynamicClass dictDynamicClass;
 
     /* 可用的乱序策略Class */
@@ -58,7 +58,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Override
     @Transactional(readOnly = true)
     @Cacheable(value = CACHE_NAME, key = "#root.method")
-    public Set<String> getAvailableCopyStrategyNames() {
+    public Set<String> getAvailableStrategyNames() {
         return availableStrategySetups.stream().map(Class::getName).collect(Collectors.toSet());
     }
 
@@ -139,7 +139,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Cacheable(value = CACHE_NAME, key = "#root.method + #className")
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
         Assert.hasLength(className, "class name不能为null或空");
-        Assert.isTrue(getAvailableCopyStrategyNames().contains(className), "class name不存在");
+        Assert.isTrue(getAvailableStrategyNames().contains(className), "class name不存在");
         val strategyClass = DynamicClass.loadClass(className);
         return DictPropertyInfoVo.applyDictPropertyInfo(strategyClass);
     }

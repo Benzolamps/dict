@@ -6,7 +6,6 @@ import com.benzolamps.dict.util.DictFile;
 import com.benzolamps.dict.util.DictLambda;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -22,7 +21,7 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     @Resource
     private MiscellaneousDao miscellaneousDao;
 
-    @Value("file:${jdbc.file}")
+    @Value("file:#{dictProperties.jdbcFile}")
     private org.springframework.core.io.Resource resource;
 
     @Override

@@ -18,7 +18,7 @@ import java.net.MalformedURLException;
 @RestController
 public class IndexController extends BaseController {
 
-    @Value("${system.remote_base_url}")
+    @Value("#{dictProperties.remoteBaseUrl}")
     private String remoteBaseUrl;
 
     /**

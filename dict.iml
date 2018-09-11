@@ -7,6 +7,7 @@
           <dependency>spring_boot_com.benzolamps.dict.main.DictApplication</dependency>
           <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/cfg/WebConfiguration.java</file>
           <file>file://$MODULE_DIR$/src/main/resources/freemarker.xml</file>
+          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/cfg/DictProperties.java</file>
         </fileset>
       </configuration>
     </facet>

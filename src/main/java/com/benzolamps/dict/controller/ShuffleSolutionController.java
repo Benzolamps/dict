@@ -46,7 +46,7 @@ public class ShuffleSolutionController extends BaseController {
     @WindowView
     protected ModelAndView add() {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/add");
-        mv.addObject("strategies", shuffleSolutionService.getAvailableCopyStrategyNames());
+        mv.addObject("strategies", shuffleSolutionService.getAvailableStrategyNames());
         return mv;
     }
 
@@ -73,7 +73,7 @@ public class ShuffleSolutionController extends BaseController {
     protected ModelAndView edit(Long id) {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/edit");
         mv.addObject("solution", shuffleSolutionService.find(id));
-        mv.addObject("strategies", shuffleSolutionService.getAvailableCopyStrategyNames());
+        mv.addObject("strategies", shuffleSolutionService.getAvailableStrategyNames());
         return mv;
     }
 

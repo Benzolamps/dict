@@ -1,7 +1,17 @@
+dict:
+  system:
+    name: dictionary
+    title: 万聪英语
+    version: 2.1.1
+    console_encoding: GBK
+    remote_base_url: http://benzolamps.oss-cn-beijing.aliyuncs.com
+    universe_path: universe/
+    jdbc_file: dictionary.db
+
 spring:
   datasource:
     driver_class_name: org.sqlite.JDBC
-    url: jdbc:sqlite:${jdbc.file}
+    url: jdbc:sqlite:${dict.system.jdbc_file}
 
   jpa:
     show_sql: false
@@ -27,27 +37,14 @@ spring:
     date_format: yyyy-MM-dd HH:mm:ss
 
     serialization:
-
-      # 格式化输出
       indent_output: true
-
-      # 忽略无法转换的对象
       fail_on_empty_beans: false
-
-    # 设置空如何序列化
     defaultPropertyInclusion: NON_EMPTY
-
     deserialization:
-      #允许对象忽略json中不存在的属性
-
       fail_on_unknown_properties: false
 
     parser:
-
-      #允许出现特殊字符和转义符
       allow_unquoted_control_chars: true
-
-      #允许出现单引号
       allow_single_quotes: true
 
   http:
@@ -59,16 +56,14 @@ spring:
     settings:
       number_format: '#'
 
-
   cache:
     type: ehcache
     ehcache:
       config: classpath:ehcache.xml
 
-
 server:
-  port: ${system.port}
-  context_path: /${system.name}-${system.version}
+  port: 2018
+  context_path: /${dict.system.name}-${dict.system.version}
   tomcat:
     uri-encoding: UTF-8
 

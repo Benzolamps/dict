@@ -18,7 +18,7 @@ import java.util.Set;
 public interface ShuffleSolutionService {
 
     /** @return 获取可用的乱序策略名 */
-    Set<String> getAvailableCopyStrategyNames();
+    Set<String> getAvailableStrategyNames();
 
     /** @return 获取默认的乱序策略实例 */
     IShuffleStrategySetup getDefaultSolutionInstance();
