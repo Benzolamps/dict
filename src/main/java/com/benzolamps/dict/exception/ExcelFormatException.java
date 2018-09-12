@@ -16,6 +16,6 @@ public class ExcelFormatException extends DictException {
      * @param columnNum 列号
      */
     public ExcelFormatException(String message, int rowNum, int columnNum) {
-        super("导入失败, 在第 " + rowNum + " 行, 第 " + columnNum + " 列发生错误, " + message);
+        super("导入失败，在第 " + rowNum + " 行，第 " + columnNum + " 列发生错误，" + message);
     }
 }

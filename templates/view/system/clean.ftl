@@ -2,7 +2,7 @@
 <div class="layui-card">
   <div class="layui-card-body">
     <blockquote class="layui-elem-quote">
-      当前数据库文件大小: ${size}&nbsp;&nbsp;&nbsp;&nbsp;
+      当前数据库文件大小：${size}&nbsp;&nbsp;&nbsp;&nbsp;
       <button id="vacuum" class="layui-btn layui-btn-normal layui-btn-sm">
         <i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 清理缓存
       </button>

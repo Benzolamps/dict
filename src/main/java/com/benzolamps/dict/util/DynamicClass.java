@@ -96,7 +96,7 @@ public class DynamicClass {
             JavaCompiler.CompilationTask task = compiler.getTask(null, produceJavaFileManager(manager), null, options, null, iterable);
             Boolean result = task.call();
             if (result == null || !result) {
-                throw new DictException("编译失败!");
+                throw new DictException("编译失败");
             }
             classBytes.keySet().forEach((DictLambda.Action1<String>) key -> dynamicClassSet.add(classLoader.loadClass(key)));
             DictSpring.removeBean("classLoader");

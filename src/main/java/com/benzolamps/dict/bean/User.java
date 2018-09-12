@@ -5,7 +5,6 @@ import com.benzolamps.dict.component.DictReadonly;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -70,7 +69,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     /** 词库 */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "library")
     private Library library;
 }

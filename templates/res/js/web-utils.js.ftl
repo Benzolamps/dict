@@ -96,7 +96,7 @@ dict.postHref = function (url, data) {
             }
         });
         if (options.async) {
-            console.warn('异步的请求不能通过返回值获取数据!');
+            console.warn('异步的请求不能通过返回值获取数据');
         }
         return responseData;
     }

@@ -204,6 +204,9 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
         T ref = find(entity.getId());
         DictBean<T> dictBean = new DictBean<>(entityClass);
         for (DictProperty property : dictBean.getProperties()) {
+            if (DictArray.contains(ignoreProperties, property.getName()) || DictArray.contains(defaultIgnore, property.getName())) {
+                continue;
+            }
             property.set(ref, property.get(entity));
         }
         return entity;
@@ -212,9 +215,6 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     @Override
 	public void remove(Collection<T> entities) {
         Assert.notEmpty(entities, "entities不能为null或空");
-        /*if (entityManager.contains(entity)) {
-            entityManager.remove(entityManager.merge(entity));
-        }*/
         Assert.isTrue(entities.stream().noneMatch(BaseEntity::isNew), "entity不能是新建对象");
         String className = entityClass.getName();
         String alias = DictString.toCamel(entityClass.getSimpleName());

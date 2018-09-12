@@ -17,7 +17,7 @@ dict.nothing = function () {
  * @throws Error
  */
 dict.assert = function (value, msg) {
-    if (!value) throw Error(msg ? msg : 'Assertion Failed!');
+    if (!value) throw Error(msg ? msg : '断言失败');
 };
 
 /**

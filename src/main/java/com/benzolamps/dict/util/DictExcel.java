@@ -33,7 +33,7 @@ public interface DictExcel {
             int real = row.getLastCellNum();
             int acquired = detectColumnNum.value();
             if (real != acquired)
-                throw new ExcelFormatException("错误的列数, 应该为 " + acquired + " , 得到 " + real, row.getRowNum(), 0);
+                throw new ExcelFormatException("错误的列数，应该为 " + acquired + "，得到 " + real, row.getRowNum(), 0);
         }
 
         /* 获取所有带有ExcelHeader注解的属性 */
@@ -109,7 +109,7 @@ public interface DictExcel {
             try {
                 return new HSSFWorkbook(stream);
             } catch (Exception e) {
-                throw new DictException("文件格式有错误: " + e.getMessage(), e);
+                throw new DictException("文件格式有错误：" + e.getMessage(), e);
             }
         }
     }

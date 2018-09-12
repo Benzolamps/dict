@@ -63,12 +63,12 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
     private boolean shuffled;
 
     @Value("false")
-    @DictPropertyInfo(display = "是否指定乱序的种子", description = "不指定则以当前时间戳为准, 每次生成的次序都不一样")
+    @DictPropertyInfo(display = "是否指定乱序的种子", description = "不指定则以当前时间戳为准，每次生成的次序都不一样")
     @NotEmpty
     private boolean shuffleSeedSpecified;
 
     @Value("0")
-    @DictPropertyInfo(display = "乱序的种子", description = "如果指定乱序的种子, 则相同的种子, 相同的一组单词, 生成的次序一样")
+    @DictPropertyInfo(display = "乱序的种子", description = "如果指定乱序的种子，则相同的种子，相同的一组单词，生成的次序一样")
     @NotEmpty
     private int shuffleSeed;
 

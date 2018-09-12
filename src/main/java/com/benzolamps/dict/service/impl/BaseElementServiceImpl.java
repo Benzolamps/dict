@@ -7,6 +7,7 @@ import com.benzolamps.dict.dao.base.BaseElementDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.service.base.BaseElementService;
 import com.benzolamps.dict.service.base.LibraryService;
+import com.benzolamps.dict.util.DictArray;
 import com.benzolamps.dict.util.DictExcel;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -119,10 +120,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     public T update(T element, String... ignoreProperties) {
         Library current = libraryService.getCurrent();
         Assert.notNull(current, "未选择词库");
-        String[] ignoreProperties1 = new String[ignoreProperties.length + 1];
-        System.arraycopy(ignoreProperties, 0, ignoreProperties1, 1, ignoreProperties.length);
-        ignoreProperties1[0] = "library";
-        return super.update(element, ignoreProperties1);
+        return super.update(element, DictArray.add(ignoreProperties, "library"));
     }
 
     @Override

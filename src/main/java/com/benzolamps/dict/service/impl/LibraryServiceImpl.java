@@ -41,15 +41,14 @@ public class LibraryServiceImpl extends BaseServiceImpl<Library> implements Libr
     @Override
     @Transactional
     public Library getCurrent() {
-        if (count() <= 0) {
+        User user = userService.getCurrent();
+        if (user == null) {
             return null;
-        } else {
-            User user = userService.getCurrent();
-            if (user.getLibrary() == null) {
-                user.setLibrary(libraryDao.findCount(1, (Filter) null).get(0));
-            }
-            return user.getLibrary();
         }
+        if (user.getLibrary() == null && count() > 0) {
+            user.setLibrary(libraryDao.findCount(1, (Filter) null).get(0));
+        }
+        return user.getLibrary();
     }
 
     @Override
