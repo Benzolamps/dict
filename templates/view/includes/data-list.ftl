@@ -298,14 +298,12 @@
     $orderInfo.find('[name=field]').val('${page.orders[0].field}');
     $orderInfo.find('[name=direction]').val('${page.orders[0].direction}');
 
-    var execute = function (forcedReload) {
+    dict.loadFormData = function () {
       var data = {};
-
       <#if page_enabled>
         data.pageSize = $pageInfo.find('[name=pageSize]').val();
         data.pageNumber = $pageInfo.find('[name=pageNumber]').val();
       </#if>
-
       data.orders = [
         {
           field: $orderInfo.find('[name=field]').val(),
@@ -313,20 +311,21 @@
         }
       ];
       if (data.orders[0].field == null || data.orders[0].field == undefined || data.orders[0].field == '') data.orders = [];
-
-
       var searchesMap = dict.generateObject(dict.serializeObject($form)).search;
       data.searches = [];
-
       $.each(searchesMap, function (key, value) {
         data.searches.push({field: key, value: value});
       });
+      return data;
+    };
+
+    var execute = function (forcedReload) {
 
       dict.loadText({
         url: 'list.html',
         requestBody: true,
         type: 'POST',
-        data: forcedReload ? null : data,
+        data: forcedReload ? null : dict.loadFormData(),
         success: function (result, status, request) {
           document.close();
           document.write(result);

@@ -142,13 +142,6 @@ dict.produceFormItem = function (property) {
 dict.postInitForm = function (form, fields, extendedRules, extendedMessages, submitHandler) {
     layui.form.render();
     var $form = $(form);
-    $form.find('select').each(function () {
-        if ($(this).attr('required')) {
-            $(this).next().find('input').attr('required', true);
-            $(this).next().find('input').attr('name', $(this).attr('name'));
-            $(this).remove();
-        }
-    });
 
     $form.find('input[type=checkbox].dict-checkbox').each(function () {
         if ($(this).attr('required') && !$(this).parent().parent().children().eq(0).is('input')) {
@@ -256,6 +249,15 @@ dict.postInitForm = function (form, fields, extendedRules, extendedMessages, sub
                 $(this).val($(this).attr('option-id'));
             } else {
                 $(this).val(null);
+            }
+        });
+        $form.find('select').each(function () {
+            if ($(this).attr('required')) {
+                $(this).next().find('input').attr('required', true);
+                $(this).next().find('input').attr('name', $(this).attr('name'));
+                console.log($(this).next().find('layui-this'));
+                $(this).next().find('input').val($(this).next().find('layui-this').attr('lay-value'));
+                //$(this).remove();
             }
         });
         return submitHandler();

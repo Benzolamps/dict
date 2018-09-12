@@ -9,7 +9,7 @@ solutions: !!set
     needHeader: true
     needShuffle: false
     order: 0
-    path: doc/universe/new_words.doc.ftl
+    path: doc/universe/new_words.doc
     properties: {}
     remark: 单词生词表
   : null
@@ -19,7 +19,7 @@ solutions: !!set
     needHeader: true
     needShuffle: true
     order: 1
-    path: doc/universe/copy_words.doc.ftl
+    path: doc/universe/copy_words.doc
     properties: {}
     remark: 单词抄写表
   : null
@@ -29,7 +29,7 @@ solutions: !!set
     needHeader: true
     needShuffle: false
     order: 2
-    path: doc/universe/check_words.doc.ftl
+    path: doc/universe/check_words.doc
     properties: {}
     remark: 单词排查表
   : null
@@ -39,7 +39,7 @@ solutions: !!set
     needHeader: true
     needShuffle: false
     order: 3
-    path: doc/universe/new_phrases.doc.ftl
+    path: doc/universe/new_phrases.doc
     properties: {}
     remark: 短语生词表
   : null
@@ -49,7 +49,7 @@ solutions: !!set
     needHeader: true
     needShuffle: true
     order: 4
-    path: doc/universe/copy_phrases.doc.ftl
+    path: doc/universe/copy_phrases.doc
     properties: {}
     remark: 单词生词表
   : null
@@ -59,7 +59,7 @@ solutions: !!set
     needHeader: true
     needShuffle: false
     order: 5
-    path: doc/universe/check_phrases.doc.ftl
+    path: doc/universe/check_phrases.doc
     properties: {}
     remark: 短语排查表
   : null

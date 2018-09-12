@@ -43,7 +43,7 @@ public interface Constant {
 
     /** HTML压缩 */
     // language=RegExp
-    String HTML_COMPRESS_PATTERN = "^\\s+|\\s+$|\\n|\\r";
+    String HTML_COMPRESS_PATTERN = "^[\\s]+|[\\s]+$|\\n|\\r";
 
     /** 空的Object数组 */
     Object[] EMPTY_OBJECT_ARRAY = new Object[0];

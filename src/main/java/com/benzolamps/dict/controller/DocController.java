@@ -3,18 +3,19 @@ package com.benzolamps.dict.controller;
 import com.benzolamps.dict.bean.DocSolution;
 import com.benzolamps.dict.component.IShuffleStrategy;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
-import com.benzolamps.dict.controller.interceptor.DocView;
 import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.service.base.DocSolutionService;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
+import com.benzolamps.dict.util.Constant;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Word文档界面
@@ -32,8 +33,7 @@ public class DocController extends BaseController {
     @Resource
     private ShuffleSolutionService shuffleSolutionService;
 
-    @PostMapping("export.doc")
-    @DocView
+    @RequestMapping(value = "/export.txt", method = {RequestMethod.GET, RequestMethod.POST})
     protected ModelAndView export(DocExportVo docExportVo) {
         ModelAndView mv = new ModelAndView();
         Assert.notNull(docExportVo, "doc export vo不能为null");
@@ -61,5 +61,12 @@ public class DocController extends BaseController {
         docSolution.getProperties().forEach(mv.getModelMap()::putIfAbsent);
         docSolutionService.getBaseProperties().forEach(mv.getModelMap()::putIfAbsent);
         return mv;
+    }
+
+    @PostMapping(value = "/download.doc")
+    @ResponseBody
+    protected String download(String fileName, String content, HttpServletResponse response) throws UnsupportedEncodingException {
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8'zh_cn'" + URLEncoder.encode(fileName, "UTF-8") + ".doc");
+        return content.replaceAll(Constant.HTML_COMPRESS_PATTERN, "").replaceAll("[\\s ]+", " ").replaceAll("> <", "><");
     }
 }

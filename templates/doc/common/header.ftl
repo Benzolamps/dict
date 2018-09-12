@@ -1,6 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <#-- @ftlvariable name="content_path" type="java.lang.String" -->
 <#-- @ftlvariable name="title" type="java.lang.String" -->
-<?xml version="1.0" encoding="utf-8"?>
 <#escape x as x?html>
   <?mso-application progid="Word.Document"?>
   <w:wordDocument

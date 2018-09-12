@@ -87,7 +87,7 @@ public class WordController extends BaseController {
      * 导出单词
      * @return ModelAndView
      */
-    @PostMapping(value = "/export_save.doc")
+    @PostMapping(value = "/export_save.txt")
     protected ModelAndView exportSave(@RequestBody DocExportVo docExportVo, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView();
         Pageable pageable = docExportVo.getPageable();
@@ -99,7 +99,7 @@ public class WordController extends BaseController {
         }
         docExportVo.setContent(words);
         redirectAttributes.addFlashAttribute("docExportVo", docExportVo);
-        mv.setViewName("redirect:/doc/export.doc");
+        mv.setViewName("redirect:/doc/export.txt");
         return mv;
     }
 
