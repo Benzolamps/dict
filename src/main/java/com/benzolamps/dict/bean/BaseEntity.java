@@ -81,4 +81,13 @@ public abstract class BaseEntity implements Serializable {
         }
         return Objects.equals(getId(), ((BaseEntity) obj).getId());
     }
+
+
+    @Override
+    public int hashCode() {
+        int hashCode = 17;
+        hashCode += getId() != null ? getId().hashCode() * 31 : 0;
+        hashCode += getClass().hashCode() * 31;
+        return hashCode;
+    }
 }

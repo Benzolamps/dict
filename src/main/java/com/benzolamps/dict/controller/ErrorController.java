@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -28,7 +29,7 @@ import java.util.stream.Stream;
  * @version 2.1.1
  * @datetime 2018-7-5 21:34:43
  */
-@Controller
+@RestController
 @Slf4j
 public class ErrorController extends BaseController implements org.springframework.boot.autoconfigure.web.ErrorController {
 

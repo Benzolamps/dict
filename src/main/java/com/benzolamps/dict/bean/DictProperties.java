@@ -1,9 +1,8 @@
 package com.benzolamps.dict.bean;
 
-import lombok.Data;
+import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 
 import java.io.Serializable;
 
@@ -15,7 +14,7 @@ import java.io.Serializable;
  */
 @Configuration("dictProperties")
 @ConfigurationProperties(prefix = "dict.system")
-@Data
+@Getter
 public class DictProperties implements Serializable {
 
     private static final long serialVersionUID = 2388800158030381132L;
@@ -40,4 +39,32 @@ public class DictProperties implements Serializable {
 
     /** Universe路径 */
     private String universePath;
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public void setJdbcFile(String jdbcFile) {
+        this.jdbcFile = jdbcFile;
+    }
+
+    public void setConsoleEncoding(String consoleEncoding) {
+        this.consoleEncoding = consoleEncoding;
+    }
+
+    public void setRemoteBaseUrl(String remoteBaseUrl) {
+        this.remoteBaseUrl = remoteBaseUrl;
+    }
+
+    public void setUniversePath(String universePath) {
+        this.universePath = universePath;
+    }
 }

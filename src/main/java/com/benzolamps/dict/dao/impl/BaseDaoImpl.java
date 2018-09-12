@@ -5,7 +5,6 @@ import com.benzolamps.dict.dao.base.BaseDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.*;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.ArrayUtils;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
@@ -205,9 +204,6 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
         T ref = find(entity.getId());
         DictBean<T> dictBean = new DictBean<>(entityClass);
         for (DictProperty property : dictBean.getProperties()) {
-            if (ArrayUtils.contains(ignoreProperties, property.getName()) || ArrayUtils.contains(defaultIgnore, property.getName())) {
-                continue;
-            }
             property.set(ref, property.get(entity));
         }
         return entity;

@@ -1,12 +1,8 @@
 package com.benzolamps.dict.controller.vo;
 
 import com.benzolamps.dict.component.*;
-import com.benzolamps.dict.util.DictBean;
-import com.benzolamps.dict.util.DictList;
-import com.benzolamps.dict.util.DictMap;
-import com.benzolamps.dict.util.DictProperty;
+import com.benzolamps.dict.util.*;
 import lombok.Getter;
-import org.apache.commons.lang.enums.EnumUtils;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
@@ -255,6 +251,7 @@ public class DictPropertyInfoVo implements Serializable {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     private List<?> internalGetOptions() {
         Collection<?> collection = null;
         if (Arrays.asList("string", "integer", "float", "char", "date").contains(getType())) {
@@ -285,8 +282,8 @@ public class DictPropertyInfoVo implements Serializable {
                 }
             }
         } else if ("enum".equals(getType())) {
-            List<?> enumList = EnumUtils.getEnumList(dictProperty.getType());
-            collection = enumList.stream().map(Object::toString).collect(Collectors.toList());
+          List<?> enumList = DictEnum.getEnumList((Class<? extends Enum<?>>) dictProperty.getType());
+          collection = enumList.stream().map(Object::toString).collect(Collectors.toList());
         }
         if (collection != null) {
             return collection.stream().map(item ->

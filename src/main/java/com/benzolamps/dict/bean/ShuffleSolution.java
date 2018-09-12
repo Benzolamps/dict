@@ -65,9 +65,17 @@ public class ShuffleSolution implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (!getClass().isAssignableFrom(obj.getClass())) {
+        if (!ShuffleSolution.class.isAssignableFrom(obj.getClass())) {
             return false;
         }
         return Objects.equals(getId(), ((ShuffleSolution) obj).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        int hashCode = 17;
+        hashCode += getId() != null ? getId().hashCode() * 31 : 0;
+        hashCode += getClass().hashCode() * 31;
+        return hashCode;
     }
 }

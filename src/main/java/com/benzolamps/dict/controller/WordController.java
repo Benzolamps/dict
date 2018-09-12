@@ -5,20 +5,21 @@ import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
+import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.controller.vo.WordVo;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
-import com.benzolamps.dict.service.base.LibraryService;
-import com.benzolamps.dict.service.base.WordClazzService;
-import com.benzolamps.dict.service.base.WordService;
+import com.benzolamps.dict.service.base.*;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 单词Controller
@@ -39,6 +40,12 @@ public class WordController extends BaseController {
     @Resource
     private LibraryService libraryService;
 
+    @Resource
+    private ShuffleSolutionService shuffleSolutionService;
+
+    @Resource
+    private DocSolutionService docSolutionService;
+
     /**
      * 列出所有单词
      * @return ModelAndView
@@ -55,6 +62,44 @@ public class WordController extends BaseController {
         } else {
             mv.setViewName("view/library/lack");
         }
+        return mv;
+    }
+
+    /**
+     * 导出单词页面
+     * @return ModelAndView
+     */
+    @RequestMapping(value = "/export.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @WindowView
+    protected ModelAndView export() {
+        ModelAndView mv = new ModelAndView();
+        if (libraryService.count() > 0) {
+            mv.setViewName("view/word/export");
+            mv.addObject("shuffleSolutions", shuffleSolutionService.findAll());
+            mv.addObject("docSolutions", docSolutionService.findAll());
+        } else {
+            mv.setViewName("view/library/lack");
+        }
+        return mv;
+    }
+
+    /**
+     * 导出单词
+     * @return ModelAndView
+     */
+    @PostMapping(value = "/export_save.doc")
+    protected ModelAndView exportSave(@RequestBody DocExportVo docExportVo, RedirectAttributes redirectAttributes) {
+        ModelAndView mv = new ModelAndView();
+        Pageable pageable = docExportVo.getPageable();
+        List<Word> words;
+        if (pageable == null) {
+            words = wordService.findAll();
+        } else {
+            words = wordService.findPage(pageable).getContent();
+        }
+        docExportVo.setContent(words);
+        redirectAttributes.addFlashAttribute("docExportVo", docExportVo);
+        mv.setViewName("redirect:/doc/export.doc");
         return mv;
     }
 

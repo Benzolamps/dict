@@ -1,10 +1,13 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.util.DictEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
@@ -66,9 +69,18 @@ public class DocSolution implements Serializable {
         if (this == obj) {
             return true;
         }
-        if (!getClass().isAssignableFrom(obj.getClass())) {
+        if (!DocSolution.class.isAssignableFrom(obj.getClass())) {
             return false;
         }
         return Objects.equals(getId(), ((DocSolution) obj).getId());
+    }
+
+
+    @Override
+    public int hashCode() {
+        int hashCode = 17;
+        hashCode += getId() != null ? getId().hashCode() * 31 : 0;
+        hashCode += getClass().hashCode() * 31;
+        return hashCode;
     }
 }
