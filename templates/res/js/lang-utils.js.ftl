@@ -132,9 +132,6 @@ dict.extendsFunction = function (func1, func2) {
         func2 = dict.nothing;
     }
 
-    console.log(func1.toString());
-    console.log(func2.toString());
-
     var extended = function () {
         var returnValue;
         for (var i = 0; i < extended.callArray.length; i++) {
