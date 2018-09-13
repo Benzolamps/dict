@@ -88,6 +88,9 @@
 
   <script type="text/javascript">
     var fields = <@json_dump obj=fields/>;
+    $.each(fields, function (index, item) {
+      delete fields[index].sort;
+    });
     fields.push({field: 'id', title: '操作', align: 'left', toolbar: '#${id}-tools'});
     table.render({
       elem: $('#${id} table'),
@@ -97,12 +100,6 @@
       data: <@json_dump obj=values/>,
       id: '${id}',
       height: 'full-200',
-      <#if page.orders?size gt 0>
-        initSort: {
-          field: '${page.orders[0].getField()}',
-          type: '${page.orders[0].getDirection()?lower_case}'
-        }
-      </#if>,
       loading: true
 
     });
@@ -256,6 +253,21 @@
       execute();
       return false;
     });
+
+    <#list fields as field>
+      <#if field.sort?? && field.sort>
+        $('th[data-field=${field.field}]').mouseenter(function () {
+          $(this).css('background-color', 'red');
+        }).mouseleave(function () {
+          $(this).css('background-color', '');
+        })
+        $('th[data-field=${field.field}]').click(function () {
+          $('#${id}-order-info [name=field]').val('${field.field}');
+          $('#${id}-order-info [name=direction]').val('${(field.field == page.orders[0].field && page.orders[0].direction == 'ASC')?string('DESC', 'ASC')}');
+          execute();
+        });
+      </#if>
+    </#list>
 
     var $form = $('#${id}');
     var $pageInfo = $form.find('#${id}-page-info');

@@ -17,6 +17,9 @@ import java.util.Map;
 
 /**
  * 乱序方案遍历Freemarker指令
+ * @author Benzolamps
+ * @version 2.1.1
+ * @datetime 2018-9-13 17:03:21
  */
 @Component
 public class ShuffleStrategyDirective implements TemplateDirectiveModel {
