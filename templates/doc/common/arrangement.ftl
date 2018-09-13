@@ -1,6 +1,6 @@
 <#-- 纵向排列 -->
 <#macro vertical_arrangement definations>
-  <#list definations as def>
+  <#list definations?split("；") as def>
     <w:p wsp:rsidR="00E602B2" wsp:rsidRPr="006C50AA" wsp:rsidRDefault="00E602B2" wsp:rsidP="00E602B2">
       <w:pPr>
         <w:spacing w:line="${line_height}" w:line-rule="auto"/>
@@ -49,7 +49,7 @@
       <w:sz-cs w:val="${font_size}"/>
     </w:rPr>
   </w:pPr>
-    <#list definations as def>
+    <#list definations?split("；") as def>
       <#if !(def_index == 0 && !def_has_next)>
         <w:r wsp:rsidRPr="006C50AA">
           <w:rPr>

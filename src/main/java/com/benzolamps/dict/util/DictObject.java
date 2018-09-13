@@ -1,5 +1,7 @@
 package com.benzolamps.dict.util;
 
+import org.springframework.util.Assert;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -9,9 +11,16 @@ import java.math.BigInteger;
  * @version 2.1.1
  * @datetime 2018-8-22 14:57:43
  */
+@SuppressWarnings("unchecked")
 public interface DictObject {
 
-    @SuppressWarnings("unchecked")
+    /**
+     * 类型转换, 转换值
+     * @param obj 对象
+     * @param tClass 类型
+     * @param <T> 类型
+     * @return 转换后的对象
+     */
     static <T> T ofObject(Object obj, Class<T> tClass) {
         if (obj == null || tClass == null) return null;
         else if (tClass.isInstance(obj)) return (T) obj;
@@ -32,6 +41,22 @@ public interface DictObject {
             return (T) obj;
         } else {
             return DictString.ofString(obj.toString(), tClass);
+        }
+    }
+
+    /**
+     * 安全类强制转换
+     * @param obj 对象
+     * @param tClass 类型
+     * @param <T> 类型
+     * @return 转换后的对象
+     */
+    static <T> T safeCast(Object obj, Class<T> tClass) {
+        Assert.notNull(tClass, "t class不能为null");
+        if (tClass.isInstance(obj)) {
+            return (T) obj;
+        } else {
+            return null;
         }
     }
 }

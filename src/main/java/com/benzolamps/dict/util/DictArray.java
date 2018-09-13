@@ -2,6 +2,8 @@ package com.benzolamps.dict.util;
 
 import java.lang.reflect.Array;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.IntConsumer;
 
 /**
  * 数组工具类

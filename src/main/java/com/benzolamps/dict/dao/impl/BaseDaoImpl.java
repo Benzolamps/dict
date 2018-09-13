@@ -212,8 +212,18 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
         return entity;
     }
 
+    interface MyIntConsumer {
+        void accept(int value) throws Throwable;
+    }
+
+
     @Override
 	public void remove(Collection<T> entities) {
+
+
+        MyIntConsumer consumer = Thread::sleep;
+
+
         Assert.notEmpty(entities, "entities不能为null或空");
         Assert.isTrue(entities.stream().noneMatch(BaseEntity::isNew), "entity不能是新建对象");
         String className = entityClass.getName();

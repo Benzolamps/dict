@@ -37,7 +37,7 @@
         success: function (result, status, request) {
           var index = parent.layer.getFrameIndex(window.name);
           parent.layer.close(index);
-          parent.$('iframe')[0].contentWindow.dict.reload();
+          parent.$('iframe')[0].contentWindow.dict.reload(true);
           ${submit_handler}
         },
         error: function (result, status, request) {

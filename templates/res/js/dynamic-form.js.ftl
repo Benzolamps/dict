@@ -140,8 +140,15 @@ dict.produceFormItem = function (property) {
  * 表单生成后处理
  */
 dict.postInitForm = function (form, fields, extendedRules, extendedMessages, submitHandler) {
-    layui.form.render();
     var $form = $(form);
+    layui.form.render();
+    $form.find('select').each(function () {
+        var $input = $(this).next().find('input');
+        $input.attr('required', $(this).attr('required'));
+        $input.attr('name', $(this).attr('name'));
+        $input.addClass('select-input');
+        $(this).remove();
+    });
 
     $form.find('input[type=checkbox].dict-checkbox').each(function () {
         if ($(this).attr('required') && !$(this).parent().parent().children().eq(0).is('input')) {
@@ -235,6 +242,11 @@ dict.postInitForm = function (form, fields, extendedRules, extendedMessages, sub
     }
 
     dict.validateForm($form, $.extend(true, rules, extendedRules), $.extend(true, messages, extendedMessages), function () {
+
+        $form.find('.select-input').each(function () {
+            $(this).val($(this).parent().next().children('.layui-this').attr('lay-value'));
+        });
+
         $form.find('input[type=checkbox].dict-switch').each(function () {
             var $next = $(this).next();
             if ($next.is('.layui-form-checked')) {
@@ -249,15 +261,6 @@ dict.postInitForm = function (form, fields, extendedRules, extendedMessages, sub
                 $(this).val($(this).attr('option-id'));
             } else {
                 $(this).val(null);
-            }
-        });
-        $form.find('select').each(function () {
-            if ($(this).attr('required')) {
-                $(this).next().find('input').attr('required', true);
-                $(this).next().find('input').attr('name', $(this).attr('name'));
-                console.log($(this).next().find('layui-this'));
-                $(this).next().find('input').val($(this).next().find('layui-this').attr('lay-value'));
-                //$(this).remove();
             }
         });
         return submitHandler();

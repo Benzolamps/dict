@@ -38,7 +38,7 @@ public interface DictMap {
                 } else {
                     StringJoiner sj = new StringJoiner(".", "", "." + key.toString());
                     list.forEach(sj::add);
-                    properties.setProperty(sj.toString(), value.toString());
+                    if (value != null) properties.setProperty(sj.toString(), value.toString());
                 }
             }
             list.remove(list.size() - 1);

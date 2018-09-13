@@ -1,6 +1,6 @@
 <#macro data_add id fields values={} rules={} messages={}
-title='添加${id}' save='save.json' request_body=true
-submit_handler='' error_handler='' ready_handler=''
+  title='添加${id}' save='save.json' request_body=true
+  submit_handler='' error_handler='' ready_handler=''
 >
   <#-- @ftlvariable name="id" type="java.lang.String" -->
   <#-- @ftlvariable name="fields" type="java.util.List<com.benzolamps.dict.controller.vo.DictPropertyInfoVo>" -->

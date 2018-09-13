@@ -5,7 +5,7 @@
   var showEdit = function (selector, className) {
     dict.loadText({
       url: 'property_info.json',
-      data: {className: '${solution.strategyClass}'},
+      data: {className: className},
       dataType: 'json',
       success: function (data) {
         dict.dynamicForm(selector, data.data, 'properties.', <@json_dump obj = solution.properties/>);
@@ -63,7 +63,7 @@
   values=solution
   messages={
     'name': {
-      'pattern': '乱序方案名称必须是汉字、字母、数字的组合'
+      'pattern': '名称必须是汉字、字母、数字的组合'
     }
   }
   ready_handler=ready_handler

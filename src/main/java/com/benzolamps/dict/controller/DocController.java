@@ -1,7 +1,6 @@
 package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.bean.DocSolution;
-import com.benzolamps.dict.component.IShuffleStrategy;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
 import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.service.base.DocSolutionService;
@@ -55,8 +54,7 @@ public class DocController extends BaseController {
         if (docSolution.getNeedShuffle()) {
             IShuffleStrategySetup setup = shuffleSolutionService.getSolutionInstanceAt(docExportVo.getShuffleSolutionId());
             Assert.notNull(setup, "shuffle solution不能为null");
-            IShuffleStrategy shuffleStrategy = setup.setup(docExportVo.getContent().size(), docExportVo.getContent().hashCode());
-            mv.addObject("shuffleStrategy", shuffleStrategy);
+            mv.addObject("shuffleStrategySetup", setup);
         }
         docSolution.getProperties().forEach(mv.getModelMap()::putIfAbsent);
         docSolutionService.getBaseProperties().forEach(mv.getModelMap()::putIfAbsent);

@@ -35,7 +35,9 @@
       display: '模板',
       description: '文档的模板',
       notEmpty: true,
-      options: docSolutions.map(function (docSolution) {
+      options: docSolutions.filter(function (docSolution) {
+          return docSolution.exportFor.toLowerCase() == 'word';
+      }).map(function (docSolution) {
         return {id: docSolution.id, value: docSolution.name};
       })
     },
