@@ -55,6 +55,5 @@ public class ShuffleStrategyDirective implements TemplateDirectiveModel {
         env.setVariable("index", oldIndex);
         env.setVariable("element_index", oldElementIndex);
         env.setVariable("has_next", oldHasNext);
-
     }
 }
