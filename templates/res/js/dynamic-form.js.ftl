@@ -63,13 +63,14 @@ dict.produceFormItem = function (property) {
     } else if (property.textArea) {
         $component = $(document.createElement('textarea'))
             .attr('name', property.name)
-            .attr('placeholder', '请输入' + property.display)
+            .attr('placeholder', property.display)
             .attr('autocomplete', 'off')
             .attr('required', property.notEmpty)
             .attr('maxlength', property.maxLength)
             .text(property.value)
             .addClass('layui-input')
-            .addClass('layui-textarea');
+            .addClass('layui-textarea')
+            .css('resize', 'none');
     } else {
         switch (property.type) {
             case 'boolean': {
@@ -242,30 +243,35 @@ dict.postInitForm = function (form, fields, extendedRules, extendedMessages, sub
     }
 
     dict.validateForm($form, $.extend(true, rules, extendedRules), $.extend(true, messages, extendedMessages), function () {
-
-        $form.find('.select-input').each(function () {
-            $(this).val($(this).parent().next().children('.layui-this').attr('lay-value'));
-        });
-
-        $form.find('input[type=checkbox].dict-switch').each(function () {
-            var $next = $(this).next();
-            if ($next.is('.layui-form-checked')) {
-                $(this).val('true');
-            } else {
-                $(this).val('false');
-            }
-        });
-        $form.find('input[type=checkbox].dict-checkbox').each(function () {
-            var $next = $(this).next();
-            if ($next.is('.layui-form-checked')) {
-                $(this).val($(this).attr('option-id'));
-            } else {
-                $(this).val(null);
-            }
-        });
-        return submitHandler();
+        dict.preSubmit($form);
+        return submitHandler ? submitHandler() : false;
     });
 };
+
+dict.preSubmit = function (form) {
+    var $form = $(form);
+
+    $form.find('.select-input').each(function () {
+        $(this).val($(this).parent().next().children('.layui-this').attr('lay-value'));
+    });
+
+    $form.find('input[type=checkbox].dict-switch').each(function () {
+        var $next = $(this).next();
+        if ($next.is('.layui-form-onswitch')) {
+            $(this).val('true');
+        } else {
+            $(this).val('false');
+        }
+    });
+    $form.find('input[type=checkbox].dict-checkbox').each(function () {
+        var $next = $(this).next();
+        if ($next.is('.layui-form-checked')) {
+            $(this).val($(this).attr('option-id'));
+        } else {
+            $(this).val(null);
+        }
+    });
+}
 
 /**
  * Ajax动态加载表单项
@@ -378,12 +384,7 @@ dict.dynamicSearch = function (form, selector, fields, initValues, extendedRules
  */
 dict.validateForm = function (selector, rules, messages, submitHandler) {
     var $form = $(selector);
-    var validator = $form.validate();
-    rules = $.extend(true, validator.dicRules, rules);
-    messages = $.extend(true, validator.dictMessages, messages);
-    submitHandler = dict.extendsFunction(validator.dictSubmitHandler, submitHandler);
-    validator.destroy();
-    validator = $form.validate({
+    $form.validate({
         rules: rules,
         messages: messages,
         errorPlacement: dict.nothing,
@@ -412,7 +413,4 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
         onclick: false,
         submitHandler: submitHandler
     })
-    validator.dictRules = rules;
-    validator.dictMessages = messages;
-    validator.dictSubmitHandler = submitHandler;
 };

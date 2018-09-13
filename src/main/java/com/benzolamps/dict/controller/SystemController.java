@@ -3,10 +3,7 @@ package com.benzolamps.dict.controller;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.service.base.MiscellaneousService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -58,8 +55,7 @@ public class SystemController extends BaseController {
      * 清理缓存界面
      * @return ModelAndView
      */
-    @NavigationView
-    @GetMapping("/clean.html")
+    @RequestMapping(value = "/clean.html", method = {RequestMethod.GET, RequestMethod.POST})
     protected ModelAndView clean() {
         ModelAndView mv = new ModelAndView("view/system/clean");
         mv.addObject("size", miscellaneousService.databaseFileSize());

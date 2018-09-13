@@ -68,6 +68,40 @@
     }, 500);
   });
 </#assign>
+
+<#assign file_export>
+  parent.layer.open({
+    type: 2,
+    content: '${base_url}/phrase/export.html',
+    area: ['800px', '600px'],
+    end: function () {
+      var data = {};
+      data.pageable = dict.loadFormData();
+      data.title = parent.exportData.title;
+      data.docSolutionId = parent.exportData.docSolution;
+      data.shuffleSolutionId = parent.exportData.shuffleSolution;
+      dict.loadText({
+        url: 'export_save.txt',
+        type: 'post',
+        data: data,
+        requestBody: true,
+        success: function (result, status, request) {
+          dict.postHref('${base_url}/doc/download.doc', {
+            fileName: data.title,
+            content: result
+          });
+        },
+        error: function (result, status, request) {
+          parent.layer.alert(result.message, {
+            icon: 2,
+            title: result.status
+          });
+        }
+      });
+    }
+  });
+</#assign>
+
 <@nothing></script></@nothing>
 <@data_list
   id='phrases'
@@ -86,6 +120,10 @@
     {
       'html': '<i class="layui-icon" style="font-size: 20px;">&#xe60a;</i> 导入短语',
       'handler': file_upload
+    },
+    {
+      'html': '<i class="layui-icon" style="font-size: 20px;">&#xe60a;</i> 导出短语',
+      'handler': file_export
     }
   ]
   page_enabled=true

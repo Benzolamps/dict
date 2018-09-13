@@ -30,6 +30,7 @@ public class ShuffleSolutionController extends BaseController {
      * 列出所有乱序方案
      * @return ModelAndView
      */
+    @WindowView
     @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
     protected ModelAndView list(Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/list");

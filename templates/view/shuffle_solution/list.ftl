@@ -4,9 +4,9 @@
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
-    {'field': 'name', 'title': '随机方案名称', 'sort': true},
-    {'field': 'strategyClass', 'title': '随机策略名称', 'sort': true},
-    {'field': 'remark', 'title': '备注', 'sort': true}
+    {'field': 'name', 'title': '随机方案名称'},
+    {'field': 'strategyClass', 'title': '随机策略名称'},
+    {'field': 'remark', 'title': '备注'}
   ]
   page=page
   add='${base_url}/shuffle_solution/add.html'

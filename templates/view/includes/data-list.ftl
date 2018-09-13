@@ -13,11 +13,26 @@
   <#-- @ftlvariable name="toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
   <#-- @ftlvariable name="head_toolbar" type="java.util.Collection<com.benzolamps.dict.directive.Toolbar>" -->
   <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page" -->
+
+  <#-- TODO: 样式 -->
   <style>
     .layui-table-view .layui-table {
       width: 100%;
     }
+
+    #${id} .field-th-hover {
+      background-color: #DDDDDD;
+    }
+
+    #${id} .field-th-active {
+      background-color: #FFB800;
+    }
+
+    #${id} th {
+      cursor: pointer;
+    }
   </style>
+
   <script type="text/javascript"></script>
   <div class="layui-row">
     <form class="layui-form" id="${id}" lay-filter="${id}" onsubmit="return false;" method="post">
@@ -72,6 +87,7 @@
     </form>
   </div>
 
+  <#-- 工具栏 -->
   <script type="text/html" id="${id}-tools">
     <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">
       <i class="layui-icon" style="font-size: 20px;">&#xe642;</i> 修改
@@ -87,11 +103,15 @@
   </script>
 
   <script type="text/javascript">
+
+    <#-- 表格字段 -->
     var fields = <@json_dump obj=fields/>;
     $.each(fields, function (index, item) {
       delete fields[index].sort;
     });
     fields.push({field: 'id', title: '操作', align: 'left', toolbar: '#${id}-tools'});
+
+    <#-- TODO: 表格渲染 -->
     table.render({
       elem: $('#${id} table'),
       page: false,
@@ -104,6 +124,7 @@
 
     });
 
+    <#-- TODO: 分页渲染 -->
     <#if page_enabled>
       laypage.render({
         elem: '${id}-page',
@@ -111,7 +132,7 @@
         curr: ${page.pageNumber},
         limit: ${page.pageSize},
         limits: [10, 20, 30, 50, 100, 200, 500, 1000],
-        layout: ['count', 'prev', 'page', 'next', 'skip', 'limit'],
+        layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
         jump: function (obj, first) {
           if (!first) {
             $('#${id}-page-info [name=pageSize]').val(obj.limit);
@@ -126,6 +147,7 @@
     var delMany = $('#${id} [lay-event=delMany]');
     var refresh = $('#${id} [lay-event=refresh]');
 
+    <#-- TODO: 添加操作 -->
     add.click(function () {
       parent.layer.open({
         type: 2,
@@ -134,6 +156,7 @@
       });
     });
 
+    <#-- 批量删除 -->
     delMany.click(function () {
       var process = function (index) {
         var checkStatus = table.checkStatus('${id}');
@@ -168,8 +191,12 @@
       });
     });
 
-    refresh.click(execute);
+    <#-- 刷新 -->
+    refresh.click(function () {
+      execute();
+    });
 
+    <#-- 头部工具栏操作 -->
     <#list head_toolbar as tool>
       $('#${id} [lay-event=head-toolbar-${tool_index}]').click(function () {
         var checkStatus = table.checkStatus('${id}');
@@ -179,14 +206,19 @@
       });
     </#list>
 
+    <#-- TODO: 工具栏操作 -->
     table.on('tool(${id})', function (obj) {
+
+      <#-- 修改 -->
       if (obj.event == 'edit') {
         parent.layer.open({
           type: 2,
           content: '${edit}?id=' + obj.data.id,
           area: ['800px', '600px']
         });
-      } else if (obj.event == 'del') {
+      }
+      <#-- 删除 -->
+      else if (obj.event == 'del') {
         var process = function (index) {
           dict.loadText({
             url: '${delete}',
@@ -217,6 +249,8 @@
           </#if>
         });
       }
+
+      <#-- 自定义工具栏操作 -->
       <#if toolbar?size gt 0>
         else {
           switch (obj.event) {
@@ -232,6 +266,7 @@
       </#if>
     });
 
+    <#-- TODO: 需要有选择项时的操作的禁用与恢复 -->
     var needSelected = $('#${id} .head-toolbar>button.layui-btn-disabled');
 
     table.on('checkbox(${id})', function (obj) {
@@ -247,28 +282,28 @@
       }
     });
 
-    table.on('sort(${id})', function (obj) {
-      $('#${id}-order-info [name=field]').val(obj.field);
-      $('#${id}-order-info [name=direction]').val(obj.type.toUpperCase());
-      execute();
-      return false;
+    <#-- TODO: 排序操作 -->
+    var currSort = '${page.orders[0].field}';
+    var currDirection = '${page.orders[0].direction}';
+
+    $('th[data-field=' + currSort + ']').addClass('field-th-active');
+    $('th[data-field=id]').removeClass('field-th-active');
+
+    $.each([<#list fields as field><#if field.sort?? && field.sort>'${field.field}'</#if><#sep>, </#list>], function (index, value) {
+      $('#${id} th[data-field=' + value + ']').click(function () {
+        $('#${id} .field-th-active').removeClass('field-th-active');
+        $(this).addClass('field-th-active');
+        $('#${id}-order-info [name=field]').val(value);
+        $('#${id}-order-info [name=direction]').val((value == currSort && currDirection == 'ASC') ? 'DESC' : 'ASC');
+        execute();
+      }).mouseenter(function () {
+        $(this).addClass('field-th-hover');
+      }).mouseleave(function () {
+        $(this).removeClass('field-th-hover');
+      });
     });
 
-    <#list fields as field>
-      <#if field.sort?? && field.sort>
-        $('th[data-field=${field.field}]').mouseenter(function () {
-          $(this).css('background-color', 'red');
-        }).mouseleave(function () {
-          $(this).css('background-color', '');
-        })
-        $('th[data-field=${field.field}]').click(function () {
-          $('#${id}-order-info [name=field]').val('${field.field}');
-          $('#${id}-order-info [name=direction]').val('${(field.field == page.orders[0].field && page.orders[0].direction == 'ASC')?string('DESC', 'ASC')}');
-          execute();
-        });
-      </#if>
-    </#list>
-
+    <#-- TODO: 筛选表格 -->
     var $form = $('#${id}');
     var $pageInfo = $form.find('#${id}-page-info');
     var $orderInfo = $form.find('#${id}-order-info');
@@ -307,9 +342,10 @@
       $pageInfo.find('[name=pageNumber]').val(#{page.pageNumber});
     </#if>
 
-    $orderInfo.find('[name=field]').val('${page.orders[0].field}');
-    $orderInfo.find('[name=direction]').val('${page.orders[0].direction}');
+    $orderInfo.find('[name=field]').val(currSort);
+    $orderInfo.find('[name=direction]').val(currDirection);
 
+    <#-- TODO: 加载表格表单筛选数据 -->
     dict.loadFormData = function () {
       var data = {};
       <#if page_enabled>
@@ -323,6 +359,7 @@
         }
       ];
       if (data.orders[0].field == null || data.orders[0].field == undefined || data.orders[0].field == '') data.orders = [];
+      dict.preSubmit($form);
       var searchesMap = dict.generateObject(dict.serializeObject($form)).search;
       data.searches = [];
       $.each(searchesMap, function (key, value) {
@@ -331,8 +368,8 @@
       return data;
     };
 
+    <#-- 执行 -->
     var execute = function (forcedReload) {
-
       dict.loadText({
         url: 'list.html',
         requestBody: true,
@@ -351,6 +388,7 @@
       });
     };
 
+    <#-- 页面刷新 -->
     if (!dict.reload.callArray) {
       dict.reload = dict.extendsFunction(null, execute);
     } else if (dict.reload.callArray.indexOf(execute) < 0) {

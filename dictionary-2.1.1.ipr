@@ -370,6 +370,7 @@
         <w>mouseup</w>
         <w>nontip</w>
         <w>onfocusout</w>
+        <w>onswitch</w>
         <w>orbitron</w>
         <w>pkgd</w>
         <w>qrcode</w>

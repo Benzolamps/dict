@@ -5,19 +5,24 @@ import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
+import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.controller.vo.PhraseVo;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
+import com.benzolamps.dict.service.base.DocSolutionService;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.PhraseService;
+import com.benzolamps.dict.service.base.ShuffleSolutionService;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 短语Controller
@@ -35,6 +40,12 @@ public class PhraseController extends BaseController {
     @Resource
     private LibraryService libraryService;
 
+    @Resource
+    private ShuffleSolutionService shuffleSolutionService;
+
+    @Resource
+    private DocSolutionService docSolutionService;
+
     /**
      * 列出所有短语
      * @return ModelAndView
@@ -50,6 +61,44 @@ public class PhraseController extends BaseController {
         } else {
             mv.setViewName("view/library/lack");
         }
+        return mv;
+    }
+
+    /**
+     * 导出短语页面
+     * @return ModelAndView
+     */
+    @RequestMapping(value = "/export.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @WindowView
+    protected ModelAndView export() {
+        ModelAndView mv = new ModelAndView();
+        if (libraryService.count() > 0) {
+            mv.setViewName("view/phrase/export");
+            mv.addObject("shuffleSolutions", shuffleSolutionService.findAll());
+            mv.addObject("docSolutions", docSolutionService.findAll());
+        } else {
+            mv.setViewName("view/library/lack");
+        }
+        return mv;
+    }
+
+    /**
+     * 导出短语
+     * @return ModelAndView
+     */
+    @PostMapping(value = "/export_save.txt")
+    protected ModelAndView exportSave(@RequestBody DocExportVo docExportVo, RedirectAttributes redirectAttributes) {
+        ModelAndView mv = new ModelAndView();
+        Pageable pageable = docExportVo.getPageable();
+        List<Phrase> phrase;
+        if (pageable == null) {
+            phrase = phraseService.findAll();
+        } else {
+            phrase = phraseService.findPage(pageable).getContent();
+        }
+        docExportVo.setContent(phrase);
+        redirectAttributes.addFlashAttribute("docExportVo", docExportVo);
+        mv.setViewName("redirect:/doc/export.txt");
         return mv;
     }
 
