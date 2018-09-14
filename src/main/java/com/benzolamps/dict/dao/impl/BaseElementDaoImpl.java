@@ -43,4 +43,15 @@ public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> im
         List<String> existsPrototypes = entityManager.createQuery(criteriaQuery).getResultList();
         return new HashSet<>(existsPrototypes);
     }
+
+    @Override
+    public Integer findMinIndex(Library library) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Integer> criteriaQuery = criteriaBuilder.createQuery(Integer.class);
+        Root<T> root = criteriaQuery.from(entityClass);
+        Predicate restrictions = criteriaBuilder.conjunction();
+        criteriaQuery.where(restrictions, criteriaBuilder.equal(root.get("library"), library));
+        criteriaQuery.select(criteriaBuilder.min(root.get("index")));
+        return entityManager.createQuery(criteriaQuery).getSingleResult();
+    }
 }

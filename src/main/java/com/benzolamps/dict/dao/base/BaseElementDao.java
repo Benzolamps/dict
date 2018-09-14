@@ -14,9 +14,16 @@ import java.util.Set;
 public interface BaseElementDao<T extends BaseElement> extends BaseDao<T> {
 
     /**
-     * 获取不存在的单词或短语原形
+     * 获取已存在的单词或短语原形
      * @param library 词库
-     * @return 不存在的单词或短语原形
+     * @return 已存在的单词或短语原形
      */
     Set<String> findPrototypes(Library library);
+
+    /**
+     * 获取最小的索引
+     * @param library 词库
+     * @return 最小的索引
+     */
+    Integer findMinIndex(Library library);
 }

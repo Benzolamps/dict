@@ -57,7 +57,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     @Override
     @Transactional(readOnly = true)
     public Page<T> findPage(Pageable pageable) {
-        pageable.getOrders().add(Order.asc("index"));
+        if (pageable.getOrders().isEmpty()) pageable.getOrders().add(Order.asc("index"));
         pageable.getFilter().and(Filter.eq("library", libraryService.getCurrent()));
         return super.findPage(pageable);
     }
@@ -68,6 +68,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         Assert.notNull(current, "未选择词库");
         element.setLibrary(current);
         if (!prototypeExists(element.getPrototype())) {
+            element.setIndex(baseElementDao.findMinIndex(current) - 1);
             return super.persist(element);
         } else {
             BaseElement ref = findByPrototype(element.getPrototype());
@@ -92,6 +93,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         elementList.forEach(element -> element.setLibrary(current));
         elements.removeAll(elementList);
         this.update(elements);
+        elementList.forEach(element -> element.setIndex(baseElementDao.findMinIndex(current) - 1));
         super.persist(elementList);
     }
 

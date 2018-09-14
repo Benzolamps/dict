@@ -2,6 +2,7 @@ package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.dao.base.PhraseDao;
+import com.benzolamps.dict.dao.core.*;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,5 +13,18 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("phraseDao")
 public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseDao {
-
+    @Override
+    public Page<Phrase> findPage(Pageable pageable) {
+        DictQuery<Phrase> dictQuery = new GeneratedDictQuery<Phrase>(Phrase.class) {
+            @Override
+            public void applyOrder(Order order) {
+                if ("prototype".equals(order.getField())) {
+                    super.applyOrder(new Order.IgnoreCaseOrder(order.getField(), order.getDirection()));
+                } else {
+                    super.applyOrder(order);
+                }
+            }
+        };
+        return super.findPage(dictQuery, pageable);
+    }
 }

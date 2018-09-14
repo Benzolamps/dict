@@ -5,6 +5,7 @@ import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.dao.base.WordClazzDao;
 import com.benzolamps.dict.dao.base.WordDao;
 import com.benzolamps.dict.dao.core.*;
+import com.benzolamps.dict.util.DictArray;
 import com.benzolamps.dict.util.DictObject;
 import org.springframework.stereotype.Repository;
 
@@ -33,6 +34,15 @@ public class WordDaoImpl extends BaseElementDaoImpl<Word> implements WordDao {
                     getFilter().and(Filter.memberOf("clazzes", wordClazz));
                 } else {
                     super.applySearch(search);
+                }
+            }
+
+            @Override
+            public void applyOrder(Order order) {
+                if (DictArray.contains(new String[] {"prototype", "americanPronunciation", "britishPronunciation"}, order.getField())) {
+                    super.applyOrder(new Order.IgnoreCaseOrder(order.getField(), order.getDirection()));
+                } else {
+                    super.applyOrder(order);
                 }
             }
         };

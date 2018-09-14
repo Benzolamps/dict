@@ -39,7 +39,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
 
     @Override
     public void applyOrder(Order order) {
-        this.orders.add(new Order.IgnoreCaseOrder(order.getField(), order.getDirection()));
+        this.orders.add(order);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
         String alias = DictString.toCamel(entityClass.getSimpleName());
         StringJoiner jpql = new StringJoiner(" ");
         filter.build(alias);
-        Order defaultOrder = Order.descIgnoreCase("id");
+        Order defaultOrder = Order.desc("id");
         if (!orders.contains(defaultOrder)) orders.add(defaultOrder);
         orders.forEach(order -> order.build(alias));
         jpql.add("select").add(field).add("from").add(className).add("as").add(alias);

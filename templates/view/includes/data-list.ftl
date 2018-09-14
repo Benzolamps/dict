@@ -113,9 +113,9 @@
       fields[index].unresize = true;
     });
 
-    <#assign width = 90/>
-    <#if delete_enabled && edit_enabled><#assign width += 90/></#if>
-    <#assign width += 90 * toolbar?size/>
+    <#assign width = 95/>
+    <#if delete_enabled && edit_enabled><#assign width += 95/></#if>
+    <#assign width += 95 * toolbar?size/>
 
     fields.push({field: 'id', title: '操作', align: 'left', toolbar: '#${id}-tools', width: ${width}});
 

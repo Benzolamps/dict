@@ -7,8 +7,6 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 /**
  * 单词或短语类的基类
@@ -25,7 +23,6 @@ public abstract class BaseElement extends BaseEntity {
 
     /** 索引 */
     @Column(nullable = false, updatable = false, name = "indexes")
-    @NotNull
     protected Integer index;
 
     /** 原形 */
