@@ -52,7 +52,7 @@
             <i class="fa fa-plus" style="font-size: 20px;"></i> &nbsp; 添加
           </button>
           <button class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-sm" lay-event="delMany" type="button" disabled>
-            <i class="fa fa-trash" style="font-size: 20px;"></i> &nbsp; 删除
+            <i class="fa fa-trash-o" style="font-size: 20px;"></i> &nbsp; 删除
           </button>
         </div>
       </div>
@@ -92,7 +92,7 @@
       <i class="fa fa-pencil-square-o" style="font-size: 20px;"></i> &nbsp; 修改
     </button>
     <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">
-      <i class="fa fa-trash" style="font-size: 20px;"></i> &nbsp; 删除
+      <i class="fa fa-trash-o" style="font-size: 20px;"></i> &nbsp; 删除
     </button>
     <#list toolbar as tool>
       <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="toolbar-${tool_index}">
@@ -102,9 +102,7 @@
   </script>
 
   <script type="text/javascript">
-
-    if (parent.$(document).width() <= 1366) $('#${id}-container').css('width', '1100px');
-    else if (parent.$(document).width() <= 1920) $('#${id}-container').css('width', '1750px');
+    $('#${id}-container').css('width', (parent.$('body').width() - 300) + 'px');
 
     <#-- 表格字段 -->
     var fields = <@json_dump obj=fields/>;
@@ -174,9 +172,10 @@
           data: {id: ids},
           async: true,
           success: function () {
-            parent.layer.alert('删除成功', function (index) {
-              parent.layer.close(index);
-              dict.reload();
+            parent.layer.alert('删除成功', {
+              end: function () {
+                dict.reload();
+              }
             });
           },
           error: function (result, status, request) {
@@ -231,9 +230,10 @@
             data: {id: obj.data.id},
             async: true,
             success: function () {
-              parent.layer.alert('删除成功', function (index) {
-                parent.layer.close(index);
-                dict.reload();
+              parent.layer.alert('删除成功', {
+                end: function () {
+                  dict.reload();
+                }
               });
             },
             error: function (result, status, request) {

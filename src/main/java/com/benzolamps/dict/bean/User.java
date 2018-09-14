@@ -71,5 +71,6 @@ public class User extends BaseEntity {
     /** 词库 */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "library")
+    @DictIgnore
     private Library library;
 }

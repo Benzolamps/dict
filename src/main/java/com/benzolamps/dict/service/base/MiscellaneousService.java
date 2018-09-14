@@ -23,5 +23,5 @@ public interface MiscellaneousService {
     /**
      * vacuum
      */
-    void vacuum();
+    void clean();
 }

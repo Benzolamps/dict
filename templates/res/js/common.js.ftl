@@ -37,7 +37,7 @@ Array.prototype.toString = function () {
             resize: false,
             move: false,
             closeBtn: 2,
-            yes: function (index) {
+            end: function (index) {
                 layer.close(index);
             }
         });
@@ -57,6 +57,9 @@ $.validator.addMethod('constant', function(value, element, param) {
 }, "输入错误");
 
 $.validator.methods.remote = function(value, element, param) {
+    if ('string' == typeof param) {
+        param = {url: param};
+    }
     return $.validator.methods.constant.call(this, value, element, param.ignore) ||
         dict.loadText({
             url: param.url,
@@ -64,10 +67,23 @@ $.validator.methods.remote = function(value, element, param) {
             cache: true,
             data: new (function () {
                 this[element.name] = value;
-            }),
-            async: false
+            })
         }) != 'false'
 };
 
+
+<#if need_update()>
+  if (!sessionStorage.getItem('readnew')) {
+      parent.layer.confirm('有新版本, 是否更新？', {
+          icon: 1,
+          title: '提示',
+          id: 'update'
+      }, function (index) {
+          sessionStorage.setItem('readnew', true);
+          parent.$('iframe').attr('src', '${base_url}/system/settings.html#update');
+          parent.layer.close(index);
+      });
+  }
+</#if>
 
 

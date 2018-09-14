@@ -3,6 +3,7 @@ package com.benzolamps.dict.directive;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.service.base.UserService;
+import com.benzolamps.dict.service.base.VersionService;
 import freemarker.template.TemplateMethodModelEx;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
@@ -29,6 +30,9 @@ public class MiscellaneousDirective {
     @Resource
     private LibraryService libraryService;
 
+    @Resource
+    private VersionService versionService;
+
     @Bean
     protected TemplateMethodModelEx currentUserMethod() {
         return arguments -> userService.getCurrent();
@@ -43,4 +47,11 @@ public class MiscellaneousDirective {
     protected TemplateMethodModelEx allLibrariesMethod() {
         return arguments -> libraryService.findAll();
     }
+
+    @Bean
+    protected TemplateMethodModelEx needUpdateMethod() {
+        return arguments -> versionService.getStatus() == VersionService.Status.HAS_NEW;
+    }
+
+
 }

@@ -1,6 +1,6 @@
 <#macro data_add id fields values={} rules={} messages={}
   title='添加${id}' save='save.json' request_body=true
-  submit_handler='' error_handler='' ready_handler=''
+  submit_handler='return true;' error_handler='return true;' ready_handler='return true;'
 >
   <#-- @ftlvariable name="id" type="java.lang.String" -->
   <#-- @ftlvariable name="fields" type="java.util.List<com.benzolamps.dict.controller.vo.DictPropertyInfoVo>" -->
@@ -35,20 +35,21 @@
         data: dict.generateObject(dict.serializeObject($form)),
         requestBody: ${request_body?c},
         success: function (result, status, request) {
-          if (!(function () {
-            ${submit_handler}
-          })()) {
-            var parent1 = parent;
-            var index = parent1.layer.getFrameIndex(window.name);
-            parent1.layer.close(index);
-            parent1.layer.alert('添加成功', function (index) {
-              parent1.layer.close(index);
-              parent1.$('iframe')[0].contentWindow.dict.reload(true);
-            });
-          }
+          var parent1 = parent;
+          var index = parent1.layer.getFrameIndex(window.name);
+          parent1.layer.close(index);
+          parent1.layer.alert('添加成功', {
+            end: function () {
+              if ((function (parent) {
+                ${submit_handler}
+              })(parent1)) {
+                parent1.$('iframe')[0].contentWindow.dict.reload(true);
+              }
+            }
+          });
         },
         error: function (result, status, request) {
-          if (!(function () {
+          if ((function () {
             ${submit_handler}
           })()) {
             parent.layer.alert(result.message, {

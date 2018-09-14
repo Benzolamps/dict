@@ -266,7 +266,7 @@
                   layer.alert('注销成功', {
                     icon: 1,
                     title: '注销成功',
-                    yes: function (index) {
+                    end: function () {
                       dict.reload(true);
                     }
                   });

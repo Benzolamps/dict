@@ -35,7 +35,7 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     }
 
     @Override
-    public void vacuum() {
+    public void clean() {
         miscellaneousDao.vacuum();
     }
 }

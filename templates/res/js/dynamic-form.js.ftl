@@ -275,7 +275,6 @@ dict.preSubmit = function (form) {
         } else {
             $(this).val('false');
         }
-        alert($(this).attr('name') + $(this).val());
     });
     $form.find('input[type=checkbox].dict-checkbox').each(function () {
         var $next = $(this).next();

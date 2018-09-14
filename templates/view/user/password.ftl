@@ -5,26 +5,26 @@
       <table class="layui-table">
         <tr>
           <td>
-            请输入原密码
+            原密码<span class="required-field">&nbsp;*&nbsp;</span>
           </td>
           <td>
-            <input type="password" name="oldPassword" required maxlength="15" autocomplete="off" placeholder="请输入原密码" class="layui-input">
-          </td>
-        </tr>
-        <tr>
-          <td>
-            请输入新密码
-          </td>
-          <td>
-            <input type="password" name="newPassword" required maxlength="15" autocomplete="off" placeholder="请输入新密码" class="layui-input">
+            <input type="password" name="oldPassword" required maxlength="15" autocomplete="off" placeholder="原密码" class="layui-input">
           </td>
         </tr>
         <tr>
           <td>
-            请再次输入新密码
+            新密码<span class="required-field">&nbsp;*&nbsp;</span>
           </td>
           <td>
-            <input type="password" name="confirmPassword" required maxlength="15" autocomplete="off" placeholder="请再次输入新密码" class="layui-input">
+            <input type="password" name="newPassword" required maxlength="15" autocomplete="off" placeholder="新密码" class="layui-input">
+          </td>
+        </tr>
+        <tr>
+          <td>
+            确认密码<span class="required-field">&nbsp;*&nbsp;</span>
+          </td>
+          <td>
+            <input type="password" name="confirmPassword" required maxlength="15" autocomplete="off" placeholder="确认密码" class="layui-input">
           </td>
         </tr>
         <tr>
@@ -89,7 +89,7 @@
         parent.layer.alert('修改成功', {
           icon: 1,
           title: '注销成功',
-          yes: function (index) {
+          end: function () {
             parent.dict.reload(true);
           }
         });

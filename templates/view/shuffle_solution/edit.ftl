@@ -77,9 +77,10 @@
                 var parent1 = parent;
                 var index = parent1.layer.getFrameIndex(window.name);
                 parent1.layer.close(index);
-                parent1.layer.alert('添加成功', function (index) {
-                  parent1.layer.close(index);
-                  parent1.$('iframe')[0].contentWindow.dict.reload(true);
+                parent1.layer.alert('修改成功', {
+                  end: function () {
+                    parent1.$('iframe')[0].contentWindow.dict.reload(true);
+                  }
                 });
               },
               error: function (result, status, request) {

@@ -18,7 +18,10 @@
     <blockquote class="layui-elem-quote">
       请求出错啦！&nbsp;&nbsp;&nbsp;&nbsp;
       <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back();">
-        <i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 返回
+        <i class="fa fa-arrow-circle-left" style="font-size: 20px;"></i> &nbsp; 返回
+      </button>
+      <button class="layui-btn layui-btn-warm layui-btn-sm" onclick="location.reload(true);">
+        <i class="fa fa-refresh" style="font-size: 20px;"></i> &nbsp; 刷新
       </button>
     </blockquote>
     <div class="layui-row">

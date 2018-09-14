@@ -51,7 +51,7 @@ solutions: !!set
     order: 4
     path: doc/universe/copy_phrases.doc
     properties: {}
-    remark: 单词生词表
+    remark: 短语抄写表
   : null
   ? exportFor: PHRASE
     id: 5

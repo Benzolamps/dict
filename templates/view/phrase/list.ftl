@@ -49,9 +49,8 @@
           parent.layer.alert('导入短语成功，共导入 ' + result.data + ' 个短语<br>用时 ' + delta + ' 秒', {
             icon: 1,
             title: '导入短语成功',
-            yes: function (index) {
+            end: function () {
               parent.$('iframe')[0].contentWindow.dict.reload(true);
-              parent.layer.close(index);
             }
           });
         },
@@ -87,12 +86,13 @@
         dataType: 'json',
         requestBody: true,
         success: function (result, status, request) {
-          parent.layer.alert('导出成功', function (index) {
-            parent.layer.close(index);
-            dict.postHref('${base_url}/doc/download.doc', {
-              fileName: data.title,
-              token: result.data
-            });
+          parent.layer.alert('导出成功', {
+            end: function () {
+              dict.postHref('${base_url}/doc/download.doc', {
+                fileName: data.title,
+                token: result.data
+              });
+            }
           });
         },
         error: function (result, status, request) {

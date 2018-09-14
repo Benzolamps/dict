@@ -55,8 +55,3 @@ server:
     uri-encoding: UTF-8
 logging:
   config: classpath:logback-spring.xml
-endpoints:
-  shutdown:
-    enabled: true
-    sensitive: false
-    path: shutdown.json

@@ -12,7 +12,9 @@
 </div>
 
 <script>
-  var docSolutions = <@json_dump obj=docSolutions/>;
+  var docSolutions = <@json_dump obj=docSolutions/>.filter(function (docSolution) {
+    return docSolution.exportFor.toLowerCase() == 'word';
+  });
   var shuffleSolutions = <@json_dump obj=shuffleSolutions/>;
   var $form = $('#word-export');
   var $table = $('#word-export table');
@@ -35,9 +37,7 @@
       display: '模板',
       description: '文档的模板',
       notEmpty: true,
-      options: docSolutions.filter(function (docSolution) {
-          return docSolution.exportFor.toLowerCase() == 'word';
-      }).map(function (docSolution) {
+      options: docSolutions.map(function (docSolution) {
         return {id: docSolution.id, value: docSolution.name};
       })
     },
@@ -62,7 +62,9 @@
   });
 
   var toggleShuffleSolution = function (index) {
-    var docSolution = docSolutions[index];
+    var docSolution = docSolutions.filter(function (item) {
+      return item.id == index;
+    })[0];
     var tr = $tbody.find('tr').last();
     if (!docSolution || !docSolution.needShuffle) {
       tr.hide();

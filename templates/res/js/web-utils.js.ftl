@@ -58,8 +58,8 @@ dict.postHref = function (url, data) {
      * @returns {string} 响应的内容
      */
     dict.loadText = function (options) {
-        dict.assert(options);
-        dict.assert(options.url);
+        dict.assert(options, 'options不能为null');
+        dict.assert(options.url, 'url不能为null');
 
         var responseData = null;
 
