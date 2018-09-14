@@ -80,7 +80,7 @@
             } else {
                 var $checkbox = $form.find('input[name="' + item.name + '"][type=checkbox]');
                 if ($checkbox.is('.dict-switch')) {
-                    object[item.name] = eval(item.value);
+                    object[item.name] = item.value;
                 } else if ($checkbox.is('.dict-checkbox')) {
                     object[item.name] = [item.value];
                 } else {

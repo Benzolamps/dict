@@ -16,9 +16,9 @@
 
   <#-- TODO: 样式 -->
   <style>
-    .layui-table-view .layui-table {
-      width: 100%;
-    }
+    /*.layui-table-view .layui-table {*/
+      /*width: 100%;*/
+    /*}*/
 
     #${id} .field-th-hover {
       background-color: #DDDDDD;
@@ -28,47 +28,46 @@
       background-color: #FFB800;
     }
 
-    #${id} th {
-      cursor: pointer;
-    }
   </style>
 
-  <script type="text/javascript"></script>
-  <div class="layui-row">
+  <div id="${id}-container" class="layui-container">
     <form class="layui-form" id="${id}" lay-filter="${id}" onsubmit="return false;" method="post">
       <#-- 头部工具栏 -->
-      <div class="head-toolbar">
-        <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="refresh" type="button">
-          <i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 刷新
-        </button>
-        <#list head_toolbar as tool>
-          <button
-            class="layui-btn layui-btn-primary <#if tool.needSelected?? && tool.needSelected>layui-btn-disabled </#if>layui-btn-sm"
-            lay-event="head-toolbar-${tool_index}"
-            <#if tool.needSelected?? && tool.needSelected>disabled</#if>
-            type="button"
-          >
-            ${tool.html}
+      <div class="layui-row layui-col-space10" style="margin: auto 0">
+        <div class="head-toolbar">
+          <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="refresh" type="button">
+            <i class="fa fa-refresh" style="font-size: 20px;"></i> &nbsp; 刷新
           </button>
-        </#list>
-        <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="add" type="button">
-          <i class="layui-icon" style="font-size: 20px;">&#xe654;</i> 添加
-        </button>
-        <button class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-sm" lay-event="delMany" type="button" disabled>
-          <i class="layui-icon" style="font-size: 20px;">&#xe640;</i> 删除
-        </button>
+          <#list head_toolbar as tool>
+            <button
+              class="layui-btn layui-btn-primary <#if tool.needSelected?? && tool.needSelected>layui-btn-disabled </#if>layui-btn-sm"
+              lay-event="head-toolbar-${tool_index}"
+              <#if tool.needSelected?? && tool.needSelected>disabled</#if>
+              type="button"
+            >
+              ${tool.html}
+            </button>
+          </#list>
+          <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="add" type="button">
+            <i class="fa fa-plus" style="font-size: 20px;"></i> &nbsp; 添加
+          </button>
+          <button class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-sm" lay-event="delMany" type="button" disabled>
+            <i class="fa fa-trash" style="font-size: 20px;"></i> &nbsp; 删除
+          </button>
+        </div>
       </div>
 
       <#-- 筛选 -->
       <#if search?size gt 0>
-        <div class="layui-container" style="margin: 10px auto">
-          <div id="${id}-search" class="layui-row layui-col-space10">
-          </div>
-        </div>
+        <div id="${id}-search" class="layui-row layui-col-space10" style="margin-top: 10px; margin-left: 0; margin-right: 0"></div>
       </#if>
 
       <#-- 表格主体 -->
-      <table class="layui-table" lay-filter="${id}"></table>
+      <div class="layui-row layui-col-space10" style="margin: auto 0">
+        <div class="layui-col-lg12">
+          <table class="layui-table" lay-filter="${id}"></table>
+        </div>
+      </div>
 
       <#-- 分页 -->
       <#if page_enabled>
@@ -90,26 +89,35 @@
   <#-- 工具栏 -->
   <script type="text/html" id="${id}-tools">
     <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">
-      <i class="layui-icon" style="font-size: 20px;">&#xe642;</i> 修改
+      <i class="fa fa-pencil-square-o" style="font-size: 20px;"></i> &nbsp; 修改
     </button>
     <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">
-      <i class="layui-icon" style="font-size: 20px;">&#xe640;</i> 删除
+      <i class="fa fa-trash" style="font-size: 20px;"></i> &nbsp; 删除
     </button>
     <#list toolbar as tool>
-       <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="toolbar-${tool_index}">
-         ${tool.html}
-       </button>
+      <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="toolbar-${tool_index}">
+        ${tool.html}
+      </button>
     </#list>
   </script>
 
   <script type="text/javascript">
 
+    if (parent.$(document).width() <= 1366) $('#${id}-container').css('width', '1100px');
+    else if (parent.$(document).width() <= 1920) $('#${id}-container').css('width', '1750px');
+
     <#-- 表格字段 -->
     var fields = <@json_dump obj=fields/>;
     $.each(fields, function (index, item) {
       delete fields[index].sort;
+      fields[index].unresize = true;
     });
-    fields.push({field: 'id', title: '操作', align: 'left', toolbar: '#${id}-tools'});
+
+    <#assign width = 90/>
+    <#if delete_enabled && edit_enabled><#assign width += 90/></#if>
+    <#assign width += 90 * toolbar?size/>
+
+    fields.push({field: 'id', title: '操作', align: 'left', toolbar: '#${id}-tools', width: ${width}});
 
     <#-- TODO: 表格渲染 -->
     table.render({
@@ -119,9 +127,7 @@
       cols: [fields],
       data: <@json_dump obj=values/>,
       id: '${id}',
-      height: 'full-200',
-      loading: true
-
+      height: 'full-205'
     });
 
     <#-- TODO: 分页渲染 -->
@@ -132,7 +138,7 @@
         curr: ${page.pageNumber},
         limit: ${page.pageSize},
         limits: [10, 20, 30, 50, 100, 200, 500, 1000],
-        layout: ['count', 'prev', 'page', 'next', 'limit', 'skip'],
+        layout: ['count', 'prev', 'page', 'next', 'skip', 'limit'],
         jump: function (obj, first) {
           if (!first) {
             $('#${id}-page-info [name=pageSize]').val(obj.limit);
@@ -290,6 +296,7 @@
     $('th[data-field=id]').removeClass('field-th-active');
 
     $.each([<#list fields as field><#if field.sort?? && field.sort>'${field.field}'</#if><#sep>, </#list>], function (index, value) {
+      $('#${id} th[data-field=' + value + ']').css('cursor', 'pointer');
       $('#${id} th[data-field=' + value + ']').click(function () {
         $('#${id} .field-th-active').removeClass('field-th-active');
         $(this).addClass('field-th-active');
@@ -328,8 +335,8 @@
 
     $('#${id}-search').append($(
       '<div class="layui-col-md2" style="height: 100%" >\n' +
-      '<button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="search" type="button">\n' +
-      '<i class="layui-icon" style="font-size: 20px;">&#xe666;</i> 搜索\n' +
+      '<button class="layui-btn layui-btn-normal" lay-event="search" type="button">\n' +
+      '<i class="layui-icon" style="font-size: 20px;">&#xe615;</i> 搜索\n' +
       '</button>' +
       '</div>'
     ).click(function () {

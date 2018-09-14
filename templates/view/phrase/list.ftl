@@ -81,14 +81,18 @@
       data.docSolutionId = parent.exportData.docSolution;
       data.shuffleSolutionId = parent.exportData.shuffleSolution;
       dict.loadText({
-        url: 'export_save.txt',
+        url: 'export_save.json',
         type: 'post',
         data: data,
+        dataType: 'json',
         requestBody: true,
         success: function (result, status, request) {
-          dict.postHref('${base_url}/doc/download.doc', {
-            fileName: data.title,
-            content: result
+          parent.layer.alert('导出成功', function (index) {
+            parent.layer.close(index);
+            dict.postHref('${base_url}/doc/download.doc', {
+              fileName: data.title,
+              token: result.data
+            });
           });
         },
         error: function (result, status, request) {
@@ -118,11 +122,11 @@
   delete='${base_url}/phrase/delete.json'
   head_toolbar=[
     {
-      'html': '<i class="layui-icon" style="font-size: 20px;">&#xe60a;</i> 导入短语',
+      'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入短语',
       'handler': file_upload
     },
     {
-      'html': '<i class="layui-icon" style="font-size: 20px;">&#xe60a;</i> 导出短语',
+      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出短语',
       'handler': file_export
     }
   ]

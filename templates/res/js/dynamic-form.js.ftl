@@ -144,15 +144,25 @@ dict.postInitForm = function (form, fields, extendedRules, extendedMessages, sub
     var $form = $(form);
     layui.form.render();
     $form.find('select').each(function () {
-        var $input = $(this).next().find('input');
-        $input.attr('required', $(this).attr('required'));
-        $input.attr('name', $(this).attr('name'));
-        $input.addClass('select-input');
-        $(this).remove();
+        if ($(this).attr('name')) {
+            var $input = $(this).next().find('input');
+            $input.attr('required', $(this).attr('required'));
+            $input.attr('name', $(this).attr('name'));
+            $input.addClass('select-input');
+            $input.before($('<input type="hidden">'));
+            $(this).remove();
+        }
+    });
+
+    $form.find('select-input').each(function () {
+        if (!$(this).attr('name')) {
+            $(this).attr('name', $(this).parent().children().first().attr('name'));
+            $(this).parent().children().first().removeAttr('name');
+        }
     });
 
     $form.find('input[type=checkbox].dict-checkbox').each(function () {
-        if ($(this).attr('required') && !$(this).parent().parent().children().eq(0).is('input')) {
+        if (!$(this).parent().parent().children().eq(0).is('input')) {
             $(this).parent().parent().children().eq(0).before($(document.createElement('input'))
                 .css({
                     'width': $(this).parent().parent().width() + 'px',
@@ -252,16 +262,20 @@ dict.preSubmit = function (form) {
     var $form = $(form);
 
     $form.find('.select-input').each(function () {
-        $(this).val($(this).parent().next().children('.layui-this').attr('lay-value'));
+        $(this).parent().children().first().attr('name', $(this).attr('name'));
+        $(this).removeAttr('name');
+        $(this).parent().children().first().val($(this).parent().next().children('.layui-this').attr('lay-value'));
     });
 
     $form.find('input[type=checkbox].dict-switch').each(function () {
+        $(this).attr('type', 'hidden');
         var $next = $(this).next();
         if ($next.is('.layui-form-onswitch')) {
             $(this).val('true');
         } else {
             $(this).val('false');
         }
+        alert($(this).attr('name') + $(this).val());
     });
     $form.find('input[type=checkbox].dict-checkbox').each(function () {
         var $next = $(this).next();

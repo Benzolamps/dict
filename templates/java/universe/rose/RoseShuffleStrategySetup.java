@@ -26,7 +26,7 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
 
     private static final long serialVersionUID = -3170125922193664875L;
 
-    @Value("15")
+    @Value("10")
     @DictOptions({"10", "15", "20", "25", "30"})
     @DictPropertyInfo(display = "每个单元的单词个数")
     @NotEmpty
@@ -39,20 +39,19 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
     private int unitTipRepeat;
 
     @Value("1")
-    @Min(0L)
-    @Max(5L)
+    @Range(max = 5L)
     @DictPropertyInfo(display = "每个单元不带提示的单词重复的次数")
     @NotEmpty
     private int unitNontipRepeat;
 
     @Value("2")
-    @DictOptions({"0", "1", "2", "3", "4", "5"})
+    @Range(max = 5L)
     @DictPropertyInfo(display = "所有单词带提示重复的次数")
     @NotEmpty
     private int entireTipRepeat;
 
     @Value("1")
-    @DictOptions({"0", "1", "2", "3", "4", "5"})
+    @Range(max = 5L)
     @DictPropertyInfo(display = "所有单词不带提示重复的次数")
     @NotEmpty
     private int entireNontipRepeat;

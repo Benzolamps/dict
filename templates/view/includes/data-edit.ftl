@@ -1,5 +1,5 @@
 <#macro data_edit id fields values={} rules={} messages={}
-  title='添加${id}' update='update.json' request_body=true
+  title='修改${id}' update='update.json' request_body=true
   submit_handler='' error_handler='' ready_handler=''
 >
   <#-- @ftlvariable name="id" type="java.lang.String" -->
@@ -35,17 +35,27 @@
         data: dict.generateObject(dict.serializeObject($form)),
         requestBody: ${request_body?c},
         success: function (result, status, request) {
-          var index = parent.layer.getFrameIndex(window.name);
-          parent.layer.close(index);
-          parent.$('iframe')[0].contentWindow.dict.reload(true);
-          ${submit_handler}
+          if (!(function () {
+            ${submit_handler}
+          })()) {
+            var parent1 = parent;
+            var index = parent1.layer.getFrameIndex(window.name);
+            parent1.layer.close(index);
+            parent1.layer.alert('修改成功', function (index) {
+              parent1.layer.close(index);
+              parent1.$('iframe')[0].contentWindow.dict.reload(true);
+            });
+          }
         },
         error: function (result, status, request) {
-          parent.layer.alert(result.message, {
-            icon: 2,
-            title: result.status
-          });
-          ${error_handler}
+          if (!(function () {
+            ${submit_handler}
+          })()) {
+            parent.layer.alert(result.message, {
+              icon: 2,
+              title: result.status
+            });
+          }
         }
       });
       return false;

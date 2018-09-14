@@ -74,9 +74,13 @@
               data: dict.generateObject(dict.serializeObject($form)),
               requestBody: true,
               success: function (result, status, request) {
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(index);
-                parent.$('iframe')[0].contentWindow.dict.reload(true);
+                var parent1 = parent;
+                var index = parent1.layer.getFrameIndex(window.name);
+                parent1.layer.close(index);
+                parent1.layer.alert('添加成功', function (index) {
+                  parent1.layer.close(index);
+                  parent1.$('iframe')[0].contentWindow.dict.reload(true);
+                });
               },
               error: function (result, status, request) {
                 parent.layer.alert(result.message, {
