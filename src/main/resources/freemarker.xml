@@ -57,7 +57,7 @@
         <entry key="current_user" value-ref="currentUserMethod"/>
         <entry key="current_library" value-ref="currentLibraryMethod"/>
         <entry key="all_libraries" value-ref="allLibrariesMethod"/>
-        <entry key="need_update" value-ref="needUpdateMethod"/>
+        <entry key="version_status" value-ref="versionStatusMethod"/>
         <entry key="shuffle_strategy_loop" value-ref="shuffleStrategyDirective"/>
       </map>
     </property>

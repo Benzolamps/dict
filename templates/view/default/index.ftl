@@ -19,11 +19,14 @@
       <link rel="stylesheet" type="text/css" href="${base_url}/res/css/common.css"/>
       <script type="text/javascript" src="${base_url}/js/jquery-3.3.1.js"></script>
       <script type="text/javascript" src="${base_url}/js/jquery.form.js"></script>
+      <script type="text/javascript" src="${base_url}/js/sockjs-0.3.js"></script>
+      <script type="text/javascript" src="${base_url}/js/stomp.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/jquery.validate.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/additional-methods.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/localization/messages_zh.js"></script>
       <script type="text/javascript" src="${base_url}/layui/layui.js"></script>
       <script type="text/javascript" src="${base_url}/res/js/common.js"></script>
+      <script type="text/javascript" src="${base_url}/res/js/update-socket.js"></script>
       <style>
         .dict-bg {
           background-color: #EEEEEE !important;
@@ -158,7 +161,7 @@
           <div class="layui-tab tab" lay-filter="docDemoTabBrief" style="height: 95%">
             <div class="layui-tab-content" style="width: 100%; height: 100%">
               <div class="layui-tab-item layui-show" style="width: 100%; height: 100%">
-                <iframe src="javascript:;" frameborder="0" style="width: 98%; height: 100%"></iframe>
+                <iframe src="javascript:;" id="content-frame" frameborder="0" style="width: 98%; height: 100%"></iframe>
               </div>
             </div>
           </div>
@@ -200,7 +203,7 @@
             /* language=JQuery-CSS */
             var $dd = $li.find('dl.layui-nav-child>dd').eq(child);
             $dd.addClass('layui-this');
-            $('iframe').attr('src', columns[column].children[child].href);
+            $('#content-frame').attr('src', columns[column].children[child].href);
             localStorage.setItem('column', column);
             localStorage.setItem('child', child);
           }
@@ -208,7 +211,7 @@
           var tipsId;
 
           $('.child-item').click(function () {
-            $('iframe').attr('src', $(this).attr('src'));
+            $('#content-frame').attr('src', $(this).attr('src'));
             child = $(this).parentsUntil('dl').last().prevAll().length;
             column = $(this).parentsUntil('ul').last().prevAll().length;
             localStorage.setItem('column', column);
@@ -315,6 +318,8 @@
             });
           }, 500);
         }
+        dict.updateSocket.connect();
+        <@update_socket/>
       </script>
     </body>
   </html>

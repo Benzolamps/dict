@@ -55,10 +55,4 @@ public class Library extends BaseEntity {
     @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)
     @DictIgnore
     private Set<Phrase> phrases;
-
-    /** 正在学习该词库的学生 */
-    @JsonIgnore
-    @OneToMany(mappedBy = "major")
-    @DictIgnore
-    private Set<Student> students;
 }

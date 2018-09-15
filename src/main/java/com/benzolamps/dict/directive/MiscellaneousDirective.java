@@ -22,9 +22,6 @@ import javax.annotation.Resource;
 public class MiscellaneousDirective {
 
     @Resource
-    private MiscellaneousService miscellaneousService;
-
-    @Resource
     private UserService userService;
 
     @Resource
@@ -33,24 +30,27 @@ public class MiscellaneousDirective {
     @Resource
     private VersionService versionService;
 
+    /** @return 查看当前用户 */
     @Bean
     protected TemplateMethodModelEx currentUserMethod() {
         return arguments -> userService.getCurrent();
     }
 
+    /** @return 查看当前词库 */
     @Bean
     protected TemplateMethodModelEx currentLibraryMethod() {
         return arguments -> libraryService.getCurrent();
     }
 
+    /** @return 查看所有词库 */
     @Bean
     protected TemplateMethodModelEx allLibrariesMethod() {
         return arguments -> libraryService.findAll();
     }
 
     @Bean
-    protected TemplateMethodModelEx needUpdateMethod() {
-        return arguments -> versionService.getStatus() == VersionService.Status.HAS_NEW;
+    protected TemplateMethodModelEx versionStatusMethod() {
+        return arguments -> versionService.getStatus();
     }
 
 

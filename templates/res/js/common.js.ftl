@@ -72,18 +72,3 @@ $.validator.methods.remote = function(value, element, param) {
 };
 
 
-<#if need_update()>
-  if (!sessionStorage.getItem('readnew')) {
-      parent.layer.confirm('有新版本, 是否更新？', {
-          icon: 1,
-          title: '提示',
-          id: 'update'
-      }, function (index) {
-          sessionStorage.setItem('readnew', true);
-          parent.$('iframe').attr('src', '${base_url}/system/settings.html#update');
-          parent.layer.close(index);
-      });
-  }
-</#if>
-
-

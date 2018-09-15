@@ -88,6 +88,8 @@
       }
     }(i);
 
-    ${ready_handler}
+    !function () {
+      ${ready_handler}
+    }();
   </script>
 </#macro>

@@ -68,7 +68,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         Assert.notNull(current, "未选择词库");
         element.setLibrary(current);
         if (!prototypeExists(element.getPrototype())) {
-            element.setIndex(baseElementDao.findMinIndex(current) - 1);
+            if (element.getIndex() != null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
             return super.persist(element);
         } else {
             BaseElement ref = findByPrototype(element.getPrototype());
@@ -93,7 +93,9 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         elementList.forEach(element -> element.setLibrary(current));
         elements.removeAll(elementList);
         this.update(elements);
-        elementList.forEach(element -> element.setIndex(baseElementDao.findMinIndex(current) - 1));
+        for (T element : elementList) {
+            if (element.getIndex() != null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
+        }
         super.persist(elementList);
     }
 

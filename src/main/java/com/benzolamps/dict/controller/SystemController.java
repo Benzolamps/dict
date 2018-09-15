@@ -3,7 +3,6 @@ package com.benzolamps.dict.controller;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.service.base.MiscellaneousService;
-import com.benzolamps.dict.service.base.VersionService;
 import com.benzolamps.dict.util.DictLambda;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,9 +21,6 @@ public class SystemController extends BaseController {
 
     @Resource
     private MiscellaneousService miscellaneousService;
-
-    @Resource
-    private VersionService versionService;
 
     /**
      * 系统信息界面
@@ -99,34 +95,5 @@ public class SystemController extends BaseController {
             System.exit(0);
         }).start();
         return SUCCESS_VO;
-    }
-
-    /**
-     * 系统更新界面
-     */
-    @RequestMapping(value = "/update.html", method = {RequestMethod.GET, RequestMethod.POST})
-    protected ModelAndView update() {
-        ModelAndView mv = new ModelAndView("view/system/update");
-        mv.addObject("newVersionName", versionService.getNewVersionName());
-        return mv;
-    }
-
-    /**
-     * 系统更新开始
-     */
-    @ResponseBody
-    @RequestMapping(value = "/update.json", method = {RequestMethod.GET, RequestMethod.POST})
-    protected BaseVo updateProcess() {
-        versionService.update();
-        return SUCCESS_VO;
-    }
-
-    /**
-     * 系统更新状态
-     */
-    @ResponseBody
-    @RequestMapping(value = "/update_status.json", method = {RequestMethod.GET, RequestMethod.POST})
-    protected BaseVo updateStatus() {
-        return wrapperData(versionService.getStatus());
     }
 }

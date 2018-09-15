@@ -3,6 +3,7 @@ package com.benzolamps.dict.dao.impl;
 import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.dao.base.BaseElementDao;
+import com.fasterxml.jackson.databind.ser.std.AtomicReferenceSerializer;
 import org.springframework.core.ResolvableType;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -12,6 +13,7 @@ import javax.persistence.criteria.Root;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 单词或短语类的基类Dao接口实现类
@@ -52,6 +54,7 @@ public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> im
         Predicate restrictions = criteriaBuilder.conjunction();
         criteriaQuery.where(restrictions, criteriaBuilder.equal(root.get("library"), library));
         criteriaQuery.select(criteriaBuilder.min(root.get("index")));
-        return entityManager.createQuery(criteriaQuery).getSingleResult();
+        Integer result = entityManager.createQuery(criteriaQuery).getSingleResult();
+        return result != null ? result : 0;
     }
 }

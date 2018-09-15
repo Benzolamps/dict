@@ -1,5 +1,7 @@
 package com.benzolamps.dict.service.base;
 
+import java.util.function.Consumer;
+
 /**
  * 版本Service接口
  * @author Benzolamps
@@ -29,4 +31,8 @@ public interface VersionService {
     String getNewVersionName();
 
     int getTotal();
+
+    void setStatusCallback(Consumer<Status> callback);
+
+    void resetStatus();
 }

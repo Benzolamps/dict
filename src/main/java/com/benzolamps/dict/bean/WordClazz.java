@@ -33,8 +33,4 @@ public class WordClazz extends BaseEntity {
     @Column
     @Length(max = 255)
     private String description;
-
-    /** 单词 */
-    @ManyToMany(mappedBy = "clazzes")
-    private Set<Word> words;
 }

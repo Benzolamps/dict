@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import java.util.List;
 // @PropertySource(value = "file:dictionary.yml", factory = YamlPropertyLoaderFactory.class)
 @EnableTransactionManagement
 @EnableCaching
+@EnableScheduling
 public interface DictApplication {
     /**
      * main方法

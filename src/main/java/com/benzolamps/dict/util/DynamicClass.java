@@ -93,6 +93,7 @@ public class DynamicClass {
             Set<File> files = DictFile.deepListFiles(file, f -> f.getName().toLowerCase().endsWith(".java"));
             Iterable<? extends JavaFileObject> iterable = manager.getJavaFileObjectsFromFiles(files);
             List<String> options = Arrays.asList("-Xlint:unchecked", "-classpath", System.getProperty("java.class.path"));
+            System.out.println(System.getProperty("java.class.path"));
             JavaCompiler.CompilationTask task = compiler.getTask(null, produceJavaFileManager(manager), null, options, null, iterable);
             Boolean result = task.call();
             if (result == null || !result) {

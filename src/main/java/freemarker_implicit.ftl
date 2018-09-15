@@ -39,7 +39,7 @@
 [#function current_user][/#function]
 [#function current_library][/#function]
 [#function all_libraries][/#function]
-[#function need_update][/#function]
+[#function version_status][/#function]
 [#include '/view/includes/main.ftl'/]
 [#include '/doc/common/arrangement.ftl'/]
 

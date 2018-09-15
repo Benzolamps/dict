@@ -1,5 +1,6 @@
 package com.benzolamps.dict.service.impl;
 
+import com.benzolamps.dict.bean.DictProperties;
 import com.benzolamps.dict.service.base.VersionService;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictFile;
@@ -11,12 +12,14 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StreamUtils;
 
+import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * 版本Service接口实现类
@@ -29,7 +32,6 @@ import java.util.Map;
 @Slf4j
 public class VersionServiceImpl implements VersionService {
 
-    @Value("0")
     private long size;
 
     private long lastDelta;
@@ -41,16 +43,20 @@ public class VersionServiceImpl implements VersionService {
 
     private Status status;
 
-    @Value("#{dictProperties.version}")
-    private String currentVersion;
+    @Resource
+    private DictProperties dictProperties;
 
     @Value("tmp")
     private String tempPath;
 
     private Thread thread;
 
+    private Consumer<Status> callback = status -> {};
+
     @Override
     public void update() {
+        size = 0;
+        lastDelta = 0;
         if (thread == null) {
             thread = new Thread(() -> {
                 try {
@@ -58,6 +64,7 @@ public class VersionServiceImpl implements VersionService {
                 } catch (Throwable e) {
                     logger.error(e.getMessage(), e);
                     status = Status.FAILED;
+                    callback.accept(status);
                 } finally {
                     thread = null;
                 }
@@ -78,9 +85,9 @@ public class VersionServiceImpl implements VersionService {
 
     @Override
     public Status getStatus() {
-        if (status == Status.ALREADY_NEW || status == Status.HAS_NEW || status == null) {
+        if (status == Status.ALREADY_NEW || status == Status.HAS_NEW || status == Status.FAILED || status == null) {
             versionInfo = getVersionInfo();
-            if (versionInfo == null || currentVersion.equals(versionInfo.get("name"))) {
+            if (versionInfo == null || dictProperties.getVersion().equals(versionInfo.get("name"))) {
                 return status = Status.ALREADY_NEW;
             } else {
                 return status = Status.HAS_NEW;
@@ -96,7 +103,6 @@ public class VersionServiceImpl implements VersionService {
 
     @Override
     public int getTotal() {
-        versionInfo = getVersionInfo();
         if (versionInfo != null) {
             return ((List)versionInfo.get("files")).size();
         }
@@ -110,7 +116,6 @@ public class VersionServiceImpl implements VersionService {
 
     @Override
     public String getNewVersionName() {
-        versionInfo = getVersionInfo();
         if (versionInfo != null) {
             return (String) versionInfo.get("name");
         }
@@ -125,32 +130,46 @@ public class VersionServiceImpl implements VersionService {
             File tempFile = new File(tempPath);
             tempFile.mkdirs();
             status = Status.DOWNLOADING;
+            callback.accept(status);
             for (String fileName1 : fileNames) {
                 String url = baseUrl + "/" + fileName1;
                 UrlResource resource = new UrlResource(url);
                 InputStream inputStream = resource.getInputStream();
-                long available = inputStream.available();
                 File file = new File(tempPath + "/" + fileName1);
                 if (file.getParentFile() != null) file.getParentFile().mkdirs();
                 OutputStream outputStream = new FileOutputStream(file);
                 StreamUtils.copy(inputStream, outputStream);
                 inputStream.close();
                 outputStream.close();
-                size += available;
             }
             status = Status.COPYING;
+            callback.accept(status);
             for (String fileName : fileNames) {
                 File from = new File(tempPath + "/" + fileName);
                 File to = new File(fileName);
                 if (to.getParentFile() != null) to.getParentFile().mkdirs();
                 to.createNewFile();
                 FileCopyUtils.copy(from, to);
+                size += to.length();
             }
             status = Status.DELETING;
-            boolean b = FileSystemUtils.deleteRecursively(tempFile);
+            callback.accept(status);
+            FileSystemUtils.deleteRecursively(tempFile);
+            long end = System.currentTimeMillis();
+            lastDelta = end - start;
             status = Status.FINISHED;
+            dictProperties.setVersion(getNewVersionName());
+            callback.accept(status);
         }
-        long end = System.currentTimeMillis();
-        lastDelta = end - start;
+    }
+
+    @Override
+    public void setStatusCallback(Consumer<Status> callback) {
+        this.callback = callback;
+    }
+
+    @Override
+    public void resetStatus() {
+        status = Status.ALREADY_NEW;
     }
 }

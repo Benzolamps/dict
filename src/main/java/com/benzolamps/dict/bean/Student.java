@@ -3,11 +3,9 @@ package com.benzolamps.dict.bean;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -36,11 +34,6 @@ public class Student extends BaseEntity {
     @Length(max = 20)
     private String name;
 
-    /** 主要学习的词库 */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "major")
-    private Library major;
-
     /** 已掌握的单词 */
     @ManyToMany
     @JoinTable(name = "dict_sw", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
@@ -50,4 +43,9 @@ public class Student extends BaseEntity {
     @ManyToMany
     @JoinTable(name = "dict_sp", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     private Set<Phrase> masteredPhrases;
+
+    /** 班级 */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "class", nullable = false)
+    private Clazz clazz;
 }
