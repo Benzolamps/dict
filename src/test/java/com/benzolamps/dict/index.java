@@ -45,6 +45,7 @@ public final class index {
 
             } catch (Throwable e) {
                 succeed = false;
+                e.printStackTrace();
             }
 
             try {
@@ -62,8 +63,11 @@ public final class index {
                     cmd.add("--install.succeed=false");
                 }
                 process = Runtime.getRuntime().exec(cmd.toString());
-                BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                br.lines().forEach(System.out::println);
+                try (InputStream is = process.getInputStream();
+                    InputStreamReader isr = new InputStreamReader(is);
+                    BufferedReader br = new BufferedReader(isr)) {
+                    br.lines().forEach(System.out::println);
+                }
             } catch (Throwable e) {
                 throw new RuntimeException(e);
             }
@@ -86,51 +90,52 @@ public final class index {
             if (start == null) {
                 throw new IllegalArgumentException("start不能为null");
             } else {
-                BufferedReader reader = new BufferedReader(new FileReader(start));
-                reader.lines().forEach((String str) -> {
-                    if (str != null && str.trim().length() > 0) {
-                        ++total;
-                        String[] content = str.trim().split("[ \\t]+");
-                        if (content.length < 2) {
-                            throw new RuntimeException();
-                        }
+                try (Reader fr = new FileReader(start); BufferedReader br = new BufferedReader(fr)) {
+                    br.lines().forEach((String str) -> {
+                        if (str != null && str.trim().length() > 0) {
 
-                        String operation = content[0].toLowerCase();
-
-                        String fileName = content[1];
-                        switch (operation) {
-                            case "delete": {
-                                File d = new File(fileName);
-                                if (d.exists()) {
-                                    if (d.isDirectory()) {
-                                        deleteRecursively(d);
-                                    } else {
-                                        d.delete();
-                                    }
-                                }
-                                break;
+                            String[] content = str.trim().split("[ \\t]+");
+                            if (content.length < 2) {
+                                throw new RuntimeException();
                             }
-                            case "save": {
-                                File d = new File(fileName);
-                                try {
-                                    createFile(d);
-                                    File s = new File(path + fileName);
-                                    totalSize += s.length();
 
-                                    try (InputStream is = new FileInputStream(s); OutputStream os = new FileOutputStream(d)) {
-                                        copy(is, os);
+                            String operation = content[0].toLowerCase();
+
+                            String fileName = content[1];
+                            switch (operation) {
+                                case "delete": {
+                                    File d = new File(fileName);
+                                    if (d.exists()) {
+                                        if (d.isDirectory()) {
+                                            deleteRecursively(d);
+                                        } else {
+                                            d.delete();
+                                        }
                                     }
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
+                                    break;
                                 }
-                                break;
+                                case "save": {
+                                    File d = new File(fileName);
+                                    try {
+                                        createFile(d);
+                                        File s = new File(path + fileName);
+                                        totalSize += s.length();
+                                        ++total;
+                                        try (InputStream is = new FileInputStream(s); OutputStream os = new FileOutputStream(d)) {
+                                            copy(is, os);
+                                        }
+                                    } catch (IOException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    break;
+                                }
+                                default:
+                                    throw new IllegalArgumentException(operation + "不存在");
                             }
-                            default:
-                                throw new IllegalArgumentException(operation + "不存在");
-                        }
 
-                    }
-                });
+                        }
+                    });
+                }
             }
         }
 
@@ -208,10 +213,10 @@ public final class index {
     private static void createFile(File file) throws IOException {
         if (file.exists() && file.isFile()) return;
         File parent = file.getParentFile();
-        if (parent.exists() && parent.isFile()) {
+        if (parent != null && parent.exists() && parent.isFile()) {
             parent.delete();
         }
-        parent.mkdirs();
+        if (parent != null) parent.mkdirs();
         file.createNewFile();
     }
 }
