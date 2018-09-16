@@ -30,13 +30,13 @@ import java.util.function.Consumer;
 @Slf4j
 public class VersionServiceImpl implements VersionService {
 
-    @Value("${install.total:}")
+    @Value("${install.total:0}")
     private int total;
 
-    @Value("${install.totalSize:}")
+    @Value("${install.totalSize:0}")
     private long totalSize;
 
-    @Value("${install.lastDelta:}")
+    @Value("${install.lastDelta:0}")
     private long lastDelta;
 
     @Value("${install.succeed:}")

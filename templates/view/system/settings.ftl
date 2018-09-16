@@ -24,30 +24,26 @@
 </div>
 
 <script type="text/javascript">
-  $('.clean,.shutdown').click(function () {
-    parent.dict.updateSocket.initCallback();
-  });
-
-  $('.update').click(function () {
-    parent.dict.updateSocket.onHasNew = function (data) {
+  var callback = new function () {
+    this.onHasNew = function (data) {
       data = JSON.parse(data).data;
       var newVersionName = data.newVersionName;
       $('.update-button').show();
       $('.update-content').html('检测到新版本：' + newVersionName);
     };
 
-    parent.dict.updateSocket.onAlreadyNew = function () {
+    this.onAlreadyNew = function () {
       $('.update-button').show();
       $('.update-button').children(0).hide();
       $('.update-content').html('当前已是最新版本，无需更新！');
     };
 
-    parent.dict.updateSocket.onDownloading = function () {
+    this.onDownloading = function () {
       $('.update-button').hide();
       $('.update-content').html('正在下载新版本！');
     };
 
-    parent.dict.updateSocket.onDownloaded = function (data) {
+    this.onDownloaded = function (data) {
       $('.update-button').hide();
       data = JSON.parse(data).data;
       var total = data.total;
@@ -56,7 +52,7 @@
       $('.update-content').html(dict.format('下载完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
     };
 
-    parent.dict.updateSocket.onInstalled = function (data) {
+    this.onInstalled = function (data) {
       $('.update-button').hide();
       data = JSON.parse(data).data;
       var total = data.total;
@@ -65,11 +61,24 @@
       $('.update-content').html(dict.format('安装完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
     };
 
-    parent.dict.updateSocket.onFailed = function () {
+    this.onFailed = function () {
       $('.update-button').show();
       $('.update-button').children().eq(0).html('<i class=\"fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 重试');
       $('.update-content').html('更新失败！');
     };
+  }
+
+  $('.clean,.shutdown').click(function () {
+    parent.dict.updateSocket.initCallback();
+    $.each(callback, function (key, value) {
+      parent.dict.updateSocket[key] = dict.extendsFunction(parent.dict.updateSocket[key], value);
+    });
+  });
+
+  $('.update').click(function () {
+    $.each(callback, function (key, value) {
+      parent.dict.updateSocket[key] = value;
+    });
   });
   var hash = location.hash.slice(1);
   hash || (hash = 'clean');
