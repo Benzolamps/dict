@@ -45,7 +45,6 @@ public final class index {
 
             } catch (Throwable e) {
                 succeed = false;
-                e.printStackTrace();
             }
 
             try {
