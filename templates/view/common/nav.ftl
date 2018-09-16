@@ -18,9 +18,6 @@
       <script type="text/javascript" src="${base_url}/res/js/common.js"></script>
     </head>
     <body>
-      <script type="text/javascript">
-        <@update_socket/>
-      </script>
       <#include '/${content_path}.ftl'/>
       <script type="text/javascript">
         $(function () {

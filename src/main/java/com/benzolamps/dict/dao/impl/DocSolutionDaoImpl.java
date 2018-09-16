@@ -5,6 +5,7 @@ import com.benzolamps.dict.bean.DocSolutions;
 import com.benzolamps.dict.dao.base.DocSolutionDao;
 import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.util.Constant;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
@@ -14,8 +15,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
-import static com.benzolamps.dict.util.DictResource.closeCloseable;
 
 /**
  * Word文档方案Dao接口实现类
@@ -45,31 +44,20 @@ public class DocSolutionDaoImpl implements DocSolutionDao {
 
     @Override
     public void reload() {
-        InputStream inputStream = null;
-        try {
-            inputStream = resource.getInputStream();
+        try (InputStream inputStream = resource.getInputStream()) {
             solutions = Constant.YAML.loadAs(inputStream, DocSolutions.class);
-        }  catch (IOException e) {
+        } catch (IOException e) {
             throw new DictException(e);
-        } finally {
-            closeCloseable(inputStream);
         }
     }
 
     @Override
     public void flush() {
         File file = resource.getFile();
-        OutputStream outputStream = null;
-        OutputStreamWriter outputStreamWriter = null;
-        try {
-            outputStream = new FileOutputStream(file);
-            outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8");
-            Constant.YAML.dump(solutions, outputStreamWriter);
+        try (var os = new FileOutputStream(file); var osw = new OutputStreamWriter(os, "UTF-8")) {
+            Constant.YAML.dump(solutions, osw);
         } catch (IOException e) {
             throw new DictException(e);
-        } finally {
-            closeCloseable(outputStreamWriter);
-            closeCloseable(outputStream);
         }
     }
 

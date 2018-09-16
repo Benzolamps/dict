@@ -18,6 +18,8 @@ import java.util.Set;
 @Setter
 public class WordGroup extends BaseGroup {
 
+    private static final long serialVersionUID = 6986324148442795620L;
+
     /** 分组中的单词 */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "dict_wg", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "word"))

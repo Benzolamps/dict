@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.util.DictString;
 import lombok.Setter;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -44,8 +45,9 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
 
     @Override
     public void applySearch(Search search) {
-        if (search != null) {
-            filter.and(Filter.likeIgnoreCase(search.getField(), '%' + String.valueOf(search.getValue()) + '%'));
+        if (search != null && !StringUtils.isEmpty(search.getValue())) {
+            String value = search.getValue().toString().replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
+            filter.and(Filter.likeIgnoreCase(search.getField(), '%' + value + '%', '\\'));
         }
     }
 

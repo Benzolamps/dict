@@ -18,6 +18,8 @@ import java.util.Set;
 @Setter
 public class PhraseGroup extends BaseGroup {
 
+    private static final long serialVersionUID = 8881615391449832778L;
+
     /** 分组中的短语 */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "dict_pg", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "phrase"))

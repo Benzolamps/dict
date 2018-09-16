@@ -319,7 +319,6 @@
           }, 500);
         }
         dict.updateSocket.connect();
-        <@update_socket/>
       </script>
     </body>
   </html>

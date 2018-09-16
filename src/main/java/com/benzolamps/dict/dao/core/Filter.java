@@ -22,13 +22,10 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public Filter and(Filter another) {
-        if (another != null) {
-            if (!another.isEmpty()) {
-                if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
-                this.add(new OperatorSnippet("and ("));
-                this.addAll(another);
-                this.add(new OperatorSnippet(")"));
-            }
+        if (another != null && !another.isEmpty()) {
+            if (!this.isEmpty()) this.add(new OperatorSnippet("and ("));
+            this.addAll(another);
+            if (!this.isEmpty()) this.add(new OperatorSnippet(")"));
         }
         return this;
     }
@@ -39,13 +36,10 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public Filter or(Filter another) {
-        if (another != null) {
-            if (!another.isEmpty()) {
-                if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
-                this.add(new OperatorSnippet("or ("));
-                this.addAll(another);
-                this.add(new OperatorSnippet(")"));
-            }
+        if (another != null && !another.isEmpty()) {
+            if (!this.isEmpty()) this.add(new OperatorSnippet("or ("));
+            this.addAll(another);
+            if (!this.isEmpty()) this.add(new OperatorSnippet(")"));
         }
         return this;
     }
@@ -55,9 +49,11 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public Filter not() {
-        if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));
-        this.add(0, new OperatorSnippet("not ("));
-        this.add(new OperatorSnippet(")"));
+        if (this.isEmpty()) this.add(new OperatorSnippet("1 = 0"));
+        else {
+            this.add(0, new OperatorSnippet("not ("));
+            this.add(new OperatorSnippet(")"));
+        }
         return this;
     }
 
@@ -238,48 +234,68 @@ public class Filter extends SnippetResolver {
      * like
      * @param field 字段
      * @param value 值
+     * @param escape 转义
      * @return Filter
      */
-    public static Filter like(String field, String value) {
+    public static Filter like(String field, String value, Character escape) {
         Assert.hasLength(field, "field不能为null或空");
         Assert.hasLength(value, "value不能为null或空");
-        return binary(field, "like", value);
+        Filter filter = binary(field, "like", value);
+        if (escape != null) {
+            filter.addSnippet(new OperatorSnippet("escape")).addSnippet(escape);
+        }
+        return filter;
     }
 
     /**
      * like ignore case
      * @param field 字段
      * @param value 值
+     * @param escape 转义
      * @return Filter
      */
-    public static Filter likeIgnoreCase(String field, String value) {
+    public static Filter likeIgnoreCase(String field, String value, Character escape) {
         Assert.hasLength(field, "field不能为null或空");
         Assert.hasLength(value, "value不能为null或空");
-        return binaryIgnoreCase(field, "like", value);
+        Filter filter = binaryIgnoreCase(field, "like", value);
+        if (escape != null) {
+            filter.addSnippet(new OperatorSnippet("escape")).addSnippet(escape);
+        }
+        return filter;
     }
 
     /**
      * not like
      * @param field 字段
      * @param value 值
+     * @param escape 转义
      * @return Filter
      */
-    public static Filter notLike(String field, String value) {
+    public static Filter notLike(String field, String value, Character escape) {
         Assert.hasLength(field, "field不能为null或空");
         Assert.hasLength(value, "value不能为null或空");
-        return binary(field, "not like", value);
+        Filter filter = binary(field, "not like", value);
+        if (escape != null) {
+            filter.addSnippet(new OperatorSnippet("escape")).addSnippet(escape);
+        }
+        return filter;
     }
 
     /**
      * not like ignore case
      * @param field 字段
      * @param value 值
+     * @param escape 转义
      * @return Filter
      */
-    public static Filter notLikeIgnoreCase(String field, String value) {
+    public static Filter notLikeIgnoreCase(String field, String value, Character escape) {
         Assert.hasLength(field, "field不能为null或空");
         Assert.hasLength(value, "value不能为null或空");
-        return binaryIgnoreCase(field, "not like", value);
+        Filter filter = binaryIgnoreCase(field, "not like", value);
+        if (escape != null) {
+            filter.addSnippet(new OperatorSnippet("escape")).addSnippet(escape);
+        }
+        return filter;
     }
 
     /**

@@ -9,6 +9,7 @@ import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.util.Constant;
 import lombok.val;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.Set;
 
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
-import static com.benzolamps.dict.util.DictResource.closeCloseable;
 
 /**
  * 乱序方案Dao接口实现类
@@ -95,16 +95,11 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
 
     @Override
     public void reload() {
-        InputStream inputStream = null;
-
         if (resource.exists()) {
-            try {
-                inputStream = resource.getInputStream();
+            try (InputStream inputStream = resource.getInputStream()) {
                 solutions = Constant.YAML.loadAs(inputStream, ShuffleSolutions.class);
             } catch (IOException e) {
                 throw new DictException(e);
-            } finally {
-                closeCloseable(inputStream);
             }
         }
 
@@ -119,13 +114,10 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         }
 
         if (shuffleSolutions.isEmpty()) {
-            try {
-                inputStream = defaultResource.getInputStream();
+            try (InputStream inputStream = defaultResource.getInputStream()) {
                 shuffleSolutions.add(Constant.YAML.loadAs(inputStream, ShuffleSolution.class));
             } catch (IOException e) {
                 throw new DictException(e);
-            } finally {
-                closeCloseable(inputStream);
             }
         }
     }
@@ -134,17 +126,10 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     public void flush() {
         File file = resource.getFile();
         if (file.exists() || file.getParentFile().mkdirs() && tryFunc(file::createNewFile)) {
-            OutputStream outputStream = null;
-            OutputStreamWriter outputStreamWriter = null;
-            try {
-                outputStream = new FileOutputStream(file);
-                outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8");
-                Constant.YAML.dump(solutions, outputStreamWriter);
+            try (var os = new FileOutputStream(file); var osw = new OutputStreamWriter(os, "UTF-8") ) {
+                Constant.YAML.dump(solutions, osw);
             }  catch (IOException e) {
                 throw new DictException(e);
-            } finally {
-                closeCloseable(outputStreamWriter);
-                closeCloseable(outputStream);
             }
         }
     }

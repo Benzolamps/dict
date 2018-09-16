@@ -17,6 +17,8 @@ import javax.persistence.MappedSuperclass;
 @Setter
 public class BaseGroup extends BaseEntity {
 
+    private static final long serialVersionUID = -756587292984332161L;
+
     /** 分组 */
     @Column(nullable = false, updatable = false)
     private Library library;

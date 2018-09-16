@@ -91,6 +91,12 @@
       <module name="dictionary-2.1.1" target="1.8" />
     </bytecodeTargetLevel>
   </component>
+  <component name="CopyrightManager">
+    <LanguageOptions name="JAVA">
+      <option name="fileTypeOverride" value="3" />
+      <option name="fileLocation" value="3" />
+    </LanguageOptions>
+  </component>
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="dictionary" uuid="7a35b5cd-0031-45d5-ab25-8c25d5010f44">
       <driver-ref>sqlite.xerial</driver-ref>

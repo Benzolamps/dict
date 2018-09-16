@@ -46,7 +46,6 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         this.baseElementDao = baseElementDao;
     }
 
-
     /** 构造器 */
     @SuppressWarnings("unchecked")
     public BaseElementServiceImpl() {
@@ -68,7 +67,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         Assert.notNull(current, "未选择词库");
         element.setLibrary(current);
         if (!prototypeExists(element.getPrototype())) {
-            if (element.getIndex() != null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
+            if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
             return super.persist(element);
         } else {
             BaseElement ref = findByPrototype(element.getPrototype());
@@ -94,7 +93,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         elements.removeAll(elementList);
         this.update(elements);
         for (T element : elementList) {
-            if (element.getIndex() != null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
+            if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
         }
         super.persist(elementList);
     }

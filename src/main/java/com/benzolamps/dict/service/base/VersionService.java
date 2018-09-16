@@ -10,29 +10,74 @@ import java.util.function.Consumer;
  */
 public interface VersionService {
 
+    /**
+     * 开始更新
+     */
     void update();
 
     enum Status {
+        /** 已是最新 */
         ALREADY_NEW,
+
+        /** 有新版本 */
         HAS_NEW,
+
+        /** 正在下载 */
         DOWNLOADING,
-        COPYING,
-        DELETING,
-        FINISHED,
+
+        /** 下载完成 */
+        DOWNLOADED,
+
+        /** 安装完成 */
+        INSTALLED,
+
+        /** 更新失败 */
         FAILED
     }
 
+    /**
+     * 获取当前状态
+     * @return 状态
+     */
     Status getStatus();
 
+    /***
+     * 获取总大小
+     * @return 总大小
+     */
     String getTotalSize();
 
+    /**
+     * 获取总时长
+     * @return 总时长
+     */
     long getDeltaTime();
 
+    /**
+     * 获取新版本号
+     * @return 版本号
+     */
     String getNewVersionName();
 
+    /**
+     * 获取文件总数
+     * @return 文件总数
+     */
     int getTotal();
 
+    /**
+     * 设置状态回调
+     * @param callback 回调
+     */
     void setStatusCallback(Consumer<Status> callback);
 
-    void resetStatus();
+    /**
+     * 禁用
+     */
+    void die();
+
+    /**
+     * @return 是否已禁用
+     */
+    boolean isDead();
 }

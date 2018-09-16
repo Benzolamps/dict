@@ -20,6 +20,8 @@ import java.util.Set;
 @Setter
 public class Clazz extends BaseEntity {
 
+    private static final long serialVersionUID = 5117865263073835548L;
+
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 20)

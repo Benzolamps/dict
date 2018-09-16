@@ -16,10 +16,6 @@
 
   <#-- TODO: 样式 -->
   <style>
-    /*.layui-table-view .layui-table {*/
-      /*width: 100%;*/
-    /*}*/
-
     #${id} .field-th-hover {
       background-color: #DDDDDD;
     }
@@ -27,7 +23,6 @@
     #${id} .field-th-active {
       background-color: #FFB800;
     }
-
   </style>
 
   <div id="${id}-container" class="layui-container">

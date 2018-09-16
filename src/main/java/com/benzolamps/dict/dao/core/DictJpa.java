@@ -5,6 +5,7 @@ import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictSpring;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -14,14 +15,11 @@ import org.springframework.util.ClassUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 
 import static com.benzolamps.dict.util.DictLambda.tryAction;
-import static com.benzolamps.dict.util.DictResource.closeCloseable;
 
 /**
  * Jpql工具类
@@ -163,21 +161,16 @@ public class DictJpa {
         Assert.hasLength(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
         DataSourceProperties dataSourceProperties = DictSpring.getBean(DataSourceProperties.class);
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            tryAction(() -> ClassUtils.forName(dataSourceProperties.getDriverClassName(), DictSpring.getBean(ClassLoader.class)));
-            connection = DriverManager.getConnection(dataSourceProperties.getUrl());
-            statement = connection.prepareStatement(sql);
-            for (int index = 0; index < positionParameters.length; index++) {
-                statement.setObject(index + 1, positionParameters[index]);
+        try (var connection = DriverManager.getConnection(dataSourceProperties.getUrl())) {
+            try (var statement = connection.prepareStatement(sql)) {
+                tryAction(() -> ClassUtils.forName(dataSourceProperties.getDriverClassName(), DictSpring.getBean(ClassLoader.class)));
+                for (int index = 0; index < positionParameters.length; index++) {
+                    statement.setObject(index + 1, positionParameters[index]);
+                }
+                statement.execute();
             }
-            statement.execute();
         } catch (SQLException e) {
             throw new DictException(e);
-        } finally {
-            closeCloseable(statement);
-            closeCloseable(connection);
         }
     }
 }

@@ -69,7 +69,6 @@
 </div>
 
 <script>
-  <@update_socket/>
   layui.use('code', function() {
     layui.code({
       about: false,

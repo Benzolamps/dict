@@ -22,7 +22,7 @@ public abstract class BaseElement extends BaseEntity {
     private static final long serialVersionUID = -3019993342620190686L;
 
     /** 索引 */
-    @Column(nullable = false, updatable = false, name = "indexes")
+    @Column(nullable = false, name = "indexes")
     protected Integer index;
 
     /** 原形 */

@@ -7,7 +7,6 @@
   <div class="layui-tab-content">
     <div class="layui-tab-item" style="min-height: 400px;">
       <script type="text/javascript">
-        <@update_socket/>
         document.write(dict.loadText({url: '${base_url}/system/shutdown.html'}));
       </script>
     </div>
@@ -26,41 +25,50 @@
 
 <script type="text/javascript">
   $('.clean,.shutdown').click(function () {
-    <@update_socket/>
+    parent.dict.updateSocket.initCallback();
   });
+
   $('.update').click(function () {
-    parent.dict.updateSocket.onHasNew = function () {
-      $('.update-content').show();
+    parent.dict.updateSocket.onHasNew = function (data) {
+      data = JSON.parse(data).data;
+      var newVersionName = data.newVersionName;
+      $('.update-button').show();
+      $('.update-content').html('检测到新版本：' + newVersionName);
     };
 
     parent.dict.updateSocket.onAlreadyNew = function () {
-      $('.update-content').hide();
-      $('.dict-blockquote').html('当前已是最新版本，无需更新！');
+      $('.update-button').show();
+      $('.update-button').children(0).hide();
+      $('.update-content').html('当前已是最新版本，无需更新！');
     };
 
     parent.dict.updateSocket.onDownloading = function () {
-      $('.update-content').hide();
-      $('.dict-blockquote').html('正在下载新版本！');
+      $('.update-button').hide();
+      $('.update-content').html('正在下载新版本！');
     };
 
-    parent.dict.updateSocket.onCopying = function () {
-      $('.update-content').hide();
-      $('.dict-blockquote').html('正在复制文件！');
+    parent.dict.updateSocket.onDownloaded = function (data) {
+      $('.update-button').hide();
+      data = JSON.parse(data).data;
+      var total = data.total;
+      var totalSize = data.totalSize;
+      var deltaTime = (data.deltaTime * 0.001).toFixed(3);
+      $('.update-content').html(dict.format('下载完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
     };
 
-    parent.dict.updateSocket.onDeleting = function () {
-      $('.update-content').hide();
-      $('.dict-blockquote').html('正在删除旧版本！');
-    };
-
-    parent.dict.updateSocket.onFinished = function () {
-      $('.update-content').hide();
-      $('.dict-blockquote').html('更新已完成！');
+    parent.dict.updateSocket.onInstalled = function (data) {
+      $('.update-button').hide();
+      data = JSON.parse(data).data;
+      var total = data.total;
+      var totalSize = data.totalSize;
+      var deltaTime = (data.deltaTime * 0.001).toFixed(3);
+      $('.update-content').html(dict.format('安装完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
     };
 
     parent.dict.updateSocket.onFailed = function () {
-      $('.update-content').hide();
-      $('.dict-blockquote').html('更新失败！');
+      $('.update-button').show();
+      $('.update-button').children().eq(0).html('<i class=\"fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 重试');
+      $('.update-content').html('更新失败！');
     };
   });
   var hash = location.hash.slice(1);

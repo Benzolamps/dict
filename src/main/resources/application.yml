@@ -1,8 +1,8 @@
 dict:
   system:
-    name: dictionary
-    title: 万聪英语
-    version: 2.1.1
+    name: @project.name@
+    title: @project.description@
+    version: @project.version@
     console_encoding: GBK
     remote_base_url: http://benzolamps.oss-cn-beijing.aliyuncs.com
     universe_path: templates/java/universe
@@ -46,7 +46,7 @@ spring:
       number_format: '#'
 server:
   port: 2018
-  context_path: /${dict.system.name}-${dict.system.version}
+  context_path: /${dict.system.name}
   tomcat:
     uri-encoding: UTF-8
 logging:
