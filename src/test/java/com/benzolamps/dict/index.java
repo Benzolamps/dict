@@ -180,21 +180,22 @@ public final class index {
 
     private static List<File> unzip(File file, String path) throws IOException {
         List<File> files = new ArrayList<>();
-        ZipFile zipFile = new ZipFile(file);
-        Enumeration<? extends ZipEntry> entries = zipFile.entries();
-        while (entries.hasMoreElements()) {
-            ZipEntry zipEntry = entries.nextElement();
-            File entryFile = new File(path + zipEntry.getName());
-            if (zipEntry.isDirectory()) {
-                createDirectory(entryFile);
-            } else {
-                createFile(entryFile);
-                try (InputStream is = zipFile.getInputStream(zipEntry); OutputStream os = new FileOutputStream(entryFile)) {
-                    copy(is, os);
+        try (ZipFile zipFile = new ZipFile(file)) {
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry zipEntry = entries.nextElement();
+                File entryFile = new File(path + zipEntry.getName());
+                if (zipEntry.isDirectory()) {
+                    createDirectory(entryFile);
+                } else {
+                    createFile(entryFile);
+                    try (InputStream is = zipFile.getInputStream(zipEntry); OutputStream os = new FileOutputStream(entryFile)) {
+                        copy(is, os);
+                    }
                 }
-            }
 
-            files.add(entryFile);
+                files.add(entryFile);
+            }
         }
         return files;
     }
