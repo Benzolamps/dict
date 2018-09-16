@@ -1,6 +1,5 @@
 package com.benzolamps.dict.controller.vo;
 
-import com.sun.xml.internal.rngom.parse.host.Base;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

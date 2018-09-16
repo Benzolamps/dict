@@ -72,7 +72,11 @@ public class SystemUpdateController extends BaseController {
         });
     }
 
-    @Scheduled(fixedRate = 1000 * 15)
+    /**
+     * 检查新版本
+     * @return 是否有新版本
+     */
+    @Scheduled(fixedRate = 1000 * 60 * 10)
     @RequestMapping(value = "/check_new_version.json", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     protected BaseVo checkNewVersion() {
@@ -86,6 +90,10 @@ public class SystemUpdateController extends BaseController {
         return SUCCESS_VO;
     }
 
+    /**
+     * 检查是否更新完成
+     * @return 是否更新完成
+     */
     @RequestMapping(value = "/check_update_finished.json", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     protected BaseVo checkUpdateFinished() {
@@ -101,6 +109,10 @@ public class SystemUpdateController extends BaseController {
         return SUCCESS_VO;
     }
 
+    /**
+     * 检查是否更新失败
+     * @return 是否更新失败
+     */
     @RequestMapping(value = "/check_update_failed.json", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     protected BaseVo checkUpdateFailed() {
@@ -113,6 +125,10 @@ public class SystemUpdateController extends BaseController {
         return SUCCESS_VO;
     }
 
+    /**
+     * 重置更新状态
+     * @return 状态
+     */
     @RequestMapping(value = "/reset_status.json", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     protected BaseVo resetStatus() {
@@ -122,6 +138,7 @@ public class SystemUpdateController extends BaseController {
 
     /**
      * 系统更新界面
+     * @return ModelAndView
      */
     @RequestMapping(value = "/update.html", method = {RequestMethod.GET, RequestMethod.POST})
     protected ModelAndView update() {
@@ -133,6 +150,7 @@ public class SystemUpdateController extends BaseController {
 
     /**
      * 系统更新开始
+     * @return 开始
      */
     @RequestMapping(value = "/update.json", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody

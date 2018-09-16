@@ -39,6 +39,11 @@ public class Pageable implements Serializable {
 	/** 最大每页记录数 */
 	private static final int MAX_PAGE_SIZE = 1000;
 
+	/** 是否禁用分页 */
+	@Getter
+	@Setter
+	private Boolean pageDisabled = false;
+
 	/** 页码 */
 	@Getter
 	@Min(DEFAULT_PAGE_NUMBER)

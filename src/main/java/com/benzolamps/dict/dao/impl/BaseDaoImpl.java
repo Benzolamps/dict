@@ -140,7 +140,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
         long total = dictQuery.getCountQuery().getSingleResult();
         TypedQuery<T> typedQuery = dictQuery.getTypedQuery();
         if (pageable != null) {
-            if (pageable.getPageNumber() != -1) {
+            if (!pageable.getPageDisabled()) {
                 int totalPages = (int) Math.ceil((double) total / (double) pageable.getPageSize());
                 if (totalPages < pageable.getPageNumber()) {
                     pageable.setPageNumber(totalPages);

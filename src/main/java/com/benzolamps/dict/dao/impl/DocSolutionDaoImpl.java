@@ -3,20 +3,19 @@ package com.benzolamps.dict.dao.impl;
 import com.benzolamps.dict.bean.DocSolution;
 import com.benzolamps.dict.bean.DocSolutions;
 import com.benzolamps.dict.dao.base.DocSolutionDao;
+import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.util.Constant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.benzolamps.dict.util.DictLambda.tryAction;
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
+import static com.benzolamps.dict.util.DictResource.closeCloseable;
 
 /**
  * Word文档方案Dao接口实现类
@@ -44,16 +43,34 @@ public class DocSolutionDaoImpl implements DocSolutionDao {
         return solutions.getSolutions().stream().filter(solution -> solution.getId().equals(id)).findFirst().orElse(null);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void reload() {
-        solutions = tryFunc(() -> Constant.YAML.loadAs(resource.getInputStream(), DocSolutions.class));
+        InputStream inputStream = null;
+        try {
+            inputStream = resource.getInputStream();
+            solutions = Constant.YAML.loadAs(inputStream, DocSolutions.class);
+        }  catch (IOException e) {
+            throw new DictException(e);
+        } finally {
+            closeCloseable(inputStream);
+        }
     }
 
     @Override
     public void flush() {
         File file = resource.getFile();
-        tryAction(() -> Constant.YAML.dump(solutions, new FileWriter(file)));
+        OutputStream outputStream = null;
+        OutputStreamWriter outputStreamWriter = null;
+        try {
+            outputStream = new FileOutputStream(file);
+            outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8");
+            Constant.YAML.dump(solutions, outputStreamWriter);
+        } catch (IOException e) {
+            throw new DictException(e);
+        } finally {
+            closeCloseable(outputStreamWriter);
+            closeCloseable(outputStream);
+        }
     }
 
     @Override

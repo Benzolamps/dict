@@ -21,6 +21,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import static com.benzolamps.dict.util.DictLambda.tryAction;
+import static com.benzolamps.dict.util.DictResource.closeCloseable;
 
 /**
  * Jpql工具类
@@ -164,7 +165,6 @@ public class DictJpa {
         DataSourceProperties dataSourceProperties = DictSpring.getBean(DataSourceProperties.class);
         Connection connection = null;
         PreparedStatement statement = null;
-        SQLException exception = null;
         try {
             tryAction(() -> ClassUtils.forName(dataSourceProperties.getDriverClassName(), DictSpring.getBean(ClassLoader.class)));
             connection = DriverManager.getConnection(dataSourceProperties.getUrl());
@@ -174,24 +174,10 @@ public class DictJpa {
             }
             statement.execute();
         } catch (SQLException e) {
-            exception = e;
+            throw new DictException(e);
         } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    exception = e;
-                } finally {
-                    try {
-                        connection.close();
-                    } catch (SQLException e) {
-                        exception = e;
-                    }
-                }
-            }
-        }
-        if (exception != null) {
-            throw new DictException(exception);
+            closeCloseable(statement);
+            closeCloseable(connection);
         }
     }
 }

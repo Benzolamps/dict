@@ -6,6 +6,7 @@ import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
+import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.util.Constant;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,12 +14,14 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.util.*;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import static com.benzolamps.dict.util.DictLambda.tryAction;
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
+import static com.benzolamps.dict.util.DictResource.closeCloseable;
 
 /**
  * 乱序方案Dao接口实现类
@@ -90,11 +93,19 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         solutions.getSolutions().remove(ref);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void reload() {
+        InputStream inputStream = null;
+
         if (resource.exists()) {
-            solutions = tryFunc(() -> Constant.YAML.loadAs(resource.getInputStream(), ShuffleSolutions.class));
+            try {
+                inputStream = resource.getInputStream();
+                solutions = Constant.YAML.loadAs(inputStream, ShuffleSolutions.class);
+            } catch (IOException e) {
+                throw new DictException(e);
+            } finally {
+                closeCloseable(inputStream);
+            }
         }
 
         if (solutions == null) {
@@ -108,7 +119,14 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         }
 
         if (shuffleSolutions.isEmpty()) {
-            shuffleSolutions.add(tryFunc(() -> Constant.YAML.loadAs(defaultResource.getInputStream(), ShuffleSolution.class)));
+            try {
+                inputStream = defaultResource.getInputStream();
+                shuffleSolutions.add(Constant.YAML.loadAs(inputStream, ShuffleSolution.class));
+            } catch (IOException e) {
+                throw new DictException(e);
+            } finally {
+                closeCloseable(inputStream);
+            }
         }
     }
 
@@ -116,7 +134,18 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     public void flush() {
         File file = resource.getFile();
         if (file.exists() || file.getParentFile().mkdirs() && tryFunc(file::createNewFile)) {
-            tryAction(() -> Constant.YAML.dump(solutions, new FileWriter(file)));
+            OutputStream outputStream = null;
+            OutputStreamWriter outputStreamWriter = null;
+            try {
+                outputStream = new FileOutputStream(file);
+                outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-8");
+                Constant.YAML.dump(solutions, outputStreamWriter);
+            }  catch (IOException e) {
+                throw new DictException(e);
+            } finally {
+                closeCloseable(outputStreamWriter);
+                closeCloseable(outputStream);
+            }
         }
     }
 }

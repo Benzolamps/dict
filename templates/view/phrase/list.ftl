@@ -68,43 +68,51 @@
   });
 </#assign>
 
-<#assign file_export>
-  parent.layer.open({
-    type: 2,
-    content: '${base_url}/phrase/export.html',
-    area: ['800px', '600px'],
-    end: function () {
-      var data = {};
-      data.pageable = dict.loadFormData();
-      data.title = parent.exportData.title;
-      data.docSolutionId = parent.exportData.docSolution;
-      data.shuffleSolutionId = parent.exportData.shuffleSolution;
-      dict.loadText({
-        url: 'export_save.json',
-        type: 'post',
-        data: data,
-        dataType: 'json',
-        requestBody: true,
-        success: function (result, status, request) {
-          parent.layer.alert('导出成功', {
-            end: function () {
-              dict.postHref('${base_url}/doc/download.doc', {
-                fileName: data.title,
-                token: result.data
-              });
-            }
-          });
-        },
-        error: function (result, status, request) {
-          parent.layer.alert(result.message, {
-            icon: 2,
-            title: result.status
-          });
-        }
-      });
-    }
-  });
-</#assign>
+<#function file_export pageDisabled>
+  <#assign returnValue>
+    parent.layer.open({
+      type: 2,
+      content: '${base_url}/phrase/export.html',
+      area: ['800px', '600px'],
+      cancel: function () {
+        delete parent.exportData;
+      },
+      end: function () {
+        if (!parent.exportData) return false;
+        var data = {};
+        data.pageable = dict.loadFormData();
+        data.pageable.pageDisabled = ${pageDisabled?c};
+        data.title = parent.exportData.title;
+        data.docSolutionId = parent.exportData.docSolution;
+        data.shuffleSolutionId = parent.exportData.shuffleSolution;
+        dict.loadText({
+          url: 'export_save.json',
+          type: 'post',
+          data: data,
+          dataType: 'json',
+          requestBody: true,
+          success: function (result, status, request) {
+            parent.layer.alert('导出成功', {
+              end: function () {
+                dict.postHref('${base_url}/doc/download.doc', {
+                  fileName: data.title,
+                  token: result.data
+                });
+              }
+            });
+          },
+          error: function (result, status, request) {
+            parent.layer.alert(result.message, {
+              icon: 2,
+              title: result.status
+            });
+          }
+        });
+      }
+    });
+  </#assign>
+  <#return returnValue/>
+</#function>
 
 <@nothing></script></@nothing>
 <@data_list
@@ -127,7 +135,11 @@
     },
     {
       'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出短语',
-      'handler': file_export
+      'handler': file_export(false)
+    },
+    {
+      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出全部短语',
+      'handler': file_export(true)
     }
   ]
   page_enabled=true
