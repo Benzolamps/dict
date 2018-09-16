@@ -115,7 +115,7 @@ public class SystemUpdateController extends BaseController {
             result.put("total", versionService.getTotal());
             result.put("totalSize", versionService.getTotalSize());
             result.put("deltaTime", versionService.getDeltaTime());
-            messagingTemplate.convertAndSend("/version/downloaded", wrapperData(result));
+            messagingTemplate.convertAndSend("/version/installed", wrapperData(result));
         }
         return SUCCESS_VO;
     }

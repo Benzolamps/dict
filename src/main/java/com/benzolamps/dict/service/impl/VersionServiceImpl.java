@@ -98,14 +98,14 @@ public class VersionServiceImpl implements VersionService {
         try {
             /* 下载完成或者更新完成的状态时不能再次更新 */
             if (status != Status.DOWNLOADED && status != Status.INSTALLED) {
-                UrlResource resource = new UrlResource(baseUrl + "/yml/version.yml");
+                UrlResource resource = new UrlResource(baseUrl + "/dict/version.yml");
                 versionInfo = Constant.YAML.loadAs(resource.getInputStream(), List.class);
 
                 /* 判断是否有新版本 */
                 if (versionInfo.stream().anyMatch(str ->
                     (newVersionName = getVersion(str)) != null &&
                     newVersionName.compareTo(dictProperties.getVersion()) > 0)) {
-                    status = Status.HAS_NEW;
+                    if (status != Status.FAILED && status != Status.HAS_NEW) status = Status.HAS_NEW;
                 } else {
                     newVersionName = dictProperties.getVersion();
                 }
