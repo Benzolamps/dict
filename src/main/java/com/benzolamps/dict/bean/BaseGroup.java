@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -20,7 +22,8 @@ public class BaseGroup extends BaseEntity {
     private static final long serialVersionUID = -756587292984332161L;
 
     /** 分组 */
-    @Column(nullable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(updatable = false)
     private Library library;
 
     /** 状态 */

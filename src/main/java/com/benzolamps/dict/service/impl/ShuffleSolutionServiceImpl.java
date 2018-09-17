@@ -88,15 +88,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Transactional(readOnly = true)
     public List<ShuffleSolution> findAll() {
         List<ShuffleSolution> shuffleSolutions = shuffleSolutionDao.findAll();
-        shuffleSolutions.sort((o1, o2) -> {
-            if (Objects.equals(o1, o2)) {
-                return 0;
-            }
-            if (o1 == null ^ o2 == null) {
-                return o1 == null ? -1 : 1;
-            }
-            return o1.getOrder() - o2.getOrder();
-        });
+        shuffleSolutions.sort(Comparator.comparing(ShuffleSolution::getOrder));
         return shuffleSolutions;
     }
 

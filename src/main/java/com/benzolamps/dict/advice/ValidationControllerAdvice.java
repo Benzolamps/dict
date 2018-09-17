@@ -21,6 +21,7 @@ import java.util.Arrays;
  * @version 2.1.1
  * @datetime 2018-8-31 21:59:16
  */
+@SuppressWarnings("ConstantConditions")
 @Aspect
 @Component
 public class ValidationControllerAdvice {

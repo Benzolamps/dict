@@ -28,15 +28,7 @@ public class DocSolutionServiceImpl implements DocSolutionService {
     @Transactional(readOnly = true)
     public List<DocSolution> findAll() {
         List<DocSolution> docSolutions = docSolutionDao.findAll();
-        docSolutions.sort((o1, o2) -> {
-            if (Objects.equals(o1, o2)) {
-                return 0;
-            }
-            if (o1 == null ^ o2 == null) {
-                return o1 == null ? -1 : 1;
-            }
-            return o1.getOrder() - o2.getOrder();
-        });
+        docSolutions.sort(Comparator.comparing(DocSolution::getOrder));
         return docSolutions;
     }
 

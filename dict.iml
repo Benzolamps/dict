@@ -3,13 +3,16 @@
   <component name="FacetManager">
     <facet type="Spring" name="Spring">
       <configuration>
-        <fileset id="fileset" name="WebConfiguration" removed="false">
-          <dependency>spring_boot_com.benzolamps.dict.main.DictApplication</dependency>
-          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/cfg/WebConfiguration.java</file>
-          <file>file://$MODULE_DIR$/src/main/resources/freemarker.xml</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/cfg/DictProperties.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/bean/DictProperties.java</file>
-          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/cfg/WebSocketConfig.java</file>
+        <fileset id="spring_boot_com.benzolamps.dict.main.DictApplication" name="DictApplication" removed="true">
+          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/main/DictApplication.java</file>
+          <file>file://$MODULE_DIR$/src/main/resources/application.yml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/application-release.yml</file>
+        </fileset>
+        <fileset id="spring-boot-dispatcherServletAutoConfiguration-mvc" name="DictApplication MVC" removed="true">
+          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/main/DictApplication.java</file>
+        </fileset>
+        <fileset id="fileset" name="Spring Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/java/com/benzolamps/dict/main/DictApplication.java</file>
         </fileset>
       </configuration>
     </facet>
@@ -19,8 +22,17 @@
         <sourceRoots>
           <root url="file://$MODULE_DIR$/src/main/java" />
           <root url="file://$MODULE_DIR$/src/main/resources" />
-          <root url="file://$MODULE_DIR$/universe" />
         </sourceRoots>
+      </configuration>
+    </facet>
+    <facet type="jpa" name="JPA">
+      <configuration>
+        <setting name="validation-enabled" value="true" />
+        <setting name="provider-name" value="" />
+        <datasource-mapping>
+          <factory-entry name="Entities" />
+          <factory-entry name="entityManagerFactory" />
+        </datasource-mapping>
       </configuration>
     </facet>
   </component>
@@ -31,12 +43,10 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/universe" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="tools (2)" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-aop:1.5.14.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:1.5.14.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:1.5.14.RELEASE" level="project" />
@@ -93,6 +103,8 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:1.5.14.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:1.5.14.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:1.5.14.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.springframework.boot:spring-boot-configuration-processor:1.5.14.RELEASE" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.16.22" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-starter-test:1.5.14.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test:1.5.14.RELEASE" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework.boot:spring-boot-test-autoconfigure:1.5.14.RELEASE" level="project" />
@@ -120,6 +132,14 @@
     <orderEntry type="library" name="Maven: dom4j:dom4j:1.6.1" level="project" />
     <orderEntry type="library" name="Maven: xml-apis:xml-apis:1.4.01" level="project" />
     <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.17" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.16.22" level="project" />
+    <orderEntry type="module-library">
+      <library name="Maven: tools:tools:unknown">
+        <CLASSES>
+          <root url="jar://C:/Program Files/Java/jre1.8.0_161/lib/tools.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

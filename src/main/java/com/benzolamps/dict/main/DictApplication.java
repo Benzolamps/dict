@@ -21,7 +21,14 @@ import java.util.List;
  * @datetime 2018-7-11 19:10:18
  */
 @SpringBootApplication
-@ComponentScan(basePackages = "com.benzolamps.dict")
+// @ComponentScan(basePackages = "com.benzolamps.dict")
+@ComponentScan(basePackages = {
+    "com.benzolamps.dict.dao.impl",
+    "com.benzolamps.dict.service.impl",
+    "com.benzolamps.dict.controller",
+    "com.benzolamps.dict.cfg",
+    "com.benzolamps.dict.directive"
+})
 @EntityScan(basePackages="com.benzolamps.dict.bean")
 @EnableJpaRepositories(basePackages= "com.benzolamps.dict.dao")
 @ImportResource(locations = "classpath:freemarker.xml")
@@ -29,17 +36,15 @@ import java.util.List;
 @EnableTransactionManagement
 @EnableCaching
 @EnableScheduling
-public interface DictApplication {
+public class DictApplication {
     /**
      * main方法
      * @param args 参数
      */
-    static void main(String... args) {
+    public static void main(String... args) {
         new SpringApplicationBuilder(DictApplication.class).initializers(applicationContext -> {
             DictSpring.setApplicationContext(applicationContext);
             DictSpring.setBean("classLoader", applicationContext.getClassLoader());
-            List<String> profiles = Arrays.asList(applicationContext.getEnvironment().getActiveProfiles());
-            DictSpring.setBean("isRelease", profiles.contains("release"));
         }).build().run(args);
     }
 }

@@ -1,8 +1,10 @@
-package com.benzolamps.dict.bean;
+package com.benzolamps.dict.cfg;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 import java.io.Serializable;
 
@@ -12,9 +14,11 @@ import java.io.Serializable;
  * @version 2,1,1
  * @datetime 2018-9-11 14:56:52
  */
+@Lazy(false)
 @Configuration("dictProperties")
 @ConfigurationProperties(prefix = "dict.system")
 @Getter
+@Setter
 public class DictProperties implements Serializable {
 
     private static final long serialVersionUID = 2388800158030381132L;
@@ -40,31 +44,9 @@ public class DictProperties implements Serializable {
     /** Universe路径 */
     private String universePath;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    /** 是否是发行版本 */
+    private boolean release;
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public void setJdbcFile(String jdbcFile) {
-        this.jdbcFile = jdbcFile;
-    }
-
-    public void setConsoleEncoding(String consoleEncoding) {
-        this.consoleEncoding = consoleEncoding;
-    }
-
-    public void setRemoteBaseUrl(String remoteBaseUrl) {
-        this.remoteBaseUrl = remoteBaseUrl;
-    }
-
-    public void setUniversePath(String universePath) {
-        this.universePath = universePath;
-    }
+    /** 类加载器 */
+    private ClassLoader classLoader;
 }

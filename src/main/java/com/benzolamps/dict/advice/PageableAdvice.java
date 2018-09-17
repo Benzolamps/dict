@@ -8,9 +8,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-import javax.validation.Validator;
-
 /**
  * 分页建言
  * @author Benzolamps
@@ -20,9 +17,6 @@ import javax.validation.Validator;
 @Aspect
 @Component
 public class PageableAdvice {
-
-    @Resource
-    private Validator validator;
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
     private native void pointcut();

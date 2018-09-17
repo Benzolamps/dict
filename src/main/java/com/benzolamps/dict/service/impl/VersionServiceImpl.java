@@ -1,6 +1,6 @@
 package com.benzolamps.dict.service.impl;
 
-import com.benzolamps.dict.bean.DictProperties;
+import com.benzolamps.dict.cfg.DictProperties;
 import com.benzolamps.dict.service.base.VersionService;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictFile;
@@ -9,8 +9,6 @@ import lombok.var;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,7 +18,8 @@ import org.springframework.util.StreamUtils;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.function.Consumer;
 

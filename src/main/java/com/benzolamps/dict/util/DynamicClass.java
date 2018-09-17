@@ -86,7 +86,7 @@ public class DynamicClass {
     }
 
     /** 编译 */
-    @SuppressWarnings("SpellCheckingInspection")
+    @SuppressWarnings({"SpellCheckingInspection", "ConstantConditions"})
     public void compile() {
         if (!compiled && (compiled = true)) {
             StandardJavaFileManager manager = compiler.getStandardFileManager(diagnosticListener, locale, charset);
