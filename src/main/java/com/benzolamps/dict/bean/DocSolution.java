@@ -1,13 +1,10 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.util.DictEnum;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 

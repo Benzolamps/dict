@@ -99,8 +99,7 @@ public class DynamicClass {
                 throw new DictException("编译失败");
             }
             classBytes.keySet().forEach((DictLambda.Action1<String>) key -> dynamicClassSet.add(classLoader.loadClass(key)));
-            DictSpring.removeBean("classLoader");
-            DictSpring.setBean("classLoader", classLoader);
+            DictSpring.setClassLoader(classLoader);
         }
     }
 
@@ -140,7 +139,7 @@ public class DynamicClass {
             throw new DictException("需要tools.jar");
         }
 
-        classLoader = new URLClassLoader(new URL[0], DictSpring.getBean("classLoader")) {
+        classLoader = new URLClassLoader(new URL[0], DictSpring.getClassLoader()) {
             @Override
             protected Class<?> findClass(String name) throws ClassNotFoundException {
                 byte[] buf = classBytes.get(name);
@@ -158,6 +157,6 @@ public class DynamicClass {
     }
 
     public static <T> Class<T> loadClass(String className) {
-        return (Class<T>) tryFunc(() -> ClassUtils.forName(className, DictSpring.getBean("classLoader")));
+        return (Class<T>) tryFunc(() -> ClassUtils.forName(className, DictSpring.getClassLoader()));
     }
 }

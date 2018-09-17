@@ -50,7 +50,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         pageable.setPageSize(10);
         pageable.setPageNumber(1);
         pageable.getOrders().add(Order.desc("id"));
-        return new Page<>(new ArrayList<>(shuffleSolutions), (long) shuffleSolutions.size(), pageable);
+        return new Page<>(new ArrayList<>(shuffleSolutions), shuffleSolutions.size(), pageable);
     }
 
     @Override
@@ -77,7 +77,9 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         Assert.notNull(shuffleSolution, "shuffle solution不能为null");
         Assert.notNull(shuffleSolution.getId(), "shuffle solution不能为新建对象");
         val ref = solutions.getSolutions().stream()
-            .filter(solution -> solution.getId().equals(shuffleSolution.getId())).findFirst().get();
+            .filter(solution -> solution.getId().equals(shuffleSolution.getId()))
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("shuffle solution不存在"));
+        Assert.notNull(ref, "shuffle solution不存在");
         ref.setName(shuffleSolution.getName());
         ref.setProperties(shuffleSolution.getProperties());
         ref.setRemark(shuffleSolution.getRemark());
@@ -89,7 +91,8 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     public void remove(final Integer shuffleSolutionId) {
         Assert.notNull(shuffleSolutionId, "shuffle solution id不能为null");
         val ref = solutions.getSolutions().stream()
-            .filter(solution -> solution.getId().equals(shuffleSolutionId)).findFirst().get();
+            .filter(solution -> solution.getId().equals(shuffleSolutionId))
+            .findFirst().orElseThrow(() -> new IllegalArgumentException("shuffle solution不存在"));
         solutions.getSolutions().remove(ref);
     }
 

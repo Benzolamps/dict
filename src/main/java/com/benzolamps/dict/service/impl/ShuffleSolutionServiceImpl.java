@@ -62,17 +62,8 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
         return availableStrategySetups.stream().map(Class::getName).collect(Collectors.toSet());
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public IShuffleStrategySetup getDefaultSolutionInstance() {
-        ShuffleSolution shuffleSolution = new ShuffleSolution();
-        shuffleSolution.setStrategyClass("rose.RoseShuffleStrategySetup");
-        shuffleSolution.setProperties(new HashMap<>());
-        return apply(shuffleSolution);
-    }
-
     private IShuffleStrategySetup apply(ShuffleSolution shuffleSolution) {
-        ClassLoader classLoader = DictSpring.getBean("classLoader");
+        ClassLoader classLoader = DictSpring.getClassLoader();
         val strategyClass = tryFunc(() -> ClassUtils.forName(shuffleSolution.getStrategyClass(), classLoader));
         Properties properties = DictMap.convertToProperties(shuffleSolution.getProperties());
         return (IShuffleStrategySetup) new DictBean<>(strategyClass).createSpringBean(properties);
@@ -121,7 +112,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Override
     @Transactional
     public ShuffleSolution update(ShuffleSolution shuffleSolution) throws ClassNotFoundException {
-        Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) ClassUtils.forName(shuffleSolution.getStrategyClass(), DictSpring.getBean(ClassLoader.class));
+        Class<IShuffleStrategySetup> strategyClass = (Class<IShuffleStrategySetup>) ClassUtils.forName(shuffleSolution.getStrategyClass(), DictSpring.getClassLoader());
         DictBean<IShuffleStrategySetup> dictBean = new DictBean<>(strategyClass);
         Collection<DictProperty> dictProperties = dictBean.getProperties();
         Map<String, Object> properties = shuffleSolution.getProperties();

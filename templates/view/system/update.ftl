@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="deltaTime" type="long" -->
 <#-- @ftlvariable name="total" type="long" -->
 <#-- @ftlvariable name="totalSize" type="java.lang.String" -->
-<blockquote class="layui-elem-quote dict-blockquote" style="margin-top: 10px;">
+<blockquote class="layui-elem-quote" style="margin-top: 10px;">
   <span class="update-content">
     <#switch status>
       <#case 'ALREADY_NEW'>当前已是最新版本，无需更新！<#break/>

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
  * @datetime 2018-9-17 15:58:10
  */
 @Component
-@SuppressWarnings("unused")
 public class RuntimeBeanConfig {
 
     @Profile("release")

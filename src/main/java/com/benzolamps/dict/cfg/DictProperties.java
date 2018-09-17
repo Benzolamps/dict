@@ -43,10 +43,4 @@ public class DictProperties implements Serializable {
 
     /** Universe路径 */
     private String universePath;
-
-    /** 是否是发行版本 */
-    private boolean release;
-
-    /** 类加载器 */
-    private ClassLoader classLoader;
 }

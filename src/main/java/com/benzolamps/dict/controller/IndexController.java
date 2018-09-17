@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -61,7 +60,7 @@ public class IndexController extends BaseController {
      * @return ModelAndView
      */
     @GetMapping("/remote/**")
-    protected ResponseEntity<Resource> remote(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected ResponseEntity<Resource> remote(HttpServletRequest request) throws IOException {
         String url = request.getRequestURL().toString();
         int index = url.indexOf("remote") + 6;
         String resourceUrl = remoteBaseUrl + url.substring(index);

@@ -11,6 +11,7 @@ import java.io.IOException;
  * @version 2.1.1
  * @datetime 2018-9-15 21:48:50
  */
+@SuppressWarnings("unused")
 @Slf4j
 public final class DictResource {
 

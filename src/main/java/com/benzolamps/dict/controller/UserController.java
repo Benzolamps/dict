@@ -140,7 +140,6 @@ public class UserController extends BaseController {
         return wrapperMsg("success");
     }
 
-
     /**
      * 锁屏界面
      * @return 界面

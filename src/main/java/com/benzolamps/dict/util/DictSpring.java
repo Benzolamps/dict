@@ -23,18 +23,22 @@ import static com.benzolamps.dict.util.Constant.EMPTY_PROPERTIES;
  * @version 2.1.1
  * @datetime 2018-8-23 19:34:21
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "unused"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public abstract class DictSpring {
 
     private static ConfigurableApplicationContext applicationContext;
+
+    private static ClassLoader classLoader;
 
     /**
      * 设置applicationContext
      * @param applicationContext applicationContext
      */
     public static void setApplicationContext(ConfigurableApplicationContext applicationContext) {
+        Assert.notNull(applicationContext, "application context不能为null");
         DictSpring.applicationContext = applicationContext;
+        DictSpring.classLoader = applicationContext.getClassLoader();
     }
 
     /**
@@ -145,5 +149,21 @@ public abstract class DictSpring {
         Assert.hasLength(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         return beanFactory.containsSingleton(name) || beanFactory.containsBeanDefinition(name);
+    }
+
+    /**
+     * 获取ClassLoader
+     * @return ClassLoader
+     */
+    public static ClassLoader getClassLoader() {
+        return classLoader;
+    }
+
+    /**
+     * 设置ClassLoader
+     * @param classLoader ClassLoader
+     */
+    public static void setClassLoader(ClassLoader classLoader) {
+        DictSpring.classLoader = classLoader;
     }
 }

@@ -99,14 +99,19 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     }
 
     @Override
-    public void update(Collection<T> entities, String... ignoreProperties) {
-        super.update(entities, ignoreProperties);
+    public void update(Collection<T> elements, String... ignoreProperties) {
+        Library current = libraryService.getCurrent();
+        Assert.notNull(current, "未选择词库");
+        for (T element : elements) {
+            if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
+        }
+        super.update(elements, ignoreProperties);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public void remove(T... entities) {
-        super.remove(entities);
+    public void remove(T... elements) {
+        super.remove(elements);
     }
 
     @Override
@@ -115,14 +120,15 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     }
 
     @Override
-    public void remove(Collection<T> entities) {
-        super.remove(entities);
+    public void remove(Collection<T> elements) {
+        super.remove(elements);
     }
 
     @Override
     public T update(T element, String... ignoreProperties) {
         Library current = libraryService.getCurrent();
         Assert.notNull(current, "未选择词库");
+        if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
         return super.update(element, DictArray.add(ignoreProperties, "library"));
     }
 

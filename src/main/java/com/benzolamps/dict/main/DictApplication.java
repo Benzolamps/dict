@@ -7,12 +7,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * SpringBoot入口类
@@ -21,18 +17,16 @@ import java.util.List;
  * @datetime 2018-7-11 19:10:18
  */
 @SpringBootApplication
-// @ComponentScan(basePackages = "com.benzolamps.dict")
 @ComponentScan(basePackages = {
     "com.benzolamps.dict.dao.impl",
     "com.benzolamps.dict.service.impl",
     "com.benzolamps.dict.controller",
     "com.benzolamps.dict.cfg",
+    "com.benzolamps.dict.advice",
     "com.benzolamps.dict.directive"
 })
-@EntityScan(basePackages="com.benzolamps.dict.bean")
-@EnableJpaRepositories(basePackages= "com.benzolamps.dict.dao")
+@EntityScan(basePackages = "com.benzolamps.dict.bean")
 @ImportResource(locations = "classpath:freemarker.xml")
-// @PropertySource(value = "file:dictionary.yml", factory = YamlPropertyLoaderFactory.class)
 @EnableTransactionManagement
 @EnableCaching
 @EnableScheduling
@@ -42,9 +36,6 @@ public class DictApplication {
      * @param args 参数
      */
     public static void main(String... args) {
-        new SpringApplicationBuilder(DictApplication.class).initializers(applicationContext -> {
-            DictSpring.setApplicationContext(applicationContext);
-            DictSpring.setBean("classLoader", applicationContext.getClassLoader());
-        }).build().run(args);
+        new SpringApplicationBuilder(DictApplication.class).initializers(DictSpring::setApplicationContext).build().run(args);
     }
 }

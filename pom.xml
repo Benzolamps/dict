@@ -81,7 +81,7 @@
       <groupId>tools</groupId>
       <artifactId>tools</artifactId>
       <scope>system</scope>
-      <systemPath>${env.JRE_HOME}/lib/tools.jar</systemPath>
+      <systemPath>${java.home}/lib/tools.jar</systemPath>
     </dependency>
   </dependencies>
   <build>

@@ -163,7 +163,7 @@ public class DictJpa {
         DataSourceProperties dataSourceProperties = DictSpring.getBean(DataSourceProperties.class);
         try (var connection = DriverManager.getConnection(dataSourceProperties.getUrl())) {
             try (var statement = connection.prepareStatement(sql)) {
-                tryAction(() -> ClassUtils.forName(dataSourceProperties.getDriverClassName(), DictSpring.getBean(ClassLoader.class)));
+                tryAction(() -> ClassUtils.forName(dataSourceProperties.getDriverClassName(), DictSpring.getClassLoader()));
                 for (int index = 0; index < positionParameters.length; index++) {
                     statement.setObject(index + 1, positionParameters[index]);
                 }

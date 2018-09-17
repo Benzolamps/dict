@@ -1,8 +1,6 @@
 package com.benzolamps.dict.dao.base;
 
 import com.benzolamps.dict.bean.DocSolution;
-import com.benzolamps.dict.bean.ShuffleSolution;
-import com.benzolamps.dict.dao.core.Page;
 
 import java.util.List;
 import java.util.Map;

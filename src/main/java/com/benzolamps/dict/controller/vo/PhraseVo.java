@@ -3,8 +3,6 @@ package com.benzolamps.dict.controller.vo;
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
-import com.benzolamps.dict.service.base.LibraryService;
-import com.benzolamps.dict.util.DictSpring;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -52,7 +50,6 @@ public class PhraseVo implements Serializable {
      */
     public static Phrase convertToPhrase(PhraseVo phraseVo) {
         Assert.notNull(phraseVo, "phrase vo不能为null");
-        LibraryService libraryService = DictSpring.getBean(LibraryService.class);
         Phrase phrase = new Phrase();
         phrase.setId(phraseVo.getId());
         phrase.setIndex(phraseVo.getIndex());

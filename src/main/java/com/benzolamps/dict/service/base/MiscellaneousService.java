@@ -12,6 +12,7 @@ public interface MiscellaneousService {
      * 获取SQLite版本
      * @return SQLite版本
      */
+    @SuppressWarnings("unused")
     String getSQLiteVersion();
 
     /**

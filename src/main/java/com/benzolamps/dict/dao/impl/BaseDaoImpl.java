@@ -132,24 +132,28 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	public Page<T> findPage(DictQuery<T> dictQuery, Pageable pageable) {
         Assert.notNull(dictQuery, " dict query不能为null");
         dictQuery.setEntityManager(entityManager);
-        pageable.getOrders().forEach(dictQuery::applyOrder);
+
         if (pageable != null) {
+            pageable.getOrders().forEach(dictQuery::applyOrder);
             pageable.getSearches().forEach(dictQuery::applySearch);
             dictQuery.getFilter().and(pageable.getFilter());
         }
-        long total = dictQuery.getCountQuery().getSingleResult();
+
+        int total = dictQuery.getCountQuery().getSingleResult().intValue();
         TypedQuery<T> typedQuery = dictQuery.getTypedQuery();
+
         if (pageable != null) {
             if (!pageable.getPageDisabled()) {
-                int totalPages = (int) Math.ceil((double) total / (double) pageable.getPageSize());
+
+                int totalPages = (total - 1) / pageable.getPageSize() + 1;
                 if (totalPages < pageable.getPageNumber()) {
                     pageable.setPageNumber(totalPages);
                 }
                 typedQuery.setFirstResult((pageable.getPageNumber() - 1) * pageable.getPageSize());
                 typedQuery.setMaxResults(pageable.getPageSize());
-
             }
         }
+
         List<T> list = typedQuery.getResultList();
         return new Page<>(list, total, pageable);
 	}

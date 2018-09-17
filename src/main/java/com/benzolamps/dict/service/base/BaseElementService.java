@@ -10,6 +10,7 @@ import org.springframework.core.io.Resource;
  * @version 2.1.1
  * @datetime 2018-9-5 21:05:33
  */
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public interface BaseElementService<T extends BaseElement> extends BaseService<T> {
 
     /**

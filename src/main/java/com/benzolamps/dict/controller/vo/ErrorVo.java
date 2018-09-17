@@ -1,10 +1,8 @@
 package com.benzolamps.dict.controller.vo;
 
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
-import java.util.StringJoiner;
 
 /**
  * 错误Vo

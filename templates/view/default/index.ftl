@@ -67,7 +67,7 @@
           color: #222222 !important;
         }
 
-        .layui-nav-itemd>.dict-column {
+        .layui-nav-itemed>.dict-column {
           background-color: #DDDDDD !important;
           color: #222222 !important !important;
         }
@@ -99,7 +99,7 @@
             </a>
           </div>
           <ul class="layui-nav layui-layout-left">
-            <li class="layui-nav-item layui-nav-itemd" lay-unselect>
+            <li class="layui-nav-item layui-nav-itemed" lay-unselect>
               <a class="dict-nav" id="toggle-nav">
                 <i class="fa fa-angle-double-left" aria-hidden="true"></i>
               </a>

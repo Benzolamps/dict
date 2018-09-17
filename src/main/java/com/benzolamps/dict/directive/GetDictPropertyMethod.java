@@ -1,12 +1,12 @@
 package com.benzolamps.dict.directive;
 
 import com.benzolamps.dict.controller.vo.DictPropertyInfoVo;
+import com.benzolamps.dict.util.DictSpring;
 import freemarker.template.TemplateMethodModelEx;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
@@ -20,15 +20,12 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
 @Component
 public class GetDictPropertyMethod implements TemplateMethodModelEx {
 
-    @Resource
-    private ClassLoader classLoader;
-
     @Override
     public Object exec(List arguments) {
         Assert.notEmpty(arguments, "arguments不能为空");
         String className = arguments.get(0).toString();
         Assert.notNull(className, "class name不能为null或空");
-        Class<?> clazz = tryFunc(() -> ClassUtils.forName(className, classLoader));
+        Class<?> clazz = tryFunc(() -> ClassUtils.forName(className, DictSpring.getClassLoader()));
         return DictPropertyInfoVo.applyDictPropertyInfo(clazz);
     }
 }

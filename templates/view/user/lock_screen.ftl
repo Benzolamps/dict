@@ -12,7 +12,7 @@
     <#list 0..3 as row>
       <div class="row">
         <#list 0..9 as cell>
-          <div class="cell">
+          <div class="cell" style="z-index: 1">
             <div class="text">${cell}</div>
           </div>
         </#list>
@@ -54,7 +54,7 @@
 <script>
   Lock.checkPassword = function (p) {
     var password = localStorage.getItem('password');
-    return null === password || dict.encrypt(p) == password;
+    return null == password || dict.encrypt(p) == password;
   };
 
   Lock.unlock = function () {
@@ -88,5 +88,5 @@
       parent.layer.close(index);
       return false;
     });
-  };
+  }
 </script>

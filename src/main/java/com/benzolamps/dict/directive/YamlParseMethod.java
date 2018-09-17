@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
  * @version 2.1.1
  * @datetime 2018-7-11 18:40:54
  */
-@Component
 public class YamlParseMethod implements TemplateMethodModelEx {
 
     /** 资源类型 */

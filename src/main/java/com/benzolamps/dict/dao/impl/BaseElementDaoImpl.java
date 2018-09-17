@@ -3,7 +3,6 @@ package com.benzolamps.dict.dao.impl;
 import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.dao.base.BaseElementDao;
-import com.fasterxml.jackson.databind.ser.std.AtomicReferenceSerializer;
 import org.springframework.core.ResolvableType;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -13,7 +12,6 @@ import javax.persistence.criteria.Root;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 单词或短语类的基类Dao接口实现类
@@ -49,12 +47,11 @@ public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> im
     @Override
     public Integer findMinIndex(Library library) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Integer> criteriaQuery = criteriaBuilder.createQuery(Integer.class);
+        CriteriaQuery<Number> criteriaQuery = criteriaBuilder.createQuery(Number.class);
         Root<T> root = criteriaQuery.from(entityClass);
-        Predicate restrictions = criteriaBuilder.conjunction();
-        criteriaQuery.where(restrictions, criteriaBuilder.equal(root.get("library"), library));
+        criteriaQuery.where(criteriaBuilder.equal(root.get("library"), library));
         criteriaQuery.select(criteriaBuilder.min(root.get("index")));
-        Integer result = entityManager.createQuery(criteriaQuery).getSingleResult();
-        return result != null ? result : 0;
+        Number result = entityManager.createQuery(criteriaQuery).getSingleResult();
+        return result != null ? result.intValue() : 0;
     }
 }

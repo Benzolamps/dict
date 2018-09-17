@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
@@ -26,6 +25,7 @@ public interface DictFile {
      * @param filter 过滤器
      * @return 文件集合
      */
+    @SuppressWarnings("ConstantConditions")
     static Set<File> deepListFiles(File file, Predicate<File> filter) {
         Assert.state(file != null && file.isDirectory(), "file不是目录");
         Stack<File> stack = new Stack<>();
@@ -52,12 +52,12 @@ public interface DictFile {
      */
     static String fileSizeStr(long size) {
         String[] unit = {"B", "KB", "MB", "GB", "TB", "PB"};
-        int i = 0;
+        int index = 0;
         double doubleSize = size;
-        while (i < 5 && doubleSize >= 1024) {
-            i++;
-            doubleSize /= 1024.0;
+        while (index < 5 && doubleSize >= 1024) {
+            ++index;
+            doubleSize /= 1024;
         }
-        return new BigDecimal(doubleSize).setScale(2, BigDecimal.ROUND_HALF_UP) + " " + unit[i];
+        return String.format("%.2f ", doubleSize) + unit[index];
     }
 }

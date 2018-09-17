@@ -25,7 +25,7 @@ public class Page<B> implements Serializable {
 
     /** 总数 */
     @Getter
-    private final Long total;
+    private final Integer total;
 
     /* pageable */
     @JsonIgnore
@@ -37,7 +37,7 @@ public class Page<B> implements Serializable {
      * @param total 总数
      * @param pageable Pageable
      */
-    public Page(List<B> content, Long total, Pageable pageable) {
+    public Page(List<B> content, Integer total, Pageable pageable) {
         this.content = content;
         this.total = total;
         this.pageable = pageable;
@@ -79,7 +79,7 @@ public class Page<B> implements Serializable {
      * 获取总页数
      * @return 总页数
      */
-    public Long getTotalPages() {
-        return (long) Math.ceil((double) getTotal() / (double) getPageSize());
+    public Integer getTotalPages() {
+        return (getTotal() - 1) / getPageSize() + 1;
     }
 }
