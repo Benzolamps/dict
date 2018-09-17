@@ -73,12 +73,12 @@ public interface VersionService {
     void setStatusCallback(Consumer<Status> callback);
 
     /**
-     * 禁用
+     * 死
      */
     void die();
 
     /**
-     * @return 是否已禁用
+     * @return 死了吗
      */
     boolean isDead();
 }

@@ -16,8 +16,8 @@
   </span>
   &nbsp;&nbsp;&nbsp;&nbsp;
   <span class="update-button"<#if ['DOWNLOADING', 'DOWNLOADED', 'INSTALLED']?seq_contains(status)> style="display: none"</#if>>
-    <button id="update" class="layui-btn layui-btn-warm layui-btn-sm">
-      <i class="fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; <#if status='FAILED'>重试<#else>开始更新</#if>
+    <button id="update" class="layui-btn layui-btn-warm layui-btn-sm"<#if status == 'ALREADY_NEW'> style="display: none"</#if>>
+      <i class="fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; <#if status == 'FAILED'>重试<#else>开始更新</#if>
     </button>
     <button id="update-data" class="layui-btn layui-btn-sm">
       <i class="fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 下载完整版数据包
