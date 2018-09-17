@@ -23,9 +23,15 @@ public class Filter extends SnippetResolver {
      */
     public Filter and(Filter another) {
         if (another != null && !another.isEmpty()) {
-            if (!this.isEmpty()) this.add(new OperatorSnippet("and ("));
-            this.addAll(another);
-            if (!this.isEmpty()) this.add(new OperatorSnippet(")"));
+            boolean empty = this.isEmpty();
+            if (!this.isEmpty()) {
+                this.add(0, new OperatorSnippet("("));
+                this.add(new OperatorSnippet(") and ("));
+                this.addAll(another);
+                this.add(new OperatorSnippet(")"));
+            } else {
+                this.addAll(another);
+            }
         }
         return this;
     }
@@ -37,9 +43,15 @@ public class Filter extends SnippetResolver {
      */
     public Filter or(Filter another) {
         if (another != null && !another.isEmpty()) {
-            if (!this.isEmpty()) this.add(new OperatorSnippet("or ("));
-            this.addAll(another);
-            if (!this.isEmpty()) this.add(new OperatorSnippet(")"));
+            boolean empty = this.isEmpty();
+            if (!this.isEmpty()) {
+                this.add(0, new OperatorSnippet("("));
+                this.add(new OperatorSnippet(") or ("));
+                this.addAll(another);
+                this.add(new OperatorSnippet(")"));
+            } else {
+                this.addAll(another);
+            }
         }
         return this;
     }

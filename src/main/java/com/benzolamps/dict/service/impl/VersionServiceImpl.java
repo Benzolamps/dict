@@ -6,6 +6,11 @@ import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictFile;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.UrlResource;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,6 +33,7 @@ import java.util.function.Consumer;
 @SuppressWarnings({"ResultOfMethodCallIgnored", "unchecked"})
 @Service("versionService")
 @Slf4j
+@Aspect
 public class VersionServiceImpl implements VersionService {
 
     @Value("${install.total:0}")
@@ -220,5 +226,12 @@ public class VersionServiceImpl implements VersionService {
     @Override
     public boolean isDead() {
         return dead;
+    }
+
+    @Around("execution(* com.benzolamps.dict.service.impl.VersionServiceImpl.die())")
+    public Object around(ProceedingJoinPoint pjp) {
+        Object wtf = pjp.getSignature();
+        System.out.println(wtf);
+        return null;
     }
 }
