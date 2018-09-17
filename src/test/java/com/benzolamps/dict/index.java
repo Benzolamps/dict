@@ -28,7 +28,7 @@ public final class index {
 
     private static Process process = null;
 
-    public static void main(String... args) {
+    public static void main(String[] args) {
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             if (process != null) process.destroy();

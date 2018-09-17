@@ -70,6 +70,7 @@
 
 <script>
   layui.use('code', function() {
+    parent.dict.updateSocket.initCallback();
     layui.code({
       about: false,
       title: 'Stack Trace'

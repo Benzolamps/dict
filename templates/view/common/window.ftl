@@ -26,6 +26,9 @@
     </head>
     <body>
       <#include '/${content_path}.ftl'/>
+      <script type="text/javascript">
+        parent.dict.updateSocket.initCallback();
+      </script>
     </body>
   </html>
 </@compress>

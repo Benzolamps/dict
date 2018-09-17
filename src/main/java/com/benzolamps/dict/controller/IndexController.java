@@ -1,13 +1,16 @@
 package com.benzolamps.dict.controller;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.config.ResourceNotFoundException;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.MalformedURLException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 主页Controller
@@ -58,10 +61,15 @@ public class IndexController extends BaseController {
      * @return ModelAndView
      */
     @GetMapping("/remote/**")
-    protected ResponseEntity<UrlResource> remote(HttpServletRequest request) throws MalformedURLException {
+    protected ResponseEntity<Resource> remote(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String url = request.getRequestURL().toString();
         int index = url.indexOf("remote") + 6;
-        return ResponseEntity.ok().body(new UrlResource(remoteBaseUrl + url.substring(index)));
+        String resourceUrl = remoteBaseUrl + url.substring(index);
+        Resource resource = new UrlResource(resourceUrl);
+        if (resource.exists() && resource.contentLength() <= 1024 * 1024 * 10) {
+            return ResponseEntity.ok().body(resource);
+        }
+        throw new ResourceNotFoundException(resourceUrl, resource);
     }
 
     /**

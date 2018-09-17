@@ -20,14 +20,10 @@
       <i class="fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; <#if status='FAILED'>重试<#else>开始更新</#if>
     </button>
     <button id="update-data" class="layui-btn layui-btn-sm">
-      <a href="${remote_base_url}/dict/dict.rar">
-        <i class="fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 下载完整版数据包
-      </a>
+      <i class="fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 下载完整版数据包
     </button>
     <button id="update-data-jre" class="layui-btn layui-btn-normal layui-btn-sm">
-      <a href="${remote_base_url}/dict/dict-jre.rar">
-        <i class="fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 下载完整版数据包 + JRE
-      </a>
+      <i class="fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 下载完整版数据包 + JRE
     </button>
   </span>
 </blockquote>
@@ -48,4 +44,13 @@
       });
     });
   });
+
+  $('#update-data').click(function () {
+    location.href = '${remote_base_url}/dict/dict.rar';
+  });
+
+  $('#update-data-jre').click(function () {
+    location.href = '${remote_base_url}/dict/dict-jre.rar';
+  });
+
 </script>

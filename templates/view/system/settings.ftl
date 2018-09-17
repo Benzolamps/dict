@@ -24,47 +24,51 @@
 </div>
 
 <script type="text/javascript">
+
+  var updateButton = $('.update-button');
+  var updateContent = $('.update-content');
+
   var callback = new function () {
     this.onHasNew = function (data) {
       data = JSON.parse(data).data;
       var newVersionName = data.newVersionName;
-      $('.update-button').show();
-      $('.update-content').html('检测到新版本：' + newVersionName);
+      updateButton.show();
+      updateContent.html('检测到新版本：' + newVersionName);
     };
 
     this.onAlreadyNew = function () {
-      $('.update-button').show();
-      $('.update-button').children(0).hide();
-      $('.update-content').html('当前已是最新版本，无需更新！');
+      updateButton.show();
+      updateButton.children().eq(0).hide();
+      updateContent.html('当前已是最新版本，无需更新！');
     };
 
     this.onDownloading = function () {
-      $('.update-button').hide();
-      $('.update-content').html('正在下载新版本！');
+      updateButton.hide();
+      updateContent.html('正在下载新版本！');
     };
 
     this.onDownloaded = function (data) {
-      $('.update-button').hide();
+      updateButton.hide();
       data = JSON.parse(data).data;
       var total = data.total;
       var totalSize = data.totalSize;
       var deltaTime = (data.deltaTime * 0.001).toFixed(3);
-      $('.update-content').html(dict.format('下载完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
+      updateContent.html(dict.format('下载完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
     };
 
     this.onInstalled = function (data) {
-      $('.update-button').hide();
+      updateButton.hide();
       data = JSON.parse(data).data;
       var total = data.total;
       var totalSize = data.totalSize;
       var deltaTime = (data.deltaTime * 0.001).toFixed(3);
-      $('.update-content').html(dict.format('安装完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
+      updateContent.html(dict.format('安装完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
     };
 
     this.onFailed = function () {
-      $('.update-button').show();
-      $('.update-button').children().eq(0).html('<i class=\"fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 重试');
-      $('.update-content').html('更新失败！');
+      updateButton.show();
+      updateButton.children().eq(0).html('<i class=\"fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 重试');
+      updateContent.html('更新失败！');
     };
   }
 

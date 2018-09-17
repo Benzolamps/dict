@@ -63,6 +63,7 @@
           document.title = title;
           parent.document.title = title + ' - ${system_title} - ${system_version}';
         });
+        parent.dict.updateSocket.initCallback();
       </script>
     </body>
   </html>

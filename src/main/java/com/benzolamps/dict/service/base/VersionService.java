@@ -8,6 +8,7 @@ import java.util.function.Consumer;
  * @version 2.1.1
  * @datetime 2018-9-14 21:13:30
  */
+@SuppressWarnings("BooleanMethodIsAlwaysInverted")
 public interface VersionService {
 
     /**
