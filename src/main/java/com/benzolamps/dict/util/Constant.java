@@ -57,6 +57,10 @@ public interface Constant {
     /** 空的Class数组 */
     Class[] EMPTY_CLASS_ARRAY = new Class[0];
 
+    /** 文本文件格式 */
+    String[] TEXT_FILES =  {".txt", ".java", ".html", ".css", ".js", ".yml", ".xml", ".json", "less", "svg", "scss", ".ftl"};
+
+
     /** 空的List */
     List EMPTY_LIST = Collections.EMPTY_LIST;
 

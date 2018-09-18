@@ -2,6 +2,9 @@ package com.benzolamps.dict;
 
 import java.awt.*;
 import java.io.*;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,53 +29,51 @@ public final class index {
 
     private static long totalSize = 0;
 
-    private static Process process = null;
-
     public static void main(String[] args) {
+        Boolean succeed = null;
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (process != null) process.destroy();
-        }));
+        try {
+            long start = System.currentTimeMillis();
+            if (fileAccess(args[0])) succeed = true;
+            long end = System.currentTimeMillis();
+            lastDelta = end - start;
 
-        new Thread(() -> {
-            Boolean succeed = null;
+        } catch (Throwable e) {
+            succeed = false;
+        }
 
-            try {
-                long start = System.currentTimeMillis();
-                if (fileAccess(args[0])) succeed = true;
-                long end = System.currentTimeMillis();
-                lastDelta = end - start;
+        try {
+            File var1 = new File("templates/static/login.html");
+            Desktop.getDesktop().open(var1);
+            List<String> params = new ArrayList<>();
+            System.setProperty("java.class.path", "dict.jar");
+            params.add("--spring.profiles.active=release");
 
-            } catch (Throwable e) {
-                succeed = false;
+            if (null != succeed) {
+                if (succeed) {
+                    params.add("--install.succeed=true");
+                    params.add("--install.lastDelta=" + lastDelta);
+                    params.add("--install.total=" + total);
+                    params.add("--install.totalSize=" + totalSize);
+                } else {
+                    params.add("--install.succeed=false");
+                }
             }
 
-            try {
-                File var1 = new File("templates/static/login.html");
-                Desktop.getDesktop().open(var1);
-                StringJoiner cmd = new StringJoiner(" ");
-                cmd.add("jre/bin/java.exe").add("-jar").add("dict-" + args[1] + ".jar").add("--spring.profiles.active=release");
-
-                if (succeed != null && succeed) {
-                    cmd.add("--install.succeed=true")
-                            .add("--install.lastDelta=" + lastDelta)
-                            .add("--install.total=" + total)
-                            .add("--install.totalSize=" + totalSize);
-                } else if (succeed != null && !succeed) {
-                    cmd.add("--install.succeed=false");
-                }
-                process = Runtime.getRuntime().exec(cmd.toString());
-                try (InputStream is = process.getInputStream();
-                    InputStreamReader isr = new InputStreamReader(is);
-                    BufferedReader br = new BufferedReader(isr)) {
-                    br.lines().forEach(System.out::println);
-                }
-            } catch (Throwable e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
+            Method add = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            add.setAccessible(true);
+            URLClassLoader classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+            URL url = new File("dict.jar").toURI().toURL();
+            add.invoke(classloader, url);
+            Class<?> clazz = Class.forName("com.benzolamps.dict.main.DictApplication");
+            Method method = clazz.getDeclaredMethod("main", String[].class);
+            method.invoke(null, new Object[] {params.toArray(new String[0])});
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
     }
 
+    @SuppressWarnings("ConstantConditions")
     private static boolean fileAccess(String path) throws IOException {
 
         File file = new File(path);
@@ -146,7 +147,7 @@ public final class index {
     private static boolean validate(File file) {
         if (file != null && file.exists() && !file.isDirectory()) {
             String fileName = file.getName();
-            return fileName != null && fileName.contains("-") && fileName.toLowerCase().endsWith(".zip");
+            return fileName.contains("-") && fileName.toLowerCase().endsWith(".zip");
         }
 
         return false;
@@ -167,12 +168,10 @@ public final class index {
     }
 
     private static void copy(InputStream in, OutputStream out) throws IOException {
-        int byteCount = 0;
         byte[] buffer = new byte[BUFFER_SIZE];
         int bytesRead;
         while ((bytesRead = in.read(buffer)) != -1) {
             out.write(buffer, 0, bytesRead);
-            byteCount += bytesRead;
         }
         out.flush();
     }
