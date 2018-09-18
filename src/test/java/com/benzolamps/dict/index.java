@@ -34,7 +34,7 @@ public final class index {
 
         try {
             long start = System.currentTimeMillis();
-            if (fileAccess(args[0])) succeed = true;
+            if (args.length > 0 && fileAccess(args[0])) succeed = true;
             long end = System.currentTimeMillis();
             lastDelta = end - start;
 
