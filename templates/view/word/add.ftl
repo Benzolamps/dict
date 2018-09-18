@@ -29,7 +29,6 @@
 
 <@data_add
   id='words'
-  title='添加单词'
   fields=fields?eval
   messages={
       'prototype': {

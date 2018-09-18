@@ -75,8 +75,7 @@
           </td>
         </tr>
         <tr>
-          <th valign="middle">&nbsp;</th>
-          <td valign="middle">
+          <td valign="middle" colspan="2">
             <br>
             <input type="submit" value="登录" class="layui-btn layui-btn-normal">
             <br>
@@ -183,10 +182,7 @@
                         localStorage.removeItem('password');
                         location.replace(baseUrl + "/");
                     } else {
-                        layer.alert('密码错误', {
-                            icon: 2,
-                            title: '密码错误'
-                        });
+                        layer.alert('密码错误！', {icon: 2});
                     }
                 }, error: function (request) {
                     var result = JSON.parse(request.responseText);

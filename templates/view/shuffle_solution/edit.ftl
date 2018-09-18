@@ -1,7 +1,6 @@
 <#-- @ftlvariable name="strategies" type="java.util.Collection<java.lang.String>" -->
 <#-- @ftlvariable name="solution" type="com.benzolamps.dict.bean.ShuffleSolution" -->
 <div class="layui-card">
-  <div class="layui-card-header">修改乱序方案</div>
   <div class="layui-card-body">
     <form id="shuffle-solution" class="layui-form" method="post" action="update.json">
       <table class="layui-table">
@@ -77,7 +76,8 @@
                 var parent1 = parent;
                 var index = parent1.layer.getFrameIndex(window.name);
                 parent1.layer.close(index);
-                parent1.layer.alert('修改成功', {
+                parent1.layer.alert('修改成功！', {
+                  icon: 1,
                   end: function () {
                     parent1.$('iframe')[0].contentWindow.dict.reload(true);
                   }

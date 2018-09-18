@@ -2,7 +2,6 @@
 <#-- @ftlvariable name="shuffleSolutions" type="java.util.List<com.benzolamps.dict.bean.ShuffleSolution>" -->
 
 <div class="layui-card">
-  <div class="layui-card-header">导出单词</div>
   <div class="layui-card-body">
     <form class="layui-form" id="word-export">
       <table class="layui-table"></table>

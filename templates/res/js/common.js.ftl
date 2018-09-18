@@ -33,13 +33,10 @@ Array.prototype.toString = function () {
         });
 
         layer && layer.config({
-            title: false,
+            title: '提示',
             resize: false,
             move: false,
-            closeBtn: 2,
-            end: function (index) {
-                layer.close(index);
-            }
+            closeBtn: 2
         });
     };
     layui.use(models, function () {

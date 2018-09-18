@@ -30,7 +30,6 @@
 
 <@data_edit
   id='words'
-  title='修改单词'
   fields=fields?eval
   values=word
   messages={

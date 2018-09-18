@@ -6,6 +6,6 @@ import org.junit.Test;
 public class DictApplicationTests {
     @Test
     public void contextLoads() {
-        DictApplication.main();
+        DictApplication.main("--spring.profiles.active=release");
     }
 }

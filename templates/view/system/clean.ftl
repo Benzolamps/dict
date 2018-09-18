@@ -14,9 +14,8 @@
           url: 'clean.json',
           type: 'get',
           success: function (result, status, request) {
-            parent.layer.alert('操作成功', {
+            parent.layer.alert('操作成功！', {
               icon: 1,
-              title: '操作成功',
               end: function () {
                 parent.$('iframe')[0].contentWindow.dict.reload(true);
               }

@@ -614,7 +614,7 @@
         <w:r wsp:rsidRPr="0028394F">
           <w:rPr>
             <w:rFonts w:hint="fareast"/>
-            <w:sz w:val="52"/>
+            <w:sz w:val="40"/>
           </w:rPr>
           <w:t>${title}</w:t>
         </w:r>
@@ -645,7 +645,7 @@
                     <w:rPr>
                       <w:lang w:val="ZH-CN"/>
                     </w:rPr>
-                    <w:t></w:t>
+                    <w:t> </w:t>
                   </w:r>
                   <w:r wsp:rsidRPr="00E74F26">
                     <w:rPr>

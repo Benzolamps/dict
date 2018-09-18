@@ -59,9 +59,8 @@
           var endTime = new Date().getTime();
           var delta = ((endTime - startTime) * 0.001).toFixed(3);
           parent.layer.close(loader);
-          parent.layer.alert('导入单词成功，共导入 ' + result.data + ' 个单词<br>用时 ' + delta + ' 秒', {
+          parent.layer.alert('导入单词成功！<br>共导入 ' + result.data + ' 个单词！<br>用时 ' + delta + ' 秒！', {
             icon: 1,
-            title: '导入单词成功',
             end: function () {
               parent.$('iframe')[0].contentWindow.dict.reload(true);
             }
@@ -85,6 +84,7 @@
   <#assign returnValue>
     parent.layer.open({
       type: 2,
+      title: '导出单词',
       content: '${base_url}/word/export.html',
       area: ['800px', '600px'],
       cancel: function () {
@@ -105,7 +105,8 @@
           dataType: 'json',
           requestBody: true,
           success: function (result, status, request) {
-            parent.layer.alert('导出成功', {
+            parent.layer.alert('导出成功！', {
+              icon: 1,
               end: function () {
                 dict.postHref('${base_url}/doc/download.doc', {
                   fileName: data.title,
@@ -131,12 +132,13 @@
 
 <@data_list
   id='words'
+  name='单词'
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
     {'field': 'prototype', 'title': '单词', 'sort': true},
     {'field': 'britishPronunciation', 'title': '英式发音', 'sort': true},
-    {'field': 'americanPronunciation', 'title': '英式发音', 'sort': true},
+    {'field': 'americanPronunciation', 'title': '美式发音', 'sort': true},
     {'field': 'clazzes', 'title': '词性'},
     {'field': 'definition', 'title': '词义', 'sort': true}
   ]

@@ -1,6 +1,5 @@
 <#-- @ftlvariable name="strategies" type="java.util.Collection<java.lang.String>" -->
 <div class="layui-card">
-  <div class="layui-card-header">添加乱序方案</div>
   <div class="layui-card-body">
     <form id="shuffle-solution" class="layui-form" method="post" action="save.json">
       <table class="layui-table">
@@ -74,7 +73,8 @@
                   var parent1 = parent;
                   var index = parent1.layer.getFrameIndex(window.name);
                   parent1.layer.close(index);
-                  parent1.layer.alert('添加成功', {
+                  parent1.layer.alert('添加成功！', {
+                    icon: 1,
                     end: function () {
                       parent1.$('iframe')[0].contentWindow.dict.reload(true);
                     }

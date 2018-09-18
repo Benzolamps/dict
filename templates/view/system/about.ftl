@@ -87,16 +87,14 @@
             <a href="${accounts.weibo}" target="_blank"></a>
           </div>
         </fieldset>
-
         <br>
-        <span class="layui-breadcrumb" lay-separator=" ">
-          <a class="img-handler" href="javascript:;" div="wechat-div">
-            <i class="layui-icon" style="font-size: xx-large; color: #01bb0f">&#xe677;</i>
-          </a>
-          <a class="img-handler" href="javascript:;" div="qq-div">
-            <i class="layui-icon" style="font-size: xx-large; color: #0188fb">&#xe676;</i>
-          </a>
-        </span>
+        <a class="img-handler" href="javascript:;" div="wechat-div">
+          <i class="layui-icon" style="font-size: xx-large; color: #01bb0f">&#xe677;</i>
+        </a>
+        &nbsp;&nbsp;
+        <a class="img-handler" href="javascript:;" div="qq-div">
+          <i class="layui-icon" style="font-size: xx-large; color: #0188fb">&#xe676;</i>
+        </a>
 
         <script type="text/html" id="qq-div">
           <a href="tencent://message/?uin=${accounts.qq}&Menu=yes">

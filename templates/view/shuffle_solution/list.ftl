@@ -1,6 +1,7 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page" -->
 <@data_list
   id='shuffle-solutions'
+  name='乱序方案'
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},

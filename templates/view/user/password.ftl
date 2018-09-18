@@ -86,9 +86,8 @@
       url: 'save_password.json',
       data: dict.generateObject(dict.serializeObject($('#password'))),
       success: function (result, status, request) {
-        parent.layer.alert('修改成功', {
+        parent.layer.alert('修改成功！', {
           icon: 1,
-          title: '注销成功',
           end: function () {
             parent.dict.reload(true);
           }
@@ -96,8 +95,9 @@
       },
       error: function (result, status, request) {
         parent.layer.alert(result.message, {
-          icon: 2,
-          title: result.status
+          title: result.status,
+          icon: 2
+
         });
       }
     });

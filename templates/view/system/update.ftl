@@ -52,5 +52,4 @@
   $('#update-data-jre').click(function () {
     location.href = '${remote_base_url}/dict/dict-jre.rar';
   });
-
 </script>

@@ -1,6 +1,7 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Library>" -->
 <@data_list
   id='libraries'
+  name='词库'
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},

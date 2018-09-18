@@ -14,7 +14,6 @@
           success: function (result, status, request) {
             parent.layer.alert('操作成功！', {
               icon: 1,
-              title: '操作成功',
               end: function () {
                 parent.location.reload(true);
               }

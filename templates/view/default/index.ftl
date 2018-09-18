@@ -266,9 +266,8 @@
                 url: '${base_url}/user/logout.json',
                 type: 'post',
                 success: function (result, status, request) {
-                  layer.alert('注销成功', {
+                  layer.alert('注销成功！', {
                     icon: 1,
-                    title: '注销成功',
                     end: function () {
                       dict.reload(true);
                     }

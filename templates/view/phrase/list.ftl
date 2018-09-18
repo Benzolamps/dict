@@ -46,9 +46,8 @@
           var endTime = new Date().getTime();
           var delta = ((endTime - startTime) * 0.001).toFixed(3);
           parent.layer.close(loader);
-          parent.layer.alert('导入短语成功，共导入 ' + result.data + ' 个短语<br>用时 ' + delta + ' 秒', {
+          parent.layer.alert('导入短语成功！<br>共导入 ' + result.data + ' 个短语！<br>用时 ' + delta + ' 秒！', {
             icon: 1,
-            title: '导入短语成功',
             end: function () {
               parent.$('iframe')[0].contentWindow.dict.reload(true);
             }
@@ -72,6 +71,7 @@
   <#assign returnValue>
     parent.layer.open({
       type: 2,
+      title: '导出短语',
       content: '${base_url}/phrase/export.html',
       area: ['800px', '600px'],
       cancel: function () {
@@ -92,7 +92,8 @@
           dataType: 'json',
           requestBody: true,
           success: function (result, status, request) {
-            parent.layer.alert('导出成功', {
+            parent.layer.alert('导出成功！', {
+              icon: 1,
               end: function () {
                 dict.postHref('${base_url}/doc/download.doc', {
                   fileName: data.title,
@@ -117,6 +118,7 @@
 <@nothing></script></@nothing>
 <@data_list
   id='phrases'
+  name='短语'
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},

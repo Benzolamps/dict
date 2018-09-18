@@ -1,5 +1,6 @@
 <#macro data_list
   id fields page values=page.content
+  name=id
   add='add.html' edit='edit.html' delete='delete.json'
   add_enabled=true edit_enabled=true delete_enabled=true
   delete_confirm=''
@@ -150,6 +151,7 @@
     add.click(function () {
       parent.layer.open({
         type: 2,
+        title: '添加${name}',
         content: '${add}',
         area: ['800px', '600px']
       });
@@ -167,7 +169,8 @@
           data: {id: ids},
           async: true,
           success: function () {
-            parent.layer.alert('删除成功', {
+            parent.layer.alert('删除成功！', {
+              icon: 1,
               end: function () {
                 dict.reload();
               }
@@ -182,9 +185,9 @@
         });
         parent.layer.close(index);
       };
-      parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+      parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '删除${name}'}, function (index) {
         <#if delete_confirm != ''>
-          parent.layer.confirm('${delete_confirm}', {icon: 3, title: '提示'}, process);
+          parent.layer.confirm('${delete_confirm}', {icon: 3, title: '删除${name}'}, process);
         <#else>
           process(index);
         </#if>
@@ -213,6 +216,7 @@
       if (obj.event == 'edit') {
         parent.layer.open({
           type: 2,
+          title: '修改${name}',
           content: '${edit}?id=' + obj.data.id,
           area: ['800px', '600px']
         });
@@ -225,7 +229,8 @@
             data: {id: obj.data.id},
             async: true,
             success: function () {
-              parent.layer.alert('删除成功', {
+              parent.layer.alert('删除成功！', {
+                icon: 1,
                 end: function () {
                   dict.reload();
                 }
@@ -241,10 +246,10 @@
           parent.layer.close(index);
         };
 
-        parent.layer.confirm('确定要删除这条记录吗？', {icon: 3, title: '提示'}, function (index) {
+        parent.layer.confirm('确定要删除这条记录吗？', {icon: 3, title: '删除${name}'}, function (index) {
           <#if delete_confirm != ''>
             parent.layer.close(index);
-            parent.layer.confirm('${delete_confirm}', {icon: 3, title: '提示'}, process);
+            parent.layer.confirm('${delete_confirm}', {icon: 3, title: '删除${name}'}, process);
           <#else>
             process(index);
           </#if>
