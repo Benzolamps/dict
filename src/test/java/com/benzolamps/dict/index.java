@@ -13,10 +13,9 @@ import java.util.zip.ZipFile;
 
 /**
  * Class index
- *
  * @author Benzolamps
  * @version 2.1.2
- * @datetime 2018/9/16 21:14
+ * @datetime 2018-9-16 21:14:47
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public final class index {

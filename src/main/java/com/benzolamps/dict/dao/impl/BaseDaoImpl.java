@@ -90,10 +90,10 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     }
 
     @Override
-    public Long count(Filter filter) {
+    public Integer count(Filter filter) {
         GeneratedDictQuery<T> query = generateDictQuery();
         query.getFilter().and(filter);
-        return query.getCountQuery().getSingleResult();
+        return query.getCountQuery().getSingleResult().intValue();
     }
 
     @Override

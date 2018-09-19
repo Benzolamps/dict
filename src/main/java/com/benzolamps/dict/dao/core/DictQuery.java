@@ -36,7 +36,7 @@ public interface DictQuery<B extends BaseEntity> {
      * 获取总条数查询
      * @return 总条数查询
      */
-    TypedQuery<Long> getCountQuery();
+    TypedQuery<? extends Number> getCountQuery();
 
     /**
      * 设置EntityManager

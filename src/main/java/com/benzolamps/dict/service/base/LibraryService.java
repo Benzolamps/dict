@@ -26,7 +26,7 @@ public interface LibraryService extends BaseService<Library> {
      * 获取词库总个数
      * @return 个数
      */
-    Long count();
+    Integer count();
 
     /**
      * 检测词库名称是否存在

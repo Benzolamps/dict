@@ -343,11 +343,9 @@ public class DictPropertyInfoVo implements Serializable {
     public static <T> Collection<DictPropertyInfoVo> applyDictPropertyInfo(Class<T> clazz) {
         Assert.notNull(clazz, "clazz不能为null");
         DictBean<T> bean = new DictBean<>(clazz);
-        Set<DictPropertyInfoVo> set = new LinkedHashSet<>();
-        for (DictProperty property : bean.getProperties()) {
-            DictPropertyInfoVo dictPropertyInfoVo = new DictPropertyInfoVo(property);
-            set.add(dictPropertyInfoVo);
-        }
-        return set;
+        return bean.getProperties().stream()
+            .filter(dictProperty -> !dictProperty.hasAnnotation(DictIgnore.class))
+            .map(DictPropertyInfoVo::new)
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 }

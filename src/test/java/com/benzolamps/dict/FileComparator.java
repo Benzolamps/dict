@@ -27,8 +27,8 @@ import static org.springframework.util.FileSystemUtils.deleteRecursively;
  * Class FileComparator
  *
  * @author Benzolamps
- * @version 2.1.2
- * @datetime 2018/9/18 19:39
+ * @version 2.1.3
+ * @datetime 2018-09-18 19:39:22
  */
 @SuppressWarnings("FieldCanBeLocal")
 public class FileComparator {

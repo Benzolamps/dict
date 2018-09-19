@@ -85,6 +85,7 @@ public class DictProperty {
      * @param annoClass 注解类型
      * @return 判断结果
      */
+    @SuppressWarnings("RedundantIfStatement")
     public boolean hasAnnotation(Class<? extends Annotation> annoClass) {
         Assert.notNull(annoClass, "anno class不能为null");
         if (field != null && field.isAnnotationPresent(annoClass)) {
@@ -119,7 +120,6 @@ public class DictProperty {
     public boolean isValid() {
         return field != null
             && !Modifier.isTransient(field.getModifiers()) && !Modifier.isStatic(field.getModifiers())
-            && !hasAnnotation(DictIgnore.class)
             && get != null && set != null;
     }
 

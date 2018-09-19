@@ -109,7 +109,7 @@ public class LibraryController extends BaseController {
     }
 
     /**
-     * 检测词库是否已存在
+     * 切换当前词库
      * @param id id
      * @return 检测结果
      */

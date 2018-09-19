@@ -1,11 +1,16 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.DictPropertyInfo;
+import com.benzolamps.dict.component.Size;
+import com.benzolamps.dict.util.DictIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 import java.util.Set;
 
 /**
@@ -22,20 +27,29 @@ public class Clazz extends BaseEntity {
 
     private static final long serialVersionUID = 5117865263073835548L;
 
+    /** 名称 */
     @Column(nullable = false)
     @NotEmpty
+    @Pattern(regexp = "^[0-9a-zA-Z\\u4e00-\\u9fa5]+$")
     @Length(max = 20)
+    @DictPropertyInfo(display = "名称")
     private String name;
 
+    /** 描述 */
     @Column
     @Length(max = 50)
+    @DictPropertyInfo(display = "描述")
     private String description;
 
-    /** 主要学习的词库 */
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "major", nullable = false)
-    private Library major;
-
+    /** 学生 */
     @OneToMany(mappedBy = "clazz", fetch = FetchType.LAZY)
+    @DictIgnore
+    @JsonIgnore
     private Set<Student> students;
+
+    /** 学生数 */
+    @Size("students")
+    @DictIgnore
+    @Transient
+    private Integer studentsCount;
 }

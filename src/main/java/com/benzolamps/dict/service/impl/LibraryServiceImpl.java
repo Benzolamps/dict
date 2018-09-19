@@ -61,7 +61,7 @@ public class LibraryServiceImpl extends BaseServiceImpl<Library> implements Libr
 
     @Override
     @Transactional(readOnly = true)
-    public Long count() {
+    public Integer count() {
         return userService.getCurrent() == null ? 0 : count(null);
     }
 

@@ -3,6 +3,7 @@ package com.benzolamps.dict.bean;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
 import com.benzolamps.dict.component.DictTextArea;
+import com.benzolamps.dict.component.Size;
 import com.benzolamps.dict.util.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -55,4 +56,16 @@ public class Library extends BaseEntity {
     @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)
     @DictIgnore
     private Set<Phrase> phrases;
+
+    /** 单词的总数 */
+    @Transient
+    @Size("words")
+    @DictIgnore
+    private Integer wordsCount;
+
+    /** 短语的总数 */
+    @Transient
+    @Size("phrases")
+    @DictIgnore
+    private Integer phrasesCount;
 }

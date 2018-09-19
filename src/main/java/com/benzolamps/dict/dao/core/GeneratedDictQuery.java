@@ -61,7 +61,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     }
 
     @Override
-    public TypedQuery<Long> getCountQuery() {
+    public TypedQuery<? extends Number> getCountQuery() {
         Assert.notNull(entityManager, "entity manager不能为空");
         String jpql = select("count(1)");
         return DictJpa.createJpqlQuery(entityManager, jpql, Long.class, null, filter.getParameters().toArray());

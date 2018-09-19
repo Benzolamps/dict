@@ -1,5 +1,5 @@
 <@data_add
-  id='phrases'
+  id='libraries'
   fields=get_dict_property('com.benzolamps.dict.bean.Library')
   messages={
     'name': {
@@ -7,5 +7,5 @@
       'pattern': '乱序方案名称必须是汉字、字母、数字的组合'
     }
   }
-submit_handler="parent.dict.reload(true);"
+  submit_handler="parent.dict.reload(true);"
 />

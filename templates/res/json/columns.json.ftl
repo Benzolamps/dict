@@ -57,7 +57,7 @@
       },
       {
         "title": "班级管理",
-        "href": "${base_url}/people/grades.html"
+        "href": "${base_url}/clazz/list.html"
       }
     ]
   }

@@ -72,7 +72,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
 
     @Override
     @Transactional(readOnly = true)
-    public Long count(Filter filter) {
+    public Integer count(Filter filter) {
         return baseDao.count(filter);
     }
 

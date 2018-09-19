@@ -154,7 +154,7 @@ public interface BaseDao<T extends BaseEntity> {
 	 * @param filter 条件
 	 * @return 查询结果条数
 	 */
-	Long count(Filter filter);
+	Integer count(Filter filter);
 
 	/**
 	 * 保存实体对象
