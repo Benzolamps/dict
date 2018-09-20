@@ -1,9 +1,6 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.DictRemote;
 import com.benzolamps.dict.component.Size;
-import com.benzolamps.dict.util.DictIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -11,6 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -29,9 +27,7 @@ public class Student extends BaseEntity {
 
     /** 学号 */
     @Column(nullable = false, updatable = false, unique = true)
-    @NotEmpty
-    @Length(max = 20)
-    @DictRemote("student/number_exists.json")
+    @NotNull
     @Min(1)
     private Integer number;
 
@@ -53,25 +49,19 @@ public class Student extends BaseEntity {
 
     /** 已掌握的单词 */
     @ManyToMany
-    @DictIgnore
-    @JsonIgnore
     @JoinTable(name = "dict_sw", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
     private Set<Word> masteredWords;
 
     /** 已掌握的短语 */
     @ManyToMany
-    @DictIgnore
-    @JsonIgnore
     @JoinTable(name = "dict_sp", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     private Set<Phrase> masteredPhrases;
 
     @Transient
     @Size("masteredWords")
-    @DictIgnore
     private Integer masteredWordsCount;
 
     @Transient
     @Size("masteredPhrases")
-    @DictIgnore
     private Integer masteredPhrasesCount;
 }

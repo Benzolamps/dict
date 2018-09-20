@@ -6,6 +6,8 @@ import lombok.Getter;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 页面
@@ -81,5 +83,15 @@ public class Page<B> implements Serializable {
      */
     public Integer getTotalPages() {
         return (getTotal() - 1) / getPageSize() + 1;
+    }
+
+    /**
+     * 分页类型转换
+     * @param converter 转换方法
+     * @param <T> 目标类型
+     * @return 转换后的分页
+     */
+    public <T> Page<T> convertPage(Function<B, T> converter) {
+        return new Page<>(content.stream().map(converter).collect(Collectors.toList()), total, pageable);
     }
 }

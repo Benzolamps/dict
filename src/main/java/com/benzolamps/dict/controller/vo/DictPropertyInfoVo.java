@@ -305,7 +305,7 @@ public class DictPropertyInfoVo implements Serializable {
     }
 
     private boolean internalIsNotEmpty() {
-        return dictProperty.hasAnnotation(NotEmpty.class);
+        return dictProperty.hasAnnotation(NotEmpty.class) || dictProperty.hasAnnotation(NotNull.class);
     }
 
     private String internalGetPattern() {

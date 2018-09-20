@@ -53,7 +53,7 @@
     [
       {
         "title": "学生管理",
-        "href": "${base_url}/people/students.html"
+        "href": "${base_url}/student/list.html"
       },
       {
         "title": "班级管理",
