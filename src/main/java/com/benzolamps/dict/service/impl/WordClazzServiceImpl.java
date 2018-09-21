@@ -3,12 +3,14 @@ package com.benzolamps.dict.service.impl;
 import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.dao.base.WordClazzDao;
 import com.benzolamps.dict.dao.core.Filter;
+import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.service.base.WordClazzService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 词性Service接口实现类
@@ -22,6 +24,11 @@ public class WordClazzServiceImpl extends BaseServiceImpl<WordClazz> implements 
 
     @Resource
     private WordClazzDao wordClazzDao;
+
+    @Override
+    public List<WordClazz> findAll() {
+        return findList(null, Order.desc("words.size"));
+    }
 
     @Override
     @Transactional(readOnly = true)

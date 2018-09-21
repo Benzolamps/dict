@@ -5,10 +5,8 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 /**
  * 单词词性实体类
@@ -35,4 +33,8 @@ public class WordClazz extends BaseEntity {
     @Column
     @Length(max = 255)
     private String description;
+
+    /** 单词 */
+    @ManyToMany(mappedBy = "clazzes", fetch = FetchType.LAZY)
+    private Set<Word> words;
 }
