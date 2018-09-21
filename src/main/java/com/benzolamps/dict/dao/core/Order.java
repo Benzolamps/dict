@@ -1,11 +1,14 @@
 package com.benzolamps.dict.dao.core;
 
+import com.benzolamps.dict.util.DictArray;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.Assert;
+
+import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 排序
@@ -88,6 +91,37 @@ public class Order extends SnippetResolver {
         }
     }
 
+    /** 个数排序 */
+    @NoArgsConstructor
+    public static class SizeOrder extends Order {
+
+        private static final long serialVersionUID = -6810719711546840379L;
+
+        /**
+         * 构造器
+         * @param field 字段
+         * @param direction 排序方向
+         */
+        public SizeOrder(String field, Direction direction) {
+            super(field, direction);
+        }
+
+        @Override
+        protected void applyField(String field) {
+            addSnippet(new OperatorSnippet("size("));
+            super.applyField(field);
+            addSnippet(new OperatorSnippet(")"));
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj) ||
+            obj.getClass().equals(this.getClass()) &&
+            ((Order) obj).direction.equals(this.direction) &&
+            ((Order) obj).field.equals(this.field);
+    }
+
     /**
      * 降序实例
      * @param field 字段
@@ -107,7 +141,7 @@ public class Order extends SnippetResolver {
     }
 
     /**
-     * 降序实例
+     * 忽略大小写降序实例
      * @param field 字段
      * @return Order
      */
@@ -116,7 +150,7 @@ public class Order extends SnippetResolver {
     }
 
     /**
-     * 升序实例
+     * 忽略大小写升序实例
      * @param field 字段
      * @return Order
      */
@@ -124,11 +158,58 @@ public class Order extends SnippetResolver {
         return new IgnoreCaseOrder(field, Direction.ASC);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj) ||
-            obj.getClass().equals(this.getClass()) &&
-            ((Order) obj).direction.equals(this.direction) &&
-            ((Order) obj).field.equals(this.field);
+    /**
+     * 个数降序实例
+     * @param field 字段
+     * @return Order
+     */
+    public static Order descSize(String field) {
+        return new SizeOrder(field, Direction.DESC);
+    }
+
+    /**
+     * 个数升序实例
+     * @param field 字段
+     * @return Order
+     */
+    public static Order ascSize(String field) {
+        return new SizeOrder(field, Direction.ASC);
+    }
+
+    /**
+     * 转换成给定排序类型
+     * @param orderClass 类型
+     * @param <T> 类型
+     * @return 对象
+     */
+    public <T extends Order> T convert(Class<T> orderClass) {
+        Assert.notNull(orderClass, "order class不能为null");
+        return tryFunc(() -> orderClass.getConstructor(String.class, Direction.class).newInstance(field, direction));
+    }
+
+    /**
+     * 转换成给定排序类型
+     * @param orderClass 类型
+     * @return 对象
+     */
+    public Order convertIf(Class<? extends Order> orderClass, String... fields) {
+        Assert.notNull(orderClass, "order class不能为null");
+
+        if (!DictArray.contains(fields, field)) {
+            return this;
+        }
+
+        return tryFunc(() -> orderClass.getConstructor(String.class, Direction.class).newInstance(field, direction));
+    }
+
+
+    /**
+     * 替换排序方向生成新的order
+     * @param direction 排序方向
+     * @return 生成后的order
+     */
+    public Order reverse(Direction direction) {
+        Assert.notNull(direction, "direction不能为null");
+        return tryFunc(() -> getClass().getConstructor(String.class, Direction.class).newInstance(field, direction));
     }
 }

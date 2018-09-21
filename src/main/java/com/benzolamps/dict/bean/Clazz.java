@@ -4,6 +4,7 @@ import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.Size;
 import com.benzolamps.dict.util.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -51,5 +52,6 @@ public class Clazz extends BaseEntity {
     @Size("students")
     @DictIgnore
     @Transient
+    @JsonProperty("students")
     private Integer studentsCount;
 }

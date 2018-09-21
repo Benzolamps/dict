@@ -192,8 +192,6 @@ public class Filter extends SnippetResolver {
         return binaryIgnoreCase(field, "<=", value);
     }
 
-
-
     /**
      * great than
      * @param field 字段
@@ -379,8 +377,9 @@ public class Filter extends SnippetResolver {
         if (value == null) return new Filter().not();
         return (Filter) new Filter()
             .addSnippet(value)
-            .addSnippet(new OperatorSnippet("member of"))
-            .addSnippet(new FieldSnippet(field));
+            .addSnippet(new OperatorSnippet("in elements("))
+            .addSnippet(new FieldSnippet(field))
+            .addSnippet(new OperatorSnippet(")"));
     }
 
     /**
@@ -394,11 +393,10 @@ public class Filter extends SnippetResolver {
         if (value == null) return new Filter();
         return (Filter) new Filter()
             .addSnippet(value)
-            .addSnippet(new OperatorSnippet("not member of"))
-            .addSnippet(new FieldSnippet(field));
+            .addSnippet(new OperatorSnippet("nor in elements("))
+            .addSnippet(new FieldSnippet(field))
+            .addSnippet(new OperatorSnippet(")"));
     }
-
-
 
     /**
      * between and

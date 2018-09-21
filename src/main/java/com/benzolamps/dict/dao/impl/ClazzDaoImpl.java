@@ -16,13 +16,10 @@ public class ClazzDaoImpl extends BaseDaoImpl<Clazz> implements ClazzDao {
 
     @Override
     public Page<Clazz> findPage(Pageable pageable) {
-        DictQuery<Clazz> dictQuery = new GeneratedDictQuery<Clazz>(Clazz.class) {
+        DictQuery<Clazz> dictQuery = new GeneratedDictQuery<Clazz>() {
             @Override
             public void applyOrder(Order order) {
-                if (order.getField().equals("studentsCount")) {
-                    order = new Order("students.size", order.getDirection());
-                }
-                super.applyOrder(order);
+                super.applyOrder(order.convertIf(Order.SizeOrder.class, "students"));
             }
         };
         return super.findPage(dictQuery, pageable);

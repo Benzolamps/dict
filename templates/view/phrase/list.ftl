@@ -6,18 +6,6 @@
 </form>
 
 <@nothing><script type="text/javascript"></@nothing>
-<#assign values>
-  [
-    <#list page.content as phrase>
-      {
-        'id': ${phrase.id},
-        'prototype': <@json_dump obj=phrase.prototype/>,
-        'definition': <@json_dump obj=phrase.definition/>
-      }
-    </#list>
-  ]
-</#assign>
-
 <#assign search>
   [
     {
@@ -126,7 +114,6 @@
     {'field': 'definition', 'title': '词义', 'sort': true}
   ]
   page=page
-  values=values?eval
   add='${base_url}/phrase/add.html'
   edit='${base_url}/phrase/edit.html'
   delete='${base_url}/phrase/delete.json'

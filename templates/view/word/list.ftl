@@ -6,20 +6,6 @@
 </form>
 
 <@nothing><script type="text/javascript"></@nothing>
-<#assign values>
-  [
-    <#list page.content as word>
-      {
-        'id': ${word.id},
-        'prototype': <@json_dump obj=word.prototype/>,
-        'britishPronunciation': <@json_dump obj=word.britishPronunciation/>,
-        'americanPronunciation': <@json_dump obj=word.americanPronunciation/>,
-        'clazzes': [<#list word.clazzes as clazz><@json_dump obj=clazz.name/><#sep>, </#list>],
-        'definition': <@json_dump obj=word.definition/>
-      }
-    </#list>
-  ]
-</#assign>
 
 <#assign search>
   [
@@ -143,7 +129,6 @@
     {'field': 'definition', 'title': '词义', 'sort': true}
   ]
   page=page
-  values=values?eval
   add='${base_url}/word/add.html'
   edit='${base_url}/word/edit.html'
   delete='${base_url}/word/delete.json'

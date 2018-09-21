@@ -120,7 +120,7 @@ public class StudentController extends BaseController {
      */
     @RequestMapping(value = "/number_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
-    protected boolean prototypeNotExists(Integer number) {
+    protected boolean numberNotExists(Integer number) {
         return !studentService.numberExists(number);
     }
 }

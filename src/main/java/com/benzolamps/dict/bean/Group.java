@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.DictRemote;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -10,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
- * 单词分组或短语分组的基类
+ * 单词短语分组
  * @author Benzolamps
  * @version 2.1.1
  * @datetime 2018-9-15 14:29:16
@@ -27,6 +28,7 @@ public class Group extends BaseEntity {
     @NotEmpty
     @Length(max = 20)
     @Column(nullable = false, unique = true)
+    @DictRemote("/word_group/name_not_exists.json")
     private String name;
 
     /** 描述 */

@@ -42,18 +42,21 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional(readOnly = true)
     public T findSingle(Filter filter) {
+        this.handlerFilter(filter);
         return baseDao.findSingle(filter);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<T> findList(Filter filter, Order... orders) {
+        this.handlerFilter(filter);
         return baseDao.findList(filter, orders);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<T> findList(Filter filter, List<Order> orders) {
+        this.handlerFilter(filter);
         return baseDao.findList(filter, orders);
     }
 
@@ -67,12 +70,14 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Transactional(readOnly = true)
     public Page<T> findPage(Pageable pageable) {
         pageable.getOrders().add(Order.desc("id"));
+        handlerFilter(pageable.getFilter());
         return baseDao.findPage(pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Integer count(Filter filter) {
+        this.handlerFilter(filter);
         return baseDao.count(filter);
     }
 
@@ -123,5 +128,12 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Transactional
     public void remove(Collection<T> entities) {
         baseDao.remove(entities);
+    }
+
+    /**
+     * 处理筛选
+     * @param filter 筛选
+     */
+    protected void handlerFilter(Filter filter) {
     }
 }

@@ -3,12 +3,15 @@ package com.benzolamps.dict.dao.core;
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.util.DictString;
 import lombok.Setter;
+import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +41,13 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
         this.entityClass = entityClass;
     }
 
+    /** 构造方法 */
+    @SuppressWarnings("unchecked")
+    protected GeneratedDictQuery() {
+        ResolvableType resolvableType = ResolvableType.forClass(getClass());
+        entityClass = (Class<B>) resolvableType.getSuperType().getGeneric().resolve();
+    }
+
     @Override
     public void applyOrder(Order order) {
         if (!this.orders.contains(order)) {
@@ -54,7 +64,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     }
 
     @Override
-    public TypedQuery<B> getTypedQuery() {
+    public final TypedQuery<B> getTypedQuery() {
         Assert.notNull(entityManager, "entity manager不能为空");
         String classSimpleName = entityClass.getSimpleName();
         String alias = DictString.toCamel(classSimpleName);
@@ -63,7 +73,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     }
 
     @Override
-    public TypedQuery<? extends Number> getCountQuery() {
+    public final TypedQuery<? extends Number> getCountQuery() {
         Assert.notNull(entityManager, "entity manager不能为空");
         String jpql = select("count(1)");
         return DictJpa.createJpqlQuery(entityManager, jpql, Long.class, null, filter.getParameters().toArray());
@@ -85,7 +95,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     }
 
     @Override
-    public Filter getFilter() {
+    public final Filter getFilter() {
         return filter;
     }
 }

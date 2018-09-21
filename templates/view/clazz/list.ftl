@@ -7,7 +7,7 @@
     {'type': 'checkbox'},
     {'field': 'name', 'title': '名称', 'sort': true},
     {'field': 'description', 'title': '描述', 'sort': true},
-    {'field': 'studentsCount', 'title': '学生数', 'sort': true}
+    {'field': 'students', 'title': '学生数', 'sort': true}
   ]
   page=page
   add='${base_url}/clazz/add.html'

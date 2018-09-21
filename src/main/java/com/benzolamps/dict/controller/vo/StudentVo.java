@@ -8,6 +8,7 @@ import com.benzolamps.dict.service.base.ClazzService;
 import com.benzolamps.dict.util.DictIgnore;
 import com.benzolamps.dict.util.DictObject;
 import com.benzolamps.dict.util.DictSpring;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -26,6 +27,8 @@ import java.io.Serializable;
  */
 @Data
 public class StudentVo implements Serializable {
+
+    private static final long serialVersionUID = 6388860303340465680L;
 
     /** id */
     @Id
@@ -56,10 +59,12 @@ public class StudentVo implements Serializable {
 
     /** 已掌握的单词数 */
     @DictIgnore
+    @JsonProperty("masteredWords")
     private Integer masteredWordsCount;
 
     /** 已掌握的短语数 */
     @DictIgnore
+    @JsonProperty("masteredPhrases")
     private Integer masteredPhrasesCount;
 
     /**

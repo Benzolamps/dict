@@ -15,11 +15,14 @@ import java.util.Date;
  * @version 2.1.3
  * @datetime 2018-9-17 20:10:21
  */
+@SuppressWarnings("unused")
 @Entity
 @Table(name = "dict_study_log")
 @Getter
 @Setter
 public class StudyLog extends BaseEntity {
+
+    private static final long serialVersionUID = -2554704023637347137L;
 
     /** 学生 */
     @ManyToOne(fetch = FetchType.LAZY)

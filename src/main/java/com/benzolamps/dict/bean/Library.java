@@ -6,6 +6,7 @@ import com.benzolamps.dict.component.DictTextArea;
 import com.benzolamps.dict.component.Size;
 import com.benzolamps.dict.util.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -61,11 +62,13 @@ public class Library extends BaseEntity {
     @Transient
     @Size("words")
     @DictIgnore
+    @JsonProperty("words")
     private Integer wordsCount;
 
     /** 短语的总数 */
     @Transient
     @Size("phrases")
     @DictIgnore
+    @JsonProperty("phrases")
     private Integer phrasesCount;
 }

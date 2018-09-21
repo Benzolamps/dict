@@ -20,7 +20,7 @@ public class SnippetResolver implements Serializable {
     private static final long serialVersionUID = 3374190442609095665L;
 
     /** 操作符代码片段 */
-    public static class OperatorSnippet {
+    protected static class OperatorSnippet {
 
         private final String operator;
 
@@ -39,7 +39,7 @@ public class SnippetResolver implements Serializable {
     }
 
     /** 字段代码片段 */
-    public static class FieldSnippet {
+    protected static class FieldSnippet {
         private final String field;
 
         /**

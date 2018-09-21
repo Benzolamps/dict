@@ -42,8 +42,8 @@
     {'field': 'name', 'title': '姓名', 'sort': true},
     {'field': 'description', 'title': '描述', 'sort': true},
     {'field': 'clazz', 'title': '班级', 'sort': true},
-    {'field': 'masteredWordsCount', 'title': '已掌握的单词数', 'sort': true},
-    {'field': 'masteredPhrasesCount', 'title': '已掌握的短语数', 'sort': true}
+    {'field': 'masteredWords', 'title': '已掌握的单词数', 'sort': true},
+    {'field': 'masteredPhrases', 'title': '已掌握的短语数', 'sort': true}
   ]
   page=page
   add='${base_url}/student/add.html'

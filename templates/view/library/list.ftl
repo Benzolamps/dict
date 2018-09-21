@@ -7,8 +7,8 @@
     {'type': 'checkbox'},
     {'field': 'name', 'title': '名称', 'sort': true},
     {'field': 'description', 'title': '描述', 'sort': true},
-    {'field': 'wordsCount', 'title': '单词数', 'sort': true},
-    {'field': 'phrasesCount', 'title': '短语数', 'sort': true}
+    {'field': 'words', 'title': '单词数', 'sort': true},
+    {'field': 'phrases', 'title': '短语数', 'sort': true}
   ]
   page=page
   add='${base_url}/library/add.html'

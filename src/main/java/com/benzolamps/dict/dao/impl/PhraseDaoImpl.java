@@ -15,14 +15,10 @@ import org.springframework.stereotype.Repository;
 public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseDao {
     @Override
     public Page<Phrase> findPage(Pageable pageable) {
-        DictQuery<Phrase> dictQuery = new GeneratedDictQuery<Phrase>(Phrase.class) {
+        DictQuery<Phrase> dictQuery = new GeneratedDictQuery<Phrase>() {
             @Override
             public void applyOrder(Order order) {
-                if ("prototype".equals(order.getField())) {
-                    super.applyOrder(new Order.IgnoreCaseOrder(order.getField(), order.getDirection()));
-                } else {
-                    super.applyOrder(order);
-                }
+                super.applyOrder(order.convertIf(Order.IgnoreCaseOrder.class, "prototype"));
             }
         };
         return super.findPage(dictQuery, pageable);

@@ -1,6 +1,7 @@
 package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.bean.Word;
+import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
@@ -57,8 +58,13 @@ public class WordController extends BaseController {
         if (libraryService.count() > 0) {
             mv.setViewName("view/word/list");
             Page<Word> words = wordService.findPage(pageable);
+            Page<WordVo> wordVos = words.convertPage(word -> {
+                WordVo wordVo = WordVo.convertFromWord(word);
+                wordVo.setClazzes(word.getClazzes().stream().map(WordClazz::getName).toArray());
+                return wordVo;
+            });
             mv.addObject("wordClazzes", wordClazzService.findAll());
-            mv.addObject("page", words);
+            mv.addObject("page", wordVos);
         } else {
             mv.setViewName("view/library/lack");
         }

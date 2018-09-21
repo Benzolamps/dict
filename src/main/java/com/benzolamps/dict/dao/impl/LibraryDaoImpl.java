@@ -16,15 +16,10 @@ public class LibraryDaoImpl extends BaseDaoImpl<Library> implements LibraryDao {
 
     @Override
     public Page<Library> findPage(Pageable pageable) {
-        DictQuery<Library> dictQuery = new GeneratedDictQuery<Library>(Library.class) {
+        DictQuery<Library> dictQuery = new GeneratedDictQuery<Library>() {
             @Override
             public void applyOrder(Order order) {
-                if (order.getField().equals("wordsCount")) {
-                    order = new Order("words.size", order.getDirection());
-                } else if (order.getField().equals("phrasesCount")) {
-                    order = new Order("phrases.size", order.getDirection());
-                }
-                super.applyOrder(order);
+                super.applyOrder(order.convertIf(Order.SizeOrder.class, "words", "phrases"));
             }
         };
         return super.findPage(dictQuery, pageable);

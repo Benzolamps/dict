@@ -27,7 +27,7 @@ public class WordClazzServiceImpl extends BaseServiceImpl<WordClazz> implements 
 
     @Override
     public List<WordClazz> findAll() {
-        return findList(null, Order.desc("words.size"));
+        return findList(null, Order.descSize("words"));
     }
 
     @Override

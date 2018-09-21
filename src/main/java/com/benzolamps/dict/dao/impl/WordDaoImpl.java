@@ -5,7 +5,6 @@ import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.dao.base.WordClazzDao;
 import com.benzolamps.dict.dao.base.WordDao;
 import com.benzolamps.dict.dao.core.*;
-import com.benzolamps.dict.util.DictArray;
 import com.benzolamps.dict.util.DictObject;
 import org.springframework.stereotype.Repository;
 
@@ -30,7 +29,7 @@ public class WordDaoImpl extends BaseElementDaoImpl<Word> implements WordDao {
             @Override
             public void applySearch(Search search) {
                 if (search.getField().equals("clazzes")) {
-                    WordClazz wordClazz = wordClazzDao.find(DictObject.ofObject(search.getValue(), Integer.class));
+                    WordClazz wordClazz = wordClazzDao.find(DictObject.ofObject(search.getValue(), int.class));
                     getFilter().and(Filter.memberOf("clazzes", wordClazz));
                 } else {
                     super.applySearch(search);
@@ -39,11 +38,7 @@ public class WordDaoImpl extends BaseElementDaoImpl<Word> implements WordDao {
 
             @Override
             public void applyOrder(Order order) {
-                if (DictArray.contains(new String[] {"prototype", "americanPronunciation", "britishPronunciation"}, order.getField())) {
-                    super.applyOrder(new Order.IgnoreCaseOrder(order.getField(), order.getDirection()));
-                } else {
-                    super.applyOrder(order);
-                }
+                super.applyOrder(order.convertIf(Order.IgnoreCaseOrder.class, "prototype", "americanPronunciation", "britishPronunciation"));
             }
         };
         return super.findPage(dictQuery, pageable);

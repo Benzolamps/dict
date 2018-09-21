@@ -24,11 +24,11 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
 
     @Override
     public Page<Student> findPage(Pageable pageable) {
-        DictQuery<Student> dictQuery = new GeneratedDictQuery<Student>(Student.class) {
+        DictQuery<Student> dictQuery = new GeneratedDictQuery<Student>() {
             @Override
             public void applySearch(Search search) {
                 if (search.getField().equals("clazz")) {
-                    Clazz clazz = clazzDao.find(DictObject.ofObject(search.getValue(), Integer.class));
+                    Clazz clazz = clazzDao.find(DictObject.ofObject(search.getValue(), int.class));
                     getFilter().and(Filter.eq("clazz", clazz));
                 } else {
                     super.applySearch(search);
@@ -40,10 +40,8 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
             public void applyOrder(Order order) {
                 if (order.getField().equals("clazz")) {
                     order = new Order("clazz.name", order.getDirection());
-                } else if (order.getField().equals("masteredWordsCount")) {
-                    order = new Order("masteredWords.size", order.getDirection());
-                } else if (order.getField().equals("masteredPhrasesCount")) {
-                    order = new Order("masteredPhrases.size", order.getDirection());
+                } else {
+                    order = order.convertIf(Order.SizeOrder.class, "masteredWords", "masteredPhrases");
                 }
                 super.applyOrder(order);
             }
