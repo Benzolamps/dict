@@ -33,7 +33,7 @@ public class WordGroupController extends BaseController {
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("view/wordGroup/list");
+        mv.setViewName("view/word_group/list");
         mv.addObject("page", wordGroupService.findPage(pageable));
         return mv;
     }
@@ -45,7 +45,7 @@ public class WordGroupController extends BaseController {
     @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView add() {
-        return new ModelAndView("view/wordGroup/add");
+        return new ModelAndView("view/word_group/add");
     }
 
     /**
@@ -68,7 +68,7 @@ public class WordGroupController extends BaseController {
     @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
-        ModelAndView mv = new ModelAndView("view/wordGroup/edit");
+        ModelAndView mv = new ModelAndView("view/word_group/edit");
         mv.addObject("wordGroup", wordGroupService.find(id));
         return mv;
     }

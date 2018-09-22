@@ -37,31 +37,38 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     }
 
     @Override
-    public void persist(Group... entities) {
-        Arrays.stream(entities).forEach(group -> group.setType(type));
-        super.persist(entities);
+    public void persist(Group... groups) {
+        Arrays.stream(groups).forEach(group -> {
+            group.setType(type);
+            group.setStatus(Group.Status.NORMAL);
+        });
+        super.persist(groups);
     }
 
     @Override
-    public Group persist(Group entity) {
-        entity.setType(type);
-        return super.persist(entity);
+    public Group persist(Group group) {
+        group.setType(type);
+        group.setStatus(Group.Status.NORMAL);
+        return super.persist(group);
     }
 
     @Override
-    public void persist(Collection<Group> entities) {
-        entities.forEach(group -> group.setType(type));
-        super.persist(entities);
+    public void persist(Collection<Group> groups) {
+        groups.forEach(group -> {
+            group.setType(type);
+            group.setStatus(Group.Status.NORMAL);
+        });
+        super.persist(groups);
     }
 
     @Override
-    public Group update(Group entity, String... ignoreProperties) {
-        return super.update(entity, DictArray.add(ignoreProperties, "type"));
+    public Group update(Group group, String... ignoreProperties) {
+        return super.update(group, DictArray.concat(ignoreProperties, new String[] {"type", "status"}));
     }
 
     @Override
-    public void update(Collection<Group> entities, String... ignoreProperties) {
-        super.update(entities, DictArray.add(ignoreProperties, "type"));
+    public void update(Collection<Group> groups, String... ignoreProperties) {
+        super.update(groups, DictArray.concat(ignoreProperties, new String[] {"type", "status"}));
     }
 
     @Override

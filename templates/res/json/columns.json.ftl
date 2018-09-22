@@ -39,7 +39,7 @@
       },
       {
         "title": "单词分组管理",
-        "href": "${base_url}/content/word_groups.html"
+        "href": "${base_url}/word_group/list.html"
       },
       {
         "title": "短语分组管理",

@@ -281,15 +281,17 @@ public class DictPropertyInfoVo implements Serializable {
                     }
                 }
             }
+
+            if (collection != null) {
+                collection = collection.stream().map(item ->
+                    DictMap.yamlMap(String.format("{id: %s, value: %s}", item, item))).collect(Collectors.toList());
+            }
         } else if ("enum".equals(getType())) {
-          List<?> enumList = DictEnum.getEnumList((Class<? extends Enum<?>>) dictProperty.getType());
-          collection = enumList.stream().map(Object::toString).collect(Collectors.toList());
+          List<? extends Enum<?>> enumList = DictEnum.getEnumList((Class<? extends Enum<?>>) dictProperty.getType());
+          collection = enumList.stream().map(e -> DictMap.yamlMap(String.format("{id: %s, value: %s}", e.ordinal(), e.toString())))
+              .collect(Collectors.toList());
         }
-        if (collection != null) {
-            return collection.stream().map(item ->
-                DictMap.yamlMap(String.format("{id: %s, value: %s}", item, item))).collect(Collectors.toList());
-        }
-        return null;
+        return (List<?>) collection;
     }
 
     private boolean internalIsMultiple() {
