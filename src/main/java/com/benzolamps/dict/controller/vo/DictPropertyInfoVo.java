@@ -144,7 +144,7 @@ public class DictPropertyInfoVo implements Serializable {
     }
 
     private String internalGetType() {
-        Class clazz = dictProperty.getType();
+        Class<?> clazz = dictProperty.getType();
         if (Arrays.asList(
             String.class, CharSequence.class,
             String[].class, CharSequence[].class

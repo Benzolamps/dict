@@ -97,7 +97,6 @@
         parent.layer.alert(result.message, {
           title: result.status,
           icon: 2
-
         });
       }
     });

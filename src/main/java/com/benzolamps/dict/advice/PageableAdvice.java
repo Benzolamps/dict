@@ -1,12 +1,12 @@
 package com.benzolamps.dict.advice;
 
-import com.benzolamps.dict.dao.core.Pageable;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+
+import com.benzolamps.dict.dao.core.Pageable;
 
 /**
  * 分页建言
@@ -18,14 +18,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class PageableAdvice {
 
-    @Pointcut("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
-    private native void pointcut();
-
-    @Around("pointcut()")
+    @Around("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
     private Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Object[] args = joinPoint.getArgs();
-        Class[] paramTypes = signature.getParameterTypes();
+        Class<?>[] paramTypes = signature.getParameterTypes();
         for (int i = 0; i < paramTypes.length; i++) {
             if (Pageable.class.equals(paramTypes[i]) && null == args[i]) {
                 args[i] = new Pageable();

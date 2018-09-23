@@ -21,7 +21,7 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
 public class GetDictPropertyMethod implements TemplateMethodModelEx {
 
     @Override
-    public Object exec(List arguments) {
+    public Object exec(@SuppressWarnings("rawtypes") List arguments) {
         Assert.notEmpty(arguments, "arguments不能为空");
         String className = arguments.get(0).toString();
         Assert.notNull(className, "class name不能为null或空");

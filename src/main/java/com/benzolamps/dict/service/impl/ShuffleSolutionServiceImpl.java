@@ -136,7 +136,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
         Assert.hasLength(className, "class name不能为null或空");
         Assert.isTrue(getAvailableStrategyNames().contains(className), "class name不存在");
-        Class strategyClass = DynamicClass.loadClass(className);
+        Class<?> strategyClass = DynamicClass.loadClass(className);
         return DictPropertyInfoVo.applyDictPropertyInfo(strategyClass);
     }
 

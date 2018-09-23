@@ -44,6 +44,7 @@ public interface DictList {
      * @param yaml YAML
      * @return list
      */
+    @SuppressWarnings("rawtypes")
     static List yamlList(String yaml) {
         if (StringUtils.isEmpty(yaml)) {
             return Constant.EMPTY_LIST;

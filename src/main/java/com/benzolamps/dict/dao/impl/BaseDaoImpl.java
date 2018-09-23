@@ -1,16 +1,36 @@
 package com.benzolamps.dict.dao.impl;
 
-import com.benzolamps.dict.bean.BaseEntity;
-import com.benzolamps.dict.dao.base.BaseDao;
-import com.benzolamps.dict.dao.core.*;
-import com.benzolamps.dict.util.*;
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaQuery;
+
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
-import javax.persistence.*;
-import javax.persistence.criteria.CriteriaQuery;
-import java.util.*;
+import com.benzolamps.dict.bean.BaseEntity;
+import com.benzolamps.dict.dao.base.BaseDao;
+import com.benzolamps.dict.dao.core.DictJpa;
+import com.benzolamps.dict.dao.core.DictQuery;
+import com.benzolamps.dict.dao.core.Filter;
+import com.benzolamps.dict.dao.core.GeneratedDictQuery;
+import com.benzolamps.dict.dao.core.Order;
+import com.benzolamps.dict.dao.core.Page;
+import com.benzolamps.dict.dao.core.Pageable;
+import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictArray;
+import com.benzolamps.dict.util.DictBean;
+import com.benzolamps.dict.util.DictMath;
+import com.benzolamps.dict.util.DictProperty;
+import com.benzolamps.dict.util.DictString;
 
 /**
  * Dao基类接口实现类
@@ -18,7 +38,6 @@ import java.util.*;
  * @version 2.1.1
  * @datetime 2018-7-1 18:30:10
  */
-@Slf4j
 @SuppressWarnings("unchecked")
 public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
@@ -200,7 +219,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	}
 
     @Override
-    public T update(T entity, String[] ignoreProperties) {
+    public T update(T entity, String... ignoreProperties) {
         Assert.notNull(entity, "entity不能为null");
         Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
         if (ignoreProperties == null) ignoreProperties = Constant.EMPTY_STRING_ARRAY;

@@ -29,7 +29,7 @@ public class YamlParseMethod implements TemplateMethodModelEx {
     }
 
     @Override
-    public Object exec(List arguments) {
+    public Object exec(@SuppressWarnings("rawtypes") List arguments) {
         Assert.notNull(resourceType, "resource type不能为空");
         Assert.notEmpty(arguments, "arguments不能为空");
         String str = arguments.get(0).toString();

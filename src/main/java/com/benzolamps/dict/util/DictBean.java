@@ -188,6 +188,7 @@ public class DictBean<B> {
      * @param properties 属性
      * @return DictBean对象
      */
+    @SuppressWarnings("unchecked")
     public B createBean(Map<String, Object> properties) {
         Assert.isTrue(instantiable(), "类必须是可实例化的");
         final B obj = BeanUtils.instantiate(type);

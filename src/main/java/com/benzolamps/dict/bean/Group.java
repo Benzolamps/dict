@@ -1,6 +1,8 @@
 package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DictRemote;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -44,7 +46,7 @@ public class Group extends BaseEntity {
     /** 状态 */
     public enum Status {
         /** 正常状态, 此状态可以导出单词, 可以删除, 可以给学生评分, 若已有评分, 则自动进入SCORING状态 */
-        NORMAL,
+        NORMAL("正常"),
 
         /**
          * 评分状态, 此状态可以导出单词, 但不可删除, 可以终止评分, 进入COMPLETED状态
@@ -52,13 +54,25 @@ public class Group extends BaseEntity {
          * 评分过的学生评分记录会被保留, 不能再次评分
          * 所有学生全部评分完毕后, 自动进入COMPLETED状态
          */
-        SCORING,
+        SCORING("评分中"),
 
         /**
          * 已完成状态, 可以导出, 也可以删除, 可以查看单词与学生掌握情况
          * 可以转换为正常状态, 所有学生都可以重新评分
          */
-        COMPLETED
+        COMPLETED("已完成");
+        
+        private String name;
+
+        private Status(String name) {
+            this.name = name;
+        }
+        
+        @JsonValue
+        @Override
+        public String toString() {
+            return this.name;
+        }
     }
 
     /** 状态 */

@@ -21,6 +21,8 @@ import java.util.List;
 @Setter
 public class DocExportVo implements Serializable {
 
+    private static final long serialVersionUID = 852337843770551706L;
+
     /** 分组id */
     private Integer groupId;
 

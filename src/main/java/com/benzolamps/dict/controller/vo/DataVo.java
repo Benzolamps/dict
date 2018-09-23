@@ -35,7 +35,7 @@ public class DataVo extends BaseVo {
             this.count = (long) Array.getLength(data);
         }
         else if (Collection.class.isAssignableFrom(data.getClass())) {
-            this.count = (long) ((Collection) data).size();
+            this.count = (long) ((Collection<?>) data).size();
         } else {
             this.count = null;
         }
