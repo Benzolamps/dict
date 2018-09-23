@@ -1,6 +1,7 @@
 package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
+import com.benzolamps.dict.component.Alias;
 import com.benzolamps.dict.util.DictString;
 import lombok.Setter;
 import org.springframework.core.ResolvableType;
@@ -25,6 +26,10 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
 
     /* 实体类型 */
     private final Class<B> entityClass;
+    
+    private String className;
+    
+    private String alias;
 
     /* 排序 */
     private List<Order> orders = new ArrayList<>();
@@ -39,6 +44,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     @SuppressWarnings("unchecked")
     public GeneratedDictQuery(Class<B> entityClass) {
         this.entityClass = entityClass;
+        generateClassNameAndAlias();
     }
 
     /** 构造方法 */
@@ -46,6 +52,14 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     protected GeneratedDictQuery() {
         ResolvableType resolvableType = ResolvableType.forClass(getClass());
         entityClass = (Class<B>) resolvableType.getSuperType().getGeneric().resolve();
+        generateClassNameAndAlias();
+    }
+    
+    private void generateClassNameAndAlias() {
+        className = entityClass.getName();
+        alias = entityClass.isAnnotationPresent(Alias.class) ? 
+            entityClass.getAnnotation(Alias.class).value() : 
+            DictString.toCamel(entityClass.getSimpleName());
     }
 
     @Override
@@ -66,8 +80,6 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     @Override
     public final TypedQuery<B> getTypedQuery() {
         Assert.notNull(entityManager, "entity manager不能为空");
-        String classSimpleName = entityClass.getSimpleName();
-        String alias = DictString.toCamel(classSimpleName);
         String jpql = select(alias);
         return DictJpa.createJpqlQuery(entityManager, jpql, entityClass, null, filter.getParameters().toArray());
     }
@@ -81,8 +93,6 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
 
     private String select(String field) {
         Assert.hasLength(field, "field不能为空或null");
-        String className = entityClass.getName();
-        String alias = DictString.toCamel(entityClass.getSimpleName());
         StringJoiner jpql = new StringJoiner(" ");
         filter.build(alias);
         applyOrder(Order.desc("id"));

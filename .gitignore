@@ -17,3 +17,6 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+/bin/
+/logs/
+/setting/

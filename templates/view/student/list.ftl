@@ -43,7 +43,9 @@
     {'field': 'description', 'title': '描述', 'sort': true},
     {'field': 'clazz', 'title': '班级', 'sort': true},
     {'field': 'masteredWords', 'title': '已掌握的单词数', 'sort': true},
-    {'field': 'masteredPhrases', 'title': '已掌握的短语数', 'sort': true}
+    {'field': 'masteredPhrases', 'title': '已掌握的短语数', 'sort': true},
+    {'field': 'failedWords', 'title': '未掌握的单词数', 'sort': true},
+    {'field': 'failedPhrases', 'title': '未掌握的短语数', 'sort': true}
   ]
   page=page
   add='${base_url}/student/add.html'

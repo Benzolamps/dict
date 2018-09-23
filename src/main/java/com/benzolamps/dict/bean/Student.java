@@ -56,12 +56,34 @@ public class Student extends BaseEntity {
     @ManyToMany
     @JoinTable(name = "dict_sp", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     private Set<Phrase> masteredPhrases;
+    
+    /** 未掌握的单词 */
+    @ManyToMany
+    @JoinTable(name = "dict_swf", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
+    private Set<Word> failedWords;
 
+    /** 未掌握的短语 */
+    @ManyToMany
+    @JoinTable(name = "dict_spf", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
+    private Set<Phrase> failedPhrases;
+
+    /** 已掌握的单词数 */
     @Transient
     @Size("masteredWords")
     private Integer masteredWordsCount;
 
+    /** 已掌握的短语数 */
     @Transient
     @Size("masteredPhrases")
     private Integer masteredPhrasesCount;
+    
+    /** 未掌握的单词数 */
+    @Transient
+    @Size("failedWords")
+    private Integer failedWordsCount;
+
+    /** 未掌握的短语数 */
+    @Transient
+    @Size("failedPhrases")
+    private Integer failedPhrasesCount;
 }

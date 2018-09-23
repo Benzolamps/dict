@@ -1,15 +1,20 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.Alias;
+import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
+import com.benzolamps.dict.component.Size;
+import com.benzolamps.dict.util.DictIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 /**
@@ -22,6 +27,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "dict_group")
+@Alias("groups")
 public class Group extends BaseEntity {
 
     private static final long serialVersionUID = -756587292984332161L;
@@ -31,19 +37,24 @@ public class Group extends BaseEntity {
     @Length(max = 20)
     @Column(nullable = false, unique = true)
     @DictRemote("/word_group/name_not_exists.json")
+    @DictPropertyInfo(display = "名称")
     private String name;
 
     /** 描述 */
     @Length(max = 50)
     @Column
+    @DictPropertyInfo(display = "描述")
     private String description;
 
     /** 词库 */
     @ManyToOne
     @JoinColumn(name = "library", updatable = false)
+    @DictIgnore
+    @JsonIgnore
     private Library library;
 
     /** 状态 */
+    @AllArgsConstructor
     public enum Status {
         /** 正常状态, 此状态可以导出单词, 可以删除, 可以给学生评分, 若已有评分, 则自动进入SCORING状态 */
         NORMAL("正常"),
@@ -63,10 +74,6 @@ public class Group extends BaseEntity {
         COMPLETED("已完成");
         
         private String name;
-
-        private Status(String name) {
-            this.name = name;
-        }
         
         @JsonValue
         @Override
@@ -74,30 +81,12 @@ public class Group extends BaseEntity {
             return this.name;
         }
     }
-
+    
     /** 状态 */
+    @DictIgnore
     @Column(nullable = false)
     private Status status;
-
-    /** 是否针对全体学生 */
-    @Column(nullable = false)
-    private Boolean isOrientedAllStudents;
-
-    /** 针对的学生 */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "dict_gs", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "student"))
-    private Set<Student> studentsOriented;
-
-    /** 针对的学生 */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "dict_gc", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "clazz"))
-    private Set<Student> clazzesOriented;
-
-    /** 已评分的学生 */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "dict_gss", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "student"))
-    private Set<Student> studentsScored;
-
+    
     /** 类型 */
     public enum Type {
         /** 单词 */
@@ -108,17 +97,59 @@ public class Group extends BaseEntity {
     }
 
     /** 类型 */
+    @DictIgnore
     @Column(nullable = false, updatable = false)
-    @NotNull
     private Type type;
+
+    /** 分组中的的学生 */
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "dict_gs", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "student"))
+    @DictIgnore
+    @JsonIgnore
+    private Set<Student> studentsOriented;
+
+    /** 已评分的学生 */
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "dict_gss", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "student"))
+    @DictIgnore
+    @JsonIgnore
+    private Set<Student> studentsScored;
 
     /** 分组中的单词 */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "dict_gw", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "word"))
-    private Set<Phrase> phrases;
+    @DictIgnore
+    @JsonIgnore
+    private Set<Word> words;
 
     /** 分组中的短语 */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "dict_gp", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "phrase"))
-    private Set<Phrase> words;
+    @DictIgnore
+    @JsonIgnore
+    private Set<Phrase> phrases;
+    
+    /** 分组中的的学生数 */
+    @Transient
+    @Size("studentsOriented")
+    @DictIgnore
+    private Integer studentsOrientedCount;
+
+    /** 已掌握的短语数 */
+    @Transient
+    @Size("studentsScored")
+    @DictIgnore
+    private Integer studentsScoredCount;
+    
+    /** 未掌握的单词数 */
+    @Transient
+    @Size("words")
+    @DictIgnore
+    private Integer wordsCount;
+
+    /** 未掌握的短语数 */
+    @Transient
+    @Size("phrases")
+    @DictIgnore
+    private Integer phrasesCount;
 }

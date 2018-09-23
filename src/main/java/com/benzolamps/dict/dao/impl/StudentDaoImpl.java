@@ -35,13 +35,12 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
                 }
             }
 
-            @SuppressWarnings("IfCanBeSwitch")
             @Override
             public void applyOrder(Order order) {
                 if (order.getField().equals("clazz")) {
                     order = new Order("clazz.name", order.getDirection());
                 } else {
-                    order = order.convertIf(Order.SizeOrder.class, "masteredWords", "masteredPhrases");
+                    order = order.convertIf(Order.SizeOrder.class, "masteredWords", "masteredPhrases", "failedWords", "failedPhrases");
                 }
                 super.applyOrder(order);
             }
