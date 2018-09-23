@@ -351,14 +351,24 @@ public interface DictLambda {
      * @param <T> 类型
      */
     @FunctionalInterface
-    interface Operator1<T> extends UnaryOperator<T>, Func1<T, T> { }
+    interface Operator1<T> extends UnaryOperator<T>, Func1<T, T> {
+        @Override
+        default T apply(T t) {
+            return this.tryExecute(t);
+        }
+    }
 
     /**
      * 2个参数有返回值, 参数类型与返回值类型一样的func
      * @param <T> 类型
      */
     @FunctionalInterface
-    interface Operator2<T> extends BinaryOperator<T>, Func2<T, T, T> { }
+    interface Operator2<T> extends BinaryOperator<T>, Func2<T, T, T> {
+        @Override
+        default T apply(T t1, T t2) {
+            return this.tryExecute(t1, t2);
+        }
+    }
 
     /**
      * 1个参数有返回值, 返回值类型是布尔类型的func
