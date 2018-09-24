@@ -29,11 +29,6 @@ public class StudyLog extends BaseEntity {
     @JoinColumn(name = "student", nullable = false, updatable = false)
     @NotNull
     private Student student;
-    
-    /** 分组 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "groups")
-    private Group group;
 
     /** 记录时间 */
     @Column(nullable = false, updatable = false)

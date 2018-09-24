@@ -77,16 +77,6 @@ public class StudentVo implements Serializable {
     @JsonProperty("failedPhrases")
     private Integer failedPhrasesCount;
 
-    /** 未掌握的单词数 */
-    @DictIgnore
-    @JsonProperty("failedWords")
-    private Integer failedWordsCount;
-
-    /** 未掌握的短语数 */
-    @DictIgnore
-    @JsonProperty("failedPhrases")
-    private Integer failedPhrasesCount;
-
     /**
      * 将StudentVo转换为Student
      * @param studentVo studentVo
