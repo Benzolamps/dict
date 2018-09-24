@@ -38,14 +38,14 @@
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
-    {'field': 'number', 'title': '学号', 'sort': true},
-    {'field': 'name', 'title': '姓名', 'sort': true},
-    {'field': 'description', 'title': '描述', 'sort': true},
-    {'field': 'clazz', 'title': '班级', 'sort': true},
-    {'field': 'masteredWords', 'title': '已掌握的单词数', 'sort': true},
-    {'field': 'masteredPhrases', 'title': '已掌握的短语数', 'sort': true},
-    {'field': 'failedWords', 'title': '未掌握的单词数', 'sort': true},
-    {'field': 'failedPhrases', 'title': '未掌握的短语数', 'sort': true}
+    {'field': 'number', 'title': '学号', 'sort': true, 'width': 120},
+    {'field': 'name', 'title': '姓名', 'sort': true, 'width': 120},
+    {'field': 'description', 'title': '描述', 'sort': true, 'width': 120},
+    {'field': 'clazz', 'title': '班级', 'sort': true, 'width': 120},
+    {'field': 'masteredWords', 'title': '已掌握的单词数', 'sort': true, 'width': 150},
+    {'field': 'masteredPhrases', 'title': '已掌握的短语数', 'sort': true, 'width': 150},
+    {'field': 'failedWords', 'title': '未掌握的单词数', 'sort': true, 'width': 150},
+    {'field': 'failedPhrases', 'title': '未掌握的短语数', 'sort': true, 'width': 150}
   ]
   page=page
   add='${base_url}/student/add.html'

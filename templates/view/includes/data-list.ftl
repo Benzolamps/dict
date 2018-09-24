@@ -98,7 +98,7 @@
   </script>
 
   <script type="text/javascript">
-    $('#${id}-container').css('width', (parent.$('body').width() - 300) + 'px');
+    $('#${id}-container').css('width', (parent.$('body').width() - 250) + 'px');
 
     <#-- 表格字段 -->
     var fields = <@json_dump obj=fields/>;
@@ -111,7 +111,7 @@
     <#if delete_enabled && edit_enabled><#assign width += 95/></#if>
     <#assign width += 95 * toolbar?size/>
 
-    fields.push({field: 'id', title: '操作', align: 'left', toolbar: '#${id}-tools', width: ${width}});
+    fields.push({field: 'id', title: '操作', align: 'left', fixed: 'right', toolbar: '#${id}-tools', width: ${width}});
 
     <#-- TODO: 表格渲染 -->
     table.render({

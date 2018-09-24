@@ -6,6 +6,7 @@ import com.benzolamps.dict.component.DictRemote;
 import com.benzolamps.dict.component.Size;
 import com.benzolamps.dict.util.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import lombok.AllArgsConstructor;
@@ -97,8 +98,9 @@ public class Group extends BaseEntity {
     }
 
     /** 类型 */
-    @DictIgnore
     @Column(nullable = false, updatable = false)
+    @DictIgnore
+    @JsonIgnore
     private Type type;
 
     /** 分组中的的学生 */
@@ -133,23 +135,27 @@ public class Group extends BaseEntity {
     @Transient
     @Size("studentsOriented")
     @DictIgnore
+    @JsonProperty("studentsOriented")
     private Integer studentsOrientedCount;
 
     /** 已掌握的短语数 */
     @Transient
     @Size("studentsScored")
     @DictIgnore
+    @JsonProperty("studentsScored")
     private Integer studentsScoredCount;
     
     /** 未掌握的单词数 */
     @Transient
     @Size("words")
     @DictIgnore
+    @JsonProperty("words")
     private Integer wordsCount;
 
     /** 未掌握的短语数 */
     @Transient
     @Size("phrases")
     @DictIgnore
+    @JsonProperty("phrases")
     private Integer phrasesCount;
 }

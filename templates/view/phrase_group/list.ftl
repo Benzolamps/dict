@@ -5,11 +5,11 @@
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
-    {'field': 'name', 'title': '名称', 'sort': true},
-    {'field': 'description', 'title': '描述', 'sort': true},
+    {'field': 'name', 'title': '名称', 'sort': true, 'width': 120},
+    {'field': 'description', 'title': '描述', 'sort': true, 'width': 120},
     {'field': 'status', 'title': '状态', 'sort': true},
-    {'field': 'studentsOriented', 'title': '分组中的的学生数', 'sort': true},
-    {'field': 'studentsScored', 'title': '已评分的学生数', 'sort': true},
+    {'field': 'studentsOriented', 'title': '分组中的的学生数', 'sort': true, 'width': 150},
+    {'field': 'studentsScored', 'title': '已评分的学生数', 'sort': true, 'width': 150},
     {'field': 'phrases', 'title': '短语数', 'sort': true}
   ]
   page=page
