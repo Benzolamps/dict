@@ -26,7 +26,7 @@ public class ShuffleStrategyDirective implements TemplateDirectiveModel {
 
     @SuppressWarnings("unchecked")
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
+    public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
         Assert.isTrue(params.containsKey("shuffle_strategy_setup"), "shuffle_strategy_setup未指定");
         IShuffleStrategySetup shuffleStrategySetup =
             DictObject.safeCast(DeepUnwrap.unwrap((TemplateModel) params.get("shuffle_strategy_setup")), IShuffleStrategySetup.class);

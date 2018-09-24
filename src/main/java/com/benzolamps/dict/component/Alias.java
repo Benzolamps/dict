@@ -3,14 +3,14 @@ package com.benzolamps.dict.component;
 import java.lang.annotation.*;
 
 /**
- * 表别名
+ * 实体类别名
  * @author Benzolamps
  * @version 2.1.4
- * @datetime 2018-9-22 21:41:09
+ * @datetime 2018-09-23 21:59:24
  */
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Target(ElementType.TYPE)
 public @interface Alias {
 
     /** 别名 */

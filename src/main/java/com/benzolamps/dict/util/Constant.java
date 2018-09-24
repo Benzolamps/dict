@@ -16,7 +16,7 @@ import java.util.function.Supplier;
  * @version 2.1.1
  * @datetime 2018-8-23 19:10:34
  */
-@SuppressWarnings({"unchecked", "unused"})
+@SuppressWarnings({"unchecked", "unused", "rawtypes"})
 public interface Constant {
 
     String DATE_FORMAT = "yyyy-MM-dd";

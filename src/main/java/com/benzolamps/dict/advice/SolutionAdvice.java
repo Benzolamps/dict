@@ -29,8 +29,7 @@ public class SolutionAdvice {
     @Resource
     private DocSolutionDao docSolutionDao;
 
-    @Pointcut("execution(* com.benzolamps.dict.service.impl.ShuffleSolutionServiceImpl.*(..)) || " +
-        "execution(* com.benzolamps.dict.service.impl.DocSolutionServiceImpl.*(..))")
+    @Pointcut("execution(* com.benzolamps.dict.service.impl.*SolutionServiceImpl.*(..))")
     private native void pointcut();
 
     @Before("pointcut()")

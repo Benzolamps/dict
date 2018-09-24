@@ -35,7 +35,6 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
                 }
             }
 
-            @SuppressWarnings("IfCanBeSwitch")
             @Override
             public void applyOrder(Order order) {
                 if (order.getField().equals("clazz")) {

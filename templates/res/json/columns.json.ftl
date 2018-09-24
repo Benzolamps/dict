@@ -43,7 +43,7 @@
       },
       {
         "title": "短语分组管理",
-        "href": "${base_url}/content/phrase_groups.html"
+        "href": "${base_url}/phrase_group/list.html"
       }
     ]
   },

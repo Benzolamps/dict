@@ -29,7 +29,7 @@ public class JsonDumpDirective implements TemplateDirectiveModel {
     private ObjectMapper mapper;
 
     @Override
-    public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws IOException, TemplateException {
+    public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws IOException, TemplateException {
         mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
         Assert.isTrue(params.containsKey("obj"), "obj未指定");
         Object obj = DeepUnwrap.unwrap((TemplateModel) params.get("obj"));

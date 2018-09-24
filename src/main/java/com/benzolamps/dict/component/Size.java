@@ -1,6 +1,5 @@
 package com.benzolamps.dict.component;
 
-import javax.persistence.Transient;
 import java.lang.annotation.*;
 
 /**

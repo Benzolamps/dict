@@ -66,6 +66,16 @@ public class StudentVo implements Serializable {
     @DictIgnore
     @JsonProperty("masteredPhrases")
     private Integer masteredPhrasesCount;
+    
+    /** 已掌握的单词数 */
+    @DictIgnore
+    @JsonProperty("failedWords")
+    private Integer failedWordsCount;
+
+    /** 已掌握的短语数 */
+    @DictIgnore
+    @JsonProperty("failedPhrases")
+    private Integer failedPhrasesCount;
 
     /** 未掌握的单词数 */
     @DictIgnore

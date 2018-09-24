@@ -33,7 +33,7 @@ public class PhraseGroupController extends BaseController {
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("view/phraseGroup/list");
+        mv.setViewName("view/phrase_group/list");
         mv.addObject("page", phraseGroupService.findPage(pageable));
         return mv;
     }
@@ -45,7 +45,7 @@ public class PhraseGroupController extends BaseController {
     @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView add() {
-        return new ModelAndView("view/phraseGroup/add");
+        return new ModelAndView("view/phrase_group/add");
     }
 
     /**
@@ -68,7 +68,7 @@ public class PhraseGroupController extends BaseController {
     @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
-        ModelAndView mv = new ModelAndView("view/phraseGroup/edit");
+        ModelAndView mv = new ModelAndView("view/phrase_group/edit");
         mv.addObject("phraseGroup", phraseGroupService.find(id));
         return mv;
     }
@@ -81,7 +81,7 @@ public class PhraseGroupController extends BaseController {
     @PostMapping("/update.json")
     @ResponseBody
     protected DataVo update(@RequestBody Group phraseGroup) {
-        phraseGroup = phraseGroupService.update(phraseGroup);
+        phraseGroup = phraseGroupService.update(phraseGroup, "status");
         return wrapperData(phraseGroup);
     }
 

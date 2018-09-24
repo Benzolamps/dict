@@ -95,7 +95,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
     @Override
     @Transactional
-    public User update(User user, String[] ignoreProperties) {
+    public User update(User user, String... ignoreProperties) {
         if (user.getPassword() != null) {
             user.setPassword(encryptPassword(user.getPassword()));
         }

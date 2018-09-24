@@ -1,16 +1,8 @@
 package com.benzolamps.dict.service.base;
 
 import com.benzolamps.dict.bean.DocSolution;
-import com.benzolamps.dict.bean.ShuffleSolution;
-import com.benzolamps.dict.component.IShuffleStrategySetup;
-import com.benzolamps.dict.controller.vo.DictPropertyInfoVo;
-import com.benzolamps.dict.dao.core.Page;
-import com.benzolamps.dict.dao.core.Pageable;
-
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Word文档方案Service接口

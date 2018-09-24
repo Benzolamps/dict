@@ -32,9 +32,7 @@
         <form class="layui-form" id="lock" method="post">
           <table class="layui-table">
             <tr>
-              <td>
-                请设置一个四位数解锁密码
-              </td>
+              <td>请设置一个四位数解锁密码</td>
               <td>
                 <input type="text" name="password" autocomplete="off" required maxlength="4" placeholder="请设置一个四位数解锁密码" class="layui-input">
               </td>

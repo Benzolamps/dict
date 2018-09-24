@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Group>" -->
 <@data_list
-  id='word-groups'
-  name='单词分组'
+  id='phrase-groups'
+  name='短语分组'
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
@@ -10,12 +10,12 @@
     {'field': 'status', 'title': '状态', 'sort': true},
     {'field': 'studentsOriented', 'title': '分组中的的学生数', 'sort': true, 'width': 150},
     {'field': 'studentsScored', 'title': '已评分的学生数', 'sort': true, 'width': 150},
-    {'field': 'words', 'title': '单词数', 'sort': true}
+    {'field': 'phrases', 'title': '短语数', 'sort': true}
   ]
   page=page
-  add='${base_url}/word_group/add.html'
-  edit='${base_url}/word_group/edit.html'
-  delete='${base_url}/word_group/delete.json'
+  add='${base_url}/phrase_group/add.html'
+  edit='${base_url}/phrase_group/edit.html'
+  delete='${base_url}/phrase_group/delete.json'
   page_enabled=true
   search=[
     {

@@ -314,7 +314,7 @@ public class Filter extends SnippetResolver {
      * @param value 值
      * @return Filter
      */
-    public static Filter in(String field, Collection value) {
+    public static Filter in(String field, Collection<?> value) {
         Assert.hasLength(field, "field不能为null或空");
         if (value == null) return new Filter().not();
         return binary(field, "in", value);
@@ -343,7 +343,7 @@ public class Filter extends SnippetResolver {
      * @param value 值
      * @return Filter
      */
-    public static Filter notIn(String field, Collection value) {
+    public static Filter notIn(String field, Collection<?> value) {
         Assert.hasLength(field, "field不能为null或空");
         if (value == null) return new Filter();
         return binary(field, "not in", value);

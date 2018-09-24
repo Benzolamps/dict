@@ -67,18 +67,22 @@ public class Student extends BaseEntity {
     @JoinTable(name = "dict_spf", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     private Set<Phrase> failedPhrases;
 
+    /** 已掌握的单词数 */
     @Transient
     @Size("masteredWords")
     private Integer masteredWordsCount;
 
+    /** 已掌握的短语数 */
     @Transient
     @Size("masteredPhrases")
     private Integer masteredPhrasesCount;
 
+    /** 未掌握的单词数 */
     @Transient
     @Size("failedWords")
     private Integer failedWordsCount;
 
+    /** 未掌握的短语数 */
     @Transient
     @Size("failedPhrases")
     private Integer failedPhrasesCount;

@@ -1,5 +1,5 @@
 <@data_add
-  id='word-groups'
+  id='phrase-groups'
   fields=get_dict_property('com.benzolamps.dict.bean.Group')
   messages={
     'name': {

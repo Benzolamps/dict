@@ -22,7 +22,7 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
 @Component
 public class ConstantMethod implements TemplateMethodModelEx {
     @Override
-    public Object exec(List arguments) throws TemplateModelException {
+    public Object exec(@SuppressWarnings("rawtypes") List arguments) throws TemplateModelException {
         Assert.notEmpty(arguments, "arguments不能为空");
         String var = DictObject.ofObject(DeepUnwrap.unwrap(((TemplateModel) arguments.get(0))), String.class);
         Assert.hasLength(var, "var不能为null或空");

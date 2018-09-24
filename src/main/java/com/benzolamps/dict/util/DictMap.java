@@ -17,24 +17,24 @@ public interface DictMap {
      * @param map map
      * @return properties
      */
-    static Properties convertToProperties(Map map) {
+    static Properties convertToProperties(Map<?, ?> map) {
         if (null == map || map instanceof Properties) {
             return (Properties) map;
         }
 
         Properties properties = new Properties();
 
-        Stack<KeyValuePairs<String, Map>> stack = new Stack<>();
+        Stack<KeyValuePairs<String, Map<?, ?>>> stack = new Stack<>();
         stack.push(new KeyValuePairs<>("", map));
         List<String> list = new ArrayList<>();
         while (!stack.empty()) {
-            KeyValuePairs<String, Map> submapPairs = stack.pop();
-            Map submap = submapPairs.getValue();
+            KeyValuePairs<String, Map<?, ?>> submapPairs = stack.pop();
+            Map<?, ?> submap = submapPairs.getValue();
             list.add(submapPairs.getKey());
             for (Object key : submap.keySet()) {
                 Object value = submap.get(key);
                 if (value instanceof Map) {
-                    stack.push(new KeyValuePairs<>(key.toString(), (Map) value));
+                    stack.push(new KeyValuePairs<>(key.toString(), (Map<?, ?>) value));
                 } else {
                     StringJoiner sj = new StringJoiner(".", "", "." + key.toString());
                     list.forEach(sj::add);
@@ -52,6 +52,7 @@ public interface DictMap {
      * @param yaml YAML
      * @return map
      */
+    @SuppressWarnings("rawtypes")
     static Map yamlMap(String yaml) {
         if (StringUtils.isEmpty(yaml)) {
             return Constant.EMPTY_MAP;

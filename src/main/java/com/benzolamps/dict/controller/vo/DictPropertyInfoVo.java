@@ -144,7 +144,7 @@ public class DictPropertyInfoVo implements Serializable {
     }
 
     private String internalGetType() {
-        Class clazz = dictProperty.getType();
+        Class<?> clazz = dictProperty.getType();
         if (Arrays.asList(
             String.class, CharSequence.class,
             String[].class, CharSequence[].class
@@ -281,15 +281,14 @@ public class DictPropertyInfoVo implements Serializable {
                     }
                 }
             }
-
-            if (collection != null) {
+            if (null != collection) {
                 collection = collection.stream().map(item ->
                     DictMap.yamlMap(String.format("{id: %s, value: %s}", item, item))).collect(Collectors.toList());
             }
         } else if ("enum".equals(getType())) {
-          List<? extends Enum<?>> enumList = DictEnum.getEnumList((Class<? extends Enum<?>>) dictProperty.getType());
-          collection = enumList.stream().map(e -> DictMap.yamlMap(String.format("{id: %s, value: %s}", e.ordinal(), e.toString())))
-              .collect(Collectors.toList());
+            List<? extends Enum<?>> enumList = DictEnum.getEnumList((Class<? extends Enum<?>>) dictProperty.getType());
+            collection = enumList.stream().map(item -> 
+                DictMap.yamlMap(String.format("{id: %s, value: %s}", item.ordinal(), item.toString()))).collect(Collectors.toList());
         }
         return (List<?>) collection;
     }

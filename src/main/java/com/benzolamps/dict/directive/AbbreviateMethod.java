@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 public class AbbreviateMethod implements TemplateMethodModelEx {
     @Override
-    public Object exec(List arguments) throws TemplateModelException {
+    public Object exec(@SuppressWarnings("rawtypes") List arguments) throws TemplateModelException {
         Assert.notEmpty(arguments, "arguments不能为空");
         Assert.isTrue(arguments.size() >= 3, "arguments个数错误");
         String str = DictObject.ofObject(DeepUnwrap.unwrap(((TemplateModel) arguments.get(0))), String.class);
@@ -38,7 +38,7 @@ public class AbbreviateMethod implements TemplateMethodModelEx {
             char c = chars[i];
             if (width > 0) {
                 if (String.valueOf(c).matches(Constant.CHINESE_PATTERN)) width -= 2;
-                else width--;
+                else --width;
                 sb.append(c);
                 if (width <= 0 && i < chars.length - 1) {
                     sb.append(ellipsis == null ? "" : ellipsis);

@@ -7,6 +7,8 @@ import com.benzolamps.dict.component.Size;
 import com.benzolamps.dict.util.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -74,32 +76,25 @@ public class Group extends BaseEntity {
 
         private String name;
 
+        @JsonValue
         @Override
         public String toString() {
-            return name;
+            return this.name;
         }
     }
 
     /** 状态 */
-    @Column(nullable = false)
     @DictIgnore
+    @Column(nullable = false)
     private Status status;
 
     /** 类型 */
-    @AllArgsConstructor
     public enum Type {
         /** 单词 */
-        WORD("单词"),
+        WORD,
 
         /** 短语 */
-        PHRASE("短语");
-
-        private String name;
-
-        @Override
-        public String toString() {
-            return name;
-        }
+        PHRASE
     }
 
     /** 类型 */
@@ -108,7 +103,7 @@ public class Group extends BaseEntity {
     @JsonIgnore
     private Type type;
 
-    /** 分组中的学生 */
+    /** 分组中的的学生 */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "dict_gs", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "student"))
     @DictIgnore
@@ -122,42 +117,42 @@ public class Group extends BaseEntity {
     @JsonIgnore
     private Set<Student> studentsScored;
 
-    /** 分组中的短语 */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "dict_gp", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "phrase"))
-    @DictIgnore
-    @JsonIgnore
-    private Set<Phrase> words;
-
     /** 分组中的单词 */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "dict_gw", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "word"))
     @DictIgnore
     @JsonIgnore
+    private Set<Word> words;
+
+    /** 分组中的短语 */
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "dict_gp", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "phrase"))
+    @DictIgnore
+    @JsonIgnore
     private Set<Phrase> phrases;
 
-    /** 分组中的学生数 */
+    /** 分组中的的学生数 */
     @Transient
     @Size("studentsOriented")
     @DictIgnore
     @JsonProperty("studentsOriented")
     private Integer studentsOrientedCount;
 
-    /** 已评分的学生数 */
+    /** 已掌握的短语数 */
     @Transient
     @Size("studentsScored")
     @DictIgnore
     @JsonProperty("studentsScored")
     private Integer studentsScoredCount;
 
-    /** 单词数 */
+    /** 未掌握的单词数 */
     @Transient
     @Size("words")
     @DictIgnore
     @JsonProperty("words")
     private Integer wordsCount;
 
-    /** 短语数 */
+    /** 未掌握的短语数 */
     @Transient
     @Size("phrases")
     @DictIgnore

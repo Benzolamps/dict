@@ -1,6 +1,7 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.Group;
+import com.benzolamps.dict.bean.Group.Status;
 import com.benzolamps.dict.bean.Group.Type;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.core.Filter;
@@ -40,7 +41,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void persist(Group... groups) {
         Arrays.stream(groups).forEach(group -> {
             group.setType(type);
-            group.setStatus(Group.Status.NORMAL);
+            group.setStatus(Status.NORMAL);
         });
         super.persist(groups);
     }
@@ -48,7 +49,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     @Override
     public Group persist(Group group) {
         group.setType(type);
-        group.setStatus(Group.Status.NORMAL);
+        group.setStatus(Status.NORMAL);
         return super.persist(group);
     }
 
@@ -56,19 +57,19 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void persist(Collection<Group> groups) {
         groups.forEach(group -> {
             group.setType(type);
-            group.setStatus(Group.Status.NORMAL);
+            group.setStatus(Status.NORMAL);
         });
         super.persist(groups);
     }
 
     @Override
     public Group update(Group group, String... ignoreProperties) {
-        return super.update(group, DictArray.concat(ignoreProperties, new String[] {"type", "status"}));
+        return super.update(group, DictArray.add(ignoreProperties, "type"));
     }
 
     @Override
     public void update(Collection<Group> groups, String... ignoreProperties) {
-        super.update(groups, DictArray.concat(ignoreProperties, new String[] {"type", "status"}));
+        super.update(groups, DictArray.add(ignoreProperties, "type"));
     }
 
     @Override

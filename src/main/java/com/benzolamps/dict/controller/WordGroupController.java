@@ -81,7 +81,7 @@ public class WordGroupController extends BaseController {
     @PostMapping("/update.json")
     @ResponseBody
     protected DataVo update(@RequestBody Group wordGroup) {
-        wordGroup = wordGroupService.update(wordGroup);
+        wordGroup = wordGroupService.update(wordGroup, "status");
         return wrapperData(wordGroup);
     }
 
