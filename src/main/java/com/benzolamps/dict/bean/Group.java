@@ -138,7 +138,7 @@ public class Group extends BaseEntity {
     @JsonProperty("studentsOriented")
     private Integer studentsOrientedCount;
 
-    /** 已掌握的短语数 */
+    /** 已评分的学生数 */
     @Transient
     @Size("studentsScored")
     @DictIgnore
