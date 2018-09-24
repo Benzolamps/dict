@@ -79,6 +79,7 @@
       <groupId>tools</groupId>
       <artifactId>tools</artifactId>
       <scope>system</scope>
+      <version>0.0.1.SNAPSHOT</version>
       <systemPath>${java.home}/lib/tools.jar</systemPath>
     </dependency>
   </dependencies>
