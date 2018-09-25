@@ -122,11 +122,11 @@
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
-    {'field': 'prototype', 'title': '单词', 'sort': true},
-    {'field': 'britishPronunciation', 'title': '英式发音', 'sort': true},
-    {'field': 'americanPronunciation', 'title': '美式发音', 'sort': true},
-    {'field': 'clazzes', 'title': '词性'},
-    {'field': 'definition', 'title': '词义', 'sort': true}
+    {'field': 'prototype', 'title': '单词', 'sort': true, 'minWidth': 120},
+    {'field': 'britishPronunciation', 'title': '英式发音', 'sort': true, 'minWidth': 120},
+    {'field': 'americanPronunciation', 'title': '美式发音', 'sort': true, 'minWidth': 120},
+    {'field': 'clazzes', 'title': '词性', 'minWidth': 150},
+    {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150}
   ]
   page=page
   add='${base_url}/word/add.html'

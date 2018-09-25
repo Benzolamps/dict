@@ -5,12 +5,12 @@
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
-    {'field': 'name', 'title': '名称', 'sort': true, 'width': 120},
-    {'field': 'description', 'title': '描述', 'sort': true, 'width': 120},
-    {'field': 'status', 'title': '状态', 'sort': true},
-    {'field': 'studentsOriented', 'title': '分组中的的学生数', 'sort': true, 'width': 150},
-    {'field': 'studentsScored', 'title': '已评分的学生数', 'sort': true, 'width': 150},
-    {'field': 'words', 'title': '单词数', 'sort': true}
+    {'field': 'name', 'title': '名称', 'sort': true, 'minWidth': 120},
+    {'field': 'description', 'title': '描述', 'sort': true, 'minWidth': 120},
+    {'field': 'status', 'title': '状态', 'sort': true, 'minWidth': 10},
+    {'field': 'studentsOriented', 'title': '分组中的的学生数', 'sort': true, 'minWidth': 150},
+    {'field': 'studentsScored', 'title': '已评分的学生数', 'sort': true, 'minWidth': 150},
+    {'field': 'words', 'title': '单词数', 'sort': true, 'minWidth': 10}
   ]
   page=page
   add='${base_url}/word_group/add.html'

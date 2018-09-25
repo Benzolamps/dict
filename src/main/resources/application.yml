@@ -3,7 +3,6 @@ dict:
     name: @project.name@
     title: @project.description@
     version: @project.version@
-    console_encoding: GBK
     remote_base_url: http://benzolamps.oss-cn-beijing.aliyuncs.com
     universe_path: templates/java/universe
     jdbc_file: dictionary.db

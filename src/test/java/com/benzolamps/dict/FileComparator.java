@@ -42,9 +42,9 @@ public class FileComparator {
 
     @Before
     public void before() throws IOException {
-        src = new File("D:\\src");
-        dest = new File("D:\\dest");
-        diff = new File("D:\\diff");
+        src = new File("E:\\src");
+        dest = new File("E:\\dest");
+        diff = new File("E:\\diff");
         start = new File(diff, "start.txt");
 
         isTrue(src.isDirectory(), "src不是目录");

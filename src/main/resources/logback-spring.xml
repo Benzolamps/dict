@@ -5,6 +5,7 @@
 <configuration>
   <springProperty scope="context" name="title" source="dict.system.title"/>
   <springProperty scope="context" name="version" source="dict.system.version"/>
+  <springProperty scope="context" name="encoding" source="file.encoding"/>
 
   <!-- 向控制台输出日志 -->
   <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
@@ -12,7 +13,7 @@
       <pattern>
         %cyan(**${title} - ${version}) %blue([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %yellow(&lt;%p&gt;) %red(%logger) %cyan([%F:%L]) %n%m%n%n
       </pattern>
-      <charset>UTF-8</charset>
+      <charset>${encoding}</charset>
     </encoder>
   
     <!--过滤器-->
@@ -32,7 +33,7 @@
       <pattern>
         ${title} - ${version} [%d{yyyy-MM-dd HH:mm:ss.SSS}] &lt;%p&gt; %logger [%F:%L] %n%m%n%n
       </pattern>
-      <charset>UTF-8</charset>
+      <charset>${encoding}</charset>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
       <fileNamePattern>./logs/dict_%d{yyyy-MM-dd}~%i.txt</fileNamePattern>

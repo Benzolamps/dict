@@ -98,7 +98,7 @@
   </script>
 
   <script type="text/javascript">
-    $('#${id}-container').css('width', (parent.$('body').width() - 250) + 'px');
+    $('#${id}-container').css('width', (parent.$('body').width() - 300) + 'px');
 
     <#-- 表格字段 -->
     var fields = <@json_dump obj=fields/>;

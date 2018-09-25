@@ -5,7 +5,7 @@
 <configuration>
     <springProperty scope="context" name="title" source="dict.system.title"/>
     <springProperty scope="context" name="version" source="dict.system.version"/>
-    <springProperty scope="context" name="encoding" source="dict.system.console_encoding"/>
+    <springProperty scope="context" name="encoding" source="file.encoding"/>
 
     <!-- 向控制台输出日志 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

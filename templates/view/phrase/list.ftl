@@ -110,8 +110,8 @@
   fields=[
     {'type': 'numbers'},
     {'type': 'checkbox'},
-    {'field': 'prototype', 'title': '短语', 'sort': true},
-    {'field': 'definition', 'title': '词义', 'sort': true}
+    {'field': 'prototype', 'title': '短语', 'sort': true, 'minWidth': 150},
+    {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150}
   ]
   page=page
   add='${base_url}/phrase/add.html'

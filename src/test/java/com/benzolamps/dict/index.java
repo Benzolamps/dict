@@ -1,12 +1,10 @@
 package com.benzolamps.dict;
 
-import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.*;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -42,11 +40,10 @@ public final class index {
         }
 
         try {
-            File var1 = new File("templates/static/login.html");
-            Desktop.getDesktop().open(var1);
             List<String> params = new ArrayList<>();
             System.setProperty("java.class.path", "dict.jar");
             params.add("--spring.profiles.active=release");
+            params.add("--file.encoding=GBK");
 
             if (null != succeed) {
                 if (succeed) {

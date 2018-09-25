@@ -59,5 +59,4 @@ public interface DictMap {
         }
         return Constant.YAML.loadAs(yaml, Map.class);
     }
-    
 }
