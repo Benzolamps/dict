@@ -1,6 +1,5 @@
 package com.benzolamps.dict.util;
 
-import com.benzolamps.dict.exception.DictException;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -12,8 +11,8 @@ import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.util.*;
 
-import static javax.tools.JavaFileObject.Kind;
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
+import static javax.tools.JavaFileObject.Kind;
 
 /**
  * 动态编译并加载目录下的全部.java文件
@@ -95,9 +94,7 @@ public class DynamicClass {
             List<String> options = Arrays.asList("-Xlint:unchecked", "-classpath", System.getProperty("java.class.path"));
             JavaCompiler.CompilationTask task = compiler.getTask(null, produceJavaFileManager(manager), null, options, null, iterable);
             Boolean result = task.call();
-            if (result == null || !result) {
-                throw new DictException("编译失败");
-            }
+            Assert.isTrue(result != null && result, "编译失败");
             classBytes.keySet().forEach((DictLambda.Action1<String>) key -> dynamicClassSet.add(classLoader.loadClass(key)));
             DictSpring.setClassLoader(classLoader);
         }
@@ -135,10 +132,7 @@ public class DynamicClass {
      */
     public DynamicClass(String classPath) {
         Assert.notNull(classPath, "class path不能为null");
-        if (compiler == null) {
-            throw new DictException("需要tools.jar");
-        }
-
+        Assert.notNull(compiler, "需要tools.jar");
         classLoader = new URLClassLoader(new URL[0], DictSpring.getClassLoader()) {
             @Override
             protected Class<?> findClass(String name) throws ClassNotFoundException {
