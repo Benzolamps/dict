@@ -17,5 +17,15 @@ public interface WordClazzService extends BaseService<WordClazz> {
      */
     WordClazz findByName(String name);
 
+    /**
+     * 通过名称或id查找词性
+     * @param name 名称或id
+     * @return 词性对象
+     */
     WordClazz findByIdOrName(String name);
+
+    /**
+     * 删除无用的词性
+     */
+    void clearUseless();
 }

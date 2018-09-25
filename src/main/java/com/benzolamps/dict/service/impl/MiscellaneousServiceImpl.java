@@ -2,6 +2,7 @@ package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.dao.base.MiscellaneousDao;
 import com.benzolamps.dict.service.base.MiscellaneousService;
+import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictFile;
 import com.benzolamps.dict.util.DictLambda;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +25,9 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     @Value("file:#{dictProperties.jdbcFile}")
     private org.springframework.core.io.Resource resource;
 
+    @Resource
+    private WordClazzService wordClazzService;
+
     @Override
     public String getSQLiteVersion() {
         return miscellaneousDao.getSQLiteVersion();
@@ -36,6 +40,7 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
 
     @Override
     public void clean() {
+        wordClazzService.clearUseless();
         miscellaneousDao.vacuum();
     }
 }

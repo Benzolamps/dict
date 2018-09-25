@@ -1,36 +1,16 @@
 package com.benzolamps.dict.dao.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaQuery;
-
+import com.benzolamps.dict.bean.BaseEntity;
+import com.benzolamps.dict.component.Alias;
+import com.benzolamps.dict.dao.base.BaseDao;
+import com.benzolamps.dict.dao.core.*;
+import com.benzolamps.dict.util.*;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
-import com.benzolamps.dict.bean.BaseEntity;
-import com.benzolamps.dict.dao.base.BaseDao;
-import com.benzolamps.dict.dao.core.DictJpa;
-import com.benzolamps.dict.dao.core.DictQuery;
-import com.benzolamps.dict.dao.core.Filter;
-import com.benzolamps.dict.dao.core.GeneratedDictQuery;
-import com.benzolamps.dict.dao.core.Order;
-import com.benzolamps.dict.dao.core.Page;
-import com.benzolamps.dict.dao.core.Pageable;
-import com.benzolamps.dict.util.Constant;
-import com.benzolamps.dict.util.DictArray;
-import com.benzolamps.dict.util.DictBean;
-import com.benzolamps.dict.util.DictMath;
-import com.benzolamps.dict.util.DictProperty;
-import com.benzolamps.dict.util.DictString;
+import javax.persistence.*;
+import javax.persistence.criteria.CriteriaQuery;
+import java.util.*;
 
 /**
  * Dao基类接口实现类
@@ -239,15 +219,24 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	public void remove(Collection<T> entities) {
         Assert.notEmpty(entities, "entities不能为null或空");
         Assert.isTrue(entities.stream().noneMatch(BaseEntity::isNew), "entity不能是新建对象");
-        String className = entityClass.getName();
-        String alias = DictString.toCamel(entityClass.getSimpleName());
-        String jpql = "delete from " + className + " as " + alias + " where " + alias + " in ?0";
         entities = new ArrayList<>(entities);
         for (int i = 0; i < entities.size(); i += 100) {
             List<T> sublist = ((List<T>) entities).subList(i, DictMath.limit(i + 100, i, entities.size()));
-            DictJpa.executeJpqlQuery(entityManager, jpql, null, sublist);
+            this.remove(Filter.in(null, sublist));
         }
 	}
+
+    @Override
+    public void remove(Filter filter) {
+        String className = entityClass.getName();
+        String alias = entityClass.isAnnotationPresent(Alias.class) ?
+                entityClass.getAnnotation(Alias.class).value() :
+                DictString.toCamel(entityClass.getSimpleName());
+        filter.build(alias);
+        StringJoiner jpql = new StringJoiner(" ");
+        jpql.add("delete from").add(className).add("as").add(alias).add("where").add(filter.getSnippet());
+        DictJpa.executeJpqlQuery(entityManager, jpql.toString(), null, filter.getParameters().toArray());
+    }
 
 	@Override
 	public T detach(T entity) {

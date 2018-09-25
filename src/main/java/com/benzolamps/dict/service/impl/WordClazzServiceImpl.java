@@ -47,4 +47,9 @@ public class WordClazzServiceImpl extends BaseServiceImpl<WordClazz> implements 
             return findByName(name);
         }
     }
+
+    @Transactional
+    public void clearUseless() {
+        this.remove(Filter.isEmpty("words"));
+    }
 }

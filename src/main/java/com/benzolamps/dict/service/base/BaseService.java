@@ -124,4 +124,11 @@ public interface BaseService<T extends BaseEntity> {
      * @param entities 实体对象
      */
     void remove(Collection<T> entities);
+
+    /**
+     * 根据条件删除实体对象
+     * @param filter 条件
+     */
+    void remove(Filter filter);
+
 }

@@ -1,6 +1,8 @@
 package com.benzolamps.dict.dao.core;
 
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -87,6 +89,13 @@ public class Filter extends SnippetResolver {
             .addSnippet(value);
     }
 
+    private static Filter binarySelf(String operator, Object value) {
+        return (Filter) new Filter()
+            .addSnippet(new AliasSnippet())
+            .addSnippet(new OperatorSnippet(operator))
+            .addSnippet(value);
+    }
+
     private static Filter binaryIgnoreCase(String field, String operator, Object value) {
         return (Filter) new Filter()
             .addSnippet(new OperatorSnippet("lower("))
@@ -103,8 +112,9 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public static Filter eq(String field, Object value) {
-        Assert.hasLength(field, "field不能为null或空");
+        //Assert.hasLength(field, "field不能为null或空");
         Assert.notNull(value, "value不能为null");
+        if (StringUtils.isEmpty(field)) return binarySelf("=", value);
         return binary(field, "=", value);
     }
 
@@ -127,8 +137,9 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public static Filter neq(String field, Object value) {
-        Assert.hasLength(field, "field不能为null或空");
+        // Assert.hasLength(field, "field不能为null或空");
         Assert.notNull(value, "value不能为null");
+        if (StringUtils.isEmpty(field)) return binarySelf("<>", value);
         return binary(field, "<>", value);
     }
 
@@ -315,8 +326,9 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public static Filter in(String field, Collection<?> value) {
-        Assert.hasLength(field, "field不能为null或空");
-        if (value == null) return new Filter().not();
+        // Assert.hasLength(field, "field不能为null或空");
+        if (CollectionUtils.isEmpty(value)) return new Filter().not();
+        if (StringUtils.isEmpty(field)) return binarySelf("in", value);
         return binary(field, "in", value);
     }
 
@@ -344,8 +356,9 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public static Filter notIn(String field, Collection<?> value) {
-        Assert.hasLength(field, "field不能为null或空");
-        if (value == null) return new Filter();
+        // Assert.hasLength(field, "field不能为null或空");
+        if (CollectionUtils.isEmpty(value)) return new Filter();
+        if (StringUtils.isEmpty(field)) return binarySelf("not in", value);
         return binary(field, "not in", value);
     }
 
@@ -393,7 +406,7 @@ public class Filter extends SnippetResolver {
         if (value == null) return new Filter();
         return (Filter) new Filter()
             .addSnippet(value)
-            .addSnippet(new OperatorSnippet("nor in elements("))
+            .addSnippet(new OperatorSnippet("not in elements("))
             .addSnippet(new FieldSnippet(field))
             .addSnippet(new OperatorSnippet(")"));
     }
@@ -444,8 +457,10 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public static Filter isNull(String field) {
-        Assert.hasLength(field, "field不能为null或空");
-        return (Filter) new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is null"));
+        // Assert.hasLength(field, "field不能为null或空");
+        return (Filter) new Filter()
+            .addSnippet(StringUtils.isEmpty(field) ? new AliasSnippet() : new FieldSnippet(field))
+            .addSnippet(new OperatorSnippet("is null"));
     }
 
     /**
@@ -454,7 +469,29 @@ public class Filter extends SnippetResolver {
      * @return Filter
      */
     public static Filter isNotNull(String field) {
+        // Assert.hasLength(field, "field不能为null或空");
+        return (Filter) new Filter()
+            .addSnippet(StringUtils.isEmpty(field) ? new AliasSnippet() : new FieldSnippet(field))
+            .addSnippet(new OperatorSnippet("is not null"));
+    }
+
+    /**
+     * is empty
+     * @param field 字段
+     * @return Filter
+     */
+    public static Filter isEmpty(String field) {
         Assert.hasLength(field, "field不能为null或空");
-        return (Filter) new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is not null"));
+        return (Filter) new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is empty"));
+    }
+
+    /**
+     * is not empty
+     * @param field 字段
+     * @return Filter
+     */
+    public static Filter isNotEmpty(String field) {
+        Assert.hasLength(field, "field不能为null或空");
+        return (Filter) new Filter().addSnippet(new FieldSnippet(field)).addSnippet(new OperatorSnippet("is not empty"));
     }
 }

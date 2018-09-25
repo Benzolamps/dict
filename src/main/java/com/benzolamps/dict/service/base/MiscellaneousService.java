@@ -22,7 +22,7 @@ public interface MiscellaneousService {
     String databaseFileSize();
 
     /**
-     * vacuum
+     * clean
      */
     void clean();
 }

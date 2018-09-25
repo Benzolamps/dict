@@ -178,6 +178,12 @@ public interface BaseDao<T extends BaseEntity> {
 	void remove(Collection<T> entities);
 
 	/**
+	 * 根据条件删除实体对象
+	 * @param filter 条件
+	 */
+	void remove(Filter filter);
+
+	/**
 	 * 将实体对象转换为游离状态
 	 * @param entity 实体对象
 	 * @return 转换后的实体对象

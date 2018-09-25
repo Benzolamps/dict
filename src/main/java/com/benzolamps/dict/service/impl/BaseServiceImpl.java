@@ -130,6 +130,12 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
         baseDao.remove(entities);
     }
 
+    @Override
+    public void remove(Filter filter) {
+        handlerFilter(filter);
+        baseDao.remove(filter);
+    }
+
     /**
      * 处理筛选
      * @param filter 筛选

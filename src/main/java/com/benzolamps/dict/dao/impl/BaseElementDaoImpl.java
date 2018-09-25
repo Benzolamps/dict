@@ -2,7 +2,11 @@ package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.bean.Library;
+import com.benzolamps.dict.component.Alias;
 import com.benzolamps.dict.dao.base.BaseElementDao;
+import com.benzolamps.dict.dao.core.DictJpa;
+import com.benzolamps.dict.dao.core.Filter;
+import com.benzolamps.dict.util.DictString;
 import org.springframework.core.ResolvableType;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -12,6 +16,7 @@ import javax.persistence.criteria.Root;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.StringJoiner;
 
 /**
  * 单词或短语类的基类Dao接口实现类
@@ -24,7 +29,6 @@ public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> im
 
     /** 实体类类型 */
     private Class<T> entityClass;
-
 
     /** 构造方法 */
     public BaseElementDaoImpl() {

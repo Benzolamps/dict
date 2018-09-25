@@ -1,5 +1,6 @@
 package com.benzolamps.dict.dao.core;
 
+import com.benzolamps.dict.component.Alias;
 import com.benzolamps.dict.util.AddOnlyList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.util.Assert;
@@ -56,6 +57,10 @@ public class SnippetResolver implements Serializable {
         }
     }
 
+    /** 别名代码片段 */
+    protected static class AliasSnippet {
+    }
+
     /* 参数 */
     @JsonIgnore
     private List<Object> parameters;
@@ -80,6 +85,8 @@ public class SnippetResolver implements Serializable {
                 this.snippet.add(snippet.toString());
             } else if (snippet instanceof FieldSnippet) {
                 this.snippet.add(alias + "." + snippet.toString());
+            } else if (snippet instanceof AliasSnippet) {
+                this.snippet.add(alias);
             } else {
                 this.snippet.add("?" + parameters.size());
                 parameters.add(snippet);
