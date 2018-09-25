@@ -18,6 +18,9 @@
       <script type="text/javascript" src="${base_url}/res/js/common.js"></script>
     </head>
     <body>
+      <script>
+        parent.dict.updateSocket.initCallback();
+      </script>
       <#include '/${content_path}.ftl'/>
       <script type="text/javascript">
         $(function () {
@@ -63,7 +66,6 @@
           document.title = title;
           parent.document.title = title + ' - ${system_title} - ${system_version}';
         });
-        parent.dict.updateSocket.initCallback();
       </script>
     </body>
   </html>

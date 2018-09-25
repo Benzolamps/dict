@@ -68,7 +68,7 @@ dict.updateSocket = new function () {
             var total = data.total;
             var totalSize = data.totalSize;
             var deltaTime = (data.deltaTime * 0.001).toFixed(3);
-            layer.alert(dict.format('下载完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒', total, totalSize, deltaTime), {icon: 1});
+            layer.alert(dict.format('下载完成！<br>共下载 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒', total, totalSize, deltaTime), {icon: 1});
         }
 
         dict.updateSocket.onInstalled = function (data) {

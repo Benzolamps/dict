@@ -53,7 +53,7 @@
       var total = data.total;
       var totalSize = data.totalSize;
       var deltaTime = (data.deltaTime * 0.001).toFixed(3);
-      updateContent.html(dict.format('下载完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
+      updateContent.html(dict.format('下载完成！<br>共下载 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
     };
 
     this.onInstalled = function (data) {
@@ -62,7 +62,7 @@
       var total = data.total;
       var totalSize = data.totalSize;
       var deltaTime = (data.deltaTime * 0.001).toFixed(3);
-      updateContent.html(dict.format('安装完成！<br>共更新 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
+      updateContent.html(dict.format('安装完成！<br>共安装 {0} 个文件！<br>总共 {1} ！<br>用时 {2} 秒！', total, totalSize, deltaTime));
     };
 
     this.onFailed = function () {

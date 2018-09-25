@@ -103,12 +103,11 @@ public class VersionServiceImpl implements VersionService {
                 versionInfo = Constant.YAML.loadAs(resource.getInputStream(), List.class);
 
                 /* 判断是否有新版本 */
-                if (versionInfo.stream().anyMatch(str ->
-                    (newVersionName = getVersion(str)) != null &&
-                    newVersionName.compareTo(dictProperties.getVersion()) > 0)) {
-                    if (status != Status.FAILED && status != Status.HAS_NEW) status = Status.HAS_NEW;
-                } else {
-                    newVersionName = dictProperties.getVersion();
+                newVersionName = getVersion(versionInfo.stream().max(String::compareToIgnoreCase).get());
+                if (newVersionName.compareTo(dictProperties.getVersion()) > 0) {
+                    if (status != Status.FAILED && status != Status.HAS_NEW) {
+                        status = Status.HAS_NEW;
+                    }
                 }
             }
         } catch (Throwable e) {
