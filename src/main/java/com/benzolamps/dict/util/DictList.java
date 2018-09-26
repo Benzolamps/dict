@@ -38,17 +38,4 @@ public interface DictList {
 
         return list;
     }
-
-    /**
-     * 通过YAML字符串构建一个List
-     * @param yaml YAML
-     * @return list
-     */
-    @SuppressWarnings("rawtypes")
-    static List yamlList(String yaml) {
-        if (StringUtils.isEmpty(yaml)) {
-            return Constant.EMPTY_LIST;
-        }
-        return Constant.YAML.loadAs(yaml, List.class);
-    }
 }

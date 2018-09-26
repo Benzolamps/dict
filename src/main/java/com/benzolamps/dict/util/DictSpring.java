@@ -2,10 +2,18 @@ package com.benzolamps.dict.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.expression.BeanFactoryResolver;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.ParserContext;
+import org.springframework.expression.spel.standard.SpelExpression;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -23,6 +31,7 @@ import static com.benzolamps.dict.util.Constant.EMPTY_PROPERTIES;
  * @version 2.1.1
  * @datetime 2018-8-23 19:34:21
  */
+@Slf4j
 @SuppressWarnings({"unchecked", "unused"})
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public abstract class DictSpring {
@@ -30,6 +39,8 @@ public abstract class DictSpring {
     private static ConfigurableApplicationContext applicationContext;
 
     private static ClassLoader classLoader;
+
+    private static ExpressionParser expressionParser;
 
     /**
      * 设置applicationContext
@@ -39,6 +50,17 @@ public abstract class DictSpring {
         Assert.notNull(applicationContext, "application context不能为null");
         DictSpring.applicationContext = applicationContext;
         DictSpring.classLoader = applicationContext.getClassLoader();
+        StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
+        evaluationContext.setBeanResolver(new BeanFactoryResolver(DictSpring.applicationContext.getBeanFactory()));
+        expressionParser = new SpelExpressionParser() {
+            @Override
+            public SpelExpression doParseExpression(String expressionString, ParserContext context) {
+                logger.info("spel: " + expressionString);
+                SpelExpression expression = super.doParseExpression(expressionString, context);
+                expression.setEvaluationContext(evaluationContext);
+                return expression;
+            }
+        };
     }
 
     /**
@@ -165,5 +187,23 @@ public abstract class DictSpring {
      */
     public static void setClassLoader(ClassLoader classLoader) {
         DictSpring.classLoader = classLoader;
+    }
+    
+    public static <T> T spel(
+            // language=SpEL
+            String expression,
+            Class<T> tClass) {
+        if (StringUtils.isEmpty(expression)) {
+            return DictObject.safeCast(expression, tClass);
+        } else {
+            expression = applicationContext.getEnvironment().resolvePlaceholders(expression);
+            return expressionParser.parseExpression(expression).getValue(tClass);
+        }
+    }
+
+    public static <T> T spel(
+        // language=SpEL
+        String expression) {
+        return (T) spel(expression, Object.class);
     }
 }

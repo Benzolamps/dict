@@ -1,7 +1,5 @@
 package com.benzolamps.dict.util;
 
-import org.springframework.util.StringUtils;
-
 import java.util.*;
 
 /**
@@ -43,20 +41,16 @@ public interface DictMap {
             }
             list.remove(list.size() - 1);
         }
-
         return properties;
     }
 
     /**
-     * 通过YAML字符串构建一个Map
-     * @param yaml YAML
+     * 通过字符串构建一个Map
+     * @param str str
      * @return map
      */
     @SuppressWarnings("rawtypes")
-    static Map yamlMap(String yaml) {
-        if (StringUtils.isEmpty(yaml)) {
-            return Constant.EMPTY_MAP;
-        }
-        return Constant.YAML.loadAs(yaml, Map.class);
+    static Map parse(String str) {
+        return DictSpring.spel(str, Map.class);
     }
 }
