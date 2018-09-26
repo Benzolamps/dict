@@ -7,12 +7,10 @@ import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.controller.vo.PhraseVo;
+import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
-import com.benzolamps.dict.service.base.DocSolutionService;
-import com.benzolamps.dict.service.base.LibraryService;
-import com.benzolamps.dict.service.base.PhraseService;
-import com.benzolamps.dict.service.base.ShuffleSolutionService;
+import com.benzolamps.dict.service.base.*;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,6 +44,9 @@ public class PhraseController extends BaseController {
 
     @Resource
     private DocSolutionService docSolutionService;
+
+    @Resource
+    private PhraseGroupService phraseGroupService;
 
     /**
      * 列出所有短语
@@ -193,5 +195,18 @@ public class PhraseController extends BaseController {
     protected boolean prototypeExists(String prototype) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return !phraseService.prototypeExists(prototype);
+    }
+
+    /**
+     * 添加到分组
+     * @param phraseIds 短语id
+     * @return ModelAndView
+     */
+    @PostMapping(value = "add_to.html")
+    protected ModelAndView addTo(@RequestParam("phraseId") Integer... phraseIds) {
+        ModelAndView mv = new ModelAndView("view/phrase/add_to");
+        mv.addObject("groups", phraseGroupService.findAll());
+        mv.addObject("phrases", phraseService.findList(Filter.in("id", Arrays.asList(phraseIds))));
+        return mv;
     }
 }

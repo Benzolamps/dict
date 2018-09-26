@@ -19,10 +19,13 @@ import java.util.function.Supplier;
 @SuppressWarnings({"unchecked", "unused", "rawtypes"})
 public interface Constant {
 
+    /** 日期格式 */
     String DATE_FORMAT = "yyyy-MM-dd";
 
+    /** 时间格式 */
     String TIME_FORMAT = "HH:mm:ss";
 
+    /** SimpleDateFormat */
     DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT + " " + TIME_FORMAT);
 
     /** 标识符正则表达式 */
@@ -58,8 +61,7 @@ public interface Constant {
     Class[] EMPTY_CLASS_ARRAY = new Class[0];
 
     /** 文本文件格式 */
-    String[] TEXT_FILES =  {".txt", ".java", ".html", ".css", ".js", ".yml", ".xml", ".json", "less", "svg", "scss", ".ftl"};
-
+    String[] TEXT_FILES =  {".txt", ".java", ".html", ".css", ".js", ".yml", ".xml", ".json", ".less", ".svg", ".scss", ".ftl"};
 
     /** 空的List */
     List EMPTY_LIST = Collections.EMPTY_LIST;

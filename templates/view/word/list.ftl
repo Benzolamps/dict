@@ -142,6 +142,17 @@
     {
       'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出全部单词',
       'handler': file_export(true)
+    },
+    {
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
+      'handler': '',
+      'needSelected': true
+    }
+  ]
+  toolbar=[
+    {
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
+      'handler': ''
     }
   ]
   page_enabled=true

@@ -1,6 +1,8 @@
 package com.benzolamps.dict.service.base;
 
+import com.benzolamps.dict.bean.Clazz;
 import com.benzolamps.dict.bean.Group;
+import com.benzolamps.dict.bean.Student;
 
 /**
  * 单词短语分组Service接口
@@ -17,4 +19,16 @@ public interface GroupService extends BaseService<Group> {
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     boolean nameExists(String name);
+
+    /**
+     * 添加学生
+     * @param students 学生
+     */
+    void addStudents(Group group, Student... students);
+
+    /**
+     * 添加班级
+     * @param clazzes 班级
+     */
+    void addClazzes(Group group, Clazz... clazzes);
 }

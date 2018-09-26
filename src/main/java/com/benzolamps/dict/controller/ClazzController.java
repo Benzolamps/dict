@@ -5,13 +5,17 @@ import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
+import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.ClazzService;
+import com.benzolamps.dict.service.base.PhraseGroupService;
+import com.benzolamps.dict.service.base.WordGroupService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 /**
  * 班级Controller
@@ -25,6 +29,12 @@ public class ClazzController extends BaseController {
 
     @Resource
     private ClazzService clazzService;
+
+    @Resource
+    private WordGroupService wordGroupService;
+
+    @Resource
+    private PhraseGroupService phraseGroupService;
 
     /**
      * 列出所有班级
@@ -95,5 +105,31 @@ public class ClazzController extends BaseController {
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
         clazzService.remove(ids);
         return SUCCESS_VO;
+    }
+
+    /**
+     * 添加到单词分组
+     * @param clazzIds 班级id
+     * @return ModelAndView
+     */
+    @PostMapping(value = "add_to_word_group.html")
+    protected ModelAndView addToWordGroup(@RequestParam("clazzId") Integer... clazzIds) {
+        ModelAndView mv = new ModelAndView("view/clazz/add_to_word_group");
+        mv.addObject("groups", wordGroupService.findAll());
+        mv.addObject("clazzes", clazzService.findList(Filter.in("id", Arrays.asList(clazzIds))));
+        return mv;
+    }
+
+    /**
+     * 添加到短语分组
+     * @param clazzIds 班级id
+     * @return ModelAndView
+     */
+    @PostMapping(value = "add_to_phrase_group.html")
+    protected ModelAndView addToPhraseGroup(@RequestParam("clazzId") Integer... clazzIds) {
+        ModelAndView mv = new ModelAndView("view/clazz/add_to_phrase_group");
+        mv.addObject("groups", phraseGroupService.findAll());
+        mv.addObject("clazzes", clazzService.findList(Filter.in("id", Arrays.asList(clazzIds))));
+        return mv;
     }
 }

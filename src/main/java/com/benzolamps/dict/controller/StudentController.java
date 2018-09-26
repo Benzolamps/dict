@@ -6,14 +6,15 @@ import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.controller.vo.StudentVo;
+import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
-import com.benzolamps.dict.service.base.ClazzService;
-import com.benzolamps.dict.service.base.StudentService;
+import com.benzolamps.dict.service.base.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 /**
  * 学生Controller
@@ -30,6 +31,12 @@ public class StudentController extends BaseController {
 
     @Resource
     private ClazzService clazzService;
+
+    @Resource
+    private WordGroupService wordGroupService;
+
+    @Resource
+    private PhraseGroupService phraseGroupService;
 
     /**
      * 列出所有学生
@@ -122,5 +129,31 @@ public class StudentController extends BaseController {
     @ResponseBody
     protected boolean numberNotExists(Integer number) {
         return !studentService.numberExists(number);
+    }
+
+    /**
+     * 添加到单词分组
+     * @param studentIds 学生id
+     * @return ModelAndView
+     */
+    @PostMapping(value = "add_to_word_group.html")
+    protected ModelAndView addToWordGroup(@RequestParam("studentId") Integer... studentIds) {
+        ModelAndView mv = new ModelAndView("view/student/add_to_word_group");
+        mv.addObject("groups", wordGroupService.findAll());
+        mv.addObject("students", studentService.findList(Filter.in("id", Arrays.asList(studentIds))));
+        return mv;
+    }
+
+    /**
+     * 添加到短语分组
+     * @param studentIds 学生id
+     * @return ModelAndView
+     */
+    @PostMapping(value = "add_to_phrase_group.html")
+    protected ModelAndView addToPhraseGroup(@RequestParam("studentId") Integer... studentIds) {
+        ModelAndView mv = new ModelAndView("view/student/add_to_phrase_group");
+        mv.addObject("groups", phraseGroupService.findAll());
+        mv.addObject("students", studentService.findList(Filter.in("id", Arrays.asList(studentIds))));
+        return mv;
     }
 }

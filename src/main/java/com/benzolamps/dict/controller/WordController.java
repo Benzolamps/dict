@@ -8,6 +8,7 @@ import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.controller.vo.WordVo;
+import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,6 +39,9 @@ public class WordController extends BaseController {
 
     @Resource
     private WordClazzService wordClazzService;
+
+    @Resource
+    private WordGroupService wordGroupService;
 
     @Resource
     private LibraryService libraryService;
@@ -202,5 +207,18 @@ public class WordController extends BaseController {
     protected boolean prototypeNotExists(String prototype) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return !wordService.prototypeExists(prototype);
+    }
+
+    /**
+     * 添加到分组
+     * @param wordIds 单词id
+     * @return ModelAndView
+     */
+    @PostMapping(value = "add_to.html")
+    protected ModelAndView addTo(@RequestParam("wordId") Integer... wordIds) {
+        ModelAndView mv = new ModelAndView("view/word/add_to");
+        mv.addObject("groups", wordGroupService.findAll());
+        mv.addObject("words", wordService.findList(Filter.in("id", Arrays.asList(wordIds))));
+        return mv;
     }
 }

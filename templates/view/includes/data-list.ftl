@@ -31,11 +31,11 @@
       <#-- 头部工具栏 -->
       <div class="layui-row layui-col-space10" style="margin: auto 0">
         <div class="head-toolbar">
-          <button class="layui-btn layui-btn-normal layui-btn-sm" lay-event="refresh" type="button">
+          <button style="margin-bottom: 5px" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="refresh" type="button">
             <i class="fa fa-refresh" style="font-size: 20px;"></i> &nbsp; 刷新
           </button>
           <#list head_toolbar as tool>
-            <button
+            <button style="margin-bottom: 5px"
               class="layui-btn layui-btn-primary <#if tool.needSelected?? && tool.needSelected>layui-btn-disabled </#if>layui-btn-sm"
               lay-event="head-toolbar-${tool_index}"
               <#if tool.needSelected?? && tool.needSelected>disabled</#if>
@@ -44,10 +44,10 @@
               ${tool.html}
             </button>
           </#list>
-          <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="add" type="button">
+          <button style="margin-bottom: 5px" class="layui-btn layui-btn-warm layui-btn-sm" lay-event="add" type="button">
             <i class="fa fa-plus" style="font-size: 20px;"></i> &nbsp; 添加
           </button>
-          <button class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-sm" lay-event="delMany" type="button" disabled>
+          <button style="margin-bottom: 5px" class="layui-btn layui-btn-danger layui-btn-disabled layui-btn-sm" lay-event="delMany" type="button" disabled>
             <i class="fa fa-trash-o" style="font-size: 20px;"></i> &nbsp; 删除
           </button>
         </div>
