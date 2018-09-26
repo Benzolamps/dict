@@ -1,6 +1,5 @@
 package com.benzolamps.dict.cfg;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Component;
  * @version 2.1.3
  * @datetime 2018-9-17 15:58:10
  */
-@Slf4j
 @Component
 public class RuntimeBeanConfig {
 
