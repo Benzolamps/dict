@@ -7,27 +7,27 @@
 </blockquote>
 
 <script type="text/javascript">
-    $('#clean').click(function () {
-      parent.layer.confirm('是否要清理缓存？', {icon: 3, title: '提示'}, function (index) {
-        parent.layer.close(index);
-        dict.loadText({
-          url: 'clean.json',
-          type: 'get',
-          success: function (result, status, request) {
-            parent.layer.alert('操作成功！', {
-              icon: 1,
-              end: function () {
-                parent.$('iframe')[0].contentWindow.dict.reload(true);
-              }
-            });
-          },
-          error: function (result, status, request) {
-            parent.layer.alert(result.message, {
-              icon: 2,
-              title: result.status
-            });
-          }
-        });
+  $('#clean').click(function () {
+    parent.layer.confirm('是否要清理缓存？', {icon: 3, title: '提示'}, function (index) {
+      parent.layer.close(index);
+      dict.loadText({
+        url: 'clean.json',
+        type: 'get',
+        success: function (result, status, request) {
+          parent.layer.alert('操作成功！', {
+            icon: 1,
+            end: function () {
+              parent.$('iframe')[0].contentWindow.dict.reload(true);
+            }
+          });
+        },
+        error: function (result, status, request) {
+          parent.layer.alert(result.message, {
+            icon: 2,
+            title: result.status
+          });
+        }
       });
     });
+  });
 </script>

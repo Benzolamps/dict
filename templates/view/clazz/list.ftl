@@ -3,8 +3,6 @@
   id='clazzes'
   name='班级'
   fields=[
-    {'type': 'numbers'},
-    {'type': 'checkbox'},
     {'field': 'name', 'title': '名称', 'sort': true},
     {'field': 'description', 'title': '描述', 'sort': true},
     {'field': 'students', 'title': '学生数', 'sort': true}
@@ -16,15 +14,7 @@
   page_enabled=true
   delete_confirm='删除班级将会删除其中的所有学生，确定要继续吗？'
   search=[
-    {
-      'name': 'name',
-      'display': '名称',
-      'type': 'string'
-    },
-    {
-      'name': 'description',
-      'display': '描述',
-      'type': 'string'
-    }
+    {'name': 'name', 'display': '名称', 'type': 'string'},
+    {'name': 'description', 'display': '描述', 'type': 'string'}
   ]
 />

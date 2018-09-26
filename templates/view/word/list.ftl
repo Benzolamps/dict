@@ -120,8 +120,6 @@
   id='words'
   name='单词'
   fields=[
-    {'type': 'numbers'},
-    {'type': 'checkbox'},
     {'field': 'prototype', 'title': '单词', 'sort': true, 'minWidth': 120},
     {'field': 'britishPronunciation', 'title': '英式发音', 'sort': true, 'minWidth': 120},
     {'field': 'americanPronunciation', 'title': '美式发音', 'sort': true, 'minWidth': 120},

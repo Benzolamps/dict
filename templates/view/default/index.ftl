@@ -1,9 +1,3 @@
-<#--
-  -- index界面
-  -- author: Benzolamps
-  -- version: 2.1.1
-  -- datetime: 2018-7-11 19:25:14
-  -->
 <#-- @ftlvariable name="nav_column_index" type="java.lang.Integer" -->
 <#-- @ftlvariable name="nav_child_index" type="java.lang.Integer" -->
 <#-- @ftlvariable name="title" type="java.lang.String" -->

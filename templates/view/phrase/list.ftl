@@ -108,8 +108,6 @@
   id='phrases'
   name='短语'
   fields=[
-    {'type': 'numbers'},
-    {'type': 'checkbox'},
     {'field': 'prototype', 'title': '短语', 'sort': true, 'minWidth': 150},
     {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150}
   ]

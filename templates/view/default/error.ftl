@@ -1,10 +1,3 @@
-<#--
-  -- 错误界面
-  -- author: Benzolamps
-  -- version: 2.1.1
-  -- datetime: 2018-7-11 19:20:43
-  -->
-
 <#-- @ftlvariable name="timestamp" type="java.util.Date" -->
 <#-- @ftlvariable name="status" type="java.lang.Integer" -->
 <#-- @ftlvariable name="path" type="java.lang.String" -->

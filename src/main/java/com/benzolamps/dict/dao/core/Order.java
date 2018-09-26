@@ -108,9 +108,8 @@ public class Order extends SnippetResolver {
 
         @Override
         protected void applyField(String field) {
-            addSnippet(new OperatorSnippet("size("));
-            super.applyField(field);
-            addSnippet(new OperatorSnippet(")"));
+            Assert.hasLength("field", "field不能为null或空");
+            super.applyField(field + ".size");
         }
     }
 

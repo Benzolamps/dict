@@ -103,8 +103,8 @@ public class VersionServiceImpl implements VersionService {
                 versionInfo = Constant.YAML.loadAs(resource.getInputStream(), List.class);
 
                 /* 判断是否有新版本 */
-                newVersionName = getVersion(versionInfo.stream().max(String::compareToIgnoreCase).get());
-                if (newVersionName.compareTo(dictProperties.getVersion()) > 0) {
+                newVersionName = getVersion(versionInfo.stream().max(String::compareToIgnoreCase).orElse(null));
+                if (dictProperties.getVersion().compareTo(newVersionName) < 0) {
                     if (status != Status.FAILED && status != Status.HAS_NEW) {
                         status = Status.HAS_NEW;
                     }
@@ -176,7 +176,7 @@ public class VersionServiceImpl implements VersionService {
                 String version = getVersion(fileName);
 
                 /* 判断是不是新版本 */
-                if (version != null && version.compareTo(dictProperties.getVersion()) > 0) {
+                if (version != null && dictProperties.getVersion().compareTo(version) < 0) {
 
                     /* 生成本地路径 */
                     String url = baseUrl + "/" + fileName;

@@ -112,6 +112,7 @@
     <#assign width += 95 * toolbar?size/>
 
     fields.push({field: 'id', title: '操作', align: 'left', fixed: 'right', toolbar: '#${id}-tools', width: ${width}});
+    fields.unshift({type: 'numbers'}, {type: 'checkbox'});
 
     <#-- TODO: 表格渲染 -->
     table.render({

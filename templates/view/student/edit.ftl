@@ -16,7 +16,7 @@
           ],
           'display': '${field.display}',
           'description': '${field.description}',
-          'notEmpty': '${field.notEmpty}'
+          'notEmpty': '${field.notEmpty?c}'
         }
       <#else>
         <@json_dump obj=field/>
