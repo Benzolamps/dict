@@ -284,12 +284,12 @@ public class DictPropertyInfoVo implements Serializable {
             }
             if (null != collection) {
                 collection = collection.stream().map(item ->
-                        DictMap.yamlMap(String.format("{id: %s, value: %s}", item, item))).collect(Collectors.toList());
+                    DictMap.yamlMap(String.format("{id: %s, value: %s}", item, item))).collect(Collectors.toList());
             }
         } else if ("enum".equals(getType())) {
             List<? extends Enum<?>> enumList = DictEnum.getEnumList((Class<? extends Enum<?>>) dictProperty.getType());
             collection = enumList.stream().map(item ->
-                    DictMap.yamlMap(String.format("{id: %s, value: %s}", item.ordinal(), item.toString()))).collect(Collectors.toList());
+                DictMap.yamlMap(String.format("{id: %s, value: %s}", item.ordinal(), item.toString()))).collect(Collectors.toList());
         }
         return (List<?>) collection;
     }
