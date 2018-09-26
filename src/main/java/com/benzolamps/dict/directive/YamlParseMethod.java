@@ -2,7 +2,6 @@ package com.benzolamps.dict.directive;
 
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictLambda;
-import com.benzolamps.dict.util.ResourceType;
 import freemarker.template.TemplateMethodModelEx;
 import lombok.Setter;
 import org.springframework.core.io.ClassPathResource;

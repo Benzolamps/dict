@@ -1,4 +1,4 @@
-package com.benzolamps.dict.util;
+package com.benzolamps.dict.component;
 
 import java.lang.annotation.*;
 

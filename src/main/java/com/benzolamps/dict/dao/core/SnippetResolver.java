@@ -1,12 +1,14 @@
 package com.benzolamps.dict.dao.core;
 
-import com.benzolamps.dict.component.Alias;
 import com.benzolamps.dict.util.AddOnlyList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.stream.Stream;
 
 /**
@@ -93,8 +95,6 @@ public class SnippetResolver implements Serializable {
             }
         }
     }
-
-
 
     /**
      * 获取代码片段

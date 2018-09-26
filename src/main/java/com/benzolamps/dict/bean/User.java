@@ -3,7 +3,7 @@ package com.benzolamps.dict.bean;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictReadonly;
 import com.benzolamps.dict.util.Constant;
-import com.benzolamps.dict.util.DictIgnore;
+import com.benzolamps.dict.component.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

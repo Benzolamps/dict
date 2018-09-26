@@ -41,7 +41,7 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
                 if (order.getField().equals("clazz")) {
                     order = new Order("clazz.name", order.getDirection());
                 } else if (order.getField().equals("progress")) {
-                    order = new Order.SizeOrder(null, Order.Direction.DESC) {
+                    order = new Order.SizeOrder(null, order.getDirection()) {
                         @Override
                         protected void applyField(String field) {
                            super.applyField("masteredWords");

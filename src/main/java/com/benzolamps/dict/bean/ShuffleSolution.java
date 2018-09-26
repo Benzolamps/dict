@@ -2,7 +2,7 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictTextArea;
-import com.benzolamps.dict.util.DictIgnore;
+import com.benzolamps.dict.component.DictIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

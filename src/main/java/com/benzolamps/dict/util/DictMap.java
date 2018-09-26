@@ -28,11 +28,11 @@ public interface DictMap {
         stack.push(new KeyValuePairs<>("", map));
         List<String> list = new ArrayList<>();
         while (!stack.empty()) {
-            KeyValuePairs<String, Map<?, ?>> submapPairs = stack.pop();
-            Map<?, ?> submap = submapPairs.getValue();
-            list.add(submapPairs.getKey());
-            for (Object key : submap.keySet()) {
-                Object value = submap.get(key);
+            KeyValuePairs<String, Map<?, ?>> subMapPairs = stack.pop();
+            Map<?, ?> subMap = subMapPairs.getValue();
+            list.add(subMapPairs.getKey());
+            for (Object key : subMap.keySet()) {
+                Object value = subMap.get(key);
                 if (value instanceof Map) {
                     stack.push(new KeyValuePairs<>(key.toString(), (Map<?, ?>) value));
                 } else {

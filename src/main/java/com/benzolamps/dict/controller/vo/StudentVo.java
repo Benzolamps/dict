@@ -5,7 +5,7 @@ import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
 import com.benzolamps.dict.service.base.ClazzService;
-import com.benzolamps.dict.util.DictIgnore;
+import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.util.DictObject;
 import com.benzolamps.dict.util.DictSpring;
 import com.fasterxml.jackson.annotation.JsonProperty;

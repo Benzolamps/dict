@@ -4,7 +4,7 @@ import com.benzolamps.dict.component.Alias;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
 import com.benzolamps.dict.component.Size;
-import com.benzolamps.dict.util.DictIgnore;
+import com.benzolamps.dict.component.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;

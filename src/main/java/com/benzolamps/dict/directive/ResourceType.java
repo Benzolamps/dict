@@ -1,4 +1,4 @@
-package com.benzolamps.dict.util;
+package com.benzolamps.dict.directive;
 
 /**
  * 资源类型
