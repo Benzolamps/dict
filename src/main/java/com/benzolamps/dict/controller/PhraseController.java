@@ -202,7 +202,8 @@ public class PhraseController extends BaseController {
      * @param phraseIds 短语id
      * @return ModelAndView
      */
-    @PostMapping(value = "add_to.html")
+    @WindowView
+    @GetMapping(value = "add_to.html")
     protected ModelAndView addTo(@RequestParam("phraseId") Integer... phraseIds) {
         ModelAndView mv = new ModelAndView("view/phrase/add_to");
         mv.addObject("groups", phraseGroupService.findAll());

@@ -50,6 +50,7 @@ dict.produceFormItem = function (property) {
                         .attr('name', property.name)
                         .attr('type', 'checkbox')
                         .attr('title', option.value)
+                        .attr('multiple-select', 1)
                         .attr('checked', property.value != null && property.value.indexOf(option.id) > -1)
                         .attr('lay-skin', 'primary')
                         .attr('option-id', option.id)

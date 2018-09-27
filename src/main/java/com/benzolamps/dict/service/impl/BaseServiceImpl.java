@@ -25,13 +25,8 @@ import java.util.stream.Collectors;
 @Transactional
 public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
-    private BaseDao<T> baseDao;
-
     @Autowired
-    @Transactional(readOnly = true)
-    protected void setBaseElementDao(BaseDao<T> baseElementDao) {
-        this.baseDao = baseElementDao;
-    }
+    private BaseDao<T> baseDao;
 
     @Override
     @Transactional(readOnly = true)

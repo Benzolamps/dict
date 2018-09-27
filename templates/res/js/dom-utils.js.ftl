@@ -69,19 +69,16 @@
     dict.serializeObject = function (selector) {
         var $form = $(selector);
         var object = {};
+        console.log($form.serializeArray());
         $.each($form.serializeArray(), function (index, item) {
             if (item.value == null || item.value == '') return;
             var value = object[item.name];
             if (value && $.isArray(value)) {
                 value.push(item.value);
             } else if (value && !$.isArray(value)) {
-                value = [value];
-                value.push(item.value);
             } else {
-                var $checkbox = $form.find('input[name="' + item.name + '"][type=checkbox]');
-                if ($checkbox.is('.dict-switch')) {
-                    object[item.name] = item.value;
-                } else if ($checkbox.is('.dict-checkbox')) {
+                var $component = $form.find('input[name="' + item.name + '"]');
+                if ($component.is('[multiple-select=1]')) {
                     object[item.name] = [item.value];
                 } else {
                     object[item.name] = item.value;

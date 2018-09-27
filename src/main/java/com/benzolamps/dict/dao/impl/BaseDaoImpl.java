@@ -8,6 +8,7 @@ import com.benzolamps.dict.util.*;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
 import java.util.*;
@@ -27,8 +28,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-	/** 构造方法 */
-	public BaseDaoImpl() {
+	protected BaseDaoImpl() {
 		ResolvableType resolvableType = ResolvableType.forClass(getClass());
 		entityClass = (Class<T>) resolvableType.getSuperType().getGeneric().resolve();
 	}

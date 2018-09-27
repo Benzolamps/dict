@@ -136,7 +136,8 @@ public class StudentController extends BaseController {
      * @param studentIds 学生id
      * @return ModelAndView
      */
-    @PostMapping(value = "add_to_word_group.html")
+    @WindowView
+    @GetMapping(value = "add_to_word_group.html")
     protected ModelAndView addToWordGroup(@RequestParam("studentId") Integer... studentIds) {
         ModelAndView mv = new ModelAndView("view/student/add_to_word_group");
         mv.addObject("groups", wordGroupService.findAll());
@@ -149,7 +150,8 @@ public class StudentController extends BaseController {
      * @param studentIds 学生id
      * @return ModelAndView
      */
-    @PostMapping(value = "add_to_phrase_group.html")
+    @WindowView
+    @GetMapping(value = "add_to_phrase_group.html")
     protected ModelAndView addToPhraseGroup(@RequestParam("studentId") Integer... studentIds) {
         ModelAndView mv = new ModelAndView("view/student/add_to_phrase_group");
         mv.addObject("groups", phraseGroupService.findAll());

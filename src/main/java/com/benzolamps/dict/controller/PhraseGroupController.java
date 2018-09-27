@@ -1,9 +1,6 @@
 package com.benzolamps.dict.controller;
 
-import com.benzolamps.dict.bean.Clazz;
-import com.benzolamps.dict.bean.Group;
-import com.benzolamps.dict.bean.Student;
-import com.benzolamps.dict.bean.Phrase;
+import com.benzolamps.dict.bean.*;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
@@ -126,55 +123,64 @@ public class PhraseGroupController extends BaseController {
 
     /**
      * 添加短语
-     * @param phraseGroupId 短语分组id
+     * @param phraseGroupIds 短语分组id
      * @param phraseIds 短语id
      * @return 添加成功
      */
     @PostMapping(value = "add_phrases.json")
     @ResponseBody
-    protected BaseVo addPhrases(@RequestParam Integer phraseGroupId, @RequestParam("phraseId") Integer... phraseIds) {
-        Assert.notNull(phraseGroupId, "phrase group id不能为null");
-        Group phraseGroup = phraseGroupService.find(phraseGroupId);
-        Assert.notNull(phraseGroup, "phrase group不存在");
-        Assert.noNullElements(phraseIds, "phrase ids不能存在为null的元素");
-        Phrase[] phrases = Arrays.stream(phraseIds).map(phraseService::find).toArray(Phrase[]::new);
-        phraseGroupService.addPhrases(phraseGroup, phrases);
+    protected BaseVo addPhrases(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("phraseId") Integer... phraseIds) {
+        Assert.notEmpty(phraseGroupIds, "phrase group id不能为null或空");
+        Assert.noNullElements(phraseGroupIds, "phrase group id不能存在为null的元素");
+        for (Integer phraseGroupId : phraseGroupIds) {
+            Group phraseGroup = phraseGroupService.find(phraseGroupId);
+            Assert.notNull(phraseGroup, "phrase group不存在");
+            Assert.noNullElements(phraseIds, "phrase ids不能存在为null的元素");
+            Phrase[] phrases = Arrays.stream(phraseIds).map(phraseService::find).toArray(Phrase[]::new);
+            phraseGroupService.addPhrases(phraseGroup, phrases);
+        }
         return SUCCESS_VO;
     }
 
     /**
      * 添加学生
-     * @param phraseGroupId 短语分组id
-     * @param studentIds 学生id
+     * @param phraseGroupIds 短语分组id
+     * @param studentIds 短语id
      * @return 添加成功
      */
     @PostMapping(value = "add_students.json")
     @ResponseBody
-    protected BaseVo addStudents(@RequestParam Integer phraseGroupId, @RequestParam("studentId") Integer... studentIds) {
-        Assert.notNull(phraseGroupId, "phrase group id不能为null");
-        Group phraseGroup = phraseGroupService.find(phraseGroupId);
-        Assert.notNull(phraseGroup, "phrase group不存在");
-        Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
-        Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
-        phraseGroupService.addStudents(phraseGroup, students);
+    protected BaseVo addStudents(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("studentId") Integer[] studentIds) {
+        Assert.notEmpty(phraseGroupIds, "phrase group id不能为null或空");
+        Assert.noNullElements(phraseGroupIds, "phrase group id不能存在为null的元素");
+        for (Integer phraseGroupId : phraseGroupIds) {
+            Group phraseGroup = phraseGroupService.find(phraseGroupId);
+            Assert.notNull(phraseGroup, "phrase group不存在");
+            Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
+            Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
+            phraseGroupService.addStudents(phraseGroup, students);
+        }
         return SUCCESS_VO;
     }
 
     /**
      * 添加班级
-     * @param phraseGroupId 短语分组id
+     * @param phraseGroupIds 短语分组id
      * @param clazzIds 班级id
      * @return 添加成功
      */
     @PostMapping(value = "add_clazzes.json")
     @ResponseBody
-    protected BaseVo addClazzes(@RequestParam Integer phraseGroupId, @RequestParam("clazzId") Integer... clazzIds) {
-        Assert.notNull(phraseGroupId, "phrase group id不能为null");
-        Group phraseGroup = phraseGroupService.find(phraseGroupId);
-        Assert.notNull(phraseGroup, "phrase group不存在");
-        Assert.noNullElements(clazzIds, "clazz ids不能存在为null的元素");
-        Clazz[] clazzes = Arrays.stream(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
-        phraseGroupService.addClazzes(phraseGroup, clazzes);
+    protected BaseVo addClazzes(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("clazzId") Integer[] clazzIds) {
+        Assert.notEmpty(phraseGroupIds, "phrase group id不能为null或空");
+        Assert.noNullElements(phraseGroupIds, "phrase group id不能存在为null的元素");
+        for (Integer phraseGroupId : phraseGroupIds) {
+            Group phraseGroup = phraseGroupService.find(phraseGroupId);
+            Assert.notNull(phraseGroup, "phrase group不存在");
+            Assert.noNullElements(clazzIds, "clazz ids不能存在为null的元素");
+            Clazz[] clazzes = Arrays.stream(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
+            phraseGroupService.addClazzes(phraseGroup, clazzes);
+        }
         return SUCCESS_VO;
     }
 }

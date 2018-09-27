@@ -11,11 +11,11 @@ import java.io.Serializable;
 /**
  * 自定义配置项
  * @author Benzolamps
- * @version 2,1,1
+ * @version 2.1.1
  * @datetime 2018-9-11 14:56:52
  */
 @Lazy(false)
-@Configuration("dictProperties")
+@Configuration
 @ConfigurationProperties(prefix = "dict.system")
 @Getter
 @Setter

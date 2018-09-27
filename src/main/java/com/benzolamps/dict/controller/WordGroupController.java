@@ -126,55 +126,64 @@ public class WordGroupController extends BaseController {
 
     /**
      * 添加单词
-     * @param wordGroupId 单词分组id
+     * @param wordGroupIds 单词分组id
      * @param wordIds 单词id
      * @return 添加成功
      */
     @PostMapping(value = "add_words.json")
     @ResponseBody
-    protected BaseVo addWords(@RequestParam Integer wordGroupId, @RequestParam("wordId") Integer... wordIds) {
-        Assert.notNull(wordGroupId, "word group id不能为null");
-        Group wordGroup = wordGroupService.find(wordGroupId);
-        Assert.notNull(wordGroup, "word group不存在");
-        Assert.noNullElements(wordIds, "word ids不能存在为null的元素");
-        Word[] words = Arrays.stream(wordIds).map(wordService::find).toArray(Word[]::new);
-        wordGroupService.addWords(wordGroup, words);
+    protected BaseVo addWords(@RequestParam("groupId") Integer[] wordGroupIds, @RequestParam("wordId") Integer... wordIds) {
+        Assert.notEmpty(wordGroupIds, "word group id不能为null或空");
+        Assert.noNullElements(wordGroupIds, "word group id不能存在为null的元素");
+        for (Integer wordGroupId : wordGroupIds) {
+            Group wordGroup = wordGroupService.find(wordGroupId);
+            Assert.notNull(wordGroup, "word group不存在");
+            Assert.noNullElements(wordIds, "word ids不能存在为null的元素");
+            Word[] words = Arrays.stream(wordIds).map(wordService::find).toArray(Word[]::new);
+            wordGroupService.addWords(wordGroup, words);
+        }
         return SUCCESS_VO;
     }
 
     /**
      * 添加学生
-     * @param wordGroupId 单词分组id
+     * @param wordGroupIds 单词分组id
      * @param studentIds 单词id
      * @return 添加成功
      */
     @PostMapping(value = "add_students.json")
     @ResponseBody
-    protected BaseVo addStudents(@RequestParam Integer wordGroupId, @RequestParam("studentId") Integer... studentIds) {
-        Assert.notNull(wordGroupId, "word group id不能为null");
-        Group wordGroup = wordGroupService.find(wordGroupId);
-        Assert.notNull(wordGroup, "word group不存在");
-        Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
-        Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
-        wordGroupService.addStudents(wordGroup, students);
+    protected BaseVo addStudents(@RequestParam("groupId") Integer[] wordGroupIds, @RequestParam("studentId") Integer[] studentIds) {
+        Assert.notEmpty(wordGroupIds, "word group id不能为null或空");
+        Assert.noNullElements(wordGroupIds, "word group id不能存在为null的元素");
+        for (Integer wordGroupId : wordGroupIds) {
+            Group wordGroup = wordGroupService.find(wordGroupId);
+            Assert.notNull(wordGroup, "word group不存在");
+            Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
+            Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
+            wordGroupService.addStudents(wordGroup, students);
+        }
         return SUCCESS_VO;
     }
 
     /**
      * 添加班级
-     * @param wordGroupId 单词分组id
+     * @param wordGroupIds 单词分组id
      * @param clazzIds 班级id
      * @return 添加成功
      */
     @PostMapping(value = "add_clazzes.json")
     @ResponseBody
-    protected BaseVo addClazzes(@RequestParam Integer wordGroupId, @RequestParam("clazzId") Integer... clazzIds) {
-        Assert.notNull(wordGroupId, "word group id不能为null");
-        Group wordGroup = wordGroupService.find(wordGroupId);
-        Assert.notNull(wordGroup, "word group不存在");
-        Assert.noNullElements(clazzIds, "clazz ids不能存在为null的元素");
-        Clazz[] clazzes = Arrays.stream(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
-        wordGroupService.addClazzes(wordGroup, clazzes);
+    protected BaseVo addClazzes(@RequestParam("groupId") Integer[] wordGroupIds, @RequestParam("clazzId") Integer[] clazzIds) {
+        Assert.notEmpty(wordGroupIds, "word group id不能为null或空");
+        Assert.noNullElements(wordGroupIds, "word group id不能存在为null的元素");
+        for (Integer wordGroupId : wordGroupIds) {
+            Group wordGroup = wordGroupService.find(wordGroupId);
+            Assert.notNull(wordGroup, "word group不存在");
+            Assert.noNullElements(clazzIds, "clazz ids不能存在为null的元素");
+            Clazz[] clazzes = Arrays.stream(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
+            wordGroupService.addClazzes(wordGroup, clazzes);
+        }
         return SUCCESS_VO;
     }
 }

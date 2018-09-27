@@ -214,7 +214,8 @@ public class WordController extends BaseController {
      * @param wordIds 单词id
      * @return ModelAndView
      */
-    @PostMapping(value = "add_to.html")
+    @GetMapping(value = "add_to.html")
+    @WindowView
     protected ModelAndView addTo(@RequestParam("wordId") Integer... wordIds) {
         ModelAndView mv = new ModelAndView("view/word/add_to");
         mv.addObject("groups", wordGroupService.findAll());

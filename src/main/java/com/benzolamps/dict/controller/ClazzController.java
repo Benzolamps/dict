@@ -112,7 +112,8 @@ public class ClazzController extends BaseController {
      * @param clazzIds 班级id
      * @return ModelAndView
      */
-    @PostMapping(value = "add_to_word_group.html")
+    @WindowView
+    @GetMapping(value = "add_to_word_group.html")
     protected ModelAndView addToWordGroup(@RequestParam("clazzId") Integer... clazzIds) {
         ModelAndView mv = new ModelAndView("view/clazz/add_to_word_group");
         mv.addObject("groups", wordGroupService.findAll());
@@ -125,7 +126,8 @@ public class ClazzController extends BaseController {
      * @param clazzIds 班级id
      * @return ModelAndView
      */
-    @PostMapping(value = "add_to_phrase_group.html")
+    @WindowView
+    @GetMapping(value = "add_to_phrase_group.html")
     protected ModelAndView addToPhraseGroup(@RequestParam("clazzId") Integer... clazzIds) {
         ModelAndView mv = new ModelAndView("view/clazz/add_to_phrase_group");
         mv.addObject("groups", phraseGroupService.findAll());

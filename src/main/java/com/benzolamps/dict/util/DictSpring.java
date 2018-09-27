@@ -60,6 +60,9 @@ public abstract class DictSpring {
             public SpelExpression doParseExpression(String expressionString, ParserContext context) {
                 logger.info("spel: " + expressionString);
                 expressionString = expressionString == null ? "" : applicationContext.getEnvironment().resolvePlaceholders(expressionString);
+                if (!expressionString.matches("^#\\{.+}$")) {
+                    expressionString = "#{'" + expressionString + "'}";
+                }
                 SpelExpression expression = super.doParseExpression(expressionString, context);
                 expression.setEvaluationContext(evaluationContext);
                 return expression;
@@ -216,7 +219,7 @@ public abstract class DictSpring {
      */
     public static <T> T spel(String expression, Class<T> tClass) {
         assertNull();
-        return expressionParser.parseExpression(expression).getValue(tClass);
+        return expressionParser.parseExpression(expression, ParserContext.TEMPLATE_EXPRESSION).getValue(tClass);
     }
 
     /**
@@ -227,6 +230,6 @@ public abstract class DictSpring {
      */
     public static <T> T spel(String expression) {
         assertNull();
-        return (T) expressionParser.parseExpression(expression).getValue();
+        return (T) expressionParser.parseExpression(expression, ParserContext.TEMPLATE_EXPRESSION).getValue();
     }
 }
