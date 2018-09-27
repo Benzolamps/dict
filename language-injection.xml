@@ -1,0 +1,7 @@
+<LanguageInjectionConfiguration>
+  <injection language="SpEL" injector-id="java">
+    <display-name>DictSpring (com.benzolamps.dict.util)</display-name>
+    <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("spel").withParameters("java.lang.String").definedInClass("com.benzolamps.dict.util.DictSpring"))]]></place>
+    <place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("spel").withParameters("java.lang.String", "java.lang.Class").definedInClass("com.benzolamps.dict.util.DictSpring"))]]></place>
+  </injection>
+</LanguageInjectionConfiguration>

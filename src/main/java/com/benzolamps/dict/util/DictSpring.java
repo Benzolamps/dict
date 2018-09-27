@@ -6,14 +6,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.expression.BeanFactoryResolver;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.ParserContext;
+import org.springframework.expression.*;
 import org.springframework.expression.spel.standard.SpelExpression;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.ReflectivePropertyAccessor;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -42,25 +40,45 @@ public abstract class DictSpring {
 
     private static ExpressionParser expressionParser;
 
-    /**
-     * 设置applicationContext
-     * @param applicationContext applicationContext
-     */
-    public static void setApplicationContext(ConfigurableApplicationContext applicationContext) {
-        Assert.notNull(applicationContext, "application context不能为null");
-        DictSpring.applicationContext = applicationContext;
-        DictSpring.classLoader = applicationContext.getClassLoader();
+    private static void initExpressionParser() {
         StandardEvaluationContext evaluationContext = new StandardEvaluationContext();
-        evaluationContext.setBeanResolver(new BeanFactoryResolver(DictSpring.applicationContext.getBeanFactory()));
+        evaluationContext.setBeanResolver((context, beanName) -> DictSpring.getBean(beanName));
+        evaluationContext.addPropertyAccessor(new ReflectivePropertyAccessor(false) {
+            @Override
+            public boolean canRead(EvaluationContext context, Object target, String name) throws AccessException {
+                return target == null && DictSpring.containsBean(name) || super.canRead(context, target, name);
+            }
+
+            @Override
+            public TypedValue read(EvaluationContext context, Object target, String name) throws AccessException {
+                return target == null ? new TypedValue(DictSpring.getBean(name)) : super.read(context, target, name);
+            }
+        });
+
         expressionParser = new SpelExpressionParser() {
             @Override
             public SpelExpression doParseExpression(String expressionString, ParserContext context) {
                 logger.info("spel: " + expressionString);
+                expressionString = expressionString == null ? "" : applicationContext.getEnvironment().resolvePlaceholders(expressionString);
                 SpelExpression expression = super.doParseExpression(expressionString, context);
                 expression.setEvaluationContext(evaluationContext);
                 return expression;
             }
         };
+    }
+
+    private static void assertNull() {
+        Assert.notNull(applicationContext, "application context不能为null");
+    }
+
+    /**
+     * 设置applicationContext
+     * @param applicationContext applicationContext
+     */
+    public static void setApplicationContext(ConfigurableApplicationContext applicationContext) {
+        DictSpring.applicationContext = applicationContext;
+        DictSpring.classLoader = applicationContext.getClassLoader();
+        DictSpring.initExpressionParser();
     }
 
     /**
@@ -70,10 +88,10 @@ public abstract class DictSpring {
      * @return bean对象
      */
     public static <T> T getBean(String name) {
-        Assert.notNull(DictSpring.applicationContext, "application context不能为null");
+        assertNull();
         Assert.hasLength(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
-        Assert.isTrue(containsBean(name), "未找到" + name + "对应的bean");
+        Assert.isTrue(DictSpring.containsBean(name), "未找到" + name + "对应的bean");
         if (beanFactory.isSingleton(name)) {
             return (T) beanFactory.getSingleton(name);
         } else {
@@ -87,7 +105,7 @@ public abstract class DictSpring {
      * @return bean列表
      */
     public static List<Object> getBeansOfAnnotation(Class<? extends Annotation> annotationClass) {
-        Assert.notNull(DictSpring.applicationContext, "application context不能为null");
+        assertNull();
         Assert.notNull(annotationClass, "annotation class不能为null");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         String[] names = beanFactory.getBeanNamesForAnnotation(annotationClass);
@@ -101,7 +119,7 @@ public abstract class DictSpring {
      * @return bean对象
      */
     public static <T> T getBean(Class<T> requiredType) {
-        Assert.notNull(DictSpring.applicationContext, "application context不能为null");
+        assertNull();
         Assert.notNull(requiredType, "required type不能为null");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         Map<String, T> beans = beanFactory.getBeansOfType(requiredType);
@@ -120,7 +138,7 @@ public abstract class DictSpring {
      * @return bean对象
      */
     public static <T> T createBean(String name, Class<?> requiredType, Properties properties, Object... args) {
-        Assert.notNull(DictSpring.applicationContext, "application context不能为null");
+        assertNull();
         Assert.hasLength(name, "name不能为null或空");
         Assert.notNull(requiredType, "required type不能为null或空");
         properties = properties == null ? EMPTY_PROPERTIES : properties;
@@ -139,7 +157,7 @@ public abstract class DictSpring {
      * @param bean 对象
      */
     public static void setBean(String name, Object bean) {
-        Assert.notNull(DictSpring.applicationContext, "application context不能为null");
+        assertNull();
         Assert.hasLength(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         beanFactory.registerSingleton(name, bean);
@@ -150,7 +168,7 @@ public abstract class DictSpring {
      * @param name 名称
      */
     public static void removeBean(String name) {
-        Assert.notNull(DictSpring.applicationContext, "application context不能为null");
+        assertNull();
         Assert.hasLength(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         Assert.isTrue(containsBean(name), "未找到" + name + "对应的bean");
@@ -167,7 +185,7 @@ public abstract class DictSpring {
      * @return 判断结果
      */
     public static boolean containsBean(String name) {
-        Assert.notNull(DictSpring.applicationContext, "application context不能为null");
+        assertNull();
         Assert.hasLength(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         return beanFactory.containsSingleton(name) || beanFactory.containsBeanDefinition(name);
@@ -188,22 +206,27 @@ public abstract class DictSpring {
     public static void setClassLoader(ClassLoader classLoader) {
         DictSpring.classLoader = classLoader;
     }
-    
-    public static <T> T spel(
-            // language=SpEL
-            String expression,
-            Class<T> tClass) {
-        if (StringUtils.isEmpty(expression)) {
-            return DictObject.safeCast(expression, tClass);
-        } else {
-            expression = applicationContext.getEnvironment().resolvePlaceholders(expression);
-            return expressionParser.parseExpression(expression).getValue(tClass);
-        }
+
+    /**
+     * 执行spel
+     * @param expression spel
+     * @param tClass 类型
+     * @param <T> 类型
+     * @return 结果
+     */
+    public static <T> T spel(String expression, Class<T> tClass) {
+        assertNull();
+        return expressionParser.parseExpression(expression).getValue(tClass);
     }
 
-    public static <T> T spel(
-        // language=SpEL
-        String expression) {
-        return (T) spel(expression, Object.class);
+    /**
+     * 执行spel
+     * @param expression spel
+     * @param <T> 类型
+     * @return 结果
+     */
+    public static <T> T spel(String expression) {
+        assertNull();
+        return (T) expressionParser.parseExpression(expression).getValue();
     }
 }
