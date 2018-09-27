@@ -73,17 +73,21 @@ public class LibraryServiceImpl extends BaseServiceImpl<Library> implements Libr
 
     @Override
     public void remove(Collection<Library> libraries) {
+        /* 删除词库前先删除词库中的单词和短语 */
         for (Library library : libraries) {
-            if (library != null) {
-                if (!CollectionUtils.isEmpty(library.getWords())) {
-                    wordService.remove(library.getWords());
-                }
-                if (!CollectionUtils.isEmpty(library.getPhrases())) {
-                    phraseService.remove(library.getPhrases());
-                }
+            if (!CollectionUtils.isEmpty(library.getWords())) {
+                wordService.remove(library.getWords());
+            }
+            if (!CollectionUtils.isEmpty(library.getPhrases())) {
+                phraseService.remove(library.getPhrases());
             }
         }
         super.remove(libraries);
         setCurrent(null);
+    }
+
+    @Override
+    public void remove(Filter filter) {
+
     }
 }

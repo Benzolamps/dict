@@ -81,13 +81,11 @@
   head_toolbar=[
     {
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到单词分组',
-      'handler': '',
       'handler': add_to_word_group,
       'needSelected': true
     },
     {
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到短语分组',
-      'handler': '',
       'handler': add_to_phrase_group,
       'needSelected': true
     }

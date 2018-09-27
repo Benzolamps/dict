@@ -10,10 +10,13 @@ import com.benzolamps.dict.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * Service基类接口实现类
@@ -58,7 +61,8 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional(readOnly = true)
     public List<T> findAll() {
-        return baseDao.findList((Filter) null);
+        Filter filter = new Filter();
+        return this.findList(filter);
     }
 
     @Override
@@ -77,6 +81,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     }
 
     @Override
+    @Transactional
     public T persist(T entity) {
         return baseDao.persist(entity);
     }
@@ -114,6 +119,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     }
 
     @Override
+    @Transactional
     public void remove(Integer... ids) {
         this.remove(Arrays.stream(ids).map(this::find).collect(Collectors.toList()));
     }
@@ -126,9 +132,16 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     }
 
     @Override
+    @Transactional
     public void remove(Filter filter) {
         handlerFilter(filter);
-        baseDao.remove(filter);
+        Method removeMethod = tryFunc(() -> getClass().getMethod("remove", Collection.class));
+        if (removeMethod.getDeclaringClass().equals(BaseServiceImpl.class)) {
+            baseDao.remove(filter);
+        } else {
+            Collection<T> entities = findList(filter);
+            this.remove(entities);
+        }
     }
 
     /**

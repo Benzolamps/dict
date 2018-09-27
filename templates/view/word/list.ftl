@@ -66,28 +66,6 @@
   });
 </#assign>
 
-<#assign add_to>
-  if (data.length > 100) {
-    parent.layer.alert('一次最多只能添加100个单词！', {icon: 2});
-  } else {
-    parent.layer.open({
-      type: 2,
-      title: '添加到单词分组',
-      content: (function () {
-        var baseUrl = '${base_url}/word/add_to.html?';
-        $.each(data, function (index, item) {
-          baseUrl += 'wordId=' + item.id;
-          if (index < data.length - 1) {
-            baseUrl += '&';
-          }
-        });
-        return baseUrl;
-      })(),
-      area: ['800px', '600px']
-    });
-  }
-</#assign>
-
 <#function file_export pageDisabled>
   <#assign returnValue>
     parent.layer.open({
@@ -136,6 +114,28 @@
   <#return returnValue/>
 </#function>
 
+<#assign add_to>
+  if (data.length > 100) {
+    parent.layer.alert('一次最多只能添加100个单词！', {icon: 2});
+  } else {
+    parent.layer.open({
+      type: 2,
+      title: '添加到单词分组',
+      content: (function () {
+        var baseUrl = '${base_url}/word/add_to.html?';
+        $.each(data, function (index, item) {
+          baseUrl += 'wordId=' + item.id;
+          if (index < data.length - 1) {
+            baseUrl += '&';
+          }
+        });
+        return baseUrl;
+      })(),
+      area: ['800px', '600px']
+    });
+  }
+</#assign>
+
 <@nothing></script></@nothing>
 
 <@data_list
@@ -167,7 +167,6 @@
     },
     {
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
-      'handler': '',
       'handler': add_to,
       'needSelected': true
     }

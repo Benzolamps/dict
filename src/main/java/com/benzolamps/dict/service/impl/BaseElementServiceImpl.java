@@ -108,22 +108,6 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         super.update(elements, ignoreProperties);
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public void remove(T... elements) {
-        super.remove(elements);
-    }
-
-    @Override
-    public void remove(Integer... ids) {
-        super.remove(ids);
-    }
-
-    @Override
-    public void remove(Collection<T> elements) {
-        super.remove(elements);
-    }
-
     @Override
     public T update(T element, String... ignoreProperties) {
         Library current = libraryService.getCurrent();

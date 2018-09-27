@@ -1,8 +1,11 @@
 package com.benzolamps.dict.service.impl;
 
+import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.controller.vo.WordExcelVo;
+import com.benzolamps.dict.dao.base.GroupDao;
+import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.service.base.WordService;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,9 @@ public class WordServiceImpl extends BaseElementServiceImpl<Word, WordExcelVo> i
 
     @Resource
     private WordClazzService wordClazzService;
+
+    @Resource
+    private GroupDao groupDao;
 
     @Override
     public void persist(Word... words) {
@@ -98,5 +104,15 @@ public class WordServiceImpl extends BaseElementServiceImpl<Word, WordExcelVo> i
         } catch (NumberFormatException e) {
             return clazzes.stream().filter(clazz -> clazz.getName().equals(name)).findFirst().orElse(null);
         }
+    }
+
+    @Override
+    public void remove(Collection<Word> words) {
+        /* 删除单词前删除与各个分组的关联 */
+        Collection<Group> groups = groupDao.findList(new Filter());
+        for (Group group : groups) {
+            group.getWords().removeAll(words);
+        }
+        super.remove(words);
     }
 }
