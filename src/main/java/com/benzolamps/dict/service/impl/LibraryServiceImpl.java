@@ -85,9 +85,4 @@ public class LibraryServiceImpl extends BaseServiceImpl<Library> implements Libr
         super.remove(libraries);
         setCurrent(null);
     }
-
-    @Override
-    public void remove(Filter filter) {
-
-    }
 }
