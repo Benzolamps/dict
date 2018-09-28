@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -26,7 +25,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     "com.benzolamps.dict.directive"
 })
 @EntityScan(basePackages = "com.benzolamps.dict.bean")
-@ImportResource(locations = "classpath:freemarker.xml")
 @EnableTransactionManagement
 @EnableCaching
 @EnableScheduling
