@@ -27,7 +27,7 @@ public class RuntimeBeanConfig {
     @SuppressWarnings("unused")
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws IOException {
-        logger.info(DictSpring.spel("#{'${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
+        logger.info(DictSpring.spel("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
         if (System.getProperty("os.name").toLowerCase().startsWith("windows")) {
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost:2018/dict/index.html");
         }
