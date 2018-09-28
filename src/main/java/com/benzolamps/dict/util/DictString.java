@@ -1,6 +1,6 @@
 package com.benzolamps.dict.util;
 
-import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -13,7 +13,7 @@ public interface DictString {
      * @return 转换后
      */
     static String toCamel(String origin) {
-        Assert.hasText(origin, "origin不能为null或空");
+        if (!StringUtils.hasText(origin)) return origin;
         StringBuilder sb = new StringBuilder();
         if (origin.contains("-") || origin.contains("_")) {
             origin = origin.toLowerCase();
