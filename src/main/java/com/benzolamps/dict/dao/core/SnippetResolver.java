@@ -79,7 +79,7 @@ public class SnippetResolver implements Serializable {
      * @param alias 别名
      */
     public void build(String alias) {
-        Assert.hasLength(alias, "alias不能为null或空");
+        Assert.hasText(alias, "alias不能为null或空");
         parameters = new ArrayList<>();
         snippet = new StringJoiner(" ");
         for (Object snippet : this.snippets) {

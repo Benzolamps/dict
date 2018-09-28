@@ -41,9 +41,8 @@ public class RoseShuffleStrategy implements IShuffleStrategy {
      * @param hash 哈希值
      * @param setup 装配器
      */
-    @SuppressWarnings("deprecation")
     public RoseShuffleStrategy(int size, int hash, RoseShuffleStrategySetup setup) {
-        Assert.notNull(setup);
+        Assert.notNull(setup, "setup不能为null");
         Assert.state(size > 0);
         this.setup = setup;
         this.size = size;

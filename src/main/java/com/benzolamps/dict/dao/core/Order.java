@@ -49,7 +49,7 @@ public class Order extends SnippetResolver {
      * @param field 字段
      */
     protected void applyField(String field) {
-        Assert.hasLength(field, "field不能为null或空");
+        Assert.hasText(field, "field不能为null或空");
         if (field.equals("0")) {
             addSnippet(new OperatorSnippet(field));
         } else {
@@ -108,7 +108,7 @@ public class Order extends SnippetResolver {
 
         @Override
         protected void applyField(String field) {
-            Assert.hasLength("field", "field不能为null或空");
+            Assert.hasText("field", "field不能为null或空");
             super.applyField(field + ".size");
         }
     }

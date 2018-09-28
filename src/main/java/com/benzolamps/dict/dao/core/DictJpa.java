@@ -48,7 +48,7 @@ public class DictJpa {
             Map<String, Object> parameters,
             Object... positionParameters) {
         Assert.notNull(entityManager, "entity manager不能为null");
-        Assert.hasLength(jpql, "sql不能为null或空");
+        Assert.hasText(jpql, "sql不能为null或空");
         Assert.notNull(tClass, "t class不能为null");
         if (parameters == null) parameters = Constant.EMPTY_MAP;
         if (positionParameters == null) positionParameters = Constant.EMPTY_OBJECT_ARRAY;
@@ -76,7 +76,7 @@ public class DictJpa {
             Map<String, Object> parameters,
             Object... positionParameters) {
         Assert.notNull(entityManager, "entity manager不能为null");
-        Assert.hasLength(jpql, "sql不能为null或空");
+        Assert.hasText(jpql, "sql不能为null或空");
         if (parameters == null) parameters = Constant.EMPTY_MAP;
         if (positionParameters == null) positionParameters = Constant.EMPTY_OBJECT_ARRAY;
         logger.info("jpql: " + jpql);
@@ -106,7 +106,7 @@ public class DictJpa {
             Map<String, Object> parameters,
             Object... positionParameters) {
         Assert.notNull(entityManager, "entity manager不能为null");
-        Assert.hasLength(sql, "sql不能为null或空");
+        Assert.hasText(sql, "sql不能为null或空");
         Assert.notNull(tClass, "t class不能为null");
         if (parameters == null) parameters = Constant.EMPTY_MAP;
         if (positionParameters == null) positionParameters = Constant.EMPTY_OBJECT_ARRAY;
@@ -139,7 +139,7 @@ public class DictJpa {
             Map<String, Object> parameters,
             Object... positionParameters) {
         Assert.notNull(entityManager, "entity manager不能为null");
-        Assert.hasLength(sql, "sql不能为null或空");
+        Assert.hasText(sql, "sql不能为null或空");
         if (parameters == null) parameters = Constant.EMPTY_MAP;
         if (positionParameters == null) positionParameters = Constant.EMPTY_OBJECT_ARRAY;
         logger.info("sql: " + sql);
@@ -158,7 +158,7 @@ public class DictJpa {
      * @param positionParameters 位置参数
      */
     public static void executeNonTransactionNativeQuery(String sql, Object... positionParameters) {
-        Assert.hasLength(sql, "sql不能为null或空");
+        Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
         DataSourceProperties dataSourceProperties = DictSpring.getBean(DataSourceProperties.class);
         try (var connection = DriverManager.getConnection(dataSourceProperties.getUrl())) {

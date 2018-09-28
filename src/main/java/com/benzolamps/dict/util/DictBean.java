@@ -89,7 +89,7 @@ public class DictBean<B> {
      * @return DictProperty
      */
     public DictProperty getProperty(String name) {
-        Assert.hasLength(name, "name不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
         return new DictProperty(name, this);
     }
 
@@ -100,7 +100,7 @@ public class DictBean<B> {
      * @return Method
      */
     public Method getMethod(String name, Class<?>... paramTypes) {
-        Assert.hasLength(name, "name不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
         return BeanUtils.findMethod(type, name, paramTypes);
     }
 
@@ -110,7 +110,7 @@ public class DictBean<B> {
      * @return Field
      */
     public Field getField(String name) {
-        Assert.hasLength(name, "name不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
         return internalGetField(type, name);
     }
 

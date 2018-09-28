@@ -72,7 +72,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public T findSingle(String jpql, Map<String, Object> parameters, Object... positionParameters) {
-        Assert.hasLength(jpql, "jpql不能为null或空");
+        Assert.hasText(jpql, "jpql不能为null或空");
         TypedQuery<T> query = DictJpa.createJpqlQuery(entityManager, jpql, entityClass, parameters, positionParameters);
         try {
             return query.getSingleResult();
@@ -83,7 +83,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public T findSingleNative(String sql, Map<String, Object> parameters, Object... positionParameters) {
-        Assert.hasLength(sql, "jpql不能为null或空");
+        Assert.hasText(sql, "jpql不能为null或空");
         List<T> results = DictJpa.createNativeQuery(entityManager, sql, entityClass, parameters, positionParameters).list();
         return results.size() != 1 ? null : results.iterator().next();
     }
@@ -117,13 +117,13 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public List<T> findList(String jpql, Map<String, Object> parameters, Object... positionParameters) {
-        Assert.hasLength(jpql, "jpql不能为null或空");
+        Assert.hasText(jpql, "jpql不能为null或空");
         return DictJpa.createJpqlQuery(entityManager, jpql, entityClass, parameters, positionParameters).getResultList();
     }
 
     @Override
     public List<T> findListNative(String sql, Map<String, Object> parameters, Object... positionParameters) {
-        Assert.hasLength(sql, "sql不能为null或空");
+        Assert.hasText(sql, "sql不能为null或空");
         return DictJpa.createNativeQuery(entityManager, sql, entityClass, parameters, positionParameters).list();
     }
 
@@ -184,7 +184,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public List<T> findCount(int count, String jpql, Map<String, Object> parameters, Object... positionParameters) {
-        Assert.hasLength(jpql, "jpql不能为null或空");
+        Assert.hasText(jpql, "jpql不能为null或空");
         return DictJpa.createJpqlQuery(entityManager, jpql, entityClass, parameters, positionParameters)
             .setMaxResults(count)
             .getResultList();
@@ -255,13 +255,13 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
     public void execute(String jpql, Map<String, Object> parameters, Object... positionParameters) {
-        Assert.hasLength(jpql, "jpql不能为null或空");
+        Assert.hasText(jpql, "jpql不能为null或空");
         DictJpa.executeJpqlQuery(entityManager, jpql, parameters, positionParameters);
     }
 
     @Override
     public void executeNative(String sql, Map<String, Object> parameters, Object... positionParameters) {
-        Assert.hasLength(sql, "sql不能为null或空");
+        Assert.hasText(sql, "sql不能为null或空");
         DictJpa.executeNativeQuery(entityManager, sql, parameters, positionParameters);
     }
 }

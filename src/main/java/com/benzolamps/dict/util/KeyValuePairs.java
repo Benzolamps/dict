@@ -12,7 +12,7 @@ import java.util.Map;
  * @see Map.Entry
  * @datetime 2018年6月17日12:21:25
  */
-@SuppressWarnings({"deprecation", "unused"})
+@SuppressWarnings("unused")
 public class KeyValuePairs<K, V> implements Map.Entry<K, V> {
 
     /* 键 */
@@ -36,7 +36,7 @@ public class KeyValuePairs<K, V> implements Map.Entry<K, V> {
      * @param entry entry
      */
     public KeyValuePairs(Map.Entry<K, V> entry) {
-        Assert.notNull(entry);
+        Assert.notNull(entry, "entry不能为null");
         this.key = entry.getKey();
         setValue(entry.getValue());
     }
@@ -47,7 +47,7 @@ public class KeyValuePairs<K, V> implements Map.Entry<K, V> {
      * @param key 键
      */
     public KeyValuePairs(Map<K, V> map, K key) {
-        Assert.notNull(map);
+        Assert.notNull(map, "map不能为空");
         this.key = key;
         setValue(map.getOrDefault(key, null));
     }

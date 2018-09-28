@@ -30,7 +30,7 @@ public class ShuffleStrategyDirective implements TemplateDirectiveModel {
         Assert.isTrue(params.containsKey("shuffle_strategy_setup"), "shuffle_strategy_setup未指定");
         IShuffleStrategySetup shuffleStrategySetup =
             DictObject.safeCast(DeepUnwrap.unwrap((TemplateModel) params.get("shuffle_strategy_setup")), IShuffleStrategySetup.class);
-        Assert.notNull(shuffleStrategySetup, "shuffle_strategy_setup不能为null");
+        Assert.notNull(shuffleStrategySetup, "shuffle strategy setup不能为null");
         List<BaseElement> elements = DictObject.safeCast(DeepUnwrap.unwrap((TemplateModel) params.get("elements")), List.class);
         Assert.notNull(elements, "elements不能为null");
         IShuffleStrategy shuffleStrategy = shuffleStrategySetup.setup(elements.size(), elements.hashCode());

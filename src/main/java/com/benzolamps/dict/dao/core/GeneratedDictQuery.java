@@ -81,20 +81,20 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
 
     @Override
     public final TypedQuery<B> getTypedQuery() {
-        Assert.notNull(entityManager, "entity manager不能为空");
+        Assert.notNull(entityManager, "entity manager不能为null");
         String jpql = select(alias);
         return DictJpa.createJpqlQuery(entityManager, jpql, entityClass, null, filter.getParameters().toArray());
     }
 
     @Override
     public final TypedQuery<? extends Number> getCountQuery() {
-        Assert.notNull(entityManager, "entity manager不能为空");
+        Assert.notNull(entityManager, "entity manager不能为null");
         String jpql = select("count(1)");
         return DictJpa.createJpqlQuery(entityManager, jpql, Long.class, null, filter.getParameters().toArray());
     }
 
     private String select(String field) {
-        Assert.hasLength(field, "field不能为空或null");
+        Assert.hasText(field, "field不能为空或null");
         StringJoiner jpql = new StringJoiner(" ");
         filter.build(alias);
         applyOrder(Order.desc("id"));

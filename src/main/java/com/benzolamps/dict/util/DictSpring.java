@@ -92,7 +92,7 @@ public abstract class DictSpring {
      */
     public static <T> T getBean(String name) {
         assertNull();
-        Assert.hasLength(name, "name不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         Assert.isTrue(DictSpring.containsBean(name), "未找到" + name + "对应的bean");
         if (beanFactory.isSingleton(name)) {
@@ -142,8 +142,8 @@ public abstract class DictSpring {
      */
     public static <T> T createBean(String name, Class<?> requiredType, Properties properties, Object... args) {
         assertNull();
-        Assert.hasLength(name, "name不能为null或空");
-        Assert.notNull(requiredType, "required type不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
+        Assert.notNull(requiredType, "required type不能为null");
         properties = properties == null ? EMPTY_PROPERTIES : properties;
         args = args == null ? EMPTY_OBJECT_ARRAY : args;
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
@@ -161,7 +161,7 @@ public abstract class DictSpring {
      */
     public static void setBean(String name, Object bean) {
         assertNull();
-        Assert.hasLength(name, "name不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         beanFactory.registerSingleton(name, bean);
     }
@@ -172,7 +172,7 @@ public abstract class DictSpring {
      */
     public static void removeBean(String name) {
         assertNull();
-        Assert.hasLength(name, "name不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         Assert.isTrue(containsBean(name), "未找到" + name + "对应的bean");
         if (beanFactory.isSingleton(name)) {
@@ -189,7 +189,7 @@ public abstract class DictSpring {
      */
     public static boolean containsBean(String name) {
         assertNull();
-        Assert.hasLength(name, "name不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
         return beanFactory.containsSingleton(name) || beanFactory.containsBeanDefinition(name);
     }

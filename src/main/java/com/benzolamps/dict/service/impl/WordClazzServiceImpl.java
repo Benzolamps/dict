@@ -33,14 +33,14 @@ public class WordClazzServiceImpl extends BaseServiceImpl<WordClazz> implements 
     @Override
     @Transactional(readOnly = true)
     public WordClazz findByName(String name) {
-        Assert.hasLength(name, "name不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
         return wordClazzDao.findSingle(Filter.eq("name", name));
     }
 
     @Override
     @Transactional(readOnly = true)
     public WordClazz findByIdOrName(String name) {
-        Assert.hasLength(name, "name不能为null或空");
+        Assert.hasText(name, "name不能为null或空");
         try {
             return wordClazzDao.find(Integer.valueOf(name));
         } catch (NumberFormatException e) {

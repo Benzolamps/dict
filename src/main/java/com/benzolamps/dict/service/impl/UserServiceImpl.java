@@ -33,14 +33,14 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Override
     @Transactional(readOnly = true)
     public boolean usernameExists(String username) {
-        Assert.hasLength(username, "username不能为null或空");
+        Assert.hasText(username, "username不能为null或空");
         return count(Filter.eq("username", username)) > 0;
     }
 
     @Override
     @Transactional(readOnly = true)
     public User findByUsername(String username) {
-        Assert.hasLength(username, "username不能为null或空");
+        Assert.hasText(username, "username不能为null或空");
         try {
             return userDao.findSingle(Filter.eq("username", username));
         } catch (NoResultException e) {
@@ -52,8 +52,8 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Transactional(readOnly = true)
     public boolean verifyUser(User user) {
         Assert.notNull(user, "user不能为null");
-        Assert.hasLength(user.getUsername(), "username不能为null或空");
-        Assert.hasLength(user.getPassword(), "password不能为null或空");
+        Assert.hasText(user.getUsername(), "username不能为null或空");
+        Assert.hasText(user.getPassword(), "password不能为null或空");
         User ref = findByUsername(user.getUsername());
         if (ref == null) return false;
         return ref.getPassword().equalsIgnoreCase(encryptPassword(user.getPassword()));
@@ -103,7 +103,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     }
 
     private String encryptPassword(String password) {
-        Assert.hasLength(password, "password不能为null或空");
+        Assert.hasText(password, "password不能为null或空");
         Charset charset = Charset.forName("UTF-8");
         String one = DigestUtils.md5DigestAsHex(password.getBytes(charset));
         String two = DigestUtils.md5DigestAsHex(one.getBytes(charset));

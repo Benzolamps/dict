@@ -17,7 +17,7 @@ public interface DictWeb {
      * @return content type
      */
     static String convertContentType(String extension) {
-        Assert.hasLength(extension, "extension不能为null或空");
+        Assert.hasText(extension, "extension不能为null或空");
         switch (extension.toLowerCase()) {
             case "css":
                 return Constant.CSS;

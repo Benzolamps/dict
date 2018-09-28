@@ -134,7 +134,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Transactional(readOnly = true)
     @Cacheable(value = CACHE_NAME, key = "#root.method + #className")
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
-        Assert.hasLength(className, "class name不能为null或空");
+        Assert.hasText(className, "class name不能为null或空");
         Assert.isTrue(getAvailableStrategyNames().contains(className), "class name不存在");
         Class<?> strategyClass = DynamicClass.loadClass(className);
         return DictPropertyInfoVo.applyDictPropertyInfo(strategyClass);

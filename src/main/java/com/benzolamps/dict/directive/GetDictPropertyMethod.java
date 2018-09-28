@@ -24,7 +24,7 @@ public class GetDictPropertyMethod implements TemplateMethodModelEx {
     public Object exec(@SuppressWarnings("rawtypes") List arguments) {
         Assert.notEmpty(arguments, "arguments不能为空");
         String className = arguments.get(0).toString();
-        Assert.notNull(className, "class name不能为null或空");
+        Assert.hasText(className, "class name不能为null或空");
         Class<?> clazz = tryFunc(() -> ClassUtils.forName(className, DictSpring.getClassLoader()));
         return DictPropertyInfoVo.applyDictPropertyInfo(clazz);
     }
