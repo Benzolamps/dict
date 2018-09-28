@@ -28,7 +28,7 @@
         <entry key="hibernate_version" value="#{T(org.hibernate.Version).versionString}"/>
         <entry key="poi_version" value="#{T(org.apache.poi.Version).version}"/>
         <entry key="sqlite_version" value="#{miscellaneousService.SQLiteVersion}"/>
-        <entry key="is_release" value="#{isRelease}"/>
+        <entry key="is_release" value="#{environment.acceptsProfiles('release')}"/>
         <entry key="logger" value="#{T(org.slf4j.LoggerFactory).getLogger(T(com.benzolamps.dict.cfg.FreemarkerConfig))}"/>
         <entry key="url_yaml_parse">
           <bean class="com.benzolamps.dict.directive.YamlParseMethod">

@@ -19,11 +19,6 @@ import java.io.IOException;
 @Slf4j
 public class RuntimeBeanConfig {
 
-    @Bean("isRelease")
-    protected Boolean isRelease() {
-        return DictSpring.spel("#{environment.acceptsProfiles('release')}");
-    }
-
     @SuppressWarnings("unused")
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws IOException {
