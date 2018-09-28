@@ -8,7 +8,7 @@
   <springProperty scope="context" name="encoding" source="file.encoding"/>
 
   <!-- 向控制台输出日志 -->
-  <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+  <appender name="console-debug" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
       <pattern>
         %cyan(**${title} - ${version}) %blue([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %yellow(&lt;%p&gt;) %red(%logger) %cyan([%F:%L]) %n%m%n%n
@@ -22,6 +22,23 @@
       <param name="levelMin" value="DEBUG"/>
       <!-- 最大级别 -->
       <param name="levelMax" value="ERROR"/>
+      <onMatch>ACCEPT</onMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+  </appender>
+  
+  <appender name="console-error" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <pattern>
+        %cyan(**${title} - ${version}) %blue([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %yellow(&lt;%p&gt;) %red(%logger) %cyan([%F:%L]) %n%m%n%n
+      </pattern>
+      <charset>${encoding}</charset>
+    </encoder>
+    
+    <!--过滤器-->
+    <filter class="ch.qos.logback.classic.filter.LevelFilter">
+      <!-- 最小级别 -->
+      <param name="levelMin" value="ERROR"/>
       <onMatch>ACCEPT</onMatch>
       <onMismatch>DENY</onMismatch>
     </filter>
@@ -45,9 +62,13 @@
   </appender>
 
   <root level="WARN">
-    <appender-ref ref="console"/>
+    <appender-ref ref="console-debug"/>
     <appender-ref ref="file"/>
   </root>
 
   <logger name="com.benzolamps.dict" level="DEBUG" additivity="true"/>
+  <logger name="org.hibernate.orm.deprecation" level="ERROR">
+    <appender-ref ref="file"/>
+    <appender-ref ref="console-error"/>
+  </logger>
 </configuration>

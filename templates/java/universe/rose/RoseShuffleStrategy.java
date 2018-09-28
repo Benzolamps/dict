@@ -43,7 +43,7 @@ public class RoseShuffleStrategy implements IShuffleStrategy {
      */
     public RoseShuffleStrategy(int size, int hash, RoseShuffleStrategySetup setup) {
         Assert.notNull(setup, "setup不能为null");
-        Assert.state(size > 0);
+        Assert.isTrue(size > 0, "size不为小于1");
         this.setup = setup;
         this.size = size;
         supplier = createSuppliers().iterator();

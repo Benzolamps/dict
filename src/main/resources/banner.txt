@@ -7,5 +7,4 @@ ${AnsiColor.CYAN}
  _) (_) ) \ \___  / /  \ \/ /   / /____ \ \__/ /__| |___) )/  /\  \  /_/      \_\ ( (      ___/ /
 (______/   \____\(_/    \__/   (_______) \____/ \________//__(  )__\(/          \)/__\    /____/
 
-${AnsiColor.BRIGHT_RED}  ${dict.system.title} - ${dict.system.version} 启动成功！
 ${AnsiColor.WHITE}

@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "file.encoding",
+      "type": "java.lang.String",
+      "description": "Description for file.encoding."
+    }
+  ]
+}

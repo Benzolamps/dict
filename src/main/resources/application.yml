@@ -48,5 +48,29 @@ server:
   context_path: /${dict.system.name}
   tomcat:
     uri-encoding: UTF-8
+
+---
+spring:
+  profiles: default
 logging:
   config: classpath:logback-spring.xml
+
+---
+spring:
+  profiles: release
+file:
+  encoding: GBK
+logging:
+  config: classpath:logback-spring-release.xml
+
+---
+spring:
+  profiles: test
+logging:
+  config: classpath:logback-spring-release.xml
+
+---
+spring:
+  profiles: eclipse
+logging:
+  config: classpath:logback-spring-release.xml

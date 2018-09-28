@@ -12,6 +12,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.ReflectivePropertyAccessor;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
@@ -58,11 +59,7 @@ public abstract class DictSpring {
         expressionParser = new SpelExpressionParser() {
             @Override
             public SpelExpression doParseExpression(String expressionString, ParserContext context) {
-                logger.info("spel: " + expressionString);
-                expressionString = expressionString == null ? "" : applicationContext.getEnvironment().resolvePlaceholders(expressionString);
-                if (!expressionString.matches("^#\\{.+}$")) {
-                    expressionString = "#{'" + expressionString + "'}";
-                }
+                // logger.info("spel: " + expressionString);
                 SpelExpression expression = super.doParseExpression(expressionString, context);
                 expression.setEvaluationContext(evaluationContext);
                 return expression;
@@ -210,6 +207,14 @@ public abstract class DictSpring {
         DictSpring.classLoader = classLoader;
     }
 
+    private static Expression convertExpression(String expression) {
+        assertNull();
+        if (expression == null) expression = "#{null}";
+        else if (StringUtils.hasText(expression)) expression = applicationContext.getEnvironment().resolvePlaceholders(expression);
+        if (!expression.matches("^#\\{.+}$")) expression = "#{'" + expression + "'}";
+        return expressionParser.parseExpression(expression, ParserContext.TEMPLATE_EXPRESSION);
+    }
+
     /**
      * 执行spel
      * @param expression spel
@@ -218,8 +223,7 @@ public abstract class DictSpring {
      * @return 结果
      */
     public static <T> T spel(String expression, Class<T> tClass) {
-        assertNull();
-        return expressionParser.parseExpression(expression, ParserContext.TEMPLATE_EXPRESSION).getValue(tClass);
+        return convertExpression(expression).getValue(tClass);
     }
 
     /**
@@ -229,7 +233,6 @@ public abstract class DictSpring {
      * @return 结果
      */
     public static <T> T spel(String expression) {
-        assertNull();
-        return (T) expressionParser.parseExpression(expression, ParserContext.TEMPLATE_EXPRESSION).getValue();
+        return (T) convertExpression(expression).getValue();
     }
 }

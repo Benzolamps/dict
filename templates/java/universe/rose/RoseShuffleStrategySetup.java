@@ -4,7 +4,8 @@ import com.benzolamps.dict.component.DictOptions;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.IShuffleStrategy;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
-import org.hibernate.validator.constraints.NotEmpty;
+import com.benzolamps.dict.main.DictApplication;
+import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -18,49 +19,51 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
 
     private static final long serialVersionUID = -3170125922193664875L;
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RoseShuffleStrategySetup.class);
+
     @Value("10")
     @DictOptions({"10", "15", "20", "25", "30"})
     @DictPropertyInfo(display = "每个单元的单词个数")
-    @NotEmpty
+    @NotNull
     private int unitSize;
 
     @Value("2")
     @Range(max = 5L)
     @DictPropertyInfo(display = "每个单元带提示的单词重复的次数")
-    @NotEmpty
+    @NotNull
     private int unitTipRepeat;
 
     @Value("1")
     @Range(max = 5L)
     @DictPropertyInfo(display = "每个单元不带提示的单词重复的次数")
-    @NotEmpty
+    @NotNull
     private int unitNontipRepeat;
 
     @Value("2")
     @Range(max = 5L)
     @DictPropertyInfo(display = "所有单词带提示重复的次数")
-    @NotEmpty
+    @NotNull
     private int entireTipRepeat;
 
     @Value("1")
     @Range(max = 5L)
     @DictPropertyInfo(display = "所有单词不带提示重复的次数")
-    @NotEmpty
+    @NotNull
     private int entireNontipRepeat;
 
     @Value("true")
     @DictPropertyInfo(display = "是否乱序")
-    @NotEmpty
+    @NotNull
     private boolean shuffled;
 
     @Value("false")
     @DictPropertyInfo(display = "是否指定乱序的种子", description = "不指定则以当前时间戳为准，每次生成的次序都不一样")
-    @NotEmpty
+    @NotNull
     private boolean shuffleSeedSpecified;
 
     @Value("0")
     @DictPropertyInfo(display = "乱序的种子", description = "如果指定乱序的种子，则相同的种子，相同的一组单词，生成的次序一样")
-    @NotEmpty
+    @NotNull
     private int shuffleSeed;
 
     public int getUnitSize() {
@@ -129,6 +132,12 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
 
     @Override
     public IShuffleStrategy setup(int size, int hash) {
+        int ¥$¥ = -355555550;
+        java.util.function.IntPredicate p = ¥¥¥$$$¥¥¥->¥$¥>>¥$¥-/**💰💰💰💰💰💰💰💰💰💰**/-¥$¥<<¥$¥<-¥¥¥$$$¥¥¥;
+        logger.info(String.valueOf(¥$¥ >> ¥$¥ + ¥$¥ << ¥$¥));
+        if (p.test(666666)) {
+            logger.info("不给钱就捣乱\ud83d\udcb0\ud83d\udcb0\ud83d\udcb0\ud83d\udcb0\ud83d\udcb0\ud83d\udcb0");
+        }
         return new RoseShuffleStrategy(size, hash, this);
     }
 }
