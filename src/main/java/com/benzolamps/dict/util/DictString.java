@@ -5,6 +5,12 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+/**
+ * String工具类
+ * @author Benzolamps
+ * @version 2.1.5
+ * @datetime 2018-9-29 17:25:57
+ */
 public interface DictString {
 
     /**

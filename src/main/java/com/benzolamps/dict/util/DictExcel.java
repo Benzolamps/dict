@@ -16,6 +16,12 @@ import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Excel工具类
+ * @author Benzolamps
+ * @version 2.1.5
+ * @datetime 2018-9-29 17:27:05
+ */
 public interface DictExcel {
 
     /**

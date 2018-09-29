@@ -4,7 +4,7 @@ package com.benzolamps.dict.util;
  * 数学工具类
  * @author Benzolamps
  * @version 1.1.1
- * @datetime 2018年6月12日13:09:49
+ * @datetime 2018-6-12 13:09:49
  */
 public interface DictMath {
 
