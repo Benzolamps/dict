@@ -33,7 +33,6 @@ public class DictApplication {
      * main方法
      * @param args 参数
      */
-    @SuppressWarnings("ConstantConditions")
     public static void main(String... args) {
         new SpringApplicationBuilder(DictApplication.class).initializers(DictSpring::setApplicationContext).build().run(args);
     }
