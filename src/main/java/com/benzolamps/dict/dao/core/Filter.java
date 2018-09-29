@@ -26,7 +26,7 @@ public class Filter extends SnippetResolver {
     public Filter and(Filter another) {
         if (another != null && !another.isEmpty()) {
             boolean empty = this.isEmpty();
-            if (!this.isEmpty()) {
+            if (!empty) {
                 this.add(0, new OperatorSnippet("("));
                 this.add(new OperatorSnippet(") and ("));
                 this.addAll(another);
@@ -46,7 +46,7 @@ public class Filter extends SnippetResolver {
     public Filter or(Filter another) {
         if (another != null && !another.isEmpty()) {
             boolean empty = this.isEmpty();
-            if (!this.isEmpty()) {
+            if (!empty) {
                 this.add(0, new OperatorSnippet("("));
                 this.add(new OperatorSnippet(") or ("));
                 this.addAll(another);
