@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-import static com.benzolamps.dict.util.DictSpring.spel;
+import static com.benzolamps.dict.util.DictSpring.resolve;
 
 /**
  * 运行时bean声明
@@ -22,8 +22,8 @@ public class RuntimeBeanConfig {
     @SuppressWarnings("unused")
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws IOException {
-        logger.info(spel("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
-        if (spel("#{'${os.name}'.startsWith('Windows')}")) {
+        logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
+        if (resolve("#{'${os.name}'.startsWith('Windows')}")) {
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost:2018/dict/index.html");
         }
     }
