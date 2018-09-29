@@ -1,5 +1,6 @@
 package com.benzolamps.dict.controller;
 
+import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -104,7 +106,11 @@ public class WordController extends BaseController {
         Pageable pageable = docExportVo.getPageable();
         List<Word> words;
         if (pageable == null) {
-            words = wordService.findAll();
+            Assert.notNull(docExportVo.getGroupId(), "group id不能为null");
+            Group group = wordGroupService.find(docExportVo.getGroupId());
+            Assert.notNull(group, "group不存在");
+            Assert.notEmpty(group.getWords(), "words不能为null或空");
+            words = new ArrayList<>(group.getWords());
         } else {
             words = wordService.findPage(pageable).getContent();
         }

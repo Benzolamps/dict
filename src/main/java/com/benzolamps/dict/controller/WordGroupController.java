@@ -7,6 +7,7 @@ import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
+import com.benzolamps.dict.controller.vo.ClazzStudentTreeVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.ClazzService;
@@ -18,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 单词分组Controller
@@ -185,5 +189,39 @@ public class WordGroupController extends BaseController {
             wordGroupService.addClazzes(wordGroup, clazzes);
         }
         return SUCCESS_VO;
+    }
+
+    /**
+     * 单词分组详情
+     * @param id 单词分组id
+     * @return ModelAndView
+     */
+    @NavigationView
+    @RequestMapping(value = "detail.html", method = {RequestMethod.GET, RequestMethod.POST})
+    protected ModelAndView detail(Integer id) {
+        Assert.notNull(id, "word group id不能为null");
+        Group wordGroup = wordGroupService.find(id);
+        Assert.notNull(wordGroup, "word group不存在");
+        ModelAndView mv = new ModelAndView("view/word_group/detail");
+        mv.addObject("group", wordGroup);
+        mv.addObject("students", ClazzStudentTreeVo.convert(wordGroup.getStudentsOriented()));
+        return mv;
+    }
+
+    @WindowView
+    @RequestMapping(value = "score.html", method = {RequestMethod.GET, RequestMethod.POST})
+    protected ModelAndView score(Integer id) {
+        Assert.notNull(id, "word group id不能为null");
+        Group wordGroup = wordGroupService.find(id);
+        Assert.notNull(wordGroup, "word group不存在");
+        List<Student> studentsOriented = new ArrayList<>(wordGroup.getStudentsOriented());
+        Assert.notEmpty(studentsOriented, "分组中没有学生");
+        Set<Student> studentsScored = wordGroup.getStudentsScored();
+        studentsOriented.removeAll(studentsScored);
+        Assert.notEmpty(studentsOriented, "评分完毕");
+        ModelAndView mv = new ModelAndView("view/word_group/score");
+        mv.addObject("group", wordGroup);
+        mv.addObject("students", studentsOriented);
+        return mv;
     }
 }

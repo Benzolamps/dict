@@ -14,6 +14,12 @@
   add='${base_url}/word_group/add.html'
   edit='${base_url}/word_group/edit.html'
   delete='${base_url}/word_group/delete.json'
+  toolbar=[
+    {
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 详情',
+      'handler': 'location.href = "detail.html?id=" + data.id;'
+    }
+  ]
   page_enabled=true
   search=[
     {'name': 'name', 'display': '名称', 'type': 'string'},
