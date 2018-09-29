@@ -210,7 +210,7 @@ public abstract class DictSpring {
     private static Expression convertExpression(String expression) {
         assertNull();
         if (expression == null) expression = "#{null}";
-        else if (StringUtils.hasText(expression)) expression = applicationContext.getEnvironment().resolvePlaceholders(expression);
+        else if (StringUtils.hasText(expression)) expression = applicationContext.getEnvironment().resolveRequiredPlaceholders(expression);
         if (!expression.matches("^#\\{.+}$")) expression = "#{'" + expression + "'}";
         return expressionParser.parseExpression(expression, ParserContext.TEMPLATE_EXPRESSION);
     }
