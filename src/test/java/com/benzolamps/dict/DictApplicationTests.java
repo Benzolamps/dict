@@ -6,6 +6,6 @@ import org.junit.Test;
 public class DictApplicationTests {
     @Test
     public void contextLoads() {
-        DictApplication.main("--spring.profiles.active=eclipse");
+        DictApplication.main("--spring.profiles.active=test");
     }
 }
