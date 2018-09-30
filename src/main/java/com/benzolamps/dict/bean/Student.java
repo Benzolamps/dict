@@ -88,13 +88,4 @@ public class Student extends BaseEntity {
     @Transient
     @Size("failedPhrases")
     private Integer failedPhrasesCount;
-
-    public Student(Number number, String name, String description, Clazz clazz, Number masteredWordsCount, Number masteredPhrasesCount) {
-        this.number = number.intValue();
-        this.name = name;
-        this.description = description;
-        this.clazz = clazz;
-        this.masteredWordsCount = masteredWordsCount.intValue();
-        this.masteredPhrasesCount = masteredPhrasesCount.intValue();
-    }
 }

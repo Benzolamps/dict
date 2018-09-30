@@ -10,7 +10,7 @@ import javax.persistence.Converter;
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
- * Class GroupLogConverter
+ * 分组日志转换器
  * @author Benzolamps
  * @version 2.1.5
  * @datetime 2018-10-1 00:20:57
