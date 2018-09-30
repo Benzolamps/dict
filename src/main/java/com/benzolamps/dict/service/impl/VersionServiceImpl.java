@@ -88,7 +88,7 @@ public class VersionServiceImpl implements VersionService {
 
     /* 重置版本信息 */
     @PostConstruct
-    @Scheduled(fixedRate = 1000 * 15)
+    @Scheduled(fixedRate = 1000 * 60 * 15)
     private void resetVersionInfo() {
 
         if (succeed != null && status == Status.ALREADY_NEW) {
