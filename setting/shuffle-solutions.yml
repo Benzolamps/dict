@@ -1,9 +1,0 @@
-!!com.benzolamps.dict.bean.ShuffleSolutions
-solutions: !!set
-  ? id: 0
-    name: 默认
-    order: 0
-    properties: {}
-    remark: 乱序方案用于导出抄写表
-    strategyClass: rose.RoseShuffleStrategySetup
-  : null
