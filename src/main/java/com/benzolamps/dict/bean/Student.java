@@ -2,6 +2,7 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -21,12 +22,13 @@ import java.util.Set;
 @Table(name = "dict_student")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Student extends BaseEntity {
 
     private static final long serialVersionUID = -4963430274445493200L;
 
     /** 学号 */
-    @Column(nullable = false, updatable = false, unique = true)
+    @Column(nullable = false, unique = true)
     @NotNull
     @Min(1)
     private Integer number;
@@ -86,4 +88,13 @@ public class Student extends BaseEntity {
     @Transient
     @Size("failedPhrases")
     private Integer failedPhrasesCount;
+
+    public Student(Number number, String name, String description, Clazz clazz, Number masteredWordsCount, Number masteredPhrasesCount) {
+        this.number = number.intValue();
+        this.name = name;
+        this.description = description;
+        this.clazz = clazz;
+        this.masteredWordsCount = masteredWordsCount.intValue();
+        this.masteredPhrasesCount = masteredPhrasesCount.intValue();
+    }
 }

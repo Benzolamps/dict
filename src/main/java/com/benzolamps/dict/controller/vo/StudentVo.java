@@ -36,7 +36,7 @@ public class StudentVo implements Serializable {
 
     /** 学号 */
     @NotNull
-    @DictRemote("student/number_not_exists.json")
+    @DictRemote("/student/number_not_exists.json")
     @DictPropertyInfo(display = "学号")
     @Min(1)
     private Integer number;

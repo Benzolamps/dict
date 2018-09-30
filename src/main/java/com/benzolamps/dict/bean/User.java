@@ -5,6 +5,7 @@ import com.benzolamps.dict.component.DictReadonly;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.component.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,7 +25,7 @@ import javax.validation.constraints.Pattern;
 @Table(name = "dict_user")
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
 
     private static final long serialVersionUID = -5309444370236159463L;

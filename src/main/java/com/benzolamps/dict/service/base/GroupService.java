@@ -22,13 +22,41 @@ public interface GroupService extends BaseService<Group> {
 
     /**
      * 添加学生
+     * @param group 分组
      * @param students 学生
      */
     void addStudents(Group group, Student... students);
 
     /**
      * 添加班级
+     * @param group 分组
      * @param clazzes 班级
      */
     void addClazzes(Group group, Clazz... clazzes);
+
+    /**
+     * 移除学生
+     * @param group 分组
+     * @param students 学生
+     */
+    void removeStudents(Group group, Student... students);
+
+    /**
+     * 跳过学生的评分
+     * @param group 分组
+     * @param student 学生
+     */
+    void jump(Group group, Student student);
+
+    /**
+     * 结束评分
+     * @param group 分组
+     */
+    void finish(Group group);
+
+    /**
+     * 完成评分
+     * @param group 分组
+     */
+    void complete(Group group);
 }

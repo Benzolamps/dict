@@ -1,14 +1,9 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.Alias;
-import com.benzolamps.dict.component.DictPropertyInfo;
-import com.benzolamps.dict.component.DictRemote;
-import com.benzolamps.dict.component.Size;
-import com.benzolamps.dict.component.DictIgnore;
+import com.benzolamps.dict.component.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -132,7 +127,12 @@ public class Group extends BaseEntity {
     @OrderBy("index")
     private Set<Phrase> phrases;
 
-    /** 分组中的的学生数 */
+    /** 分组日志 */
+    @Convert(converter = GroupLogConverter.class)
+    @Basic(fetch = FetchType.LAZY)
+    private GroupLog groupLog;
+
+    /** 分组中的学生数 */
     @Transient
     @Size("studentsOriented")
     @DictIgnore
@@ -146,14 +146,14 @@ public class Group extends BaseEntity {
     @JsonProperty("studentsScored")
     private Integer studentsScoredCount;
 
-    /** 未掌握的单词数 */
+    /** 分组中的单词数 */
     @Transient
     @Size("words")
     @DictIgnore
     @JsonProperty("words")
     private Integer wordsCount;
 
-    /** 未掌握的短语数 */
+    /** 分组中的短语数 */
     @Transient
     @Size("phrases")
     @DictIgnore

@@ -1,5 +1,6 @@
 <#-- @ftlvariable name="group" type="com.benzolamps.dict.bean.Group" -->
 <#-- @ftlvariable name="students" type="java.util.List<com.benzolamps.dict.controller.vo.ClazzStudentTreeVo>" -->
+<#assign title>单词分组详情</#assign>
 <blockquote class="layui-elem-quote" style="margin-top: 10px;">
   ${group.name}&nbsp;&nbsp;&nbsp;&nbsp;
   <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back();">
@@ -77,10 +78,12 @@
   <div class="layui-col-xs4">
     <div class="layui-card" style="height: 500px;">
       <div class="layui-card-body">
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
-        <button class="layui-btn layui-btn-danger layui-btn-xs">删除</button>
+        <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
+          <button class="layui-btn layui-btn-danger layui-btn-xs delete">删除</button>
+        </#if>
         <div class="ztree" id="words-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
     </div>
@@ -97,10 +100,12 @@
   <div class="layui-col-xs4">
     <div class="layui-card" style="height: 500px;">
       <div class="layui-card-body">
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
-        <button class="layui-btn layui-btn-danger layui-btn-xs">删除</button>
+        <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
+          <button class="layui-btn layui-btn-danger layui-btn-xs delete">删除</button>
+        </#if>
         <div class="ztree" id="students-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
     </div>
@@ -111,10 +116,12 @@
 <script type="text/javascript" src="${base_url}/zTree_v3/js/jquery.ztree.excheck.js"></script>
 <script>
   var setting = {
-    check: {
-      enable: true,
-      chkStyle: "checkbox"
-    },
+    <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
+      check: {
+        enable: true,
+        chkStyle: "checkbox"
+      },
+    </#if>
     callback: {
       beforeClick: dict.nothing
     }
@@ -126,14 +133,18 @@
       name: '单词',
       open: 'true',
       children: [
-        <#list group.words as word>
+        <#if group.status != 'COMPLETED'>
+          <#list group.words as word>
           {id: '${word.id}', name: '${word.prototype} (${word.definition})'},
-        </#list>
+          </#list>
+        <#else>
+          <#list group.groupLog.words as word>
+          {id: '${word.id}', name: '${word.prototype} (${word.definition}) (掌握人数：${word.masteredStudentsCount})'},
+          </#list>
+        </#if>
       ]
     }
   ];
-
-  <@data_tree id='words-tree' setting='setting' value='wordsNode' variable='wordsTree'/>
 
   var studentsNode = [
     {
@@ -148,7 +159,9 @@
               <#list clazz.students as student>
                 {
                   id: '#{student.id}',
-                  name: '${student.name} (${student.number})<#if student.description??> (${student.description})</#if>'
+                  name: '${student.name} (${student.number!''})' +
+                    '<#if student.description??> (${student.description})</#if>' +
+                    '<#if group.status == 'COMPLETED'> (掌握单词数：${student.masteredWordsCount})</#if>'
                 },
               </#list>
             ]
@@ -157,6 +170,10 @@
       ]
     }
   ];
+
+  var wordsTree, studentsTree;
+
+  <@data_tree id='words-tree' setting='setting' value='wordsNode' variable='wordsTree'/>
 
   <@data_tree id='students-tree' setting='setting' value='studentsNode' variable='studentsTree'/>
 
@@ -211,24 +228,176 @@
     </#if>
   });
 
-  $('#score').click(function () {
-    <#if group.wordsCount lte 0>
-      parent.layer.alert('还没有单词呢！怎么评分？', {
-        icon: 2,
-        title: '提示'
+  <#if group.status != 'COMPLETED'>
+    $('#score').click(function () {
+      <#if group.wordsCount lte 0>
+        parent.layer.alert('还没有单词呢！怎么评分？', {
+          icon: 2,
+          title: '提示'
+        });
+      <#elseif group.studentsOrientedCount lte 0>
+        parent.layer.alert('还没有学生呢！不能评分！', {
+          icon: 2,
+          title: '提示'
+        });
+      <#else>
+        parent.layer.open({
+          type: 2,
+          title: '单词分组评分',
+          content: '${base_url}/word_group/score.html?id=${group.id}',
+          area: ['800px', '600px']
+        });
+      </#if>
+    });
+  </#if>
+
+  <#if group.status == 'SCORING'>
+    $('#finish').click(function () {
+    parent.layer.confirm('确定要结束当前评分吗？', {icon: 3, title: '提示'}, function (index) {
+      dict.loadText({
+        url: '${base_url}/word_group/finish.json',
+        type: 'post',
+        data: {
+          id: ${group.id}
+        },
+        dataType: 'json',
+        success: function (result, status, request) {
+          parent.layer.alert('操作成功！', {
+            icon: 1,
+            end: function () {
+              parent.$('iframe')[0].contentWindow.dict.reload(true);
+              var layerIndex = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(layerIndex);
+            }
+          });
+        },
+        error: function (result, status, request) {
+          parent.layer.alert(result.message, {
+            icon: 2,
+            title: result.status
+          });
+        }
       });
-    <#elseif group.studentsOrientedCount lte 0>
-      parent.layer.alert('还没有学生呢！不能评分！', {
-        icon: 2,
-        title: '提示'
-      });
-    <#else>
-      parent.layer.open({
-        type: 2,
-        title: '单词分组评分',
-        content: '${base_url}/word_group/score.html?id=${group.id}',
-        area: ['800px', '600px']
-      });
-    </#if>
+    });
   });
+  </#if>
+
+  <#if group.status == 'COMPLETED'>
+    $('#complete').click(function () {
+      parent.layer.confirm('确定要开始新一轮的评分吗？', {icon: 3, title: '提示'}, function (index) {
+        dict.loadText({
+          url: '${base_url}/word_group/complete.json',
+          type: 'post',
+          data: {
+            id: ${group.id}
+          },
+          dataType: 'json',
+          success: function (result, status, request) {
+            parent.layer.alert('操作成功！', {
+              icon: 1,
+              end: function () {
+                parent.$('iframe')[0].contentWindow.dict.reload(true);
+                var layerIndex = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(layerIndex);
+              }
+            });
+          },
+          error: function (result, status, request) {
+            parent.layer.alert(result.message, {
+              icon: 2,
+              title: result.status
+            });
+          }
+        });
+      });
+    });
+  </#if>
+
+  <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
+    $('#students-tree').parent().find('.delete').click(function () {
+      var nodes = studentsTree.getCheckedNodes().filter(function (node) {
+        return !node.isParent;
+      });
+      console.log(nodes);
+      if (nodes.length <= 0) {
+        parent.layer.alert('请选中要删除的学生！', {
+          icon: 2,
+          title: '提示'
+        });
+      } else {
+        parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+          dict.loadText({
+            url: '${base_url}/word_group/remove_students.json',
+            type: 'post',
+            data: {
+              groupId: ${group.id},
+              studentId: nodes.map(function (item) {
+                return item.id;
+              })
+            },
+            dataType: 'json',
+            success: function (result, status, request) {
+              parent.layer.alert('操作成功！', {
+                icon: 1,
+                end: function () {
+                  parent.$('iframe')[0].contentWindow.dict.reload(true);
+                  var layerIndex = parent.layer.getFrameIndex(window.name);
+                  parent.layer.close(layerIndex);
+                }
+              });
+            },
+            error: function (result, status, request) {
+              parent.layer.alert(result.message, {
+                icon: 2,
+                title: result.status
+              });
+            }
+          });
+        });
+      }
+    });
+
+    $('#words-tree').parent().find('.delete').click(function () {
+      var nodes = wordsTree.getCheckedNodes().filter(function (node) {
+        return !node.isParent;
+      });
+      console.log(nodes);
+      if (nodes.length <= 0) {
+        parent.layer.alert('请选中要删除的单词！', {
+          icon: 2,
+          title: '提示'
+        });
+      } else {
+        parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+          dict.loadText({
+            url: '${base_url}/word_group/remove_words.json',
+            type: 'post',
+            data: {
+              groupId: ${group.id},
+              wordId: nodes.map(function (item) {
+                return item.id;
+              })
+            },
+            dataType: 'json',
+            success: function (result, status, request) {
+              parent.layer.alert('操作成功！', {
+                icon: 1,
+                end: function () {
+                  parent.$('iframe')[0].contentWindow.dict.reload(true);
+                  var layerIndex = parent.layer.getFrameIndex(window.name);
+                  parent.layer.close(layerIndex);
+                }
+              });
+            },
+            error: function (result, status, request) {
+              parent.layer.alert(result.message, {
+                icon: 2,
+                title: result.status
+              });
+            }
+          });
+        });
+      }
+    });
+  </#if>
 </script>

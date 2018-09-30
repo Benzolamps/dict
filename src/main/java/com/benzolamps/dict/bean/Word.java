@@ -1,7 +1,9 @@
 package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.Format;
+import com.benzolamps.dict.component.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -19,6 +21,7 @@ import java.util.Set;
 @Table(name = "dict_word", uniqueConstraints = @UniqueConstraint(name = "uk_word", columnNames = {"library", "prototype"}))
 @Getter
 @Setter
+@NoArgsConstructor
 public class Word extends BaseElement {
 
     private static final long serialVersionUID = -7799252559204665509L;
@@ -44,5 +47,9 @@ public class Word extends BaseElement {
 
     /** 已掌握该单词的学生 */
     @ManyToMany(mappedBy = "masteredWords")
-    protected Set<Student> masteredStudents;
+    private Set<Student> masteredStudents;
+
+    @Transient
+    @Size("masteredStudents")
+    private Integer masteredStudentsCount;
 }

@@ -1,12 +1,11 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import java.util.Set;
 
 /**
@@ -19,11 +18,16 @@ import java.util.Set;
 @Table(name = "dict_phrase", uniqueConstraints = @UniqueConstraint(name = "uk_phrase", columnNames = {"library", "prototype"}))
 @Getter
 @Setter
+@NoArgsConstructor
 public class Phrase extends BaseElement {
 
     private static final long serialVersionUID = 5771542562398020839L;
 
     /** 已掌握该短语的学生 */
     @ManyToMany(mappedBy = "masteredPhrases")
-    protected Set<Student> masteredStudents;
+    private Set<Student> masteredStudents;
+
+    @Transient
+    @Size("masteredStudents")
+    private Integer masteredStudentsCount;
 }

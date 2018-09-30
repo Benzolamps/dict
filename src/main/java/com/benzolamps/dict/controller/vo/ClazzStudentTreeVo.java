@@ -52,6 +52,8 @@ public class ClazzStudentTreeVo implements Serializable {
                 studentVo.setName(student.getName());
                 studentVo.setNumber(student.getNumber());
                 studentVo.setDescription(student.getDescription());
+                studentVo.setMasteredWordsCount(student.getMasteredWordsCount());
+                studentVo.setMasteredPhrasesCount(student.getMasteredPhrasesCount());
                 ClazzStudentTreeVo clazzStudentTreeVo = clazzStudentTreeVos.stream()
                         .filter(vo -> vo.getId().equals(student.getClazz().getId())).findFirst().orElse(null);
                 if (clazzStudentTreeVo != null) {

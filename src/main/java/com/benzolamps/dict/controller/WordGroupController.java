@@ -145,8 +145,8 @@ public class WordGroupController extends BaseController {
     @ResponseBody
     protected BaseVo addWords(@RequestParam("groupId") Integer[] wordGroupIds, @RequestParam("wordId") Integer... wordIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
-        Assert.notEmpty(wordGroupIds, "word group id不能为null或空");
-        Assert.noNullElements(wordGroupIds, "word group id不能存在为null的元素");
+        Assert.notEmpty(wordGroupIds, "word group ids不能为null或空");
+        Assert.noNullElements(wordGroupIds, "word group ids不能存在为null的元素");
         for (Integer wordGroupId : wordGroupIds) {
             Group wordGroup = wordGroupService.find(wordGroupId);
             Assert.notNull(wordGroup, "word group不存在");
@@ -165,10 +165,10 @@ public class WordGroupController extends BaseController {
      */
     @PostMapping(value = "add_students.json")
     @ResponseBody
-    protected BaseVo addStudents(@RequestParam("groupId") Integer[] wordGroupIds, @RequestParam("studentId") Integer[] studentIds) {
+    protected BaseVo addStudents(@RequestParam("groupId") Integer[] wordGroupIds, @RequestParam("studentId") Integer... studentIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
-        Assert.notEmpty(wordGroupIds, "word group id不能为null或空");
-        Assert.noNullElements(wordGroupIds, "word group id不能存在为null的元素");
+        Assert.notEmpty(wordGroupIds, "word group ids不能为null或空");
+        Assert.noNullElements(wordGroupIds, "word group ids不能存在为null的元素");
         for (Integer wordGroupId : wordGroupIds) {
             Group wordGroup = wordGroupService.find(wordGroupId);
             Assert.notNull(wordGroup, "word group不存在");
@@ -187,10 +187,10 @@ public class WordGroupController extends BaseController {
      */
     @PostMapping(value = "add_clazzes.json")
     @ResponseBody
-    protected BaseVo addClazzes(@RequestParam("groupId") Integer[] wordGroupIds, @RequestParam("clazzId") Integer[] clazzIds) {
+    protected BaseVo addClazzes(@RequestParam("groupId") Integer[] wordGroupIds, @RequestParam("clazzId") Integer... clazzIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
-        Assert.notEmpty(wordGroupIds, "word group id不能为null或空");
-        Assert.noNullElements(wordGroupIds, "word group id不能存在为null的元素");
+        Assert.notEmpty(wordGroupIds, "word group ids不能为null或空");
+        Assert.noNullElements(wordGroupIds, "word group ids不能存在为null的元素");
         for (Integer wordGroupId : wordGroupIds) {
             Group wordGroup = wordGroupService.find(wordGroupId);
             Assert.notNull(wordGroup, "word group不存在");
@@ -198,6 +198,44 @@ public class WordGroupController extends BaseController {
             Clazz[] clazzes = Arrays.stream(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
             wordGroupService.addClazzes(wordGroup, clazzes);
         }
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 移除单词
+     * @param wordGroupId 单词分组id
+     * @param wordIds 单词id
+     * @return 移除成功
+     */
+    @PostMapping(value = "remove_words.json")
+    @ResponseBody
+    protected BaseVo removeWords(@RequestParam("groupId") Integer wordGroupId, @RequestParam("wordId") Integer[] wordIds) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(wordGroupId, "word group id不能为null或空");
+        Group wordGroup = wordGroupService.find(wordGroupId);
+        Assert.notNull(wordGroup, "word group不存在");
+        Assert.noNullElements(wordIds, "clazz ids不能存在为null的元素");
+        Word[] words = Arrays.stream(wordIds).map(wordService::find).toArray(Word[]::new);
+        wordGroupService.removeWords(wordGroup, words);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 移除学生
+     * @param wordGroupId 单词分组id
+     * @param studentIds 学生id
+     * @return 移除成功
+     */
+    @PostMapping(value = "remove_students.json")
+    @ResponseBody
+    protected BaseVo removeStudents(@RequestParam("groupId") Integer wordGroupId, @RequestParam("studentId") Integer[] studentIds) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(wordGroupId, "word group id不能为null或空");
+        Group wordGroup = wordGroupService.find(wordGroupId);
+        Assert.notNull(wordGroup, "word group不存在");
+        Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
+        Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
+        wordGroupService.removeStudents(wordGroup, students);
         return SUCCESS_VO;
     }
 
@@ -213,12 +251,22 @@ public class WordGroupController extends BaseController {
         Assert.notNull(id, "word group id不能为null");
         Group wordGroup = wordGroupService.find(id);
         Assert.notNull(wordGroup, "word group不存在");
+
         ModelAndView mv = new ModelAndView("view/word_group/detail");
         mv.addObject("group", wordGroup);
-        mv.addObject("students", ClazzStudentTreeVo.convert(wordGroup.getStudentsOriented()));
+        if (wordGroup.getStatus() != Group.Status.COMPLETED) {
+            mv.addObject("students", ClazzStudentTreeVo.convert(wordGroup.getStudentsOriented()));
+        } else {
+            mv.addObject("students", ClazzStudentTreeVo.convert(wordGroup.getGroupLog().getStudents()));
+        }
         return mv;
     }
 
+    /**
+     * 评分界面
+     * @param id 单词分组id
+     * @return ModelAndView
+     */
     @WindowView
     @RequestMapping(value = "score.html", method = {RequestMethod.GET, RequestMethod.POST})
     protected ModelAndView score(Integer id) {
@@ -254,6 +302,13 @@ public class WordGroupController extends BaseController {
         return mv;
     }
 
+    /**
+     * 评分保存
+     * @param groupId 分组id
+     * @param studentId 学生id
+     * @param masteredWordIds 掌握的单词id
+     * @return 保存成功
+     */
     @PostMapping(value = "score_save.json")
     protected BaseVo scoreSave(@RequestParam Integer groupId, @RequestParam Integer studentId, @RequestParam(value = "wordId", required = false) Integer... masteredWordIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -267,6 +322,55 @@ public class WordGroupController extends BaseController {
         Assert.noNullElements(masteredWordIds, "mastered word ids不能存在为null的元素");
         Word[] masteredWords = Arrays.stream(masteredWordIds).map(wordService::find).toArray(Word[]::new);
         wordGroupService.scoreWords(wordGroup, student, masteredWords);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 跳过当前学生的评分
+     * @param groupId 分组id
+     * @param studentId 学生id
+     * @return 操作成功
+     */
+    @PostMapping(value = "jump.json")
+    protected BaseVo jump(Integer groupId, Integer studentId) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(groupId, "id不能为null");
+        Group wordGroup = wordGroupService.find(groupId);
+        Assert.notNull(wordGroup, "word group不存在");
+        Assert.notNull(studentId, "id不能为null");
+        Student student = studentService.find(studentId);
+        Assert.notNull(student, "student不存在");
+        wordGroupService.jump(wordGroup, student);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 结束评分
+     * @param id 分组id
+     * @return 操作成功
+     */
+    @PostMapping(value = "finish.json")
+    protected BaseVo finish(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(id, "id不能为null");
+        Group wordGroup = wordGroupService.find(id);
+        Assert.notNull(wordGroup, "word group不存在");
+        wordGroupService.finish(wordGroup);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 完成
+     * @param id 分组id
+     * @return 操作成功
+     */
+    @PostMapping(value = "complete.json")
+    protected BaseVo complete(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(id, "id不能为null");
+        Group wordGroup = wordGroupService.find(id);
+        Assert.notNull(wordGroup, "word group不存在");
+        wordGroupService.complete(wordGroup);
         return SUCCESS_VO;
     }
 }

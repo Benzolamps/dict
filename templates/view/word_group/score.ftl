@@ -24,7 +24,11 @@
       </div>
       <br><br>
       <div class="layui-card-body" style="text-align: center">
-        <table cellspacing="0" cellpadding="0" border="0" width="100%">
+        ${student.name}<br>
+        ${student.number}<br>
+        ${student.description}<br>
+        ${student.clazz.name}<br>
+        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 10px">
           <tr>
             <td>
               <button id="move-right" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius" style="width: 50%; margin-bottom: 10px;">

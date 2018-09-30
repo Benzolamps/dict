@@ -13,11 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * 单词短语分组Service接口实现类
@@ -113,7 +109,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void addStudents(Group group, Student... students) {
         Assert.notNull(group, "group不能为null");
         Assert.isTrue(group.getType() == type, "group类型错误");
-        group.getStudentsOriented().addAll(Arrays.stream(students).collect(Collectors.toSet()));
+        group.getStudentsOriented().addAll(Arrays.asList(students));
     }
 
     @Transactional
@@ -130,11 +126,20 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     }
 
     @Transactional
+    @Override
+    public void removeStudents(Group group, Student... students) {
+        Assert.notNull(group, "group不能为null");
+        Assert.isTrue(group.getType() == type, "group类型错误");
+        group.getStudentsOriented().removeAll(Arrays.asList(students));
+        group.getStudentsScored().removeAll(Arrays.asList(students));
+    }
+
+    @Transactional
     public void addWords(Group wordGroup, Word... words) {
         Assert.notNull(wordGroup, "word group不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
         Assert.isTrue(type == Type.WORD && wordGroup.getType() == type, "group类型错误");
-        wordGroup.getWords().addAll(Arrays.stream(words).collect(Collectors.toSet()));
+        wordGroup.getWords().addAll(Arrays.asList(words));
     }
 
     @Transactional
@@ -142,7 +147,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.notNull(phraseGroup, "phrase group不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
         Assert.isTrue(type == Type.PHRASE && phraseGroup.getType() == type, "group类型错误");
-        phraseGroup.getPhrases().addAll(Arrays.stream(phrases).collect(Collectors.toSet()));
+        phraseGroup.getPhrases().addAll(Arrays.asList(phrases));
     }
 
     @Transactional
@@ -150,7 +155,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.notNull(wordGroup, "word group不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
         Assert.isTrue(type == Type.WORD && wordGroup.getType() == type, "group类型错误");
-        wordGroup.getWords().removeAll(Arrays.stream(words).collect(Collectors.toSet()));
+        wordGroup.getWords().removeAll(Arrays.asList(words));
     }
 
     @Transactional
@@ -158,9 +163,10 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.notNull(phraseGroup, "phrase group不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
         Assert.isTrue(type == Type.PHRASE && phraseGroup.getType() == type, "group类型错误");
-        phraseGroup.getPhrases().removeAll(Arrays.stream(phrases).collect(Collectors.toSet()));
+        phraseGroup.getPhrases().removeAll(Arrays.asList(phrases));
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Transactional
     public void scoreWords(Group wordGroup, Student student, Word... words) {
         Assert.notNull(wordGroup, "word group不能为null");
@@ -170,14 +176,37 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.isTrue(type == Type.WORD && wordGroup.getType() == type, "group类型错误");
         studentService.addFailedWords(student, wordGroup.getWords().toArray(new Word[0]));
         studentService.addMasteredWords(student, words);
-        wordGroup.getStudentsScored().add(student);
-        if (wordGroup.getStudentsOrientedCount() - wordGroup.getStudentsScoredCount() == 1) {
-            wordGroup.setStatus(Status.COMPLETED);
-        } else if (wordGroup.getStudentsScoredCount() == 0) {
-            wordGroup.setStatus(Status.SCORING);
+        this.jump(wordGroup, student);
+        if (wordGroup.getGroupLog() == null) {
+            wordGroup.setGroupLog(new GroupLog());
+            for (Word word : wordGroup.getWords()) {
+                Word wordReview = new Word();
+                wordReview.setId(word.getId());
+                wordReview.setIndex(word.getIndex());
+                wordReview.setPrototype(word.getPrototype());
+                wordReview.setDefinition(word.getDefinition());
+                wordReview.setMasteredStudentsCount(0);
+                wordGroup.getGroupLog().getWords().add(wordReview);
+            }
         }
+        for (Word word : words) {
+            Word wordReview = wordGroup.getGroupLog().getWords().stream().filter(word::equals).findFirst().orElse(null);
+            wordReview.setMasteredStudentsCount(wordReview.getMasteredStudentsCount() + 1);
+        }
+        Student studentReview = new Student();
+        studentReview.setId(student.getId());
+        studentReview.setName(student.getName());
+        studentReview.setDescription(student.getDescription());
+        Clazz clazz = new Clazz();
+        clazz.setId(student.getClazz().getId());
+        clazz.setName(student.getClazz().getName());
+        clazz.setDescription(student.getClazz().getDescription());
+        studentReview.setClazz(clazz);
+        studentReview.setMasteredWordsCount(words.length);
+        wordGroup.getGroupLog().getStudents().add(studentReview);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Transactional
     public void scorePhrases(Group phraseGroup, Student student, Phrase... phrases) {
         Assert.notNull(phraseGroup, "phrase group不能为null");
@@ -187,11 +216,61 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.isTrue(type == Type.PHRASE && phraseGroup.getType() == type, "group类型错误");
         studentService.addFailedPhrases(student, phraseGroup.getPhrases().toArray(new Phrase[0]));
         studentService.addMasteredPhrases(student, phrases);
-        phraseGroup.getStudentsScored().add(student);
-        if (phraseGroup.getStudentsOrientedCount() - phraseGroup.getStudentsScoredCount() == 1) {
-            phraseGroup.setStatus(Status.COMPLETED);
-        } else if (phraseGroup.getStudentsScoredCount() == 0) {
-            phraseGroup.setStatus(Status.SCORING);
+        this.jump(phraseGroup, student);
+        if (phraseGroup.getGroupLog() == null) {
+            phraseGroup.setGroupLog(new GroupLog());
+            for (Phrase phrase : phraseGroup.getPhrases()) {
+                Phrase phraseReview = new Phrase();
+                phraseReview.setId(phrase.getId());
+                phraseReview.setIndex(phrase.getIndex());
+                phraseReview.setPrototype(phrase.getPrototype());
+                phraseReview.setDefinition(phrase.getDefinition());
+                phraseReview.setMasteredStudentsCount(0);
+                phraseGroup.getGroupLog().getPhrases().add(phraseReview);
+            }
         }
+        for (Phrase phrase : phrases) {
+            Phrase phraseReview = phraseGroup.getGroupLog().getPhrases().stream().filter(phrase::equals).findFirst().orElse(null);
+            phraseReview.setMasteredStudentsCount(phraseReview.getMasteredStudentsCount() + 1);
+        }
+        Student studentReview = new Student();
+        studentReview.setId(student.getId());
+        studentReview.setName(student.getName());
+        studentReview.setDescription(student.getDescription());
+        Clazz clazz = new Clazz();
+        clazz.setId(student.getClazz().getId());
+        clazz.setName(student.getClazz().getName());
+        clazz.setDescription(student.getClazz().getDescription());
+        studentReview.setClazz(clazz);
+        studentReview.setMasteredWordsCount(phrases.length);
+        phraseGroup.getGroupLog().getStudents().add(studentReview);
+    }
+
+    @Transactional
+    @Override
+    public void jump(Group group, Student student) {
+        Assert.notNull(group, "phrase group不能为null");
+        if (group.getStudentsOrientedCount() - group.getStudentsScoredCount() == 1) {
+            group.setStatus(Status.COMPLETED);
+        } else if (group.getStudentsScoredCount() == 0) {
+            group.setStatus(Status.SCORING);
+        }
+        group.getStudentsScored().add(student);
+    }
+
+    @Transactional
+    @Override
+    public void finish(Group group) {
+        Assert.notNull(group, "phrase group不能为null");
+        group.setStatus(Status.COMPLETED);
+        group.getStudentsScored().addAll(group.getStudentsOriented());
+    }
+
+    @Transactional
+    @Override
+    public void complete(Group group) {
+        Assert.notNull(group, "phrase group不能为null");
+        group.setStatus(Status.NORMAL);
+        group.getStudentsScored().clear();
     }
 }

@@ -41,7 +41,7 @@ public abstract class BaseElement extends BaseEntity {
     /** 词库 */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "library", nullable = false, updatable = false)
-    protected Library library;
+    private Library library;
 
     /** @return 用于实体类中字段的格式 */
     @SuppressWarnings("unused")
