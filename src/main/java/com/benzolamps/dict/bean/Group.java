@@ -77,9 +77,8 @@ public class Group extends BaseEntity {
         private String name;
 
         @JsonValue
-        @Override
-        public String toString() {
-            return this.name;
+        public String getName() {
+            return name;
         }
     }
 
@@ -122,6 +121,7 @@ public class Group extends BaseEntity {
     @JoinTable(name = "dict_gw", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "word"))
     @DictIgnore
     @JsonIgnore
+    @OrderBy("index")
     private Set<Word> words;
 
     /** 分组中的短语 */
@@ -129,6 +129,7 @@ public class Group extends BaseEntity {
     @JoinTable(name = "dict_gp", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     @DictIgnore
     @JsonIgnore
+    @OrderBy("index")
     private Set<Phrase> phrases;
 
     /** 分组中的的学生数 */

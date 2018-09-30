@@ -68,4 +68,3 @@ $.validator.methods.remote = function(value, element, param) {
         }) != 'false'
 };
 
-

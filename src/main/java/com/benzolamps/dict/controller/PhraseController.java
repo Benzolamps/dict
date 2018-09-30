@@ -74,13 +74,9 @@ public class PhraseController extends BaseController {
     @WindowView
     protected ModelAndView export() {
         ModelAndView mv = new ModelAndView();
-        if (libraryService.count() > 0) {
-            mv.setViewName("view/phrase/export");
-            mv.addObject("shuffleSolutions", shuffleSolutionService.findAll());
-            mv.addObject("docSolutions", docSolutionService.findAll());
-        } else {
-            mv.setViewName("view/library/lack");
-        }
+        mv.setViewName("view/phrase/export");
+        mv.addObject("shuffleSolutions", shuffleSolutionService.findAll());
+        mv.addObject("docSolutions", docSolutionService.findAll());
         return mv;
     }
 

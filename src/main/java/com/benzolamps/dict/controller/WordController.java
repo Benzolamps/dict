@@ -86,13 +86,9 @@ public class WordController extends BaseController {
     @WindowView
     protected ModelAndView export() {
         ModelAndView mv = new ModelAndView();
-        if (libraryService.count() > 0) {
-            mv.setViewName("view/word/export");
-            mv.addObject("shuffleSolutions", shuffleSolutionService.findAll());
-            mv.addObject("docSolutions", docSolutionService.findAll());
-        } else {
-            mv.setViewName("view/library/lack");
-        }
+        mv.setViewName("view/word/export");
+        mv.addObject("shuffleSolutions", shuffleSolutionService.findAll());
+        mv.addObject("docSolutions", docSolutionService.findAll());
         return mv;
     }
 
@@ -223,6 +219,7 @@ public class WordController extends BaseController {
     @GetMapping(value = "add_to.html")
     @WindowView
     protected ModelAndView addTo(@RequestParam("wordId") Integer... wordIds) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         ModelAndView mv = new ModelAndView("view/word/add_to");
         mv.addObject("groups", wordGroupService.findAll());
         mv.addObject("words", wordService.findList(Filter.in("id", Arrays.asList(wordIds))));

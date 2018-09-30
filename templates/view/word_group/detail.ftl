@@ -34,7 +34,7 @@
           <tbody>
             <tr>
               <th title="状态">状态</th>
-              <td>${group.status}</td>
+              <td>${group.status.getName()}</td>
             </tr>
             <tr>
               <th title="单词数">单词数</th>
@@ -42,7 +42,7 @@
             </tr>
             <tr>
               <th title="已考核次数">已考核次数</th>
-              <td class="date-time-text">0</td>
+              <td>0</td>
             </tr>
           </tbody>
         </table>
@@ -75,18 +75,18 @@
 </div>
 <div class="layui-row" style="margin-top: 20px">
   <div class="layui-col-xs4">
-    <div class="layui-card" style="height: 500px; overflow: auto">
+    <div class="layui-card" style="height: 500px;">
       <div class="layui-card-body">
-        <button class="layui-btn layui-btn-primary layui-btn-xs">全选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs">全不选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs">反选</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
         <button class="layui-btn layui-btn-danger layui-btn-xs">删除</button>
-        <div class="ztree" id="words-tree"></div>
+        <div class="ztree" id="words-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
     </div>
   </div>
   <div class="layui-col-xs4">
-    <div class="layui-card" style="height: 500px; overflow: auto">
+    <div class="layui-card" style="height: 500px;">
       <div class="layui-card-body">
         <blockquote class="layui-elem-quote" style="margin-top: 10px;">
           结束评分后可查看该分组单词的考核情况！
@@ -95,13 +95,13 @@
     </div>
   </div>
   <div class="layui-col-xs4">
-    <div class="layui-card" style="height: 500px; overflow: auto">
+    <div class="layui-card" style="height: 500px;">
       <div class="layui-card-body">
-        <button class="layui-btn layui-btn-primary layui-btn-xs">全选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs">全不选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs">反选</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
+        <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
         <button class="layui-btn layui-btn-danger layui-btn-xs">删除</button>
-        <div class="ztree" id="students-tree"></div>
+        <div class="ztree" id="students-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
     </div>
   </div>
@@ -133,7 +133,7 @@
     }
   ];
 
-  $.fn.zTree.init($('#words-tree'), setting, wordsNode);
+  <@data_tree id='words-tree' setting='setting' value='wordsNode' variable='wordsTree'/>
 
   var studentsNode = [
     {
@@ -158,49 +158,77 @@
     }
   ];
 
-  $.fn.zTree.init($('#students-tree'), setting, studentsNode);
+  <@data_tree id='students-tree' setting='setting' value='studentsNode' variable='studentsTree'/>
 
   $('#export').click(function () {
-    parent.layer.open({
-      type: 2,
-      title: '导出单词',
-      content: '${base_url}/word/export.html',
-      area: ['800px', '600px'],
-      cancel: function () {
-        delete parent.exportData;
-      },
-      end: function () {
-        if (!parent.exportData) return false;
-        var data = {};
-        data.groupId = ${group.id};
-        data.title = parent.exportData.title;
-        data.docSolutionId = parent.exportData.docSolution;
-        data.shuffleSolutionId = parent.exportData.shuffleSolution;
-        dict.loadText({
-          url: '${base_url}/word/export_save.json',
-          type: 'post',
-          data: data,
-          dataType: 'json',
-          requestBody: true,
-          success: function (result, status, request) {
-            parent.layer.alert('导出成功！', {
-              icon: 1,
-              end: function () {
-                dict.postHref('${base_url}/doc/download.doc', {
-                  fileName: data.title,
-                  token: result.data
-                });
-              }
-            });
-          },
-          error: function (result, status, request) {
-            parent.layer.alert(result.message, {
-              icon: 2,
-              title: result.status
-            });
-          }
-        });
-      }
-    });
+    <#if group.wordsCount gt 0>
+      parent.layer.open({
+        type: 2,
+        title: '导出单词',
+        content: '${base_url}/word/export.html',
+        area: ['800px', '600px'],
+        cancel: function () {
+          delete parent.exportData;
+        },
+        end: function () {
+          if (!parent.exportData) return false;
+          var data = {};
+          data.groupId = ${group.id};
+          data.title = parent.exportData.title;
+          data.docSolutionId = parent.exportData.docSolution;
+          data.shuffleSolutionId = parent.exportData.shuffleSolution;
+          dict.loadText({
+            url: '${base_url}/word/export_save.json',
+            type: 'post',
+            data: data,
+            dataType: 'json',
+            requestBody: true,
+            success: function (result, status, request) {
+              parent.layer.alert('导出成功！', {
+                icon: 1,
+                end: function () {
+                  dict.postHref('${base_url}/doc/download.doc', {
+                    fileName: data.title,
+                    token: result.data
+                  });
+                }
+              });
+            },
+            error: function (result, status, request) {
+              parent.layer.alert(result.message, {
+                icon: 2,
+                title: result.status
+              });
+            }
+          });
+        }
+      });
+    <#else>
+      parent.layer.alert('还没有单词呢！导出个毛线啊！', {
+        icon: 2,
+        title: '提示'
+      });
+    </#if>
+  });
+
+  $('#score').click(function () {
+    <#if group.wordsCount lte 0>
+      parent.layer.alert('还没有单词呢！怎么评分？', {
+        icon: 2,
+        title: '提示'
+      });
+    <#elseif group.studentsOrientedCount lte 0>
+      parent.layer.alert('还没有学生呢！不能评分！', {
+        icon: 2,
+        title: '提示'
+      });
+    <#else>
+      parent.layer.open({
+        type: 2,
+        title: '单词分组评分',
+        content: '${base_url}/word_group/score.html?id=${group.id}',
+        area: ['800px', '600px']
+      });
+    </#if>
   });
 </script>

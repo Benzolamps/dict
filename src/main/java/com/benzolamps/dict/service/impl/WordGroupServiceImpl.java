@@ -1,10 +1,8 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.Group;
-import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.service.base.WordGroupService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 /**
  * 单词分组Service接口实现类

@@ -6,10 +6,7 @@ import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.dao.core.Pageable;
-import com.benzolamps.dict.service.base.ClazzService;
-import com.benzolamps.dict.service.base.PhraseGroupService;
-import com.benzolamps.dict.service.base.PhraseService;
-import com.benzolamps.dict.service.base.StudentService;
+import com.benzolamps.dict.service.base.*;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -39,6 +36,9 @@ public class PhraseGroupController extends BaseController {
     @Resource
     private ClazzService clazzService;
 
+    @Resource
+    private LibraryService libraryService;
+
     /**
      * 列出所有短语分组
      * @return ModelAndView
@@ -47,8 +47,12 @@ public class PhraseGroupController extends BaseController {
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("view/phrase_group/list");
-        mv.addObject("page", phraseGroupService.findPage(pageable));
+        if (libraryService.count() > 0) {
+            mv.setViewName("view/phrase_group/list");
+            mv.addObject("page", phraseGroupService.findPage(pageable));
+        } else {
+            mv.setViewName("view/library/lack");
+        }
         return mv;
     }
 
@@ -59,6 +63,7 @@ public class PhraseGroupController extends BaseController {
     @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView add() {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return new ModelAndView("view/phrase_group/add");
     }
 
@@ -70,6 +75,7 @@ public class PhraseGroupController extends BaseController {
     @PostMapping("/save.json")
     @ResponseBody
     protected DataVo save(@RequestBody Group phraseGroup) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         phraseGroup = phraseGroupService.persist(phraseGroup);
         return wrapperData(phraseGroup);
     }
@@ -82,6 +88,7 @@ public class PhraseGroupController extends BaseController {
     @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         ModelAndView mv = new ModelAndView("view/phrase_group/edit");
         mv.addObject("phraseGroup", phraseGroupService.find(id));
         return mv;
@@ -95,6 +102,7 @@ public class PhraseGroupController extends BaseController {
     @PostMapping("/update.json")
     @ResponseBody
     protected DataVo update(@RequestBody Group phraseGroup) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         phraseGroup = phraseGroupService.update(phraseGroup, "status");
         return wrapperData(phraseGroup);
     }
@@ -106,6 +114,7 @@ public class PhraseGroupController extends BaseController {
     @PostMapping("/delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         phraseGroupService.remove(ids);
         return SUCCESS_VO;
     }
@@ -118,6 +127,7 @@ public class PhraseGroupController extends BaseController {
     @RequestMapping(value = "/name_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     protected boolean nameNotExists(String name) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return !phraseGroupService.nameExists(name);
     }
 
@@ -130,6 +140,7 @@ public class PhraseGroupController extends BaseController {
     @PostMapping(value = "add_phrases.json")
     @ResponseBody
     protected BaseVo addPhrases(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("phraseId") Integer... phraseIds) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notEmpty(phraseGroupIds, "phrase group id不能为null或空");
         Assert.noNullElements(phraseGroupIds, "phrase group id不能存在为null的元素");
         for (Integer phraseGroupId : phraseGroupIds) {
@@ -151,6 +162,7 @@ public class PhraseGroupController extends BaseController {
     @PostMapping(value = "add_students.json")
     @ResponseBody
     protected BaseVo addStudents(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("studentId") Integer[] studentIds) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notEmpty(phraseGroupIds, "phrase group id不能为null或空");
         Assert.noNullElements(phraseGroupIds, "phrase group id不能存在为null的元素");
         for (Integer phraseGroupId : phraseGroupIds) {
@@ -172,6 +184,7 @@ public class PhraseGroupController extends BaseController {
     @PostMapping(value = "add_clazzes.json")
     @ResponseBody
     protected BaseVo addClazzes(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("clazzId") Integer[] clazzIds) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notEmpty(phraseGroupIds, "phrase group id不能为null或空");
         Assert.noNullElements(phraseGroupIds, "phrase group id不能存在为null的元素");
         for (Integer phraseGroupId : phraseGroupIds) {
