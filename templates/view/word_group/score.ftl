@@ -44,7 +44,8 @@
             </td>
           </tr>
         </table>
-        <input id="submit" type="submit" value="<#if hasMore>下一个<#else>完成</#if>" class="layui-btn layui-btn-normal layui-btn-sm" style="margin-top: 200px; width: 100%">
+        <input id="submit" type="button" value="完成" class="layui-btn layui-btn-normal layui-btn-sm" style="margin-top: 150px; width: 100%">
+        <br><input id="jump" type="button" value="跳过" class="layui-btn layui-btn-danger layui-btn-sm" style="margin-top: 10px; width: 100%">
       </div>
     </div>
   </div>
@@ -99,68 +100,102 @@
 
   $('#move-right').click(function () {
     var nodes = failedTree.getCheckedNodes();
-    $.each(nodes, function (index, item) {
+    $.each(nodes.sort(function (a, b) {
+      return b.getIndex() - a.getIndex();
+    }), function (index, item) {
       var node = failedNode.splice(item.getIndex(), 1)[0];
       masteredNode.push(node);
-      masteredNode.sort(function (a, b) {
-          return a.index - b.index;
-      });
-      init();
-    })
+    });
+    masteredNode.sort(function (a, b) {
+      return a.index - b.index;
+    });
+    init();
   });
 
   $('#move-left').click(function () {
     var nodes = masteredTree.getCheckedNodes();
-    $.each(nodes, function (index, item) {
+    $.each(nodes.sort(function (a, b) {
+      return b.getIndex() - a.getIndex();
+    }), function (index, item) {
       var node = masteredNode.splice(item.getIndex(), 1)[0];
       failedNode.push(node);
-      failedNode.sort(function (a, b) {
-        return a.index - b.index;
-      });
-      init();
-    })
+    });
+    failedNode.sort(function (a, b) {
+      return a.index - b.index;
+    });
+    init();
   });
 
   $('#submit').click(function () {
-    var nodes = masteredTree.getNodes();
-    console.log({
-      groupId: ${group.id},
-      studentId: ${student.id},
-      wordId: nodes.map(function (item) {
-        return item.id;
-      })
-    });
-    dict.loadText({
-      url: '${base_url}/word_group/score_save.json',
-      type: 'post',
-      data: {
-        groupId: ${group.id},
-        studentId: ${student.id},
-        wordId: nodes.map(function (item) {
-          return item.id;
-        })
-      },
-      dataType: 'json',
-      success: function (result, status, request) {
-        parent.layer.alert('操作成功！', {
-          icon: 1,
-          end: function () {
-            parent.$('iframe')[0].contentWindow.dict.reload(true);
+    parent.layer.confirm('确定当前学生已评分完毕？', {icon: 3, title: '提示'}, function (index) {
+      var nodes = masteredTree.getNodes();
+      dict.loadText({
+        url: '${base_url}/word_group/score_save.json',
+        type: 'post',
+        data: {
+          groupId: ${group.id},
+          studentId: ${student.id},
+          wordId: nodes.map(function (item) {
+            return item.id;
+          })
+        },
+        dataType: 'json',
+        success: function (result, status, request) {
+          parent.layer.alert('操作成功！', {
+            icon: 1,
+            end: function () {
+              parent.$('iframe')[0].contentWindow.dict.reload(true);
             <#if hasMore>
               dict.reload(true);
             <#else>
               var layerIndex = parent.layer.getFrameIndex(window.name);
               parent.layer.close(layerIndex);
             </#if>
-          }
-        });
-      },
-      error: function (result, status, request) {
-        parent.layer.alert(result.message, {
-          icon: 2,
-          title: result.status
-        });
-      }
+            }
+          });
+        },
+        error: function (result, status, request) {
+          parent.layer.alert(result.message, {
+            icon: 2,
+            title: result.status
+          });
+        }
+      });
+    });
+  });
+
+  $('#jump').click(function () {
+    parent.layer.confirm('确定要跳过当前学生的评分？', {icon: 3, title: '提示'}, function (index) {
+      var nodes = masteredTree.getNodes();
+      dict.loadText({
+        url: '${base_url}/word_group/jump.json',
+        type: 'post',
+        data: {
+          groupId: ${group.id},
+          studentId: ${student.id}
+        },
+        dataType: 'json',
+        success: function (result, status, request) {
+          parent.layer.alert('操作成功！', {
+            icon: 1,
+            end: function () {
+              parent.$('iframe')[0].contentWindow.dict.reload(true);
+            <#if hasMore>
+              dict.reload(true);
+            <#else>
+              var layerIndex = parent.layer.getFrameIndex(window.name);
+              parent.layer.close(layerIndex);
+            </#if>
+            }
+          });
+        },
+        error: function (result, status, request) {
+          parent.layer.alert(result.message, {
+            icon: 2,
+            title: result.status
+          });
+        }
+      });
     });
   });
 </script>

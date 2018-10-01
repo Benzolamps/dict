@@ -75,7 +75,7 @@
   </div>
 </div>
 <div class="layui-row" style="margin-top: 20px">
-  <div class="layui-col-xs4">
+  <div class="layui-col-xs3">
     <div class="layui-card" style="height: 500px;">
       <div class="layui-card-body">
         <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
@@ -88,16 +88,20 @@
       </div>
     </div>
   </div>
-  <div class="layui-col-xs4">
+  <div class="layui-col-xs6">
     <div class="layui-card" style="height: 500px;">
       <div class="layui-card-body">
-        <blockquote class="layui-elem-quote" style="margin-top: 10px;">
-          结束评分后可查看该分组单词的考核情况！
-        </blockquote>
+        <#if group.status != 'COMPLETED'>
+          <blockquote class="layui-elem-quote" style="margin-top: 10px;">
+            结束评分后可查看该分组单词的考核情况！
+          </blockquote>
+        <#else>
+          <div id="rate" style="width: 100%; height: 450px"></div>
+        </#if>
       </div>
     </div>
   </div>
-  <div class="layui-col-xs4">
+  <div class="layui-col-xs3">
     <div class="layui-card" style="height: 500px;">
       <div class="layui-card-body">
         <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
@@ -114,6 +118,7 @@
 <link rel="stylesheet" type="text/css" href="${base_url}/zTree_v3/css/zTreeStyle/zTreeStyle.css"/>
 <script type="text/javascript" src="${base_url}/zTree_v3/js/jquery.ztree.core.js"></script>
 <script type="text/javascript" src="${base_url}/zTree_v3/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" src="${base_url}/js/echarts.js"></script>
 <script>
   var setting = {
     <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
@@ -159,9 +164,9 @@
               <#list clazz.students as student>
                 {
                   id: '#{student.id}',
-                  name: '${student.name} (${student.number!''})' +
+                  name: '${student.name} (${student.number})' +
                     '<#if student.description??> (${student.description})</#if>' +
-                    '<#if group.status == 'COMPLETED'> (掌握单词数：${student.masteredWordsCount})</#if>'
+                    '<#if group.status == 'COMPLETED'> (掌握单词数：${student.masteredWordsCount!'未参与评分'})</#if>'
                 },
               </#list>
             ]
@@ -280,6 +285,60 @@
       });
     });
   });
+  </#if>
+
+  <#if group.status == 'COMPLETED'>
+    var data = <@json_dump obj=group.groupLog.students/>;
+    data = data.filter(function (item) {
+      return item.masteredWordsCount != null
+    });
+    data.sort(function (a, b) {
+      return b.masteredWordsCount - a.masteredWordsCount;
+    });
+
+    data = data.slice(0, 10);
+    echarts.init($('#rate')[0]).setOption({
+      color: ['#3398DB'],
+      tooltip : {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow'
+        }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: data.map(function (item) {
+            return item.name;
+          }),
+          axisTick: {
+            alignWithLabel: true
+          }
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          max: ${group.wordsCount}
+        }
+      ],
+      series: [
+        {
+          name: '掌握单词数',
+          type: 'bar',
+          barWidth: '60%',
+          data: data.map(function (item) {
+            return item.masteredWordsCount;
+          })
+        }
+      ]
+    });
   </#if>
 
   <#if group.status == 'COMPLETED'>

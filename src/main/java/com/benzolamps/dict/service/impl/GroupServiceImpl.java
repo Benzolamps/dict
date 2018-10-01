@@ -130,8 +130,12 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void removeStudents(Group group, Student... students) {
         Assert.notNull(group, "group不能为null");
         Assert.isTrue(group.getType() == type, "group类型错误");
-        group.getStudentsOriented().removeAll(Arrays.asList(students));
-        group.getStudentsScored().removeAll(Arrays.asList(students));
+        List<Student> studentList = Arrays.asList(students);
+        group.getStudentsOriented().removeAll(studentList);
+        group.getStudentsScored().removeAll(studentList);
+        if (group.getGroupLog() != null) {
+            group.getGroupLog().getStudents().removeAll(studentList);
+        }
     }
 
     @Transactional
@@ -155,7 +159,12 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.notNull(wordGroup, "word group不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
         Assert.isTrue(type == Type.WORD && wordGroup.getType() == type, "group类型错误");
-        wordGroup.getWords().removeAll(Arrays.asList(words));
+        List<Word> wordList = Arrays.asList(words);
+        wordGroup.getWords().removeAll(wordList);
+        if (wordGroup.getGroupLog() != null) {
+            wordGroup.getGroupLog().getWords().removeAll(wordList);
+        }
+
     }
 
     @Transactional
@@ -164,6 +173,11 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
         Assert.isTrue(type == Type.PHRASE && phraseGroup.getType() == type, "group类型错误");
         phraseGroup.getPhrases().removeAll(Arrays.asList(phrases));
+        List<Phrase> phraseList = Arrays.asList(phrases);
+        phraseGroup.getPhrases().removeAll(phraseList);
+        if (phraseGroup.getGroupLog() != null) {
+            phraseGroup.getGroupLog().getPhrases().removeAll(phraseList);
+        }
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -176,34 +190,11 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.isTrue(type == Type.WORD && wordGroup.getType() == type, "group类型错误");
         studentService.addFailedWords(student, wordGroup.getWords().toArray(new Word[0]));
         studentService.addMasteredWords(student, words);
-        this.jump(wordGroup, student);
-        if (wordGroup.getGroupLog() == null) {
-            wordGroup.setGroupLog(new GroupLog());
-            for (Word word : wordGroup.getWords()) {
-                Word wordReview = new Word();
-                wordReview.setId(word.getId());
-                wordReview.setIndex(word.getIndex());
-                wordReview.setPrototype(word.getPrototype());
-                wordReview.setDefinition(word.getDefinition());
-                wordReview.setMasteredStudentsCount(0);
-                wordGroup.getGroupLog().getWords().add(wordReview);
-            }
-        }
+        this.internalJump(wordGroup, student, words.length);
         for (Word word : words) {
             Word wordReview = wordGroup.getGroupLog().getWords().stream().filter(word::equals).findFirst().orElse(null);
             wordReview.setMasteredStudentsCount(wordReview.getMasteredStudentsCount() + 1);
         }
-        Student studentReview = new Student();
-        studentReview.setId(student.getId());
-        studentReview.setName(student.getName());
-        studentReview.setDescription(student.getDescription());
-        Clazz clazz = new Clazz();
-        clazz.setId(student.getClazz().getId());
-        clazz.setName(student.getClazz().getName());
-        clazz.setDescription(student.getClazz().getDescription());
-        studentReview.setClazz(clazz);
-        studentReview.setMasteredWordsCount(words.length);
-        wordGroup.getGroupLog().getStudents().add(studentReview);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -216,25 +207,52 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.isTrue(type == Type.PHRASE && phraseGroup.getType() == type, "group类型错误");
         studentService.addFailedPhrases(student, phraseGroup.getPhrases().toArray(new Phrase[0]));
         studentService.addMasteredPhrases(student, phrases);
-        this.jump(phraseGroup, student);
-        if (phraseGroup.getGroupLog() == null) {
-            phraseGroup.setGroupLog(new GroupLog());
-            for (Phrase phrase : phraseGroup.getPhrases()) {
+        this.internalJump(phraseGroup, student, phrases.length);
+        for (Phrase phrase : phrases) {
+            Phrase phraseReview = phraseGroup.getGroupLog().getPhrases().stream().filter(phrase::equals).findFirst().orElse(null);
+            phraseReview.setMasteredStudentsCount(phraseReview.getMasteredStudentsCount() + 1);
+        }
+    }
+
+    @Transactional
+    @Override
+    public void jump(Group group, Student student) {
+        Assert.notNull(group, "group不能为null");
+        Assert.notNull(student, "student不能为null");
+        internalJump(group, student, null);
+    }
+
+    private void internalJump(Group group, Student student, Integer count) {
+        if (group.getStudentsOrientedCount() - group.getStudentsScoredCount() == 1) {
+            group.setStatus(Status.COMPLETED);
+        } else if (group.getStudentsScoredCount() == 0) {
+            group.setStatus(Status.SCORING);
+        }
+        if (group.getGroupLog() == null) {
+            group.setGroupLog(new GroupLog());
+            for (Word word : group.getWords()) {
+                Word wordReview = new Word();
+                wordReview.setId(word.getId());
+                wordReview.setIndex(word.getIndex());
+                wordReview.setPrototype(word.getPrototype());
+                wordReview.setDefinition(word.getDefinition());
+                wordReview.setMasteredStudentsCount(0);
+                group.getGroupLog().getWords().add(wordReview);
+            }
+            for (Phrase phrase : group.getPhrases()) {
                 Phrase phraseReview = new Phrase();
                 phraseReview.setId(phrase.getId());
                 phraseReview.setIndex(phrase.getIndex());
                 phraseReview.setPrototype(phrase.getPrototype());
                 phraseReview.setDefinition(phrase.getDefinition());
                 phraseReview.setMasteredStudentsCount(0);
-                phraseGroup.getGroupLog().getPhrases().add(phraseReview);
+                group.getGroupLog().getPhrases().add(phraseReview);
             }
         }
-        for (Phrase phrase : phrases) {
-            Phrase phraseReview = phraseGroup.getGroupLog().getPhrases().stream().filter(phrase::equals).findFirst().orElse(null);
-            phraseReview.setMasteredStudentsCount(phraseReview.getMasteredStudentsCount() + 1);
-        }
+        group.getStudentsScored().add(student);
         Student studentReview = new Student();
         studentReview.setId(student.getId());
+        studentReview.setNumber(student.getNumber());
         studentReview.setName(student.getName());
         studentReview.setDescription(student.getDescription());
         Clazz clazz = new Clazz();
@@ -242,20 +260,8 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         clazz.setName(student.getClazz().getName());
         clazz.setDescription(student.getClazz().getDescription());
         studentReview.setClazz(clazz);
-        studentReview.setMasteredWordsCount(phrases.length);
-        phraseGroup.getGroupLog().getStudents().add(studentReview);
-    }
-
-    @Transactional
-    @Override
-    public void jump(Group group, Student student) {
-        Assert.notNull(group, "phrase group不能为null");
-        if (group.getStudentsOrientedCount() - group.getStudentsScoredCount() == 1) {
-            group.setStatus(Status.COMPLETED);
-        } else if (group.getStudentsScoredCount() == 0) {
-            group.setStatus(Status.SCORING);
-        }
-        group.getStudentsScored().add(student);
+        studentReview.setMasteredWordsCount(count);
+        group.getGroupLog().getStudents().add(studentReview);
     }
 
     @Transactional
@@ -271,6 +277,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void complete(Group group) {
         Assert.notNull(group, "phrase group不能为null");
         group.setStatus(Status.NORMAL);
+        group.setGroupLog(null);
         group.getStudentsScored().clear();
     }
 }

@@ -20,6 +20,7 @@ public class GroupLogConverter implements AttributeConverter<GroupLog, String> {
 
     @Override
     public String convertToDatabaseColumn(GroupLog attribute) {
+        if (null == attribute) return null;
         return tryFunc(() -> DictSpring.getBean(ObjectMapper.class).writeValueAsString(attribute));
     }
 
