@@ -7,16 +7,29 @@
 
 <@nothing><script type="text/javascript"></@nothing>
 
+<#list page.searches as search>
+  <#if search.field == 'studentId'><#assign student_id = search.value/></#if>
+</#list>
+
+<#assign fields>
+  [
+    {'field': 'prototype', 'title': '单词', 'sort': true, 'minWidth': 120},
+    <#--{'field': 'britishPronunciation', 'title': '英式发音', 'sort': true, 'minWidth': 120},-->
+    <#--{'field': 'americanPronunciation', 'title': '美式发音', 'sort': true, 'minWidth': 120},-->
+    {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150},
+    {'field': 'clazzes', 'title': '词性', 'minWidth': 150}
+    <#if !student_id??>
+      , {'field': 'masteredStudents', 'title': '已掌握', 'sort': true}
+      , {'field': 'failedStudents', 'title': '未掌握', 'sort': true}
+    </#if>
+  ]
+</#assign>
+
 <#assign search>
   [
     {
       'name': 'prototype',
       'display': '单词',
-      'type': 'string'
-    },
-    {
-      'name': 'definition',
-      'display': '词义',
       'type': 'string'
     },
     {
@@ -29,6 +42,20 @@
         </#list>
       ]
     }
+    <#if student_id??>
+      , {'name': 'studentId', 'display': '学生学号', 'type': 'integer', 'readonly': true}
+      , {'name': 'studentName', 'display': '学生姓名', 'type': 'string', 'readonly': true}
+      , {
+        'name': 'isMastered',
+        'display': '是否掌握',
+        'type': 'string',
+        'readonly': true,
+        'options': [
+          {'id': 'true', 'value': '已掌握'},
+          {'id': 'false', 'value': '未掌握'}
+        ]
+      }
+    </#if>
   ]
 </#assign>
 <@nothing>;</@nothing>
@@ -137,20 +164,32 @@
   }
 </#assign>
 
+<#assign create_personal>
+  if (data.length > 100) {
+    parent.layer.alert('一次最多只能添加100个单词！', {icon: 2});
+  } else {
+    parent.layer.open({
+      type: 2,
+      title: '创建专属分组',
+      content: (function () {
+        var baseUrl = '${base_url}/word/create_personal.html?';
+        $.each(data, function (index, item) {
+          baseUrl += 'wordId=' + item.id + '&';
+        });
+        baseUrl += 'studentId=${student_id!}';
+        return baseUrl;
+      })(),
+      area: ['800px', '600px']
+    });
+  }
+</#assign>
+
 <@nothing></script></@nothing>
 
 <@data_list
   id='words'
   name='单词'
-  fields=[
-    {'field': 'prototype', 'title': '单词', 'sort': true, 'minWidth': 120},
-    <#--{'field': 'britishPronunciation', 'title': '英式发音', 'sort': true, 'minWidth': 120},-->
-    <#--{'field': 'americanPronunciation', 'title': '美式发音', 'sort': true, 'minWidth': 120},-->
-    {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150},
-    {'field': 'clazzes', 'title': '词性', 'minWidth': 150},
-    {'field': 'masteredStudents', 'title': '已掌握', 'sort': true},
-    {'field': 'failedStudents', 'title': '未掌握', 'sort': true}
-  ]
+  fields=fields?eval
   page=page
   add='${base_url}/word/add.html'
   edit='${base_url}/word/edit.html'
@@ -169,8 +208,8 @@
       'handler': file_export(true)
     },
     {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
-      'handler': add_to,
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; ' + student_id???string('创建专属分组', '添加到分组'),
+      'handler': student_id???string(create_personal, add_to),
       'needSelected': true
     }
   ]

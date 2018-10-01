@@ -1,11 +1,9 @@
 package com.benzolamps.dict.service.impl;
 
-import com.benzolamps.dict.bean.Group;
-import com.benzolamps.dict.bean.Phrase;
-import com.benzolamps.dict.bean.Student;
-import com.benzolamps.dict.bean.Word;
+import com.benzolamps.dict.bean.*;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.base.StudentDao;
+import com.benzolamps.dict.dao.base.StudyLogDao;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.service.base.StudentService;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,9 @@ public class StudentServiceImpl extends BaseServiceImpl<Student> implements Stud
     @Resource
     private GroupDao groupDao;
 
+    @Resource
+    private StudyLogDao studyLogDao;
+
     @Override
     @Transactional(readOnly = true)
     public boolean numberExists(Integer number) {
@@ -45,6 +46,7 @@ public class StudentServiceImpl extends BaseServiceImpl<Student> implements Stud
             group.getStudentsOriented().removeAll(students);
             group.getStudentsScored().removeAll(students);
         }
+        studyLogDao.remove(Filter.in("student", students));
         super.remove(students);
     }
 

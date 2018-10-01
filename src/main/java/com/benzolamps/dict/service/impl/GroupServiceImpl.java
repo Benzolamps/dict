@@ -9,6 +9,7 @@ import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.service.base.GroupService;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.StudentService;
+import com.benzolamps.dict.service.base.StudyLogService;
 import com.benzolamps.dict.util.DictArray;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -28,6 +29,9 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     @Resource
     private GroupDao groupDao;
+
+    @Resource
+    private StudyLogService studyLogService;
 
     @Resource
     private LibraryService libraryService;
@@ -287,6 +291,21 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         studentReview.setMasteredWordsCount(wordsCount);
         studentReview.setMasteredPhrasesCount(phrasesCount);
         group.getGroupLog().getStudents().add(studentReview);
+
+        if (wordsCount != null || phrasesCount != null) {
+            StudyLog studyLog = new StudyLog();
+            studyLog.setGroupName(group.getName());
+            studyLog.setGroupCreateDate(group.getCreateDate());
+            studyLog.setGroupType(group.getType());
+            studyLog.setLibraryName(group.getLibrary().getName());
+            studyLog.setLogDate(new Date());
+            studyLog.setStudent(student);
+            studyLog.setWordsCount(group.getWordsCount());
+            studyLog.setMasteredWordsCount(wordsCount);
+            studyLog.setPhrasesCount(group.getPhrasesCount());
+            studyLog.setMasteredPhrasesCount(phrasesCount);
+            studyLogService.persist(studyLog);
+        }
     }
 
     @Transactional

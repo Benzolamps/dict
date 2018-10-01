@@ -74,6 +74,24 @@ public interface BaseService<T extends BaseEntity> {
     Integer count(Filter filter);
 
     /**
+     * 根据条件和排序获取实体对象集合
+     * @param count 个数
+     * @param filter 条件
+     * @param orders 排序
+     * @return 实体对象集合
+     */
+    List<T> findCount(int count, Filter filter, Order... orders);
+
+    /**
+     * 根据条件和排序获取实体对象集合
+     * @param count 个数
+     * @param filter 条件
+     * @param orders 排序
+     * @return 实体对象集合
+     */
+    List<T> findCount(int count, Filter filter, Collection<Order> orders);
+
+    /**
      * 保存实体对象
      * @param entity 实体对象
      * @return 保存后的实体对象

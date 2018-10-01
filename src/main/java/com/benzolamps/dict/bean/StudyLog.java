@@ -42,7 +42,7 @@ public class StudyLog extends BaseEntity {
 
     /** 分组类型 */
     @Column(nullable = false, updatable = false)
-    @NotEmpty
+    @NotNull
     private Group.Type groupType;
 
     /** 分组创建时间 */
@@ -57,21 +57,17 @@ public class StudyLog extends BaseEntity {
 
     /** 分组单词数 */
     @Column(nullable = false, updatable = false)
-    @NotEmpty
     private Integer wordsCount;
 
     /** 分组短语数 */
     @Column(nullable = false, updatable = false)
-    @NotEmpty
     private Integer phrasesCount;
 
     /** 分组中学会的单词数 */
     @Column(nullable = false, updatable = false)
-    @NotEmpty
     private Integer masteredWordsCount;
 
     /** 分组中学会的短语数 */
     @Column(nullable = false, updatable = false)
-    @NotEmpty
     private Integer masteredPhrasesCount;
 }

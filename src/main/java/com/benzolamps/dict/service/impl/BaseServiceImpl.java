@@ -83,6 +83,16 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     }
 
     @Override
+    public List<T> findCount(int count, Filter filter, Order... orders) {
+        return baseDao.findCount(count, filter, orders);
+    }
+
+    @Override
+    public List<T> findCount(int count, Filter filter, Collection<Order> orders) {
+        return baseDao.findCount(count, filter, orders);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Integer count(Filter filter) {
         this.handleFilter(filter);
