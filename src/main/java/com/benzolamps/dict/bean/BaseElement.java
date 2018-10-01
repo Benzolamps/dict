@@ -47,7 +47,7 @@ public abstract class BaseElement extends BaseEntity {
     @SuppressWarnings("unused")
     public String replaceString(String str) {
         return str == null ? "" : str
-            .replaceAll("[ \\s\\u00a0]+", "")
+            .replaceAll("[\\s\\u00a0]+", "")
             .replace("（", "(")
             .replace("）", ")")
             .replace("：", ":")

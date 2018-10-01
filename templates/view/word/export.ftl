@@ -11,7 +11,7 @@
 </div>
 
 <script>
-  var docSolutions = <@json_dump obj=docSolutions/>.filter(function (docSolution) {
+  var docSolutions = (<@json_dump obj=docSolutions/>).filter(function (docSolution) {
     return docSolution.exportFor.toLowerCase() == 'word';
   });
   var shuffleSolutions = <@json_dump obj=shuffleSolutions/>;
@@ -70,7 +70,7 @@
     } else {
       tr.show();
     }
-  }
+  };
 
   toggleShuffleSolution(docSolutions[0].id);
 

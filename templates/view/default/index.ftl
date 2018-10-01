@@ -88,7 +88,7 @@
       <div class="layui-layout layui-layout-admin">
         <div class="layui-header" style="background-color: #FBFBFB">
           <div class="layui-logo" style="background-color: #FFB800">
-            <a onclick="location.dict(true);" title="${system_title} ~ ${system_version}" >
+            <a onclick="dict.reload(true);" title="${system_title} ~ ${system_version}" >
               ${abbreviate('${system_title} ~ ${system_version}', 20, '...')?html}
             </a>
           </div>
@@ -310,7 +310,7 @@
               }
             });
           }, 500);
-        }
+        };
         dict.updateSocket.connect();
       </script>
     </body>

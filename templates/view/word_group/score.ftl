@@ -93,7 +93,7 @@
   var init = function () {
     <@data_tree id='failed-tree' setting='setting' value='failedNode' variable='failedTree'/>
     <@data_tree id='mastered-tree' setting='setting' value='masteredNode' variable='masteredTree'/>
-  }
+  };
 
   init();
 

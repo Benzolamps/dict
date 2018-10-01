@@ -79,7 +79,7 @@
               <w:sz-cs w:val="${font_size}"/>
               <w:u w:val="single"/>
             </w:rPr>
-            <w:t> </w:t>
+            <w:t/>
           </w:r>
         </w:p>
       </w:tc>

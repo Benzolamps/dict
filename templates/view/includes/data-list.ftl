@@ -297,8 +297,7 @@
     $('th[data-field=id]').removeClass('field-th-active');
 
     $.each([<#list fields as field><#if field.sort?? && field.sort>'${field.field}'</#if><#sep>, </#list>], function (index, value) {
-      $('#${id} th[data-field=' + value + ']').css('cursor', 'pointer');
-      $('#${id} th[data-field=' + value + ']').click(function () {
+      $('#${id} th[data-field=' + value + ']').css('cursor', 'pointer').click(function () {
         $('#${id} .field-th-active').removeClass('field-th-active');
         $(this).addClass('field-th-active');
         $('#${id}-order-info [name=field]').val(value);

@@ -31,6 +31,7 @@
     }
   ]
 </#assign>
+<@nothing>;</@nothing>
 
 <#assign file_upload>
   var $file = $('#upload-form input');

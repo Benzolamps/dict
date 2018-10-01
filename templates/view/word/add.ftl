@@ -1,5 +1,4 @@
 <#-- @ftlvariable name="wordClazzes" type="java.util.Collection<com.benzolamps.dict.bean.WordClazz>" -->
-<@nothing><script type="text/javascript"></@nothing>
 <#assign fields>
   [
     <#list get_dict_property('com.benzolamps.dict.controller.vo.WordVo') as field>
@@ -25,8 +24,6 @@
     </#list>
   ]
 </#assign>
-<@nothing></script></@nothing>
-
 <@data_add
   id='words'
   fields=fields?eval

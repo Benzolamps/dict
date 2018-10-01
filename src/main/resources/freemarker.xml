@@ -58,6 +58,7 @@
         <entry key="current_library" value-ref="currentLibraryMethod"/>
         <entry key="all_libraries" value-ref="allLibrariesMethod"/>
         <entry key="shuffle_strategy_loop" value-ref="shuffleStrategyDirective"/>
+        <entry key="compress" value-ref="compressDirective"/>
       </map>
     </property>
   </bean>

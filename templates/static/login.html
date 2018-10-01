@@ -4,25 +4,38 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=0.8"/>
   <title>登录 - ${system_title} - ${system_version}</title>
+  <!--<@nothing>-->
+  <link rel="stylesheet" type="text/css" href="css/login.css">
+  <link rel="stylesheet" type="text/css" href="css/loading.css">
+  <link rel="stylesheet" type="text/css" href="layui/css/layui.css">
+  <link rel="stylesheet" type="text/css" href="font-awesome/css/font-awesome.min.css">
+  <script type="text/javascript" src="js/jquery-3.3.1.js"></script>
+  <script type="text/javascript" src="js/jquery.form.js"></script>
+  <script type="text/javascript" src="jquery-validation-1.17.0/jquery.validate.js"></script>
+  <script type="text/javascript" src="jquery-validation-1.17.0/additional-methods.js"></script>
+  <script type="text/javascript" src="jquery-validation-1.17.0/localization/messages_zh.js"></script>
+  <script type="text/javascript" src="layui/layui.js"></script>
+  <script type="text/javascript" src="js/circle.js"></script>
+  <script type="text/javascript" src="js/login.js"></script>
+  <!--</@nothing>-->
+  <!--${'--' + '>'}
+  <link rel="stylesheet" type="text/css" href="${base_url}/css/login.css">
+  <link rel="stylesheet" type="text/css" href="${base_url}/css/loading.css">
+  <link rel="stylesheet" type="text/css" href="${base_url}/layui/css/layui.css">
+  <link rel="stylesheet" type="text/css" href="${base_url}/font-awesome/css/font-awesome.min.css">
+  <script type="text/javascript" src="${base_url}/js/jquery-3.3.1.js"></script>
+  <script type="text/javascript" src="${base_url}/js/jquery.form.js"></script>
+  <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/jquery.validate.js"></script>
+  <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/additional-methods.js"></script>
+  <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/localization/messages_zh.js"></script>
+  <script type="text/javascript" src="${base_url}/layui/layui.js"></script>
+  <script type="text/javascript" src="${base_url}/js/circle.js"></script>
+  <script type="text/javascript" src="${base_url}/js/login.js"></script>
+  ${'<!-'}-->
   <script>
       if (parent !== window) {
           parent.location.replace(location.href);
       }
-      var baseUrl = '${base_url}/';
-      /*<@nothing>*/ baseUrl = ''; /*</@nothing>*/
-      document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'css/login.css">');
-      document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'css/loading.css">');
-      document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'layui/css/layui.css">');
-      document.write('<link rel="stylesheet" type="text/css" href="' + baseUrl + 'font-awesome/css/font-awesome.min.css">');
-      document.write('<script type="text/javascript" src="' + baseUrl + 'js/jquery-3.3.1.js"><\/script>');
-      document.write('<script type="text/javascript" src="' + baseUrl + 'js/jquery.form.js"><\/script>');
-      document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/jquery.validate.js"><\/script>');
-      document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/additional-methods.js"><\/script>');
-      document.write('<script type="text/javascript" src="' + baseUrl + 'jquery-validation-1.17.0/localization/messages_zh.js"><\/script>');
-      document.write('<script type="text/javascript" src="' + baseUrl + 'layui/layui.js"><\/script>');
-      document.write('<script type="text/javascript" src="' + baseUrl + 'js/circle.js"><\/script>');
-      document.write('<script type="text/javascript" src="' + baseUrl + 'js/login.js"><\/script>');
-      /*<@nothing>*/ baseUrl = 'http://localhost:2018/dict'; /*</@nothing>*/
   </script>
 </head>
 <body>
@@ -84,10 +97,12 @@
         </tr>
       </table>
     </form>
-    <iframe src="http://localhost:2018/dictionary-2.1.1/ping" style="display: none"></iframe>
   </div>
 </div>
 <script>
+  
+    var baseUrl = /*<@nothing>*/'http://localhost:2018/dict'/*</@nothing>${'*' + '/'}'${base_url}'/**/;
+  
     !function () {
         Array.prototype.toString = function () {
             return this.join('，');
@@ -202,7 +217,7 @@
     var id = setInterval(function () {
         $.ajax({
             type: 'get',
-            url: baseUrl + "/ping",
+            url: baseUrl + '/ping',
             success: function (data, s) {
                 (!redirected) && (redirected ^= true) && !function () {
                     /*<@nothing>*/ location.replace(baseUrl + "/"); /*</@nothing>*/

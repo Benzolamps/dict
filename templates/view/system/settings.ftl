@@ -70,7 +70,7 @@
       updateButton.children().eq(0).html('<i class=\"fa fa-puzzle-piece" style="font-size: 20px;"></i> &nbsp; 重试');
       updateContent.html('更新失败！');
     };
-  }
+  };
 
   $('.clean,.shutdown').click(function () {
     parent.dict.updateSocket.initCallback();

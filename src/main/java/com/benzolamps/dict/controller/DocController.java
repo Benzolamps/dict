@@ -6,7 +6,7 @@ import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.service.base.DocSolutionService;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
-import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictSpring;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.springframework.ui.ModelMap;
@@ -23,6 +23,7 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.UUID;
+import java.util.function.UnaryOperator;
 
 /**
  * Word文档界面
@@ -72,7 +73,7 @@ public class DocController extends BaseController {
         }
         StringWriter stringWriter = new StringWriter();
         template.process(modelMap, stringWriter);
-        String content = stringWriter.toString().replaceAll(Constant.HTML_COMPRESS_PATTERN, "").replaceAll("[\\s ]+", " ").replaceAll("> <", "><");
+        String content = DictSpring.<UnaryOperator<String>> getBean("compress").apply(stringWriter.toString());
         String token = UUID.randomUUID().toString().replace("-", "");
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         requestAttributes.setAttribute(token, content, RequestAttributes.SCOPE_SESSION);

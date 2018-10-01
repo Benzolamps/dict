@@ -16,11 +16,11 @@
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/localization/messages_zh.js"></script>
       <script type="text/javascript" src="${base_url}/layui/layui.all.js"></script>
       <script type="text/javascript" src="${base_url}/res/js/common.js"></script>
-    </head>
-    <body>
       <script>
         parent.dict.updateSocket.initCallback();
       </script>
+    </head>
+    <body>
       <#include '/${content_path}.ftl'/>
       <script type="text/javascript">
         $(function () {

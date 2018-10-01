@@ -4,7 +4,7 @@ import com.benzolamps.dict.bean.User;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.service.base.UserService;
-import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictSpring;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -17,6 +17,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.function.UnaryOperator;
 
 /**
  * 用户Controller
@@ -48,7 +49,7 @@ public class UserController extends BaseController {
             Template template = configuration.getTemplate("static/login.html");
             StringWriter stringWriter = new StringWriter();
             template.process(null, stringWriter);
-            String html = stringWriter.toString().replaceAll(Constant.HTML_COMPRESS_PATTERN, "");
+            String html = DictSpring.<UnaryOperator<String>> getBean("compress").apply(stringWriter.toString());
             stringWriter.close();
             response.getWriter().print(html);
         }

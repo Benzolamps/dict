@@ -6,20 +6,6 @@
 </form>
 
 <@nothing><script type="text/javascript"></@nothing>
-<#assign search>
-  [
-    {
-      'name': 'prototype',
-      'display': '短语',
-      'type': 'string'
-    },
-    {
-      'name': 'definition',
-      'display': '词义',
-      'type': 'string'
-    }
-  ]
-</#assign>
 
 <#assign file_upload>
   var $file = $('#upload-form input');
@@ -163,5 +149,8 @@
     }
   ]
   page_enabled=true
-  search=search?eval
+  search=[
+    {'name': 'prototype', 'display': '短语', 'type': 'string'},
+    {'name': 'definition', 'display': '词义', 'type': 'string'}
+  ]
 />

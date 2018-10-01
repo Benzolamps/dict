@@ -44,10 +44,6 @@ public interface Constant {
     // language=RegExp
     String MOBILE_PATTERN = "^1[3-9][0-9]{9}$";
 
-    /** HTML压缩 */
-    // language=RegExp
-    String HTML_COMPRESS_PATTERN = "^[\\s]+|[\\s]+$|\\n|\\r";
-
     /** 空的Object数组 */
     Object[] EMPTY_OBJECT_ARRAY = new Object[0];
 
