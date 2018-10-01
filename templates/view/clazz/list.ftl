@@ -69,16 +69,6 @@
       'needSelected': true
     }
   ]
-  toolbar=[
-    {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到单词分组',
-      'handler': '~function (data) {' + add_to_word_group + '}([data]);'
-    },
-    {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到短语分组',
-      'handler': '~function (data) {' + add_to_phrase_group + '}([data]);'
-    }
-  ]
   page_enabled=true
   delete_confirm='删除班级将会删除其中的所有学生，确定要继续吗？'
   search=[

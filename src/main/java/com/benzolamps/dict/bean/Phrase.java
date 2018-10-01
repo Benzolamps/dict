@@ -27,7 +27,17 @@ public class Phrase extends BaseElement {
     @ManyToMany(mappedBy = "masteredPhrases")
     private Set<Student> masteredStudents;
 
+    /** 未掌握该短语的学生 */
+    @ManyToMany(mappedBy = "failedPhrases")
+    private Set<Student> failedStudents;
+
+    /** 已掌握该短语的学生数 */
     @Transient
     @Size("masteredStudents")
     private Integer masteredStudentsCount;
+
+    /** 未掌握该短语的学生数 */
+    @Transient
+    @Size("failedStudents")
+    private Integer failedStudentsCount;
 }

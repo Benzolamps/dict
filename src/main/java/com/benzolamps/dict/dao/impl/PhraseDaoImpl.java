@@ -18,7 +18,9 @@ public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseD
         DictQuery<Phrase> dictQuery = new GeneratedDictQuery<Phrase>() {
             @Override
             public void applyOrder(Order order) {
-                super.applyOrder(order.convertIf(Order.IgnoreCaseOrder.class, "prototype"));
+                order = order.convertIf(Order.IgnoreCaseOrder.class, "prototype");
+                order = order.convertIf(Order.SizeOrder.class, "masteredStudents", "failedStudents");
+                super.applyOrder(order);
             }
         };
         return super.findPage(dictQuery, pageable);

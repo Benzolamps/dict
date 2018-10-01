@@ -103,6 +103,13 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     }
 
     @Override
+    public void remove(Collection<Group> groups) {
+        Assert.isTrue(groups.stream().allMatch(Objects::nonNull), "groups中不能存在为null的元素");
+        Assert.isTrue(groups.stream().allMatch(group -> group.getStatus() != Status.SCORING), "无法删除正在评分的分组！");
+        super.remove(groups);
+    }
+
+    @Override
     protected void handleFilter(final Filter filter) {
         Library library = libraryService.getCurrent();
         Assert.notNull(library, "未选中词库");

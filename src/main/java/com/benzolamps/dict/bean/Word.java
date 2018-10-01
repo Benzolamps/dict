@@ -49,7 +49,17 @@ public class Word extends BaseElement {
     @ManyToMany(mappedBy = "masteredWords")
     private Set<Student> masteredStudents;
 
+    /** 未掌握该单词的学生 */
+    @ManyToMany(mappedBy = "failedWords")
+    private Set<Student> failedStudents;
+
+    /** 已掌握该单词的学生数 */
     @Transient
     @Size("masteredStudents")
     private Integer masteredStudentsCount;
+
+    /** 未掌握该单词的学生数 */
+    @Transient
+    @Size("failedStudents")
+    private Integer failedStudentsCount;
 }

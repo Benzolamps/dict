@@ -38,7 +38,9 @@ public class WordDaoImpl extends BaseElementDaoImpl<Word> implements WordDao {
 
             @Override
             public void applyOrder(Order order) {
-                super.applyOrder(order.convertIf(Order.IgnoreCaseOrder.class, "prototype", "americanPronunciation", "britishPronunciation"));
+                order = order.convertIf(Order.IgnoreCaseOrder.class, "prototype", "americanPronunciation", "britishPronunciation");
+                order = order.convertIf(Order.SizeOrder.class, "masteredStudents", "failedStudents");
+                super.applyOrder(order);
             }
         };
         return super.findPage(dictQuery, pageable);

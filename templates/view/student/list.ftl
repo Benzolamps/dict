@@ -5,7 +5,6 @@
   [
     {'name': 'number', 'display': '学号', 'type': 'integer'},
     {'name': 'name', 'display': '姓名', 'type': 'string'},
-    {'name': 'description', 'display': '描述', 'type': 'string'},
     {
       'name': 'clazz',
       'display': '班级',
@@ -18,6 +17,7 @@
     }
   ]
 </#assign>
+<@nothing>;</@nothing>
 
 <#assign add_to_word_group>
   if (data.length > 100) {
@@ -68,11 +68,10 @@
   id='students'
   name='学生'
   fields=[
-    {'field': 'number', 'title': '学号', 'sort': true, 'minWidth': 120},
-    {'field': 'name', 'title': '姓名', 'sort': true, 'minWidth': 120},
-    {'field': 'description', 'title': '描述', 'sort': true, 'minWidth': 150},
-    {'field': 'clazz', 'title': '班级', 'sort': true, 'minWidth': 150},
-    {'field': 'progress', 'title': '学习进度 （已掌握／未掌握）', 'sort': true, 'minWidth': 240}
+    {'field': 'number', 'title': '学号', 'sort': true},
+    {'field': 'name', 'title': '姓名', 'sort': true},
+    {'field': 'clazz', 'title': '班级', 'sort': true},
+    {'field': 'progress', 'title': '学习进度 （已掌握／未掌握）', 'sort': true, 'width': 250}
   ]
   page=page
   add='${base_url}/student/add.html'
@@ -88,16 +87,6 @@
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到短语分组',
       'handler': add_to_phrase_group,
       'needSelected': true
-    }
-  ]
-  toolbar=[
-    {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到单词分组',
-      'handler': '~function (data) {' + add_to_word_group + '}([data]);'
-    },
-    {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到短语分组',
-      'handler': '~function (data) {' + add_to_phrase_group + '}([data]);'
     }
   ]
   page_enabled=true

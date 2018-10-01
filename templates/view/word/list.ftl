@@ -144,10 +144,12 @@
   name='单词'
   fields=[
     {'field': 'prototype', 'title': '单词', 'sort': true, 'minWidth': 120},
-    {'field': 'britishPronunciation', 'title': '英式发音', 'sort': true, 'minWidth': 120},
-    {'field': 'americanPronunciation', 'title': '美式发音', 'sort': true, 'minWidth': 120},
+    <#--{'field': 'britishPronunciation', 'title': '英式发音', 'sort': true, 'minWidth': 120},-->
+    <#--{'field': 'americanPronunciation', 'title': '美式发音', 'sort': true, 'minWidth': 120},-->
+    {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150},
     {'field': 'clazzes', 'title': '词性', 'minWidth': 150},
-    {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150}
+    {'field': 'masteredStudents', 'title': '已掌握', 'sort': true},
+    {'field': 'failedStudents', 'title': '未掌握', 'sort': true}
   ]
   page=page
   add='${base_url}/word/add.html'
@@ -170,12 +172,6 @@
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
       'handler': add_to,
       'needSelected': true
-    }
-  ]
-  toolbar=[
-    {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
-      'handler': '~function (data) {' + add_to + '}([data]);'
     }
   ]
   page_enabled=true

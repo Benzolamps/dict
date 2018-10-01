@@ -55,7 +55,7 @@ public class ClazzStudentTreeVo implements Serializable {
                 studentVo.setMasteredWordsCount(student.getMasteredWordsCount());
                 studentVo.setMasteredPhrasesCount(student.getMasteredPhrasesCount());
                 ClazzStudentTreeVo clazzStudentTreeVo = clazzStudentTreeVos.stream()
-                        .filter(vo -> vo.getId().equals(student.getClazz().getId())).findFirst().orElse(null);
+                    .filter(vo -> vo.getId().equals(student.getClazz().getId())).findFirst().orElse(null);
                 if (clazzStudentTreeVo != null) {
                     clazzStudentTreeVo.students.add(studentVo);
                 } else {

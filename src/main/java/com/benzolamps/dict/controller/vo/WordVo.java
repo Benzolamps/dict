@@ -2,10 +2,12 @@ package com.benzolamps.dict.controller.vo;
 
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
+import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictSpring;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -65,6 +67,16 @@ public class WordVo implements Serializable {
     @DictPropertyInfo(display = "索引")
     private Integer index;
 
+    /** 已掌握该单词的学生数 */
+    @DictIgnore
+    @JsonProperty("masteredStudents")
+    private Integer masteredStudentsCount;
+
+    /** 未掌握该单词的学生数 */
+    @DictIgnore
+    @JsonProperty("failedStudents")
+    private Integer failedStudentsCount;
+
     /**
      * 将WordVo转换为Word
      * @param wordVo wordVo
@@ -106,6 +118,8 @@ public class WordVo implements Serializable {
         wordVo.setAmericanPronunciation(word.getAmericanPronunciation());
         wordVo.setPrototype(word.getPrototype());
         wordVo.setClazzes(word.getClazzes().stream().map(WordClazz::getId).toArray(Integer[]::new));
+        wordVo.setMasteredStudentsCount(word.getMasteredStudentsCount());
+        wordVo.setFailedStudentsCount(word.getFailedStudentsCount());
         return wordVo;
     }
 }

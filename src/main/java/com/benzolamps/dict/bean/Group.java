@@ -130,10 +130,13 @@ public class Group extends BaseEntity {
     /** 分组日志 */
     @Convert(converter = GroupLogConverter.class)
     @Basic(fetch = FetchType.LAZY)
+    @DictIgnore
+    @JsonIgnore
     private GroupLog groupLog;
 
     /** 评分次数 */
     @Column(nullable = false)
+    @DictIgnore
     private Integer scoreCount;
 
     /** 分组中的学生数 */

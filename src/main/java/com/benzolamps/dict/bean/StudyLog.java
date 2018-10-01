@@ -35,12 +35,6 @@ public class StudyLog extends BaseEntity {
     @Past
     private Date logDate;
 
-    /** 分组 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="groups")
-    @NotNull
-    private Group group;
-
     /** 分组名称 */
     @Column(nullable = false, updatable = false)
     @NotEmpty

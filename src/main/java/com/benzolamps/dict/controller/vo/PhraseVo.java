@@ -1,8 +1,10 @@
 package com.benzolamps.dict.controller.vo;
 
 import com.benzolamps.dict.bean.Phrase;
+import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -43,6 +45,16 @@ public class PhraseVo implements Serializable {
     @DictPropertyInfo(display = "索引")
     private Integer index;
 
+    /** 已掌握该短语的学生数 */
+    @DictIgnore
+    @JsonProperty("masteredStudents")
+    private Integer masteredStudentsCount;
+
+    /** 未掌握该短语的学生数 */
+    @DictIgnore
+    @JsonProperty("failedStudents")
+    private Integer failedStudentsCount;
+
     /**
      * 将PhraseVo转换为Phrase
      * @param phraseVo phraseVo
@@ -70,6 +82,8 @@ public class PhraseVo implements Serializable {
         phraseVo.setIndex(phrase.getIndex());
         phraseVo.setDefinition(phrase.getDefinition());
         phraseVo.setPrototype(phrase.getPrototype());
+        phraseVo.setMasteredStudentsCount(phrase.getMasteredStudentsCount());
+        phraseVo.setFailedStudentsCount(phrase.getFailedStudentsCount());
         return phraseVo;
     }
 }

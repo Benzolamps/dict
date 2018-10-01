@@ -116,8 +116,10 @@
   id='phrases'
   name='短语'
   fields=[
-    {'field': 'prototype', 'title': '短语', 'sort': true, 'minWidth': 150},
-    {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150}
+    {'field': 'prototype', 'title': '短语', 'sort': true},
+    {'field': 'definition', 'title': '词义', 'sort': true},
+    {'field': 'masteredStudents', 'title': '已掌握', 'sort': true},
+    {'field': 'failedStudents', 'title': '未掌握', 'sort': true}
   ]
   page=page
   add='${base_url}/phrase/add.html'
@@ -140,12 +142,6 @@
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
       'handler': add_to,
       'needSelected': true
-    }
-  ]
-  toolbar=[
-    {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
-      'handler': '~function (data) {' + add_to + '}([data]);'
     }
   ]
   page_enabled=true

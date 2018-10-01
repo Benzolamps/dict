@@ -56,7 +56,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     @Override
     @Transactional(readOnly = true)
     public Page<T> findPage(Pageable pageable) {
-        if (pageable.getOrders().isEmpty()) pageable.getOrders().add(Order.asc("index"));
+        pageable.getOrders().add(Order.asc("index"));
         pageable.getFilter().and(Filter.eq("library", libraryService.getCurrent()));
         return super.findPage(pageable);
     }
