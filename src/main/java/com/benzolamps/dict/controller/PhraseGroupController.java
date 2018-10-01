@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.*;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
+import com.benzolamps.dict.controller.vo.ClazzStudentTreeVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * 短语分组Controller
@@ -194,6 +195,180 @@ public class PhraseGroupController extends BaseController {
             Clazz[] clazzes = Arrays.stream(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
             phraseGroupService.addClazzes(phraseGroup, clazzes);
         }
+        return SUCCESS_VO;
+    }
+
+
+    /**
+     * 移除短语
+     * @param phraseGroupId 短语分组id
+     * @param phraseIds 短语id
+     * @return 移除成功
+     */
+    @PostMapping(value = "remove_phrases.json")
+    @ResponseBody
+    protected BaseVo removePhrases(@RequestParam("groupId") Integer phraseGroupId, @RequestParam("phraseId") Integer[] phraseIds) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(phraseGroupId, "phrase group id不能为null或空");
+        Group phraseGroup = phraseGroupService.find(phraseGroupId);
+        Assert.notNull(phraseGroup, "phrase group不存在");
+        Assert.noNullElements(phraseIds, "clazz ids不能存在为null的元素");
+        Phrase[] phrases = Arrays.stream(phraseIds).map(phraseService::find).toArray(Phrase[]::new);
+        phraseGroupService.removePhrases(phraseGroup, phrases);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 移除学生
+     * @param phraseGroupId 短语分组id
+     * @param studentIds 学生id
+     * @return 移除成功
+     */
+    @PostMapping(value = "remove_students.json")
+    @ResponseBody
+    protected BaseVo removeStudents(@RequestParam("groupId") Integer phraseGroupId, @RequestParam("studentId") Integer[] studentIds) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(phraseGroupId, "phrase group id不能为null或空");
+        Group phraseGroup = phraseGroupService.find(phraseGroupId);
+        Assert.notNull(phraseGroup, "phrase group不存在");
+        Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
+        Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
+        phraseGroupService.removeStudents(phraseGroup, students);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 短语分组详情
+     * @param id 短语分组id
+     * @return ModelAndView
+     */
+    @NavigationView
+    @RequestMapping(value = "detail.html", method = {RequestMethod.GET, RequestMethod.POST})
+    protected ModelAndView detail(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(id, "phrase group id不能为null");
+        Group phraseGroup = phraseGroupService.find(id);
+        Assert.notNull(phraseGroup, "phrase group不存在");
+
+        ModelAndView mv = new ModelAndView("view/phrase_group/detail");
+        mv.addObject("group", phraseGroup);
+        if (phraseGroup.getStatus() != Group.Status.COMPLETED) {
+            mv.addObject("students", ClazzStudentTreeVo.convert(phraseGroup.getStudentsOriented()));
+        } else {
+            mv.addObject("students", ClazzStudentTreeVo.convert(phraseGroup.getGroupLog().getStudents()));
+        }
+        return mv;
+    }
+
+    /**
+     * 评分界面
+     * @param id 短语分组id
+     * @return ModelAndView
+     */
+    @WindowView
+    @RequestMapping(value = "score.html", method = {RequestMethod.GET, RequestMethod.POST})
+    protected ModelAndView score(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(id, "phrase group id不能为null");
+        Group phraseGroup = phraseGroupService.find(id);
+        Assert.notNull(phraseGroup, "phrase group不存在");
+
+        /* 获取未评分的学生 */
+        List<Student> studentsOriented = new ArrayList<>(phraseGroup.getStudentsOriented());
+        Assert.notEmpty(studentsOriented, "分组中没有学生");
+        Set<Student> studentsScored = phraseGroup.getStudentsScored();
+        studentsOriented.removeAll(studentsScored);
+
+        Assert.notEmpty(studentsOriented, "评分完毕");
+
+        boolean hasMore = studentsOriented.size() > 1;
+
+        Student student = studentsOriented.get(0);
+
+        /* 分离已掌握的短语和未掌握的短语 */
+        Set<Phrase> masteredPhrases = new LinkedHashSet<>(student.getMasteredPhrases());
+        Set<Phrase> failedPhrases = new LinkedHashSet<>(phraseGroup.getPhrases());
+        masteredPhrases.retainAll(failedPhrases);
+        failedPhrases.removeAll(masteredPhrases);
+
+        ModelAndView mv = new ModelAndView("view/phrase_group/score");
+        mv.addObject("group", phraseGroup);
+        mv.addObject("student", student);
+        mv.addObject("hasMore", hasMore);
+        mv.addObject("masteredPhrases", masteredPhrases);
+        mv.addObject("failedPhrases", failedPhrases);
+        return mv;
+    }
+
+    /**
+     * 评分保存
+     * @param groupId 分组id
+     * @param studentId 学生id
+     * @param masteredPhraseIds 掌握的短语id
+     * @return 保存成功
+     */
+    @PostMapping(value = "score_save.json")
+    protected BaseVo scoreSave(@RequestParam Integer groupId, @RequestParam Integer studentId, @RequestParam(value = "phraseId", required = false) Integer... masteredPhraseIds) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(groupId, "phrase group id不能为null");
+        Group phraseGroup = phraseGroupService.find(groupId);
+        Assert.notNull(phraseGroup, "phrase group不存在");
+        Assert.notNull(studentId, "student id不能为null");
+        Student student = studentService.find(studentId);
+        Assert.notNull(student, "student不存在");
+        if (masteredPhraseIds == null) masteredPhraseIds = new Integer[0];
+        Assert.noNullElements(masteredPhraseIds, "mastered phrase ids不能存在为null的元素");
+        Phrase[] masteredPhrases = Arrays.stream(masteredPhraseIds).map(phraseService::find).toArray(Phrase[]::new);
+        phraseGroupService.scorePhrases(phraseGroup, student, masteredPhrases);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 跳过当前学生的评分
+     * @param groupId 分组id
+     * @param studentId 学生id
+     * @return 操作成功
+     */
+    @PostMapping(value = "jump.json")
+    protected BaseVo jump(Integer groupId, Integer studentId) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(groupId, "id不能为null");
+        Group phraseGroup = phraseGroupService.find(groupId);
+        Assert.notNull(phraseGroup, "phrase group不存在");
+        Assert.notNull(studentId, "id不能为null");
+        Student student = studentService.find(studentId);
+        Assert.notNull(student, "student不存在");
+        phraseGroupService.jump(phraseGroup, student);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 结束评分
+     * @param id 分组id
+     * @return 操作成功
+     */
+    @PostMapping(value = "finish.json")
+    protected BaseVo finish(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(id, "id不能为null");
+        Group phraseGroup = phraseGroupService.find(id);
+        Assert.notNull(phraseGroup, "phrase group不存在");
+        phraseGroupService.finish(phraseGroup);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 完成
+     * @param id 分组id
+     * @return 操作成功
+     */
+    @PostMapping(value = "complete.json")
+    protected BaseVo complete(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(id, "id不能为null");
+        Group phraseGroup = phraseGroupService.find(id);
+        Assert.notNull(phraseGroup, "phrase group不存在");
+        phraseGroupService.complete(phraseGroup);
         return SUCCESS_VO;
     }
 }

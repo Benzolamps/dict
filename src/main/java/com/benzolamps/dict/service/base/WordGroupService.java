@@ -10,7 +10,6 @@ import com.benzolamps.dict.bean.Word;
  * @version 2.1.4
  * @datetime 2018-9-21 22:09:20
  */
-@SuppressWarnings("unused")
 public interface WordGroupService extends GroupService {
 
     /**

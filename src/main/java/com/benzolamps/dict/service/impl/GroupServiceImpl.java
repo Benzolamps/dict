@@ -5,6 +5,7 @@ import com.benzolamps.dict.bean.Group.Status;
 import com.benzolamps.dict.bean.Group.Type;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.core.Filter;
+import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.service.base.GroupService;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.StudentService;
@@ -55,6 +56,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
             group.setType(type);
             group.setStatus(Status.NORMAL);
             group.setLibrary(library);
+            group.setScoreCount(0);
         });
         super.persist(groups);
     }
@@ -66,6 +68,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         group.setType(type);
         group.setStatus(Status.NORMAL);
         group.setLibrary(library);
+        group.setScoreCount(0);
         return super.persist(group);
     }
 
@@ -77,25 +80,38 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
             group.setType(type);
             group.setStatus(Status.NORMAL);
             group.setLibrary(library);
+            group.setScoreCount(0);
         });
         super.persist(groups);
     }
 
     @Override
     public Group update(Group group, String... ignoreProperties) {
-        return super.update(group, DictArray.concat(ignoreProperties, new String[] {"type", "library"}));
+        Group ref = find(group.getId());
+        if (!DictArray.contains(ignoreProperties, "name")) ref.setName(group.getName());
+        if (!DictArray.contains(ignoreProperties, "description")) ref.setDescription(group.getDescription());
+        return ref;
     }
 
     @Override
     public void update(Collection<Group> groups, String... ignoreProperties) {
-        super.update(groups, DictArray.concat(ignoreProperties, new String[] {"type", "library"}));
+        for (Group group : groups) {
+            Group ref = find(group.getId());
+            if (!DictArray.contains(ignoreProperties, "name")) ref.setName(group.getName());
+            if (!DictArray.contains(ignoreProperties, "description")) ref.setDescription(group.getDescription());
+        }
     }
 
     @Override
-    protected void handlerFilter(Filter filter) {
+    protected void handleFilter(final Filter filter) {
         Library library = libraryService.getCurrent();
         Assert.notNull(library, "未选中词库");
         filter.and(Filter.eq("type", type)).and(Filter.eq("library", library));
+    }
+
+    @Override
+    protected void handleOrder(List<Order> orders) {
+        orders.add(Order.asc("createDate"));
     }
 
     @Transactional(readOnly = true)
@@ -190,7 +206,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.isTrue(type == Type.WORD && wordGroup.getType() == type, "group类型错误");
         studentService.addFailedWords(student, wordGroup.getWords().toArray(new Word[0]));
         studentService.addMasteredWords(student, words);
-        this.internalJump(wordGroup, student, words.length);
+        this.internalJump(wordGroup, student, words.length, null);
         for (Word word : words) {
             Word wordReview = wordGroup.getGroupLog().getWords().stream().filter(word::equals).findFirst().orElse(null);
             wordReview.setMasteredStudentsCount(wordReview.getMasteredStudentsCount() + 1);
@@ -207,7 +223,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.isTrue(type == Type.PHRASE && phraseGroup.getType() == type, "group类型错误");
         studentService.addFailedPhrases(student, phraseGroup.getPhrases().toArray(new Phrase[0]));
         studentService.addMasteredPhrases(student, phrases);
-        this.internalJump(phraseGroup, student, phrases.length);
+        this.internalJump(phraseGroup, student, null, phrases.length);
         for (Phrase phrase : phrases) {
             Phrase phraseReview = phraseGroup.getGroupLog().getPhrases().stream().filter(phrase::equals).findFirst().orElse(null);
             phraseReview.setMasteredStudentsCount(phraseReview.getMasteredStudentsCount() + 1);
@@ -219,13 +235,14 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void jump(Group group, Student student) {
         Assert.notNull(group, "group不能为null");
         Assert.notNull(student, "student不能为null");
-        internalJump(group, student, null);
+        this.internalJump(group, student, null, null);
     }
 
-    private void internalJump(Group group, Student student, Integer count) {
-        if (group.getStudentsOrientedCount() - group.getStudentsScoredCount() == 1) {
+    private void internalJump(Group group, Student student, Integer wordsCount, Integer phrasesCount) {
+        if (group.getStudentsOriented().size() - group.getStudentsScored().size() == 1) {
             group.setStatus(Status.COMPLETED);
-        } else if (group.getStudentsScoredCount() == 0) {
+            group.setScoreCount(group.getScoreCount() + 1);
+        } else if (group.getStudentsScored().isEmpty()) {
             group.setStatus(Status.SCORING);
         }
         if (group.getGroupLog() == null) {
@@ -260,22 +277,24 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         clazz.setName(student.getClazz().getName());
         clazz.setDescription(student.getClazz().getDescription());
         studentReview.setClazz(clazz);
-        studentReview.setMasteredWordsCount(count);
+        studentReview.setMasteredWordsCount(wordsCount);
+        studentReview.setMasteredPhrasesCount(phrasesCount);
         group.getGroupLog().getStudents().add(studentReview);
     }
 
     @Transactional
     @Override
     public void finish(Group group) {
-        Assert.notNull(group, "phrase group不能为null");
-        group.setStatus(Status.COMPLETED);
-        group.getStudentsScored().addAll(group.getStudentsOriented());
+        Assert.notNull(group, "group不能为null");
+        group.getStudentsOriented().stream()
+            .filter(student -> !group.getStudentsScored().contains(student))
+            .forEach(student -> this.internalJump(group, student, null, null));
     }
 
     @Transactional
     @Override
     public void complete(Group group) {
-        Assert.notNull(group, "phrase group不能为null");
+        Assert.notNull(group, "group不能为null");
         group.setStatus(Status.NORMAL);
         group.setGroupLog(null);
         group.getStudentsScored().clear();

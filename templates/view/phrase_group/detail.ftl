@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="group" type="com.benzolamps.dict.bean.Group" -->
 <#-- @ftlvariable name="students" type="java.util.List<com.benzolamps.dict.controller.vo.ClazzStudentTreeVo>" -->
-<#assign title>单词分组详情</#assign>
+<#assign title>短语分组详情</#assign>
 <blockquote class="layui-elem-quote" style="margin-top: 10px;">
   ${group.name}&nbsp;&nbsp;&nbsp;&nbsp;
   <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back();">
@@ -10,7 +10,7 @@
     <i class="fa fa-refresh" style="font-size: 20px;"></i> &nbsp; 刷新
   </button>
   <button id="export" class="layui-btn layui-btn-primary layui-btn-sm">
-    <i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出单词
+    <i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出短语
   </button>
   <button id="score" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
     去评分
@@ -38,8 +38,8 @@
               <td>${group.status.getName()}</td>
             </tr>
             <tr>
-              <th title="单词数">单词数</th>
-              <td>${group.wordsCount}</td>
+              <th title="短语数">短语数</th>
+              <td>${group.phrasesCount}</td>
             </tr>
             <tr>
               <th title="已考核次数">已考核次数</th>
@@ -84,7 +84,7 @@
           <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
           <button class="layui-btn layui-btn-danger layui-btn-xs delete">删除</button>
         </#if>
-        <div class="ztree" id="words-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
+        <div class="ztree" id="phrases-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
     </div>
   </div>
@@ -93,7 +93,7 @@
       <div class="layui-card-body">
         <#if group.status != 'COMPLETED'>
           <blockquote class="layui-elem-quote" style="margin-top: 10px;">
-            结束评分后可查看该分组单词的考核情况！
+            结束评分后可查看该分组短语的考核情况！
           </blockquote>
         <#else>
           <div id="rate" style="width: 100%; height: 450px"></div>
@@ -125,7 +125,7 @@
       <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
         check: {
           enable: true,
-          chkStyle: 'checkbox'
+          chkStyle: "checkbox"
         },
       </#if>
       callback: {
@@ -133,19 +133,19 @@
       }
     };
 
-    var wordsNode = [
+    var phrasesNode = [
       {
-        treeId: 'words',
-        name: '单词',
+        treeId: 'phrases',
+        name: '短语',
         open: 'true',
         children: [
           <#if group.status != 'COMPLETED'>
-            <#list group.words as word>
-            {id: '${word.id}', name: '${word.prototype} (${word.definition})'},
+            <#list group.phrases as phrase>
+              {id: '${phrase.id}', name: '${phrase.prototype} (${phrase.definition})'},
             </#list>
           <#else>
-            <#list group.groupLog.words as word>
-            {id: '${word.id}', name: '${word.prototype} (${word.definition}) (掌握人数：${word.masteredStudentsCount})'},
+            <#list group.groupLog.phrases as phrase>
+              {id: '${phrase.id}', name: '${phrase.prototype} (${phrase.definition}) (掌握人数：${phrase.masteredStudentsCount})'},
             </#list>
           </#if>
         ]
@@ -167,7 +167,7 @@
                     id: '#{student.id}',
                     name: '${student.name} (${student.number})' +
                       '<#if student.description??> (${student.description})</#if>' +
-                      '<#if group.status == 'COMPLETED'> (掌握单词数：${student.masteredWordsCount!'未参与评分'})</#if>'
+                      '<#if group.status == 'COMPLETED'> (掌握短语数：${student.masteredPhrasesCount!'未参与评分'})</#if>'
                   },
                 </#list>
               ]
@@ -177,18 +177,18 @@
       }
     ];
 
-    var wordsTree, studentsTree;
+    var phrasesTree, studentsTree;
 
-    <@data_tree id='words-tree' setting='setting' value='wordsNode' variable='wordsTree'/>
+    <@data_tree id='phrases-tree' setting='setting' value='phrasesNode' variable='phrasesTree'/>
 
     <@data_tree id='students-tree' setting='setting' value='studentsNode' variable='studentsTree'/>
 
     $('#export').click(function () {
-      <#if group.wordsCount gt 0>
+      <#if group.phrasesCount gt 0>
         parent.layer.open({
           type: 2,
-          title: '导出单词',
-          content: '${base_url}/word/export.html',
+          title: '导出短语',
+          content: '${base_url}/phrase/export.html',
           area: ['800px', '600px'],
           cancel: function () {
             delete parent.exportData;
@@ -201,7 +201,7 @@
             data.docSolutionId = parent.exportData.docSolution;
             data.shuffleSolutionId = parent.exportData.shuffleSolution;
             dict.loadText({
-              url: '${base_url}/word/export_save.json',
+              url: '${base_url}/phrase/export_save.json',
               type: 'post',
               data: data,
               dataType: 'json',
@@ -227,7 +227,7 @@
           }
         });
       <#else>
-        parent.layer.alert('还没有单词呢！导出个毛线啊！', {
+        parent.layer.alert('还没有短语呢！导出个毛线啊！', {
           icon: 2,
           title: '提示'
         });
@@ -236,8 +236,8 @@
 
     <#if group.status != 'COMPLETED'>
       $('#score').click(function () {
-        <#if group.wordsCount lte 0>
-          parent.layer.alert('还没有单词呢！怎么评分？', {
+        <#if group.phrasesCount lte 0>
+          parent.layer.alert('还没有短语呢！怎么评分？', {
             icon: 2,
             title: '提示'
           });
@@ -249,8 +249,8 @@
         <#else>
           parent.layer.open({
             type: 2,
-            title: '单词分组评分',
-            content: '${base_url}/word_group/score.html?id=${group.id}',
+            title: '短语分组评分',
+            content: '${base_url}/phrase_group/score.html?id=${group.id}',
             area: ['800px', '600px']
           });
         </#if>
@@ -261,7 +261,7 @@
       $('#finish').click(function () {
       parent.layer.confirm('确定要结束当前评分吗？', {icon: 3, title: '提示'}, function (index) {
         dict.loadText({
-          url: '${base_url}/word_group/finish.json',
+          url: '${base_url}/phrase_group/finish.json',
           type: 'post',
           data: {
             id: ${group.id}
@@ -291,10 +291,10 @@
     <#if group.status == 'COMPLETED'>
       var data = <@json_dump obj=group.groupLog.students/>;
       data = data.filter(function (item) {
-        return item.masteredWordsCount != null
+        return item.masteredPhrasesCount != null
       });
       data.sort(function (a, b) {
-        return b.masteredWordsCount - a.masteredWordsCount;
+        return b.masteredPhrasesCount - a.masteredPhrasesCount;
       });
 
       data = data.slice(0, 10);
@@ -326,16 +326,16 @@
         yAxis: [
           {
             type: 'value',
-            max: ${group.wordsCount}
+            max: ${group.phrasesCount}
           }
         ],
         series: [
           {
-            name: '掌握单词数',
+            name: '掌握短语数',
             type: 'bar',
             barWidth: '60%',
             data: data.map(function (item) {
-              return item.masteredWordsCount;
+              return item.masteredPhrasesCount;
             })
           }
         ]
@@ -346,7 +346,7 @@
       $('#complete').click(function () {
         parent.layer.confirm('确定要开始新一轮的评分吗？', {icon: 3, title: '提示'}, function (index) {
           dict.loadText({
-            url: '${base_url}/word_group/complete.json',
+            url: '${base_url}/phrase_group/complete.json',
             type: 'post',
             data: {
               id: ${group.id}
@@ -387,7 +387,7 @@
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
             dict.loadText({
-              url: '${base_url}/word_group/remove_students.json',
+              url: '${base_url}/phrase_group/remove_students.json',
               type: 'post',
               data: {
                 groupId: ${group.id},
@@ -417,24 +417,24 @@
         }
       });
 
-      $('#words-tree').parent().find('.delete').click(function () {
-        var nodes = wordsTree.getCheckedNodes().filter(function (node) {
+      $('#phrases-tree').parent().find('.delete').click(function () {
+        var nodes = phrasesTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
         console.log(nodes);
         if (nodes.length <= 0) {
-          parent.layer.alert('请选中要删除的单词！', {
+          parent.layer.alert('请选中要删除的短语！', {
             icon: 2,
             title: '提示'
           });
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
             dict.loadText({
-              url: '${base_url}/word_group/remove_words.json',
+              url: '${base_url}/phrase_group/remove_phrases.json',
               type: 'post',
               data: {
                 groupId: ${group.id},
-                wordId: nodes.map(function (item) {
+                phraseId: nodes.map(function (item) {
                   return item.id;
                 })
               },

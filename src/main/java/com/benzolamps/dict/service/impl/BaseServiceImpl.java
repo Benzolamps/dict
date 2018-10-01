@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -40,43 +41,51 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional(readOnly = true)
     public T findSingle(Filter filter) {
-        this.handlerFilter(filter);
+        this.handleFilter(filter);
         return baseDao.findSingle(filter);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<T> findList(Filter filter, Order... orders) {
-        this.handlerFilter(filter);
-        return baseDao.findList(filter, orders);
+        this.handleFilter(filter);
+        List<Order> orderList = new ArrayList<>(Arrays.asList(orders));
+        this.handleOrder(orderList);
+        return baseDao.findList(filter, orderList.toArray(orders));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<T> findList(Filter filter, List<Order> orders) {
-        this.handlerFilter(filter);
-        return baseDao.findList(filter, orders);
+        this.handleFilter(filter);
+        Order[] orderArray = orders.toArray(new Order[0]);
+        this.handleOrder(orders);
+        return baseDao.findList(filter, new ArrayList<>(Arrays.asList(orderArray)));
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<T> findAll() {
+        List<Order> orders = new ArrayList<>();
         Filter filter = new Filter();
-        return this.findList(filter);
+        this.handleFilter(filter);
+        this.handleOrder(orders);
+        return this.findList(filter, orders);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<T> findPage(Pageable pageable) {
+        handleFilter(pageable.getFilter());
+        handleOrder(pageable.getOrders());
         pageable.getOrders().add(Order.desc("id"));
-        handlerFilter(pageable.getFilter());
         return baseDao.findPage(pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Integer count(Filter filter) {
-        this.handlerFilter(filter);
+        this.handleFilter(filter);
         return baseDao.count(filter);
     }
 
@@ -134,7 +143,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional
     public void remove(Filter filter) {
-        handlerFilter(filter);
+        handleFilter(filter);
         Method removeMethod = tryFunc(() -> getClass().getMethod("remove", Collection.class));
         if (removeMethod.getDeclaringClass().equals(BaseServiceImpl.class)) {
             baseDao.remove(filter);
@@ -148,6 +157,13 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
      * 处理筛选
      * @param filter 筛选
      */
-    protected void handlerFilter(Filter filter) {
+    protected void handleFilter(final Filter filter) {
+    }
+
+    /**
+     * 处理排序
+     * @param orders 排序
+     */
+    protected void handleOrder(List<Order> orders) {
     }
 }

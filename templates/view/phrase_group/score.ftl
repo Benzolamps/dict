@@ -1,13 +1,13 @@
 <#-- @ftlvariable name="group" type="com.benzolamps.dict.bean.Group" -->
 <#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
 <#-- @ftlvariable name="hasMore" type="boolean" -->
-<#-- @ftlvariable name="masteredWords" type="java.util.Collection<com.benzolamps.dict.bean.Word>" -->
-<#-- @ftlvariable name="failedWords" type="java.util.Collection<com.benzolamps.dict.bean.Word>" -->
+<#-- @ftlvariable name="masteredPhrases" type="java.util.Collection<com.benzolamps.dict.bean.Phrase>" -->
+<#-- @ftlvariable name="failedPhrases" type="java.util.Collection<com.benzolamps.dict.bean.Phrase>" -->
 <div class="layui-row">
   <div class="layui-col-xs5">
     <div class="layui-card" style="height: 500px;">
       <div class="layui-card-header">
-        <div style="text-align: center">未掌握的单词</div>
+        <div style="text-align: center">未掌握的短语</div>
       </div>
       <div class="layui-card-body">
         <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
@@ -52,7 +52,7 @@
   <div class="layui-col-xs5">
     <div class="layui-card" style="height: 500px;">
       <div class="layui-card-header">
-        <div style="text-align: center">已掌握的单词</div>
+        <div style="text-align: center">已掌握的短语</div>
       </div>
       <div class="layui-card-body">
         <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
@@ -71,7 +71,7 @@
     var setting = {
       check: {
         enable: true,
-        chkStyle: 'checkbox'
+        chkStyle: "checkbox"
       },
       callback: {
         beforeClick: dict.nothing
@@ -79,14 +79,14 @@
     };
 
     var masteredNode = [
-      <#list masteredWords as word>
-        {id: '${word.id}', name: '${word.prototype} (${word.definition})', index: ${word.index}},
+      <#list masteredPhrases as phrase>
+        {id: '${phrase.id}', name: '${phrase.prototype} (${phrase.definition})', index: ${phrase.index}},
       </#list>
     ];
 
     var failedNode = [
-      <#list failedWords as word>
-        {id: '${word.id}', name: '${word.prototype} (${word.definition})', index: ${word.index}},
+      <#list failedPhrases as phrase>
+        {id: '${phrase.id}', name: '${phrase.prototype} (${phrase.definition})', index: ${phrase.index}},
       </#list>
     ];
 
@@ -131,12 +131,12 @@
       parent.layer.confirm('确定当前学生已评分完毕？', {icon: 3, title: '提示'}, function (index) {
         var nodes = masteredTree.getNodes();
         dict.loadText({
-          url: '${base_url}/word_group/score_save.json',
+          url: '${base_url}/phrase_group/score_save.json',
           type: 'post',
           data: {
             groupId: ${group.id},
             studentId: ${student.id},
-            wordId: nodes.map(function (item) {
+            phraseId: nodes.map(function (item) {
               return item.id;
             })
           },
@@ -169,7 +169,7 @@
       parent.layer.confirm('确定要跳过当前学生的评分？', {icon: 3, title: '提示'}, function (index) {
         var nodes = masteredTree.getNodes();
         dict.loadText({
-          url: '${base_url}/word_group/jump.json',
+          url: '${base_url}/phrase_group/jump.json',
           type: 'post',
           data: {
             groupId: ${group.id},

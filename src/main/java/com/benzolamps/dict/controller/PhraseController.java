@@ -1,5 +1,6 @@
 package com.benzolamps.dict.controller;
 
+import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
@@ -59,7 +60,8 @@ public class PhraseController extends BaseController {
         if (libraryService.count() > 0) {
             mv.setViewName("view/phrase/list");
             Page<Phrase> phrases = phraseService.findPage(pageable);
-            mv.addObject("page", phrases);
+            Page<PhraseVo> phraseVos = phrases.convertPage(PhraseVo::convertFromPhrase);
+            mv.addObject("page", phraseVos);
         } else {
             mv.setViewName("view/library/lack");
         }
@@ -202,7 +204,7 @@ public class PhraseController extends BaseController {
     @GetMapping(value = "add_to.html")
     protected ModelAndView addTo(@RequestParam("phraseId") Integer... phraseIds) {
         ModelAndView mv = new ModelAndView("view/phrase/add_to");
-        mv.addObject("groups", phraseGroupService.findAll());
+        mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
         mv.addObject("phrases", phraseService.findList(Filter.in("id", Arrays.asList(phraseIds))));
         return mv;
     }

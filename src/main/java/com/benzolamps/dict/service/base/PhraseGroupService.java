@@ -10,7 +10,6 @@ import com.benzolamps.dict.bean.Student;
  * @version 2.1.4
  * @datetime 2018-9-21 22:50:01
  */
-@SuppressWarnings("unused")
 public interface PhraseGroupService extends GroupService {
 
     /**

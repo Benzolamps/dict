@@ -221,7 +221,7 @@ public class WordController extends BaseController {
     protected ModelAndView addTo(@RequestParam("wordId") Integer... wordIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         ModelAndView mv = new ModelAndView("view/word/add_to");
-        mv.addObject("groups", wordGroupService.findAll());
+        mv.addObject("groups", wordGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
         mv.addObject("words", wordService.findList(Filter.in("id", Arrays.asList(wordIds))));
         return mv;
     }

@@ -1,6 +1,7 @@
 package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.bean.Clazz;
+import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
@@ -116,7 +117,7 @@ public class ClazzController extends BaseController {
     @GetMapping(value = "add_to_word_group.html")
     protected ModelAndView addToWordGroup(@RequestParam("clazzId") Integer... clazzIds) {
         ModelAndView mv = new ModelAndView("view/clazz/add_to_word_group");
-        mv.addObject("groups", wordGroupService.findAll());
+        mv.addObject("groups", wordGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
         mv.addObject("clazzes", clazzService.findList(Filter.in("id", Arrays.asList(clazzIds))));
         return mv;
     }
@@ -130,7 +131,7 @@ public class ClazzController extends BaseController {
     @GetMapping(value = "add_to_phrase_group.html")
     protected ModelAndView addToPhraseGroup(@RequestParam("clazzId") Integer... clazzIds) {
         ModelAndView mv = new ModelAndView("view/clazz/add_to_phrase_group");
-        mv.addObject("groups", phraseGroupService.findAll());
+        mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
         mv.addObject("clazzes", clazzService.findList(Filter.in("id", Arrays.asList(clazzIds))));
         return mv;
     }

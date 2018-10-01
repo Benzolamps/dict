@@ -1,5 +1,6 @@
 package com.benzolamps.dict.controller;
 
+import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
@@ -140,7 +141,7 @@ public class StudentController extends BaseController {
     @GetMapping(value = "add_to_word_group.html")
     protected ModelAndView addToWordGroup(@RequestParam("studentId") Integer... studentIds) {
         ModelAndView mv = new ModelAndView("view/student/add_to_word_group");
-        mv.addObject("groups", wordGroupService.findAll());
+        mv.addObject("groups", wordGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
         mv.addObject("students", studentService.findList(Filter.in("id", Arrays.asList(studentIds))));
         return mv;
     }
@@ -154,7 +155,7 @@ public class StudentController extends BaseController {
     @GetMapping(value = "add_to_phrase_group.html")
     protected ModelAndView addToPhraseGroup(@RequestParam("studentId") Integer... studentIds) {
         ModelAndView mv = new ModelAndView("view/student/add_to_phrase_group");
-        mv.addObject("groups", phraseGroupService.findAll());
+        mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
         mv.addObject("students", studentService.findList(Filter.in("id", Arrays.asList(studentIds))));
         return mv;
     }

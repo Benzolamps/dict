@@ -132,6 +132,10 @@ public class Group extends BaseEntity {
     @Basic(fetch = FetchType.LAZY)
     private GroupLog groupLog;
 
+    /** 评分次数 */
+    @Column(nullable = false)
+    private Integer scoreCount;
+
     /** 分组中的学生数 */
     @Transient
     @Size("studentsOriented")

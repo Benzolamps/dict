@@ -6,14 +6,18 @@
     {'field': 'name', 'title': '名称', 'sort': true, 'minWidth': 120},
     {'field': 'description', 'title': '描述', 'sort': true, 'minWidth': 120},
     {'field': 'status', 'title': '状态', 'sort': true, 'minWidth': 10},
-    {'field': 'studentsOriented', 'title': '分组中的的学生数', 'sort': true, 'minWidth': 150},
-    {'field': 'studentsScored', 'title': '已评分的学生数', 'sort': true, 'minWidth': 150},
-    {'field': 'phrases', 'title': '短语数', 'sort': true, 'minWidth': 10}
+    {'field': 'scoreCount', 'title': '已考核次数', 'sort': true, 'minWidth': 120}
   ]
   page=page
   add='${base_url}/phrase_group/add.html'
   edit='${base_url}/phrase_group/edit.html'
   delete='${base_url}/phrase_group/delete.json'
+  toolbar=[
+    {
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 详情',
+      'handler': 'location.href = "detail.html?id=" + data.id;'
+    }
+  ]
   page_enabled=true
   search=[
     {'name': 'name', 'display': '名称', 'type': 'string'},
