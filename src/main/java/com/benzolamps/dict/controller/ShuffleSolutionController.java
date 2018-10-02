@@ -1,6 +1,7 @@
 package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.bean.ShuffleSolution;
+import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
@@ -30,7 +31,7 @@ public class ShuffleSolutionController extends BaseController {
      * 列出所有乱序方案
      * @return ModelAndView
      */
-    @WindowView
+    @NavigationView
     @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
     protected ModelAndView list(Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/list");

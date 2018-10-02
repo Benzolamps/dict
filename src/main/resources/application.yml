@@ -15,11 +15,11 @@ spring:
     generate_ddl: true
     database_platform: com.benzolamps.dict.cfg.sqlite.SQLiteDialect
   mvc:
+    favicon:
+      enabled: true
     view:
       prefix:
       suffix: .ftl
-    favicon:
-      enabled: false
     async:
       request_timeout: 30000
   resources:
@@ -51,24 +51,23 @@ server:
 
 ---
 spring:
-  profiles: default
-logging:
-  config: classpath:logback-spring.xml
+  profiles: [default]
+dict:
+  system:
+    logback_console_pattern:
+      '%cyan(**${dict.system.title} - ${dict.system.version})
+      %blue([%d{yyyy-MM-dd HH:mm:ss.SSS}])
+      %yellow(<%p>) %red(%logger)
+      %cyan([%F:%L]) %n%m%n%n'
+    logback_file_pattern:
+      '${dict.system.title} - ${dict.system.version} [%d{yyyy-MM-dd HH:mm:ss.SSS}] &lt;%p&gt; %logger [%F:%L] %n%m%n%n'
 
 ---
 spring:
-  profiles: release
-logging:
-  config: classpath:logback-spring-release.xml
-
----
-spring:
-  profiles: test
-logging:
-  config: classpath:logback-spring-release.xml
-
----
-spring:
-  profiles: eclipse
-logging:
-  config: classpath:logback-spring-release.xml
+  profiles: [release, test, eclipse]
+dict:
+  system:
+    logback_console_pattern:
+      '${dict.system.title} - ${dict.system.version} [%d{yyyy-MM-dd HH:mm:ss.SSS}] <%p> %logger [%F:%L] %n%m%n%n'
+    logback_file_pattern:
+      '${dict.system.title} - ${dict.system.version} [%d{yyyy-MM-dd HH:mm:ss.SSS}] <%p> %logger [%F:%L] %n%m%n%n'

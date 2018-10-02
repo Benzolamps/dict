@@ -10,7 +10,7 @@ dict.produceFormItem = function (property) {
 
     var $component;
 
-    if (property.readonly && property.value) {
+    if (property.readonly && property.value && !property.options && property.type != 'boolean') {
         $component = $(document.createElement('input'))
             .attr('type', 'text')
             .attr('name', property.name)
@@ -25,6 +25,7 @@ dict.produceFormItem = function (property) {
                 .addClass('layui-input')
                 .attr('required', property.notEmpty)
                 .attr('lay-filter', property.name)
+                .attr('disabled', property.readonly && property.value)
                 .append($(document.createElement('option'))
                     .val('')
                     .text(property.display)
@@ -51,6 +52,7 @@ dict.produceFormItem = function (property) {
                         .attr('type', 'checkbox')
                         .attr('title', option.value)
                         .attr('multiple-select', 1)
+                        .attr('disabled', property.readonly && property.value)
                         .attr('checked', property.value != null && property.value.indexOf(option.id) > -1)
                         .attr('lay-skin', 'primary')
                         .attr('option-id', option.id)
@@ -80,6 +82,7 @@ dict.produceFormItem = function (property) {
                     .attr('name', property.name)
                     .attr('lay-skin', 'switch')
                     .attr('lay-text', '开|关')
+                    .attr('disabled', property.readonly && property.value)
                     .attr('lay-filter', property.name)
                     .attr('checked', property.value === 'true' || property.value === true)
                     .attr('required', property.notEmpty)

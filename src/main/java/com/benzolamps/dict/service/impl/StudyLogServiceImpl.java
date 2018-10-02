@@ -47,12 +47,12 @@ public class StudyLogServiceImpl extends BaseServiceImpl<StudyLog> implements St
     @Override
     public Collection<StudyLog> findWordLogs(Student student) {
         Assert.notNull(student, "student不能为null");
-        return findList(Filter.eq("student", student).and(Filter.eq("groupType", Group.Type.WORD)));
+        return findList(Filter.eq("student", student).and(Filter.eq("groupType", Group.Type.WORD)), Order.asc("logDate"));
     }
 
     @Override
     public Collection<StudyLog> findPhraseLogs(Student student) {
         Assert.notNull(student, "student不能为null");
-        return findList(Filter.eq("student", student).and(Filter.eq("groupType", Group.Type.PHRASE)));
+        return findList(Filter.eq("student", student).and(Filter.eq("groupType", Group.Type.PHRASE)), Order.asc("logDate"));
     }
 }

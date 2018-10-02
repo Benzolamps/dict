@@ -1,6 +1,8 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.Clazz;
+import com.benzolamps.dict.controller.vo.StudyProcessVo;
+import com.benzolamps.dict.dao.base.ClazzDao;
 import com.benzolamps.dict.service.base.ClazzService;
 import com.benzolamps.dict.service.base.StudentService;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class ClazzServiceImpl extends BaseServiceImpl<Clazz> implements ClazzSer
     @Resource
     private StudentService studentService;
 
+    @Resource
+    private ClazzDao clazzDao;
+
     @Override
     public void remove(Collection<Clazz> clazzes) {
         /* 删除班级前先删除班级中的学生 */
@@ -30,5 +35,15 @@ public class ClazzServiceImpl extends BaseServiceImpl<Clazz> implements ClazzSer
             }
         }
         super.remove(clazzes);
+    }
+
+    @Override
+    public StudyProcessVo getWordStudyProcess(Clazz clazz) {
+        return clazzDao.getWordStudyProcess(clazz);
+    }
+
+    @Override
+    public StudyProcessVo getPhraseStudyProcess(Clazz clazz) {
+        return clazzDao.getPhraseStudyProcess(clazz);
     }
 }

@@ -89,6 +89,12 @@
       'needSelected': true
     }
   ]
+  toolbar=[
+    {
+      'html': '<i class="fa fa-map-o" style="font-size: 20px;"></i> &nbsp; 详情',
+      'handler': 'location.href = "detail.html?id=" + data.id;'
+    }
+  ]
   page_enabled=true
   search=search?eval
 />

@@ -118,7 +118,7 @@
 <link rel="stylesheet" type="text/css" href="${base_url}/zTree_v3/css/zTreeStyle/zTreeStyle.css"/>
 <script type="text/javascript" src="${base_url}/zTree_v3/js/jquery.ztree.core.js"></script>
 <script type="text/javascript" src="${base_url}/zTree_v3/js/jquery.ztree.excheck.js"></script>
-<script type="text/javascript" src="${base_url}/js/echarts.js"></script>
+<script type="text/javascript" src="${base_url}/js/echarts.min.js"></script>
 <script>
   <#escape x as x?js_string>
     var setting = {

@@ -69,6 +69,21 @@
       'needSelected': true
     }
   ]
+  toolbar=[
+    {
+      'html': '<i class="fa fa-graduation-cap" style="font-size: 20px;"></i> &nbsp; 查看学生',
+      'handler': "
+         var baseUrl = '${base_url}/student/list.html?' +
+         encodeURIComponent(JSON.stringify({
+          searches: [
+            {field: 'clazz', value: data.id},
+          ]
+        }));
+        console.log(baseUrl);
+        location.href = baseUrl;
+      "
+    }
+  ]
   page_enabled=true
   delete_confirm='删除班级将会删除其中的所有学生，确定要继续吗？'
   search=[

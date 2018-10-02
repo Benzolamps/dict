@@ -2,13 +2,17 @@ package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.bean.Clazz;
 import com.benzolamps.dict.bean.Student;
+import com.benzolamps.dict.controller.vo.StudyProcessVo;
 import com.benzolamps.dict.dao.base.ClazzDao;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
+import com.benzolamps.dict.util.DictMap;
 import com.benzolamps.dict.util.DictObject;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import javax.persistence.TypedQuery;
 
 /**
  * 学生Dao接口实现类
@@ -35,7 +39,7 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
                 }
             }
 
-            @SuppressWarnings("IfCanBeSwitch")
+            @SuppressWarnings({"IfCanBeSwitch", "serial"})
             @Override
             public void applyOrder(Order order) {
                 if (order.getField().equals("clazz")) {
@@ -56,5 +60,35 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
             }
         };
         return super.findPage(dictQuery, pageable);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public StudyProcessVo getWordStudyProcess(Student student) {
+        Assert.notNull(student, "student不能为null");
+        String jpql = "select new com.benzolamps.dict.controller.vo.StudyProcessVo(" +
+            "student.masteredWords.size, " +
+            "student.failedWords.size, " +
+            "((select count(word) from Word as word) - student.masteredWords.size - student.failedWords.size), " +
+            "(select count(word) from Word as word)) " +
+            "from Student as student where student = :student";
+        TypedQuery<StudyProcessVo> query = DictJpa.createJpqlQuery(
+                entityManager, jpql, StudyProcessVo.class, DictMap.parse("student", student));
+        return query.getSingleResult();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public StudyProcessVo getPhraseStudyProcess(Student student) {
+        Assert.notNull(student, "student不能为null");
+        String jpql = "select new com.benzolamps.dict.controller.vo.StudyProcessVo(" +
+            "student.masteredPhrases.size, " +
+            "student.failedPhrases.size, " +
+            "((select count(phrase) from Phrase as phrase) - student.masteredPhrases.size - student.failedPhrases.size), " +
+            "(select count(phrase) from Phrase as phrase)) " +
+            "from Student as student where student = :student";
+        TypedQuery<StudyProcessVo> query = DictJpa.createJpqlQuery(
+            entityManager, jpql, StudyProcessVo.class, DictMap.parse("student", student));
+        return query.getSingleResult();
     }
 }

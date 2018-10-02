@@ -75,7 +75,7 @@ public class VersionServiceImpl implements VersionService {
                     try {
                         updateProcess();
                     } catch (Throwable e) {
-                        logger.error(e.getMessage(), e);
+                        logger.error("下载更新失败：" + e.getMessage(), e);
                         status = Status.FAILED;
                         callback.accept(status);
                     } finally {
@@ -112,7 +112,7 @@ public class VersionServiceImpl implements VersionService {
             }
         } catch (Throwable e) {
             if (newVersionName == null) newVersionName = dictProperties.getVersion();
-            logger.error(e.getMessage(), e);
+            logger.error("网络错误", e);
         }
     }
 
@@ -203,6 +203,7 @@ public class VersionServiceImpl implements VersionService {
 
             /* 更改状态 */
             status = Status.DOWNLOADED;
+            logger.info("下载更新完成");
             callback.accept(status);
         }
     }

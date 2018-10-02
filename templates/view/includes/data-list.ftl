@@ -112,7 +112,14 @@
     <#assign width += 110 * toolbar?size/>
 
     fields.push({field: 'id', title: '操作', align: 'left', fixed: 'right', toolbar: '#${id}-tools', width: ${width}});
-    fields.unshift({type: 'numbers'}, {type: 'checkbox'});
+    fields.unshift(/*{type: 'numbers'},*/{type: 'checkbox'});
+
+    var emptyText = [
+      '空空如也~',
+      '这儿什么都没有~',
+      'Empty List!',
+      '快加点数据吧！'
+    ];
 
     <#-- TODO: 表格渲染 -->
     table.render({
@@ -122,7 +129,10 @@
       cols: [fields],
       data: <@json_dump obj=values/>,
       id: '${id}',
-      height: 'full-205'
+      height: 'full-205',
+      text: {
+        none: emptyText[(Math.random() * emptyText.length) | 0]
+      }
     });
 
     <#-- TODO: 分页渲染 -->
@@ -378,7 +388,7 @@
     <#-- 执行 -->
     var execute = function (forcedReload) {
       dict.loadText({
-        url: 'list.html',
+        url: location.pathname,
         requestBody: true,
         type: 'POST',
         data: forcedReload ? null : dict.loadFormData(),

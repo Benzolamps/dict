@@ -11,10 +11,12 @@ import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 /**
@@ -180,12 +182,16 @@ public class StudentController extends BaseController {
         Assert.notNull(id, "id不能为null");
         Student student = studentService.find(id);
         Assert.notNull(student, "student不存在");
-        Collection<StudyLog> wordStudyLog = studyLogService.findWordLogs(student);
-        Collection<StudyLog> phraseStudyLog = studyLogService.findPhraseLogs(student);
+        Collection<StudyLog> wordStudyLogs = studyLogService.findWordLogs(student);
+        Collection<StudyLog> phraseStudyLogs = studyLogService.findPhraseLogs(student);
         ModelAndView mv = new ModelAndView("view/student/detail");
         mv.addObject("student", student);
-        mv.addObject("wordStudyLog", wordStudyLog);
-        mv.addObject("phraseStudyLog", phraseStudyLog);
+        mv.addObject("wordStudyLogs", wordStudyLogs);
+        mv.addObject("phraseStudyLogs", phraseStudyLogs);
+        mv.addObject("wordStudyProcess", studentService.getWordStudyProcess(student));
+        mv.addObject("phraseStudyProcess", studentService.getPhraseStudyProcess(student));
+        mv.addObject("averageWordStudyProcess", clazzService.getWordStudyProcess(student.getClazz()));
+        mv.addObject("averagePhraseStudyProcess", clazzService.getPhraseStudyProcess(student.getClazz()));
         return mv;
     }
 
@@ -208,19 +214,24 @@ public class StudentController extends BaseController {
 
     /**
      * 创建专属单词分组保存
-     * @param wordGroup 单词分组
+     * @param request HttpServletRequest
      * @param studentId 学生id
      * @param wordIds 单词id
      * @return 保存成功
      */
     @ResponseBody
     @RequestMapping(value = "personal_word_group_save.json", method = {RequestMethod.GET, RequestMethod.POST})
-    protected BaseVo personalWordGroupSave(
-        @RequestParam Group wordGroup, @RequestParam Integer studentId, @RequestParam("wordId") Integer... wordIds) {
+    protected BaseVo personalWordGroupSave(HttpServletRequest request, @RequestParam Integer studentId, @RequestParam("wordId") Integer... wordIds) {
         Student student = studentService.find(studentId);
         Assert.notNull(student, "student不存在");
-        List<Word> words = wordService.findList(Filter.in("id", Arrays.asList(wordIds)));
+        String groupName = request.getParameter("name");
+        String groupDescription = request.getParameter("description");
+        Assert.hasText(groupName, "name不能为null或空");
+        Group wordGroup = new Group();
+        wordGroup.setName(groupName);
+        if (StringUtils.hasText(groupDescription)) wordGroup.setDescription(groupDescription);
         wordGroup.setStudentsOriented(Collections.singleton(student));
+        List<Word> words = wordService.findList(Filter.in("id", Arrays.asList(wordIds)));
         wordGroup.setWords(new HashSet<>(words));
         wordGroupService.persist(wordGroup);
         return SUCCESS_VO;
@@ -245,21 +256,26 @@ public class StudentController extends BaseController {
 
     /**
      * 创建专属短语分组保存
-     * @param phraseGroup 短语分组
+     * @param request HttpServletRequest
      * @param studentId 学生id
      * @param phraseIds 单词id
      * @return 保存成功
      */
     @ResponseBody
     @RequestMapping(value = "personal_phrase_group_save.json", method = {RequestMethod.GET, RequestMethod.POST})
-    protected BaseVo personalWordPhraseSave(
-        @RequestParam Group phraseGroup, @RequestParam Integer studentId, @RequestParam("phraseId") Integer... phraseIds) {
+    protected BaseVo personalWordPhraseSave(HttpServletRequest request, @RequestParam Integer studentId, @RequestParam("phraseId") Integer... phraseIds) {
         Student student = studentService.find(studentId);
         Assert.notNull(student, "student不存在");
-        List<Phrase> phrases = phraseService.findList(Filter.in("id", Arrays.asList(phraseIds)));
+        String groupName = request.getParameter("name");
+        String groupDescription = request.getParameter("description");
+        Assert.hasText(groupName, "name不能为null或空");
+        Group phraseGroup = new Group();
+        phraseGroup.setName(groupName);
+        if (StringUtils.hasText(groupDescription)) phraseGroup.setDescription(groupDescription);
         phraseGroup.setStudentsOriented(Collections.singleton(student));
+        List<Phrase> phrases = phraseService.findList(Filter.in("id", Arrays.asList(phraseIds)));
         phraseGroup.setPhrases(new HashSet<>(phrases));
-        wordGroupService.persist(phraseGroup);
+        phraseGroupService.persist(phraseGroup);
         return SUCCESS_VO;
     }
 }

@@ -3,8 +3,6 @@
   id='libraries'
   name='词库'
   fields=[
-    {'type': 'numbers'},
-    {'type': 'checkbox'},
     {'field': 'name', 'title': '名称', 'sort': true, 'minWidth': 120},
     {'field': 'description', 'title': '描述', 'sort': true, 'minWidth': 150},
     {'field': 'words', 'title': '单词数', 'sort': true, 'minWidth': 120},

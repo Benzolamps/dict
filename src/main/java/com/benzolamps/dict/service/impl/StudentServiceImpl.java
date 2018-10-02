@@ -1,6 +1,7 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.*;
+import com.benzolamps.dict.controller.vo.StudyProcessVo;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.base.StudyLogDao;
@@ -81,5 +82,15 @@ public class StudentServiceImpl extends BaseServiceImpl<Student> implements Stud
         Assert.notNull(phrases, "phrases不能为null");
         student.getFailedPhrases().addAll(Arrays.asList(phrases));
         student.getMasteredPhrases().removeAll(Arrays.asList(phrases));
+    }
+
+    @Override
+    public StudyProcessVo getWordStudyProcess(Student student) {
+        return studentDao.getWordStudyProcess(student);
+    }
+
+    @Override
+    public StudyProcessVo getPhraseStudyProcess(Student student) {
+        return studentDao.getPhraseStudyProcess(student);
     }
 }

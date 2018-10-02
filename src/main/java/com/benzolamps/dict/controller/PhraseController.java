@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -90,13 +91,17 @@ public class PhraseController extends BaseController {
     protected ModelAndView exportSave(@RequestBody DocExportVo docExportVo, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView();
         Pageable pageable = docExportVo.getPageable();
-        List<Phrase> phrase;
+        List<Phrase> phrases;
         if (pageable == null) {
-            phrase = phraseService.findAll();
+            Assert.notNull(docExportVo.getGroupId(), "group id不能为null");
+            Group group = phraseGroupService.find(docExportVo.getGroupId());
+            Assert.notNull(group, "group不存在");
+            Assert.notEmpty(group.getPhrases(), "phrases不能为null或空");
+            phrases = new ArrayList<>(group.getPhrases());
         } else {
-            phrase = phraseService.findPage(pageable).getContent();
+            phrases = phraseService.findPage(pageable).getContent();
         }
-        docExportVo.setContent(phrase);
+        docExportVo.setContent(phrases);
         redirectAttributes.addFlashAttribute("docExportVo", docExportVo);
         mv.setViewName("redirect:/doc/export.json");
         return mv;

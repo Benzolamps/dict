@@ -60,6 +60,36 @@
 </#assign>
 <@nothing>;</@nothing>
 
+<#assign head_toolbar>
+  [
+    {
+      'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入单词',
+      'handler': file_upload
+    },
+    {
+      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出单词',
+      'handler': file_export(false)
+    },
+    {
+      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出全部单词',
+      'handler': file_export(true)
+    },
+    {
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
+      'handler': add_to,
+      'needSelected': true
+    }
+    <#if student_id??>
+      , {
+        'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属分组',
+        'handler': create_personal,
+        'needSelected': true
+      }
+    </#if>
+  ]
+</#assign>
+<@nothing>;</@nothing>
+
 <#assign file_upload>
   var $file = $('#upload-form input');
   $file.trigger('click');
@@ -172,7 +202,7 @@
       type: 2,
       title: '创建专属分组',
       content: (function () {
-        var baseUrl = '${base_url}/word/create_personal.html?';
+        var baseUrl = '${base_url}/student/personal_word_group.html?';
         $.each(data, function (index, item) {
           baseUrl += 'wordId=' + item.id + '&';
         });
@@ -194,25 +224,7 @@
   add='${base_url}/word/add.html'
   edit='${base_url}/word/edit.html'
   delete='${base_url}/word/delete.json'
-  head_toolbar=[
-    {
-      'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入单词',
-      'handler': file_upload
-    },
-    {
-      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出单词',
-      'handler': file_export(false)
-    },
-    {
-      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出全部单词',
-      'handler': file_export(true)
-    },
-    {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; ' + student_id???string('创建专属分组', '添加到分组'),
-      'handler': student_id???string(create_personal, add_to),
-      'needSelected': true
-    }
-  ]
+  head_toolbar=head_toolbar?eval
   page_enabled=true
   search=search?eval
 />

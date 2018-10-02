@@ -77,6 +77,36 @@
 </#assign>
 <@nothing>;</@nothing>
 
+<#assign head_toolbar>
+  [
+    {
+      'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入短语',
+      'handler': file_upload
+    },
+    {
+      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出短语',
+      'handler': file_export(false)
+    },
+    {
+      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出全部短语',
+      'handler': file_export(true)
+    },
+    {
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
+      'handler': add_to,
+      'needSelected': true
+    }
+    <#if student_id??>
+      , {
+        'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属分组',
+        'handler': create_personal,
+        'needSelected': true
+      }
+    </#if>
+  ]
+</#assign>
+<@nothing>;</@nothing>
+
 <#function file_export pageDisabled>
   <#assign returnValue>
     parent.layer.open({
@@ -155,7 +185,7 @@
       type: 2,
       title: '创建专属分组',
       content: (function () {
-        var baseUrl = '${base_url}/phrase/create_personal.html?';
+        var baseUrl = '${base_url}/student/personal_phrase_group.html?';
         $.each(data, function (index, item) {
           baseUrl += 'phraseId=' + item.id + '&';
         });
@@ -176,25 +206,7 @@
   add='${base_url}/phrase/add.html'
   edit='${base_url}/phrase/edit.html'
   delete='${base_url}/phrase/delete.json'
-  head_toolbar=[
-    {
-      'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入短语',
-      'handler': file_upload
-    },
-    {
-      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出短语',
-      'handler': file_export(false)
-    },
-    {
-      'html': '<i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出全部短语',
-      'handler': file_export(true)
-    },
-    {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; ' + student_id???string('创建专属分组', '添加到分组'),
-      'handler': student_id???string(create_personal, add_to),
-      'needSelected': true
-    }
-  ]
+  head_toolbar=head_toolbar?eval
   page_enabled=true
   search=search?eval
 />

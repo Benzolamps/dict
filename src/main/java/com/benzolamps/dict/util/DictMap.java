@@ -1,5 +1,6 @@
 package com.benzolamps.dict.util;
 
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -58,5 +59,22 @@ public interface DictMap {
             return Constant.EMPTY_MAP;
         }
         return Constant.YAML.loadAs(yaml, Map.class);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    static Map parse(Object... keyAndValues) {
+        if (ObjectUtils.isEmpty(keyAndValues)) {
+            return Constant.EMPTY_MAP;
+        }
+
+        Map map = new HashMap();
+        for (int i = 0; i < keyAndValues.length; i++) {
+            if (i < keyAndValues.length - 1) {
+                map.put(keyAndValues[i], keyAndValues[++i]);
+            } else {
+                map.put(keyAndValues[i], null);
+            }
+        }
+        return map;
     }
 }

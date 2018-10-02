@@ -3,16 +3,14 @@
   logback 配置 - default
 -->
 <configuration>
-  <springProperty scope="context" name="title" source="dict.system.title"/>
-  <springProperty scope="context" name="version" source="dict.system.version"/>
+  <springProperty scope="context" name="console_pattern" source="dict.system.logback_console_pattern"/>
+  <springProperty scope="context" name="file_pattern" source="dict.system.logback_file_pattern"/>
   <springProperty scope="context" name="encoding" source="file.encoding"/>
 
   <!-- 向控制台输出日志 -->
   <appender name="console-debug" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-      <pattern>
-        %cyan(**${title} - ${version}) %blue([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %yellow(&lt;%p&gt;) %red(%logger) %cyan([%F:%L]) %n%m%n%n
-      </pattern>
+      <pattern>${console_pattern}</pattern>
       <charset>${encoding}</charset>
     </encoder>
   
@@ -29,9 +27,7 @@
   
   <appender name="console-error" class="ch.qos.logback.core.ConsoleAppender">
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-      <pattern>
-        %cyan(**${title} - ${version}) %blue([%d{yyyy-MM-dd HH:mm:ss.SSS}]) %yellow(&lt;%p&gt;) %red(%logger) %cyan([%F:%L]) %n%m%n%n
-      </pattern>
+      <pattern>${console_pattern}</pattern>
       <charset>${encoding}</charset>
     </encoder>
     
@@ -47,9 +43,7 @@
   <!-- 向文件输出配置 -->
   <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-      <pattern>
-        ${title} - ${version} [%d{yyyy-MM-dd HH:mm:ss.SSS}] &lt;%p&gt; %logger [%F:%L] %n%m%n%n
-      </pattern>
+      <pattern>${file_pattern}</pattern>
       <charset>${encoding}</charset>
     </encoder>
     <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">

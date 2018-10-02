@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -28,6 +29,7 @@ public class StudyLog extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student", nullable = false, updatable = false)
     @NotNull
+    @JsonIgnore
     private Student student;
 
     /** 记录时间 */
