@@ -10,7 +10,6 @@ import com.benzolamps.dict.service.base.ShuffleSolutionService;
 import com.benzolamps.dict.util.*;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -31,8 +30,6 @@ import static com.benzolamps.dict.util.DictLambda.tryFunc;
 @SuppressWarnings("unchecked")
 @Service("shuffleSolutionService")
 public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
-
-    private static final String CACHE_NAME = "shuffle_solution";
 
     /* 动态类加载器 */
     @Value("#{new com.benzolamps.dict.util.DynamicClass(dictProperties.universePath)}")
@@ -57,7 +54,6 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = CACHE_NAME, key = "#root.method")
     public Set<String> getAvailableStrategyNames() {
         return availableStrategySetups.stream().map(Class::getName).collect(Collectors.toSet());
     }
@@ -132,7 +128,6 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = CACHE_NAME, key = "#root.method + #className")
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
         Assert.hasText(className, "class name不能为null或空");
         Assert.isTrue(getAvailableStrategyNames().contains(className), "class name不存在");
@@ -144,13 +139,5 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Transactional(readOnly = true)
     public boolean isSpare() {
         return shuffleSolutionDao.findAll().size() < 10;
-    }
-
-    @Override
-    @Transactional
-    public void use(Integer id) {
-        ShuffleSolution solution = find(id);
-        Integer order = findAll().stream().mapToInt(ShuffleSolution::getOrder).max().orElse(0);
-        solution.setOrder(order + 1);
     }
 }

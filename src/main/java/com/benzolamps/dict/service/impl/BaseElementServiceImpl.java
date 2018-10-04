@@ -38,17 +38,11 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
 
     private Class<R> elementVoClass;
 
+    @Autowired
     private BaseElementDao<T> baseElementDao;
 
-    @Autowired
-    @Transactional(readOnly = true)
-    protected void setBaseElementDao(BaseElementDao<T> baseElementDao) {
-        this.baseElementDao = baseElementDao;
-    }
-
-    /** 构造器 */
     @SuppressWarnings("unchecked")
-    public BaseElementServiceImpl() {
+    protected BaseElementServiceImpl() {
         ResolvableType resolvableType = ResolvableType.forClass(getClass());
         elementVoClass = (Class<R>) resolvableType.getSuperType().getGeneric(1).resolve();
     }

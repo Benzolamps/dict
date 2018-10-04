@@ -23,12 +23,6 @@ public interface DocSolutionDao {
      */
     DocSolution find(Integer id);
 
-    /** 重新加载 */
-    void reload();
-
-    /** 保存 */
-    void flush();
-
     /** 获取基础属性 */
     Map<String, Object> getBaseProperties();
 }

@@ -72,9 +72,4 @@ public interface ShuffleSolutionService {
      * @return 结果
      */
     boolean isSpare();
-
-    /**
-     * 使用
-     */
-    void use(Integer id);
 }

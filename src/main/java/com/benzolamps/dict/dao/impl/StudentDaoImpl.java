@@ -11,15 +11,11 @@ import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import org.springframework.util.StreamUtils;
 
 import javax.annotation.Resource;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 学生Dao接口实现类
@@ -33,8 +29,8 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     @Resource
     private ClazzDao clazzDao;
 
-    @Value("classpath:sql/study_process.sql")
-    private org.springframework.core.io.Resource studyProcessSql;
+    @Value("#{T(org.springframework.util.StreamUtils).copyToString(new org.springframework.core.io.ClassPathResource('sql/study_process.sql').inputStream, 'UTF-8')}")
+    private String studyProcessSql;
 
     @Override
     public Page<Student> findPage(Pageable pageable) {
@@ -76,9 +72,8 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     @SuppressWarnings("unchecked")
     public StudyProcess[] getStudyProcess(Student student) {
         Assert.notNull(student, "student不能为null");
-        String sql = tryFunc(() -> StreamUtils.copyToString(studyProcessSql.getInputStream(), Charset.forName("UTF-8")));
         Map<String, Object> parameters = Collections.singletonMap("student_id", student.getId());
-        Query query = DictJpa.createNativeQuery(entityManager, sql, StudyProcess.class, parameters);
+        Query query = DictJpa.createNativeQuery(entityManager, studyProcessSql, StudyProcess.class, parameters);
         List list = query.list();
         return ((List<StudyProcess>) list).toArray(new StudyProcess[0]);
     }

@@ -1,6 +1,5 @@
 package com.benzolamps.dict.advice;
 
-import com.benzolamps.dict.dao.base.DocSolutionDao;
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import lombok.val;
 import org.aspectj.lang.JoinPoint;
@@ -21,21 +20,17 @@ import java.lang.reflect.Method;
  */
 @Component
 @Aspect
-public class SolutionAdvice {
+public class ShuffleSolutionAdvice {
 
     @Resource
     private ShuffleSolutionDao shuffleSolutionDao;
 
-    @Resource
-    private DocSolutionDao docSolutionDao;
-
-    @Pointcut("execution(* com.benzolamps.dict.service.impl.*SolutionServiceImpl.*(..))")
+    @Pointcut("execution(* com.benzolamps.dict.service.impl.ShuffleSolutionServiceImpl.*(..))")
     private native void pointcut();
 
     @Before("pointcut()")
     private void before() {
         shuffleSolutionDao.reload();
-        docSolutionDao.reload();
     }
 
     @AfterReturning("pointcut()")
@@ -43,7 +38,6 @@ public class SolutionAdvice {
         Transactional transactional = getTransactional(point);
         if (transactional == null || !transactional.readOnly()) {
             shuffleSolutionDao.flush();
-            docSolutionDao.flush();
         }
     }
 
@@ -53,7 +47,6 @@ public class SolutionAdvice {
         if (transactional != null) {
             if (!ObjectUtils.isCheckedException(throwable)) {
                 shuffleSolutionDao.reload();
-                docSolutionDao.reload();
             }
         }
     }
