@@ -74,9 +74,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Override
     @Transactional(readOnly = true)
     public List<ShuffleSolution> findAll() {
-        List<ShuffleSolution> shuffleSolutions = shuffleSolutionDao.findAll();
-        shuffleSolutions.sort(Comparator.comparing(ShuffleSolution::getOrder));
-        return shuffleSolutions;
+        return shuffleSolutionDao.findAll();
     }
 
     @Override

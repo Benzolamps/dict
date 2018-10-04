@@ -15,8 +15,9 @@
     <w:tblLook w:val="04A0"/>
   </w:tblPr>
   <w:tblGrid>
-    <w:gridCol w:w="1555"/>
-    <w:gridCol w:w="3455"/>
+    <w:gridCol w:w="534"/>
+    <w:gridCol w:w="1417"/>
+    <w:gridCol w:w="3285"/>
   </w:tblGrid>
   <#list content as phrase>
     <w:tr wsp:rsidR="007813FA" wsp:rsidRPr="00C2588E" wsp:rsidTr="00C2588E">
@@ -25,7 +26,31 @@
       </w:trPr>
       <w:tc>
         <w:tcPr>
-          <w:tcW w:w="1555" w:type="dxa"/>
+          <w:tcW w:w="534" w:type="dxa"/>
+        </w:tcPr>
+        <w:p wsp:rsidR="00220549" wsp:rsidRPr="00C2588E" wsp:rsidRDefault="00220549" wsp:rsidP="00220549">
+          <w:pPr>
+            <w:spacing w:line="${line_height}" w:line-rule="auto"/>
+            <w:jc w:val="center"/>
+            <w:rPr>
+              <w:rFonts w:ascii="${english_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${english_font_family}"/>
+              <wx:font wx:val="${english_font_family}"/>
+              <w:sz-cs w:val="${font_size}"/>
+            </w:rPr>
+          </w:pPr>
+          <w:r>
+            <w:rPr>
+              <w:rFonts w:ascii="${chinese_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${chinese_font_family}" w:hint="fareast"/>
+              <wx:font wx:val="${chinese_font_family}"/>
+              <w:sz-cs w:val="${font_size}"/>
+            </w:rPr>
+            <w:t>□</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:tcPr>
+          <w:tcW w:w="1417" w:type="dxa"/>
           <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
         </w:tcPr>
         <w:p wsp:rsidR="007813FA" wsp:rsidRPr="00C2588E" wsp:rsidRDefault="007813FA" wsp:rsidP="00C2588E">
@@ -52,7 +77,7 @@
       </w:tc>
       <w:tc>
         <w:tcPr>
-          <w:tcW w:w="3455" w:type="dxa"/>
+          <w:tcW w:w="3285" w:type="dxa"/>
           <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
           <w:vAlign w:val="bottom"/>
         </w:tcPr>
@@ -75,7 +100,6 @@
               <w:sz-cs w:val="${font_size}"/>
               <w:u w:val="single"/>
             </w:rPr>
-            <w:t> </w:t>
           </w:r>
           <w:r>
             <w:rPr>
@@ -85,7 +109,6 @@
               <w:sz-cs w:val="${font_size}"/>
               <w:u w:val="single"/>
             </w:rPr>
-            <w:t> </w:t>
           </w:r>
         </w:p>
       </w:tc>

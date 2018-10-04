@@ -1,5 +1,5 @@
-<#-- 单词排查表 -->
-<#-- @ftlvariable name="content" type="java.util.List<com.benzolamps.dict.bean.Word>" -->
+<#-- 短语排查表 -->
+<#-- @ftlvariable name="content" type="java.util.List<com.benzolamps.dict.bean.Phrase>" -->
 <w:tbl>
   <w:tblPr>
     <w:tblW w:w="0" w:type="auto"/>
@@ -19,7 +19,7 @@
     <w:gridCol w:w="1417"/>
     <w:gridCol w:w="3285"/>
   </w:tblGrid>
-  <#list content as word>
+  <#list content as phrase>
     <w:tr wsp:rsidR="007813FA" wsp:rsidRPr="00C2588E" wsp:rsidTr="00C2588E">
       <w:trPr>
         <w:jc w:val="center"/>
@@ -64,15 +64,15 @@
               <w:sz-cs w:val="${font_size}"/>
             </w:rPr>
           </w:pPr>
-            <w:r wsp:rsidRPr="00C2588E">
-              <w:rPr>
-                <w:rFonts w:ascii="${english_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${english_font_family}"/>
-                <wx:font wx:val="${chinese_font_family}"/>
-                <w:sz w:val="${font_size}"/>
-                <w:sz-cs w:val="${font_size}"/>
-              </w:rPr>
-              <w:t>${word.prototype}</w:t>
-            </w:r>
+          <w:r wsp:rsidRPr="00C2588E">
+            <w:rPr>
+              <w:rFonts w:ascii="${english_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${english_font_family}"/>
+              <wx:font wx:val="${chinese_font_family}"/>
+              <w:sz w:val="${font_size}"/>
+              <w:sz-cs w:val="${font_size}"/>
+            </w:rPr>
+            <w:t>${phrase.prototype}</w:t>
+          </w:r>
         </w:p>
       </w:tc>
       <w:tc>
@@ -109,6 +109,7 @@
               <w:sz-cs w:val="${font_size}"/>
               <w:u w:val="single"/>
             </w:rPr>
+            <w:t>${phrase.definition}</w:t>
           </w:r>
         </w:p>
       </w:tc>

@@ -614,7 +614,7 @@
         <w:r wsp:rsidRPr="0028394F">
           <w:rPr>
             <w:rFonts w:hint="fareast"/>
-            <w:sz w:val="40"/>
+            <w:sz w:val="30"/>
           </w:rPr>
           <w:t>${title}</w:t>
         </w:r>

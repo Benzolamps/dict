@@ -22,11 +22,6 @@ public interface DocSolutionService {
      */
     DocSolution find(Integer id);
 
-    /**
-     * 使用
-     */
-    void use(Integer id);
-
     /** 获取基础属性 */
     Map<String, Object> getBaseProperties();
 }

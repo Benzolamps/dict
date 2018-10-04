@@ -37,10 +37,4 @@ public class DictProperties implements Serializable {
 
     /** Universe路径 */
     private String universePath;
-
-    /** logback console pattern */
-    private String logbackConsolePattern;
-
-    /** logback file pattern */
-    private String logbackFilePattern;
 }

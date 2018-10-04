@@ -15,7 +15,7 @@ solutions:
     needHeader: true
     exportFor: WORD
     needShuffle: false
-    order: 0
+    properties: {}
   - id: 1
     name: 单词抄写表
     path: doc/universe/copy_words.doc
@@ -23,7 +23,7 @@ solutions:
     needHeader: true
     exportFor: WORD
     needShuffle: true
-    order: 1
+    properties: {}
   - id: 2
     name: 单词排查表
     path: doc/universe/check_words.doc
@@ -31,28 +31,44 @@ solutions:
     needHeader: true
     exportFor: WORD
     needShuffle: false
-    order: 2
+    properties: {}
   - id: 3
+    name: 单词对照表
+    path: doc/universe/collation_words.doc
+    remark: 单词对照表
+    needHeader: true
+    exportFor: WORD
+    needShuffle: false
+    properties: {}
+  - id: 4
     name: 短语生词表
     path: doc/universe/new_phrases.doc
     remark: 短语生词表
     needHeader: true
     exportFor: PHRASE
     needShuffle: false
-    order: 3
-  - id: 4
+    properties: {}
+  - id: 5
     name: 短语抄写表
     path: doc/universe/copy_phrases.doc
     remark: 短语抄写表
     needHeader: true
     exportFor: PHRASE
     needShuffle: true
-    order: 4
-  - id: 5
+    properties: {}
+  - id: 6
     name: 短语排查表
     path: doc/universe/check_phrases.doc
     remark: 短语排查表
     needHeader: true
     exportFor: PHRASE
     needShuffle: false
-    order: 5
+    properties: {}
+  - id: 7
+    name: 短语对照表
+    path: doc/universe/collation_phrases.doc
+    remark: 短语对照表
+    needHeader: true
+    exportFor: PHRASE
+    needShuffle: false
+    properties: {}

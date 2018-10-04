@@ -4,10 +4,10 @@ import com.benzolamps.dict.bean.DocSolution;
 import com.benzolamps.dict.dao.base.DocSolutionDao;
 import com.benzolamps.dict.service.base.DocSolutionService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Word文档方案Service接口实现类
@@ -19,31 +19,17 @@ import java.util.*;
 @Service("docSolutionService")
 public class DocSolutionServiceImpl implements DocSolutionService {
 
-
     @Resource
     private DocSolutionDao docSolutionDao;
 
-
     @Override
-    @Transactional(readOnly = true)
     public List<DocSolution> findAll() {
-        List<DocSolution> docSolutions = docSolutionDao.findAll();
-        docSolutions.sort(Comparator.comparing(DocSolution::getOrder));
-        return docSolutions;
+        return docSolutionDao.findAll();
     }
 
     @Override
-    @Transactional(readOnly = true)
     public DocSolution find(Integer id) {
         return docSolutionDao.find(id);
-    }
-
-    @Override
-    @Transactional
-    public void use(Integer id) {
-        DocSolution solution = find(id);
-        Integer order = findAll().stream().mapToInt(DocSolution::getOrder).max().orElse(0);
-        solution.setOrder(order + 1);
     }
 
     @Override

@@ -52,9 +52,6 @@ public class DocSolution implements Serializable {
     /** 是否需要乱序 */
     private Boolean needShuffle;
 
-    /** 排序 */
-    private Integer order;
-
     /** 属性 */
     private Map<String, Object> properties;
 

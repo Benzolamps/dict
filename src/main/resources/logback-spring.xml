@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <springProperty scope="context" name="console_pattern" source="dict.system.logback_console_pattern"/>
-  <springProperty scope="context" name="file_pattern" source="dict.system.logback_file_pattern"/>
+  <springProperty scope="context" name="console_pattern" source="logging.pattern.console"/>
+  <springProperty scope="context" name="file_pattern" source="logging.pattern.file"/>
   <springProperty scope="context" name="encoding" source="file.encoding"/>
 
   <!-- 向控制台输出日志 -->
@@ -58,6 +58,10 @@
   </root>
 
   <logger name="com.benzolamps.dict" level="DEBUG" additivity="true"/>
-  <logger name="org.hibernate.orm.deprecation" level="ERROR"/>
+  <logger name="org.hibernate.orm.deprecation" level="OFF"/>
   <logger name="org.apache.catalina.core.ContainerBase" level="OFF"/>
+  
+  <springProfile name="release">
+    <logger name="com.benzolamps.dict.dao.core.DictJpa" level="OFF"/>
+  </springProfile>
 </configuration>
