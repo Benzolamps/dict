@@ -1,9 +1,12 @@
+/* 学习进度查询SQL语句 */
 select
   cast(d.mastered_count as signed) as masteredCount,
   cast(d.failed_count as signed) as failedCount,
-	cast(case is_word when 1 then w.wc else p.pc end - failed_count - mastered_count as signed) as unstudiedCount,
-  cast(case is_word when 1 then w.wc else p.pc end as signed) as wholeCount
+	cast(case d.is_word when 1 then w.wc else p.pc end - failed_count - mastered_count as signed) as unstudiedCount,
+  cast(case d.is_word when 1 then w.wc else p.pc end as signed) as wholeCount
 from
+(select count(1) as wc from dict_word) as w,
+(select count(1) as pc from dict_phrase) as p,
 (
   select
 	  1 as is_word,
@@ -19,11 +22,11 @@ from
     1 as is_word,
     (
       select avg((select count(1) from dict_sw as sw where sw.student = s.id)) from dict_student as s
-      where s.class = (select s1.class from dict_student as s1 where s1.id = :student_id)
+      where s.class = (select s1.class as class from dict_student as s1 where s1.id = :student_id)
     ) as mastered_count,
     (
       select avg((select count(1) from dict_swf as swf where swf.student = s.id)) from dict_student as s
-      where s.class = (select s1.class from dict_student as s1 where s1.id = :student_id)
+      where s.class = (select s1.class as class from dict_student as s1 where s1.id = :student_id)
     ) as failed_count
 	union all
   select
@@ -36,6 +39,4 @@ from
       select avg((select count(1) from dict_spf as spf where spf.student = s.id)) from dict_student as s
       where s.class = (select s1.class from dict_student as s1 where s1.id = :student_id)
     ) as failed_count
-) as d,
-(select count(1) as wc from dict_word) as w,
-(select count(1) as pc from dict_phrase) as p;
+) as d;

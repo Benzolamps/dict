@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  logback 配置 - default
--->
 <configuration>
   <springProperty scope="context" name="console_pattern" source="dict.system.logback_console_pattern"/>
   <springProperty scope="context" name="file_pattern" source="dict.system.logback_file_pattern"/>
@@ -34,7 +31,7 @@
     <!--过滤器-->
     <filter class="ch.qos.logback.classic.filter.LevelFilter">
       <!-- 最小级别 -->
-      <param name="levelMin" value="FATAL"/>
+      <param name="levelMin" value="ERROR"/>
       <onMatch>ACCEPT</onMatch>
       <onMismatch>DENY</onMismatch>
     </filter>
