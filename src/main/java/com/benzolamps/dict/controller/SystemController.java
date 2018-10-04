@@ -4,10 +4,13 @@ import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.util.DictLambda;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+
+import static com.benzolamps.dict.util.DictSpring.resolve;
 
 /**
  * 系统管理Controller
@@ -16,6 +19,7 @@ import javax.annotation.Resource;
  * @datetime 2018-7-4 19:21:16
  */
 @RestController
+@Slf4j
 @RequestMapping("system/")
 public class SystemController extends BaseController {
 
@@ -92,6 +96,7 @@ public class SystemController extends BaseController {
     protected BaseVo shutdownProcess() {
         new Thread((DictLambda.Action) () -> {
             Thread.sleep(100);
+            logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 已退出！'}"));
             System.exit(0);
         }).start();
         return SUCCESS_VO;

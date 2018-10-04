@@ -2,11 +2,11 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.component.DictPropertyInfo;
-import com.benzolamps.dict.component.Size;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -43,15 +43,14 @@ public class Clazz extends BaseEntity {
     private String description;
 
     /** 学生 */
-    @OneToMany(mappedBy = "clazz", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "clazz", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @DictIgnore
     @JsonIgnore
     private Set<Student> students;
 
     /** 学生数 */
-    @Size("students")
+    @Formula("(select count(1) from dict_student as s where s.class = id)")
     @DictIgnore
-    @Transient
     @JsonProperty("students")
     private Integer studentsCount;
 }

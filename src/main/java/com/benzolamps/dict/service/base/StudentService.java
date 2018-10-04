@@ -3,7 +3,7 @@ package com.benzolamps.dict.service.base;
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.Word;
-import com.benzolamps.dict.controller.vo.StudyProcessVo;
+import com.benzolamps.dict.bean.StudyProcess;
 
 /**
  * 学生Service接口
@@ -48,17 +48,11 @@ public interface StudentService extends BaseService<Student> {
      */
     void addFailedPhrases(Student student, Phrase... phrases);
 
-    /**
-     * 获取单词学习进度
-     * @param student 学生
-     * @return 学习进度
-     */
-    StudyProcessVo getWordStudyProcess(Student student);
 
     /**
-     * 获取短语学习进度
+     * 获取学习进度
      * @param student 学生
      * @return 学习进度
      */
-    StudyProcessVo getPhraseStudyProcess(Student student);
+    StudyProcess[] getStudyProcess(Student student);
 }

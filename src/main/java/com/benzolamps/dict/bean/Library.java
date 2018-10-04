@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -22,6 +23,13 @@ import java.util.Set;
 @Table(name = "dict_library")
 @Getter
 @Setter
+@NamedEntityGraphs(@NamedEntityGraph(
+    attributeNodes = {
+        @NamedAttributeNode(value = "words", subgraph = "size"),
+        @NamedAttributeNode(value = "phrases", subgraph = "size")
+    }
+
+))
 public class Library extends BaseEntity {
 
     private static final long serialVersionUID = -8525365652508791389L;
@@ -55,15 +63,13 @@ public class Library extends BaseEntity {
     private Set<Phrase> phrases;
 
     /** 单词的总数 */
-    @Transient
-    @Size("words")
+    @Formula("(select count(1) from dict_word as w where w.library = id)")
     @DictIgnore
     @JsonProperty("words")
     private Integer wordsCount;
 
     /** 短语的总数 */
-    @Transient
-    @Size("phrases")
+    @Formula("(select count(1) from dict_phrase as p where p.library = id)")
     @DictIgnore
     @JsonProperty("phrases")
     private Integer phrasesCount;

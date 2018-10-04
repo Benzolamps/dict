@@ -4,6 +4,8 @@ import com.benzolamps.dict.component.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -18,7 +20,6 @@ import java.util.Objects;
  * @datetime 2018-6-30 22:58:35
  */
 @MappedSuperclass
-@EntityListeners(DictEntityListener.class)
 @Getter
 @Setter
 public abstract class BaseEntity implements Serializable {
@@ -41,12 +42,14 @@ public abstract class BaseEntity implements Serializable {
     @Column(nullable = false, updatable = false)
     @DictIgnore
     @JsonIgnore
+    @CreationTimestamp
     protected Date createDate;
 
     /** 修改时间 */
     @Column(nullable = false)
     @DictIgnore
     @JsonIgnore
+    @UpdateTimestamp
     protected Date modifyDate;
 
     /** 备注 */

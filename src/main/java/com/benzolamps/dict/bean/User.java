@@ -41,7 +41,8 @@ public class User extends BaseEntity {
     }
 
     /** 登录、注册验证组 */
-    public interface LoginGroup { }
+    public interface LoginGroup {
+    }
 
     /** 用户名 */
     @NotEmpty(groups = LoginGroup.class)
@@ -70,7 +71,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     /** 词库 */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "library")
     @DictIgnore
     private Library library;

@@ -13,7 +13,7 @@ public interface MiscellaneousService {
      * @return SQLite版本
      */
     @SuppressWarnings("unused")
-    String getSQLiteVersion();
+    String getMysqlVersion();
 
     /**
      * 获取数据库文件的大小

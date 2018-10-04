@@ -2,17 +2,24 @@ package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.bean.Clazz;
 import com.benzolamps.dict.bean.Student;
-import com.benzolamps.dict.controller.vo.StudyProcessVo;
+import com.benzolamps.dict.bean.StudyProcess;
 import com.benzolamps.dict.dao.base.ClazzDao;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
-import com.benzolamps.dict.util.DictMap;
 import com.benzolamps.dict.util.DictObject;
+import org.hibernate.Query;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import org.springframework.util.StreamUtils;
 
 import javax.annotation.Resource;
-import javax.persistence.TypedQuery;
+import java.nio.charset.Charset;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 学生Dao接口实现类
@@ -25,6 +32,9 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
 
     @Resource
     private ClazzDao clazzDao;
+
+    @Value("classpath:sql/study_process.sql")
+    private org.springframework.core.io.Resource studyProcessSql;
 
     @Override
     public Page<Student> findPage(Pageable pageable) {
@@ -64,31 +74,12 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
 
     @Override
     @SuppressWarnings("unchecked")
-    public StudyProcessVo getWordStudyProcess(Student student) {
+    public StudyProcess[] getStudyProcess(Student student) {
         Assert.notNull(student, "student不能为null");
-        String jpql = "select new com.benzolamps.dict.controller.vo.StudyProcessVo(" +
-            "student.masteredWords.size, " +
-            "student.failedWords.size, " +
-            "((select count(word) from Word as word) - student.masteredWords.size - student.failedWords.size), " +
-            "(select count(word) from Word as word)) " +
-            "from Student as student where student = :student";
-        TypedQuery<StudyProcessVo> query = DictJpa.createJpqlQuery(
-                entityManager, jpql, StudyProcessVo.class, DictMap.parse("student", student));
-        return query.getSingleResult();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public StudyProcessVo getPhraseStudyProcess(Student student) {
-        Assert.notNull(student, "student不能为null");
-        String jpql = "select new com.benzolamps.dict.controller.vo.StudyProcessVo(" +
-            "student.masteredPhrases.size, " +
-            "student.failedPhrases.size, " +
-            "((select count(phrase) from Phrase as phrase) - student.masteredPhrases.size - student.failedPhrases.size), " +
-            "(select count(phrase) from Phrase as phrase)) " +
-            "from Student as student where student = :student";
-        TypedQuery<StudyProcessVo> query = DictJpa.createJpqlQuery(
-            entityManager, jpql, StudyProcessVo.class, DictMap.parse("student", student));
-        return query.getSingleResult();
+        String sql = tryFunc(() -> StreamUtils.copyToString(studyProcessSql.getInputStream(), Charset.forName("UTF-8")));
+        Map<String, Object> parameters = Collections.singletonMap("student_id", student.getId());
+        Query query = DictJpa.createNativeQuery(entityManager, sql, StudyProcess.class, parameters);
+        List list = query.list();
+        return ((List<StudyProcess>) list).toArray(new StudyProcess[0]);
     }
 }

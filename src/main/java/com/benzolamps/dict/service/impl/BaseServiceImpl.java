@@ -10,14 +10,10 @@ import com.benzolamps.dict.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * Service基类接口实现类
@@ -140,10 +136,9 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional
     public void remove(Integer... ids) {
-        this.remove(Arrays.stream(ids).map(this::find).collect(Collectors.toList()));
+        this.remove(findList(Filter.in("id", Arrays.asList(ids))));
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     @Transactional
     public void remove(Collection<T> entities) {
@@ -154,13 +149,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Transactional
     public void remove(Filter filter) {
         handleFilter(filter);
-        Method removeMethod = tryFunc(() -> getClass().getMethod("remove", Collection.class));
-        if (removeMethod.getDeclaringClass().equals(BaseServiceImpl.class)) {
-            baseDao.remove(filter);
-        } else {
-            Collection<T> entities = findList(filter);
-            this.remove(entities);
-        }
+        baseDao.remove(filter);
     }
 
     /**

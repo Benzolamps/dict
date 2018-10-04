@@ -1,6 +1,5 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.Format;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -26,13 +25,34 @@ public abstract class BaseElement extends BaseEntity {
     protected Integer index;
 
     /** 原形 */
+    @Convert(converter = FullWidthToHalfWidthConverter.class)
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 255)
     private String prototype;
 
+    /** 词义转换 */
+    @Converter
+    public static class DefinitionConverter extends HalfWidthToFullWidthConverter {
+        @Override
+        public String convertToDatabaseColumn(String value) {
+            return super.convertToDatabaseColumn(value)
+                .replaceAll("[，]+", "，")
+                .replaceAll("[；]+", "；")
+                .replaceAll("(^；+)|(；+$)|(^，+)|(，+$)", "");
+        }
+
+        @Override
+        public String convertToEntityAttribute(String value) {
+            return super.convertToDatabaseColumn(value)
+                .replaceAll("[，]+", "，")
+                .replaceAll("[；]+", "；")
+                .replaceAll("(^；+)|(；+$)|(^，+)|(，+$)", "");
+        }
+    }
+
     /** 词义 */
-    @Format("replaceString")
+    @Convert(converter = DefinitionConverter.class)
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 255)
@@ -42,17 +62,4 @@ public abstract class BaseElement extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "library", nullable = false, updatable = false)
     private Library library;
-
-    /** @return 用于实体类中字段的格式 */
-    @SuppressWarnings("unused")
-    public String replaceString(String str) {
-        return str == null ? "" : str
-            .replaceAll("[\\s\\u00a0]+", "")
-            .replace("(", "（")
-            .replace(")", "）")
-            .replace(":", "：")
-            .replaceAll("[,，]+", "，")
-            .replaceAll("[;；]+", "；")
-            .replaceAll("(^；+)|(；+$)|(^，+)|(，+$)", "");
-    }
 }

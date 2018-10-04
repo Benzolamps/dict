@@ -26,7 +26,7 @@
       <div class="layui-card-body" style="text-align: center">
         ${student.name}<br>
         ${student.number}<br>
-        ${student.description}<br>
+        ${student.description!''}<br>
         ${student.clazz.name}<br>
         <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 10px">
           <tr>

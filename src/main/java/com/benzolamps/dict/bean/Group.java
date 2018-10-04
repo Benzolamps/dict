@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -44,7 +45,7 @@ public class Group extends BaseEntity {
 
     /** 词库 */
     @ManyToOne
-    @JoinColumn(name = "library", updatable = false)
+    @JoinColumn(name = "library", updatable = false, nullable = false)
     @DictIgnore
     @JsonIgnore
     private Library library;
@@ -64,7 +65,7 @@ public class Group extends BaseEntity {
         SCORING("评分中"),
 
         /**
-         * 已完成状态, 可以导出, 也可以删除, 可以查看单词与学生掌握情况
+         * 已完成状态, 可以导出, 可以查看单词与学生掌握情况
          * 可以转换为正常状态, 所有学生都可以重新评分
          */
         COMPLETED("已完成");
@@ -128,8 +129,9 @@ public class Group extends BaseEntity {
     private Set<Phrase> phrases;
 
     /** 分组日志 */
-    @Convert(converter = GroupLogConverter.class)
+    @Convert(converter = GroupLog.GroupLogConverter.class)
     @Basic(fetch = FetchType.LAZY)
+    @Column(insertable = false, length = 1000, columnDefinition = "longtext")
     @DictIgnore
     @JsonIgnore
     private GroupLog groupLog;
@@ -140,29 +142,25 @@ public class Group extends BaseEntity {
     private Integer scoreCount;
 
     /** 分组中的学生数 */
-    @Transient
-    @Size("studentsOriented")
+    @Formula("(select count(1) from dict_gs as gs where gs.groups = id)")
     @DictIgnore
     @JsonProperty("studentsOriented")
     private Integer studentsOrientedCount;
 
     /** 已评分的学生数 */
-    @Transient
-    @Size("studentsScored")
+    @Formula("(select count(1) from dict_gss as gss where gss.groups = id)")
     @DictIgnore
     @JsonProperty("studentsScored")
     private Integer studentsScoredCount;
 
     /** 分组中的单词数 */
-    @Transient
-    @Size("words")
+    @Formula("(select count(1) from dict_gw as gw where gw.groups = id)")
     @DictIgnore
     @JsonProperty("words")
     private Integer wordsCount;
 
     /** 分组中的短语数 */
-    @Transient
-    @Size("phrases")
+    @Formula("(select count(1) from dict_gp as gp where gp.groups = id)")
     @DictIgnore
     @JsonProperty("phrases")
     private Integer phrasesCount;

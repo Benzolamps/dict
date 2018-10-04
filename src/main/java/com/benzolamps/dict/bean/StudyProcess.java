@@ -1,6 +1,5 @@
-package com.benzolamps.dict.controller.vo;
+package com.benzolamps.dict.bean;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,8 +11,7 @@ import java.io.Serializable;
  * @datetime 2018-10-2 12:59:59
  */
 @Data
-@AllArgsConstructor
-public class StudyProcessVo implements Serializable {
+public class StudyProcess implements Serializable {
 
     private static final long serialVersionUID = 2232499968500674516L;
 

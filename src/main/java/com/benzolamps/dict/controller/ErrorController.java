@@ -77,7 +77,7 @@ public class ErrorController extends BaseController implements org.springframewo
             attributes.put("message", "请求的路径不存在");
         }
         StringJoiner sj = new StringJoiner("\n");
-        Stream.of("timestamp", "status", "error", "exception", "message", "path")
+        Stream.of("timestamp", "status", "error", "exception", "message", "path", "trace")
             .filter(attributes::containsKey)
             .map(key -> key + ": " + Objects.toString(attributes.get(key)))
             .forEachOrdered(sj::add);

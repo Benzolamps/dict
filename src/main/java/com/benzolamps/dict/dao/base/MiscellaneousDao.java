@@ -11,10 +11,13 @@ public interface MiscellaneousDao {
      * 获取SQLite版本
      * @return SQLite版本
      */
-    String getSQLiteVersion();
+    String getMysqlVersion();
 
     /**
-     * vacuum
+     * clear
      */
-    void vacuum();
+    void clear();
+
+    /** 获取数据库总大小 */
+    long dataSize();
 }

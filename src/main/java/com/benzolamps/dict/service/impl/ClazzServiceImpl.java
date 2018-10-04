@@ -1,15 +1,8 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.Clazz;
-import com.benzolamps.dict.controller.vo.StudyProcessVo;
-import com.benzolamps.dict.dao.base.ClazzDao;
 import com.benzolamps.dict.service.base.ClazzService;
-import com.benzolamps.dict.service.base.StudentService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import javax.annotation.Resource;
-import java.util.Collection;
 
 /**
  * 班级Service接口实现类
@@ -19,31 +12,4 @@ import java.util.Collection;
  */
 @Service("clazzService")
 public class ClazzServiceImpl extends BaseServiceImpl<Clazz> implements ClazzService {
-
-    @Resource
-    private StudentService studentService;
-
-    @Resource
-    private ClazzDao clazzDao;
-
-    @Override
-    public void remove(Collection<Clazz> clazzes) {
-        /* 删除班级前先删除班级中的学生 */
-        for (Clazz clazz : clazzes) {
-            if (!CollectionUtils.isEmpty(clazz.getStudents())) {
-                studentService.remove(clazz.getStudents());
-            }
-        }
-        super.remove(clazzes);
-    }
-
-    @Override
-    public StudyProcessVo getWordStudyProcess(Clazz clazz) {
-        return clazzDao.getWordStudyProcess(clazz);
-    }
-
-    @Override
-    public StudyProcessVo getPhraseStudyProcess(Clazz clazz) {
-        return clazzDao.getPhraseStudyProcess(clazz);
-    }
 }

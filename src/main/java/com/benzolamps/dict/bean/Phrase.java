@@ -1,9 +1,9 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -32,12 +32,10 @@ public class Phrase extends BaseElement {
     private Set<Student> failedStudents;
 
     /** 已掌握该短语的学生数 */
-    @Transient
-    @Size("masteredStudents")
+    @Formula("(select count(1) from dict_sp as sp where sp.phrase = id)")
     private Integer masteredStudentsCount;
 
     /** 未掌握该短语的学生数 */
-    @Transient
-    @Size("failedStudents")
+    @Formula("(select count(1) from dict_spf as spf where spf.phrase = id)")
     private Integer failedStudentsCount;
 }

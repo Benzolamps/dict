@@ -6,6 +6,7 @@ import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.controller.vo.StudentVo;
+import com.benzolamps.dict.bean.StudyProcess;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
@@ -188,10 +189,11 @@ public class StudentController extends BaseController {
         mv.addObject("student", student);
         mv.addObject("wordStudyLogs", wordStudyLogs);
         mv.addObject("phraseStudyLogs", phraseStudyLogs);
-        mv.addObject("wordStudyProcess", studentService.getWordStudyProcess(student));
-        mv.addObject("phraseStudyProcess", studentService.getPhraseStudyProcess(student));
-        mv.addObject("averageWordStudyProcess", clazzService.getWordStudyProcess(student.getClazz()));
-        mv.addObject("averagePhraseStudyProcess", clazzService.getPhraseStudyProcess(student.getClazz()));
+        StudyProcess[] studyProcessVos = studentService.getStudyProcess(student);
+        mv.addObject("wordStudyProcess", studyProcessVos[0]);
+        mv.addObject("phraseStudyProcess", studyProcessVos[1]);
+        mv.addObject("averageWordStudyProcess", studyProcessVos[2]);
+        mv.addObject("averagePhraseStudyProcess", studyProcessVos[3]);
         return mv;
     }
 

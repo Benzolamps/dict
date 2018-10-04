@@ -18,7 +18,7 @@
 [#-- @ftlvariable name="springboot_version" type="java.lang.String" --]
 [#-- @ftlvariable name="tomcat_version" type="java.lang.String" --]
 [#-- @ftlvariable name="servlet_version" type="java.lang.String" --]
-[#-- @ftlvariable name="sqlite_version" type="java.lang.String" --]
+[#-- @ftlvariable name="mysql_version" type="java.lang.String" --]
 [#-- @ftlvariable name="hibernate_version" type="java.lang.String" --]
 [#-- @ftlvariable name="poi_version" type="java.lang.String" --]
 [#-- @ftlvariable name="is_release" type="java.lang.Boolean" --]

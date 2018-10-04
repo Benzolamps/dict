@@ -191,6 +191,11 @@ public interface BaseDao<T extends BaseEntity> {
 	T detach(T entity);
 
 	/**
+	 * 刷新
+	 */
+	void flush();
+
+	/**
 	 * 检测实体对象是否存在
 	 * @param entity 实体对象
 	 * @return 检测结果

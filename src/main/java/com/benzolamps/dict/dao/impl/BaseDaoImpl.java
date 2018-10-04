@@ -1,17 +1,21 @@
 package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.bean.BaseEntity;
-import com.benzolamps.dict.component.Alias;
 import com.benzolamps.dict.dao.base.BaseDao;
 import com.benzolamps.dict.dao.core.*;
-import com.benzolamps.dict.util.*;
+import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictArray;
+import com.benzolamps.dict.util.DictBean;
+import com.benzolamps.dict.util.DictProperty;
 import org.springframework.core.ResolvableType;
 import org.springframework.util.Assert;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Dao基类接口实现类
@@ -28,10 +32,10 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	@PersistenceContext
 	protected EntityManager entityManager;
 
-	protected BaseDaoImpl() {
-		ResolvableType resolvableType = ResolvableType.forClass(getClass());
-		entityClass = (Class<T>) resolvableType.getSuperType().getGeneric().resolve();
-	}
+    protected BaseDaoImpl() {
+        ResolvableType resolvableType = ResolvableType.forClass(getClass());
+        entityClass = (Class<T>) resolvableType.getSuperType().getGeneric().resolve();
+    }
 
     /**
      * 生成一个GeneratedDictQuery
@@ -217,25 +221,14 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
     @Override
 	public void remove(Collection<T> entities) {
-        Assert.notEmpty(entities, "entities不能为null或空");
-        Assert.isTrue(entities.stream().noneMatch(BaseEntity::isNew), "entity不能是新建对象");
-        entities = new ArrayList<>(entities);
-        for (int i = 0; i < entities.size(); i += 100) {
-            List<T> sublist = ((List<T>) entities).subList(i, DictMath.limit(i + 100, i, entities.size()));
-            this.remove(Filter.in(null, sublist));
-        }
+        Assert.notNull(entities, "entities不能为null");
+        entities.forEach(entity -> entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity)));
 	}
 
     @Override
     public void remove(Filter filter) {
-        String className = entityClass.getName();
-        String alias = entityClass.isAnnotationPresent(Alias.class) ?
-                entityClass.getAnnotation(Alias.class).value() :
-                DictString.toCamel(entityClass.getSimpleName());
-        filter.build(alias);
-        StringJoiner jpql = new StringJoiner(" ");
-        jpql.add("delete from").add(className).add("as").add(alias).add("where").add(filter.getSnippet());
-        DictJpa.executeJpqlQuery(entityManager, jpql.toString(), null, filter.getParameters().toArray());
+        Collection<T> entities = findList(filter);
+        this.remove(entities);
     }
 
 	@Override
@@ -245,6 +238,11 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
         entityManager.detach(entity);
 		return entity;
 	}
+
+    @Override
+    public void flush() {
+        entityManager.flush();
+    }
 
     @Override
     public boolean contains(T entity) {

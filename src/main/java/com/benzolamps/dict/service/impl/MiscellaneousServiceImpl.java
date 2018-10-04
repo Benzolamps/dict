@@ -4,8 +4,6 @@ import com.benzolamps.dict.dao.base.MiscellaneousDao;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictFile;
-import com.benzolamps.dict.util.DictLambda;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,25 +20,32 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     @Resource
     private MiscellaneousDao miscellaneousDao;
 
-    @Value("file:#{dictProperties.jdbcFile}")
-    private org.springframework.core.io.Resource resource;
-
     @Resource
     private WordClazzService wordClazzService;
 
     @Override
-    public String getSQLiteVersion() {
-        return miscellaneousDao.getSQLiteVersion();
+    public String getMysqlVersion() {
+        return miscellaneousDao.getMysqlVersion();
     }
 
     @Override
     public String databaseFileSize() {
-       return DictFile.fileSizeStr(DictLambda.tryFunc(resource::contentLength));
+//        File file = new File("E:\\src\\mysql");
+//
+//        long size = 0;
+//
+//        Set<File> allTheFiles = DictFile.deepListFiles(file, null);
+//
+//        for (File subFile : allTheFiles) {
+//            size += subFile.length();
+//        }
+
+       return DictFile.fileSizeStr(miscellaneousDao.dataSize());
     }
 
     @Override
     public void clean() {
         wordClazzService.clearUseless();
-        miscellaneousDao.vacuum();
+        miscellaneousDao.clear();
     }
 }

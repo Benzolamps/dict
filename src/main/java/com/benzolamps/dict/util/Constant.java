@@ -57,7 +57,10 @@ public interface Constant {
     Class[] EMPTY_CLASS_ARRAY = new Class[0];
 
     /** 文本文件格式 */
-    String[] TEXT_FILES =  {".txt", ".java", ".html", ".css", ".js", ".yml", ".xml", ".json", ".less", ".svg", ".scss", ".md", ".ftl"};
+    String[] TEXT_FILES =  {
+        ".txt", ".java", ".html", ".css", ".js", ".yml", ".xml", ".json", ".less", ".svg", ".scss", ".md", ".ftl",
+        ".ini", ".vbs"
+    };
 
     /** 空的List */
     List EMPTY_LIST = Collections.EMPTY_LIST;
@@ -81,5 +84,44 @@ public interface Constant {
         enhancer.setCallback((MethodInterceptor) (obj, method, args, methodProxy) ->
             method.getDeclaringClass().isInstance(EMPTY_MAP) ? methodProxy.invoke(EMPTY_MAP, args) : methodProxy.invokeSuper(obj, args));
         return (Properties) enhancer.create();
+    }).get();
+
+    /** 半角字符与全角字符映射 */
+    List<KeyValuePairs<Character, Character>> HALF_WIDTH_FULL_WIDTH_MAPPING = ((Supplier<List>) () -> {
+        List<KeyValuePairs<Character, Character>> mapping = new ArrayList<>();
+        mapping.add(new KeyValuePairs<>(',', '，'));
+        mapping.add(new KeyValuePairs<>('\'', '’'));
+        mapping.add(new KeyValuePairs<>('\'', '‘'));
+        mapping.add(new KeyValuePairs<>('"', '”'));
+        mapping.add(new KeyValuePairs<>('"', '“'));
+        mapping.add(new KeyValuePairs<>(';', '；'));
+        mapping.add(new KeyValuePairs<>(':', '：'));
+        mapping.add(new KeyValuePairs<>('/', '／'));
+        mapping.add(new KeyValuePairs<>('\\', '＼'));
+        mapping.add(new KeyValuePairs<>('!', '！'));
+        mapping.add(new KeyValuePairs<>('?', '？'));
+        mapping.add(new KeyValuePairs<>('&', '＆'));
+        mapping.add(new KeyValuePairs<>('|', '｜'));
+        mapping.add(new KeyValuePairs<>('(', '（'));
+        mapping.add(new KeyValuePairs<>(')', '）'));
+        mapping.add(new KeyValuePairs<>('[', '［'));
+        mapping.add(new KeyValuePairs<>(']', '］'));
+        mapping.add(new KeyValuePairs<>('<', '＜'));
+        mapping.add(new KeyValuePairs<>('>', '＞'));
+        mapping.add(new KeyValuePairs<>('{', '｛'));
+        mapping.add(new KeyValuePairs<>('}', '｝'));
+        mapping.add(new KeyValuePairs<>('~', '～'));
+        mapping.add(new KeyValuePairs<>('@', '＠'));
+        mapping.add(new KeyValuePairs<>('#', '＃'));
+        mapping.add(new KeyValuePairs<>('_', '＿'));
+        mapping.add(new KeyValuePairs<>('-', '－'));
+        mapping.add(new KeyValuePairs<>('¯', '￣'));
+        mapping.add(new KeyValuePairs<>('`', 'ˋ'));
+        mapping.add(new KeyValuePairs<>('+', '＋'));
+        mapping.add(new KeyValuePairs<>('*', '＊'));
+        mapping.add(new KeyValuePairs<>('%', '％'));
+        mapping.add(new KeyValuePairs<>('$', '＄'));
+        mapping.add(new KeyValuePairs<>('¥', '￥'));
+        return mapping;
     }).get();
 }

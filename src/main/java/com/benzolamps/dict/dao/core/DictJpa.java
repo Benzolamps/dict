@@ -3,6 +3,7 @@ package com.benzolamps.dict.dao.core;
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictLambda.Action1;
 import com.benzolamps.dict.util.DictSpring;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
@@ -11,12 +12,14 @@ import org.hibernate.transform.Transformers;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Map;
 
 import static com.benzolamps.dict.util.DictLambda.tryAction;
@@ -153,17 +156,39 @@ public class DictJpa {
     }
 
     /**
+     * 执行一个原生SQL语句
+     * @param sql SQL
+     */
+    @SuppressWarnings("unchecked")
+    public static void executeNativeQueryBatch(String... sql) {
+        Assert.notNull(sql, "sql不能为null或空");
+        Assert.isTrue(Arrays.stream(sql).allMatch(StringUtils::hasText), "sql不能为null或空");
+        logger.info("sql: " + String.join("\n", sql));
+        DataSourceProperties dsp = DictSpring.getBean(DataSourceProperties.class);
+        try (var connection = DriverManager.getConnection(dsp.getUrl(), dsp.getUsername(), dsp.getPassword())) {
+            try (var statement = connection.createStatement()) {
+                tryAction(() -> ClassUtils.forName(dsp.getDriverClassName(), DictSpring.getClassLoader()));
+                Arrays.stream(sql).forEach((Action1<String>) statement::addBatch);
+                statement.executeBatch();
+            }
+        } catch (SQLException e) {
+            throw new DictException(e);
+        }
+    }
+
+    /**
      * 执行一个无事务的原生SQL语句
      * @param sql SQL
      * @param positionParameters 位置参数
      */
+    @SuppressWarnings("unused")
     public static void executeNonTransactionNativeQuery(String sql, Object... positionParameters) {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
-        DataSourceProperties dataSourceProperties = DictSpring.getBean(DataSourceProperties.class);
-        try (var connection = DriverManager.getConnection(dataSourceProperties.getUrl())) {
+        DataSourceProperties dsp = DictSpring.getBean(DataSourceProperties.class);
+        try (var connection = DriverManager.getConnection(dsp.getUrl(), dsp.getUsername(), dsp.getPassword())) {
             try (var statement = connection.prepareStatement(sql)) {
-                tryAction(() -> ClassUtils.forName(dataSourceProperties.getDriverClassName(), DictSpring.getClassLoader()));
+                tryAction(() -> ClassUtils.forName(dsp.getDriverClassName(), DictSpring.getClassLoader()));
                 for (int index = 0; index < positionParameters.length; index++) {
                     statement.setObject(index + 1, positionParameters[index]);
                 }

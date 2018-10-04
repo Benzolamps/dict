@@ -32,9 +32,6 @@ public class DictProperties implements Serializable {
     /** 系统版本 */
     private String version;
 
-    /** SQLite数据库文件所在位置 */
-    private String jdbcFile;
-
     /** 远程文件路径 */
     private String remoteBaseUrl;
 

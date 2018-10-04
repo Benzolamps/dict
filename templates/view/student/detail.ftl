@@ -1,10 +1,10 @@
 <#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
 <#-- @ftlvariable name="wordStudyLogs" type="java.util.List<com.benzolamps.dict.bean.StudyLog>" -->
 <#-- @ftlvariable name="phraseStudyLogs" type="java.util.List<com.benzolamps.dict.bean.StudyLog>" -->
-<#-- @ftlvariable name="wordStudyProcess" type="com.benzolamps.dict.controller.vo.StudyProcessVo" -->
-<#-- @ftlvariable name="phraseStudyProcess" type="com.benzolamps.dict.controller.vo.StudyProcessVo" -->
-<#-- @ftlvariable name="averageWordStudyProcess" type="com.benzolamps.dict.controller.vo.StudyProcessVo" -->
-<#-- @ftlvariable name="averagePhraseStudyProcess" type="com.benzolamps.dict.controller.vo.StudyProcessVo" -->
+<#-- @ftlvariable name="wordStudyProcess" type="com.benzolamps.dict.bean.StudyProcess" -->
+<#-- @ftlvariable name="phraseStudyProcess" type="com.benzolamps.dict.bean.StudyProcess" -->
+<#-- @ftlvariable name="averageWordStudyProcess" type="com.benzolamps.dict.bean.StudyProcess" -->
+<#-- @ftlvariable name="averagePhraseStudyProcess" type="com.benzolamps.dict.bean.StudyProcess" -->
 <#assign title>学生详情</#assign>
 <blockquote class="layui-elem-quote" style="margin-top: 10px;">
   ${student.name}&nbsp;&nbsp;&nbsp;&nbsp;
@@ -54,7 +54,7 @@
             </tr>
             <tr>
               <th title="描述">描述</th>
-              <td>${student.description}</td>
+              <td>${student.description!''}</td>
             </tr>
             <tr>
               <th title="班级">班级</th>
@@ -275,7 +275,7 @@
           name: '${student.name}单词学习进度',
           type: 'pie',
           center: ['25%', '50%'],
-          radius: ['45%', '55%'],
+          radius: ['40%', '50%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
@@ -292,7 +292,7 @@
           name: '班级平均单词学习进度',
           type: 'pie',
           center: ['25%', '50%'],
-          radius: ['0%', '35%'],
+          radius: ['0%', '30%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
@@ -309,7 +309,7 @@
           name: '${student.name}短语学习进度',
           type: 'pie',
           center: ['75%', '50%'],
-          radius: ['45%', '55%'],
+          radius: ['40%', '50%'],
           avoidLabelOverlap: false,
           label: {
             normal: {
@@ -326,7 +326,7 @@
           name: '班级平均短语学习进度',
           type: 'pie',
           center: ['75%', '50%'],
-          radius: ['0%', '35%'],
+          radius: ['0%', '30%'],
           avoidLabelOverlap: false,
           label: {
             normal: {

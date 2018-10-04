@@ -5,16 +5,14 @@ import com.benzolamps.dict.bean.User;
 import com.benzolamps.dict.dao.base.LibraryDao;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.service.base.LibraryService;
-import com.benzolamps.dict.service.base.PhraseService;
 import com.benzolamps.dict.service.base.UserService;
-import com.benzolamps.dict.service.base.WordService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * 词库Service接口实现类
@@ -31,12 +29,6 @@ public class LibraryServiceImpl extends BaseServiceImpl<Library> implements Libr
 
     @Resource
     private LibraryDao libraryDao;
-
-    @Resource
-    private WordService wordService;
-
-    @Resource
-    private PhraseService phraseService;
 
     @Override
     @Transactional
@@ -73,16 +65,11 @@ public class LibraryServiceImpl extends BaseServiceImpl<Library> implements Libr
 
     @Override
     public void remove(Collection<Library> libraries) {
-        /* 删除词库前先删除词库中的单词和短语 */
-        for (Library library : libraries) {
-            if (!CollectionUtils.isEmpty(library.getWords())) {
-                wordService.remove(library.getWords());
-            }
-            if (!CollectionUtils.isEmpty(library.getPhrases())) {
-                phraseService.remove(library.getPhrases());
-            }
-        }
+        Assert.isTrue(!libraries.contains(getCurrent()), "不能删除当前词库");
+        /* 将使用此词库的用户词库设为空 */
+        List<User> users = userService.findList(Filter.in("library", libraries));
+        users.forEach(user -> user.setLibrary(null));
+        libraryDao.flush();
         super.remove(libraries);
-        setCurrent(null);
     }
 }

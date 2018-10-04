@@ -1,10 +1,10 @@
 package com.benzolamps.dict.service.impl;
 
-import com.benzolamps.dict.bean.*;
-import com.benzolamps.dict.controller.vo.StudyProcessVo;
-import com.benzolamps.dict.dao.base.GroupDao;
+import com.benzolamps.dict.bean.Phrase;
+import com.benzolamps.dict.bean.Student;
+import com.benzolamps.dict.bean.Word;
+import com.benzolamps.dict.bean.StudyProcess;
 import com.benzolamps.dict.dao.base.StudentDao;
-import com.benzolamps.dict.dao.base.StudyLogDao;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.service.base.StudentService;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,6 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
-import java.util.Collection;
 
 /**
  * 学生Service接口实现类
@@ -27,28 +26,10 @@ public class StudentServiceImpl extends BaseServiceImpl<Student> implements Stud
     @Resource
     private StudentDao studentDao;
 
-    @Resource
-    private GroupDao groupDao;
-
-    @Resource
-    private StudyLogDao studyLogDao;
-
     @Override
     @Transactional(readOnly = true)
     public boolean numberExists(Integer number) {
         return studentDao.count(Filter.eq("number", number)) > 0;
-    }
-
-    @Override
-    public void remove(Collection<Student> students) {
-        /* 删除学生前删除与各个分组的关联 */
-        Collection<Group> groups = groupDao.findList(new Filter());
-        for (Group group : groups) {
-            group.getStudentsOriented().removeAll(students);
-            group.getStudentsScored().removeAll(students);
-        }
-        studyLogDao.remove(Filter.in("student", students));
-        super.remove(students);
     }
 
     @Override
@@ -85,12 +66,7 @@ public class StudentServiceImpl extends BaseServiceImpl<Student> implements Stud
     }
 
     @Override
-    public StudyProcessVo getWordStudyProcess(Student student) {
-        return studentDao.getWordStudyProcess(student);
-    }
-
-    @Override
-    public StudyProcessVo getPhraseStudyProcess(Student student) {
-        return studentDao.getPhraseStudyProcess(student);
+    public StudyProcess[] getStudyProcess(Student student) {
+        return studentDao.getStudyProcess(student);
     }
 }

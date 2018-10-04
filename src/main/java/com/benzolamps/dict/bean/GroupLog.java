@@ -1,10 +1,17 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.util.DictSpring;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
+import javax.persistence.AttributeConverter;
+import javax.persistence.Converter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 分组日志
@@ -25,4 +32,20 @@ public class GroupLog implements Serializable {
 
     /** 短语统计 */
     private List<Phrase> phrases = new ArrayList<>();
+
+    @Converter
+    public static class GroupLogConverter implements AttributeConverter<GroupLog, String> {
+
+        @Override
+        public String convertToDatabaseColumn(GroupLog value) {
+            if (null == value) return null;
+            return tryFunc(() -> DictSpring.getBean(ObjectMapper.class).writeValueAsString(value));
+        }
+
+        @Override
+        public GroupLog convertToEntityAttribute(String value) {
+            if (!StringUtils.hasText(value)) return null;
+            return tryFunc(() -> DictSpring.getBean(ObjectMapper.class).readValue(value, GroupLog.class));
+        }
+    }
 }

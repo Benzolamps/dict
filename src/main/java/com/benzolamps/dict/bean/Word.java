@@ -1,10 +1,9 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.Format;
-import com.benzolamps.dict.component.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -27,14 +26,14 @@ public class Word extends BaseElement {
     private static final long serialVersionUID = -7799252559204665509L;
 
     /** 美式发音 */
-    @Format("replaceString")
+    @Convert(converter = FullWidthToHalfWidthConverter.class)
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 255)
     private String americanPronunciation;
 
     /** 英式发音 */
-    @Format("replaceString")
+    @Convert(converter = FullWidthToHalfWidthConverter.class)
     @Column(nullable = false)
     @NotEmpty
     @Length(max = 255)
@@ -54,12 +53,10 @@ public class Word extends BaseElement {
     private Set<Student> failedStudents;
 
     /** 已掌握该单词的学生数 */
-    @Transient
-    @Size("masteredStudents")
+    @Formula("(select count(1) from dict_sw as sw where sw.word = id)")
     private Integer masteredStudentsCount;
 
     /** 未掌握该单词的学生数 */
-    @Transient
-    @Size("failedStudents")
+    @Formula("(select count(1) from dict_swf as swf where swf.word = id)")
     private Integer failedStudentsCount;
 }

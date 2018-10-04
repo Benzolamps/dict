@@ -81,8 +81,8 @@
               <td>${.version}</td>
             </tr>
             <tr>
-              <th title="Hibernate版本">SQLite版本</th>
-              <td>${sqlite_version}</td>
+              <th title="Hibernate版本">MySQL版本</th>
+              <td>${mysql_version}</td>
             </tr>
             <tr>
               <th title="Hibernate版本">Hibernate版本</th>

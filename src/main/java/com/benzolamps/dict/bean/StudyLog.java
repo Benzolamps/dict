@@ -58,18 +58,18 @@ public class StudyLog extends BaseEntity {
     private String libraryName;
 
     /** 分组单词数 */
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private Integer wordsCount;
 
     /** 分组短语数 */
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private Integer phrasesCount;
 
     /** 分组中学会的单词数 */
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private Integer masteredWordsCount;
 
     /** 分组中学会的短语数 */
-    @Column(nullable = false, updatable = false)
+    @Column(updatable = false)
     private Integer masteredPhrasesCount;
 }
