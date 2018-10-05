@@ -3,6 +3,7 @@ baseProperties:
   english_font_family: Times New Roman
   font_size: 21
   line_height: 300
+  separate_columns: 2
   show_separators: true
   insert_blank_line_between_words: false
   definition_arranges_vertically: false
@@ -31,7 +32,8 @@ solutions:
     needHeader: true
     exportFor: WORD
     needShuffle: false
-    properties: {}
+    properties:
+      separate_columns: 3
   - id: 3
     name: 单词对照表
     path: doc/universe/collation_words.doc
@@ -63,7 +65,8 @@ solutions:
     needHeader: true
     exportFor: PHRASE
     needShuffle: false
-    properties: {}
+    properties:
+      separate_columns: 3
   - id: 7
     name: 短语对照表
     path: doc/universe/collation_phrases.doc

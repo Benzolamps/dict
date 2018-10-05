@@ -39,6 +39,7 @@ public class RuntimeBeanConfig {
     @SuppressWarnings("unused")
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws Exception {
+
         /* 加载Freemarker共享变量 */
         freemarkerGlobals.forEach((Action2<String, Object>) configuration::setSharedVariable);
 

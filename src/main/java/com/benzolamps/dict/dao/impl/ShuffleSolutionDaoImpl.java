@@ -15,6 +15,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -34,10 +35,17 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     private FileSystemResource resource;
 
     /* 默认乱序方案配置文件 */
-    @Value("#{dictProperties.universePath}/default.yml")
-    private FileSystemResource defaultResource;
+    @Value("file:#{dictProperties.universePath}/default.yml")
+    private InputStream defaultResource;
+
+    private ShuffleSolution defaultSolution;
 
     private ShuffleSolutions solutions;
+
+    @PostConstruct
+    private void postConstruct() {
+        defaultSolution = Constant.YAML.loadAs(defaultResource, ShuffleSolution.class);
+    }
 
     @Override
     public List<ShuffleSolution> findAll() {
@@ -117,11 +125,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         }
 
         if (shuffleSolutions.isEmpty()) {
-            try (InputStream inputStream = defaultResource.getInputStream()) {
-                shuffleSolutions.add(Constant.YAML.loadAs(inputStream, ShuffleSolution.class));
-            } catch (IOException e) {
-                throw new DictException(e);
-            }
+            shuffleSolutions.add(defaultSolution);
         }
     }
 
