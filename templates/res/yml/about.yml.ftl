@@ -38,6 +38,7 @@ devtools:
       '
     - title: MySQL
       content: '
-        MySQL是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。
-        它是一个零配置的数据库，这意味着与其他数据库一样，您不需要在系统中配置。
+        MySQL是一个关系型数据库管理系统，由瑞典MySQL AB公司开发，目前属于Oracle旗下产品。
+        MySQL是最流行的关系型数据库管理系统之一，
+        在 WEB 应用方面，MySQL是最好的RDBMS（Relational Database Management System，关系数据库管理系统）应用软件。
       '
