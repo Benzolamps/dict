@@ -9,8 +9,8 @@ package com.benzolamps.dict.service.base;
 public interface MiscellaneousService {
 
     /**
-     * 获取SQLite版本
-     * @return SQLite版本
+     * 获取MySQL版本
+     * @return MySQL版本
      */
     @SuppressWarnings("unused")
     String getMysqlVersion();

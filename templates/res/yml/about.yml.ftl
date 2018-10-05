@@ -20,7 +20,7 @@ devtools:
   description: '
     `${system_title}` 后端采用的是SpringBoot技术，
     前端采用的LayUI技术，
-    利用SQLite数据库存储数据，
+    利用MySQL数据库存储数据，
     利用POI进行Word和Excel的读写操作。
   '
   columns:
@@ -36,8 +36,8 @@ devtools:
         门槛极低，拿来即用。其外在极简，却又不失饱满的内在，体积轻盈，组件丰盈，
         从核心代码到 API 的每一处细节都经过精心雕琢，非常适合界面的快速开发。
       '
-    - title: SQLite
+    - title: MySQL
       content: '
-        SQLite是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。
+        MySQL是一个进程内的库，实现了自给自足的、无服务器的、零配置的、事务性的 SQL 数据库引擎。
         它是一个零配置的数据库，这意味着与其他数据库一样，您不需要在系统中配置。
       '

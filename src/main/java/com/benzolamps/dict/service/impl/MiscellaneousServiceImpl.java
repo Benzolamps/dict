@@ -30,16 +30,6 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
 
     @Override
     public String databaseFileSize() {
-//        File file = new File("E:\\src\\mysql");
-//
-//        long size = 0;
-//
-//        Set<File> allTheFiles = DictFile.deepListFiles(file, null);
-//
-//        for (File subFile : allTheFiles) {
-//            size += subFile.length();
-//        }
-
        return DictFile.fileSizeStr(miscellaneousDao.dataSize());
     }
 

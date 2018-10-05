@@ -8,8 +8,8 @@ package com.benzolamps.dict.dao.base;
 public interface MiscellaneousDao {
 
     /**
-     * 获取SQLite版本
-     * @return SQLite版本
+     * 获取MySQL版本
+     * @return MySQL版本
      */
     String getMysqlVersion();
 
