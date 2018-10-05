@@ -43,6 +43,7 @@ spring:
   freemarker:
     template_loader_path: file:templates
     settings:
+      auto_include: view/includes/main.ftl
       number_format: '#'
 server:
   port: 2018
@@ -60,7 +61,10 @@ logging:
 
 ---
 spring:
-  profiles: [release, test, eclipse]
+  profiles:
+    - release
+    - test
+    - eclipse
 logging:
   pattern:
     console: '${dict.system.title} - ${dict.system.version} [%d{yyyy-MM-dd HH:mm:ss.SSS}] <%p> %logger [%F:%L] %n%m%n%n'

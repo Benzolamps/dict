@@ -2,64 +2,63 @@
 <beans
   xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:util="http://www.springframework.org/schema/util"
   xsi:schemaLocation="http://www.springframework.org/schema/beans
-  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+  http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+  http://www.springframework.org/schema/util
+  http://www.springframework.org/schema/util/spring-util.xsd"
 >
-  <bean id="freemarkerConfig" class="com.benzolamps.dict.cfg.FreemarkerConfig">
-    <property name="sharedVariables">
-      <map>
-        <entry key="null" value="#{null}"/>
-        <entry key="system_name" value="#{dictProperties.name}"/>
-        <entry key="system_version" value="#{dictProperties.version}"/>
-        <entry key="system_title" value="#{dictProperties.title}"/>
-        <entry key="user_name" value="#{systemProperties['user.name']}"/>
-        <entry key="os_name" value="#{systemProperties['os.name']}"/>
-        <entry key="os_version" value="#{systemProperties['os.version']}"/>
-        <entry key="os_arth" value="#{systemProperties['os.arch']}"/>
-        <entry key="java_version" value="#{systemProperties['java.version']}"/>
-        <entry key="base_url" value="#{servletContext.contextPath}"/>
-        <entry key="base_path" value="#{new java.io.File('').absolutePath}"/>
-        <entry key="remote_base_url" value="#{dictProperties.remoteBaseUrl}"/>
-        <entry key="springboot_version" value="#{T(org.springframework.boot.SpringBootVersion).version}"/>
-        <entry key="host_address" value="#{T(java.net.InetAddress).localHost.hostAddress}"/>
-        <entry key="host_name" value="#{T(java.net.InetAddress).localHost.hostName}"/>
-        <entry key="tomcat_version" value="#{servletContext.serverInfo}"/>
-        <entry key="servlet_version" value="#{servletContext.majorVersion + '.' + servletContext.minorVersion}"/>
-        <entry key="hibernate_version" value="#{T(org.hibernate.Version).versionString}"/>
-        <entry key="poi_version" value="#{T(org.apache.poi.Version).version}"/>
-        <entry key="mysql_version" value="#{miscellaneousService.mysqlVersion}"/>
-        <entry key="is_release" value="#{environment.acceptsProfiles('release')}"/>
-        <entry key="logger" value="#{T(org.slf4j.LoggerFactory).getLogger(T(com.benzolamps.dict.cfg.FreemarkerConfig))}"/>
-        <entry key="url_yaml_parse">
-          <bean class="com.benzolamps.dict.directive.YamlParseMethod">
-            <property name="resourceType" value="URL"/>
-          </bean>
-        </entry>
-        <entry key="class_path_yaml_parse">
-          <bean class="com.benzolamps.dict.directive.YamlParseMethod">
-            <property name="resourceType" value="CLASS_PATH"/>
-          </bean>
-        </entry>
-        <entry key="file_system_yaml_parse">
-          <bean class="com.benzolamps.dict.directive.YamlParseMethod">
-            <property name="resourceType" value="FILE_SYSTEM"/>
-          </bean>
-        </entry>
-        <entry key="string_yaml_parse">
-          <bean class="com.benzolamps.dict.directive.YamlParseMethod">
-            <property name="resourceType" value="STRING"/>
-          </bean>
-        </entry>
-        <entry key="json_dump" value-ref="jsonDumpDirective"/>
-        <entry key="get_dict_property" value-ref="getDictPropertyMethod"/>
-        <entry key="abbreviate" value-ref="abbreviateMethod"/>
-        <entry key="constant" value-ref="constantMethod"/>
-        <entry key="current_user" value-ref="currentUserMethod"/>
-        <entry key="current_library" value-ref="currentLibraryMethod"/>
-        <entry key="all_libraries" value-ref="allLibrariesMethod"/>
-        <entry key="shuffle_strategy_loop" value-ref="shuffleStrategyDirective"/>
-        <entry key="compress" value-ref="compressDirective"/>
-      </map>
-    </property>
-  </bean>
+  <util:map id="freemarkerGlobals">
+    <entry key="null" value="#{null}"/>
+    <entry key="system_name" value="#{dictProperties.name}"/>
+    <entry key="system_version" value="#{dictProperties.version}"/>
+    <entry key="system_title" value="#{dictProperties.title}"/>
+    <entry key="user_name" value="#{systemProperties['user.name']}"/>
+    <entry key="os_name" value="#{systemProperties['os.name']}"/>
+    <entry key="os_version" value="#{systemProperties['os.version']}"/>
+    <entry key="os_arth" value="#{systemProperties['os.arch']}"/>
+    <entry key="java_version" value="#{systemProperties['java.version']}"/>
+    <entry key="base_url" value="#{servletContext.contextPath}"/>
+    <entry key="base_path" value="#{new java.io.File('').absolutePath}"/>
+    <entry key="remote_base_url" value="#{dictProperties.remoteBaseUrl}"/>
+    <entry key="springboot_version" value="#{T(org.springframework.boot.SpringBootVersion).version}"/>
+    <entry key="host_address" value="#{T(java.net.InetAddress).localHost.hostAddress}"/>
+    <entry key="host_name" value="#{T(java.net.InetAddress).localHost.hostName}"/>
+    <entry key="tomcat_version" value="#{servletContext.serverInfo}"/>
+    <entry key="servlet_version" value="#{servletContext.majorVersion + '.' + servletContext.minorVersion}"/>
+    <entry key="hibernate_version" value="#{T(org.hibernate.Version).versionString}"/>
+    <entry key="poi_version" value="#{T(org.apache.poi.Version).version}"/>
+    <entry key="mysql_version" value="#{miscellaneousService.mysqlVersion}"/>
+    <entry key="is_release" value="#{environment.acceptsProfiles('release')}"/>
+    <entry key="logger" value="#{T(org.slf4j.LoggerFactory).getLogger(T(com.benzolamps.dict.main.DictApplication))}"/>
+    <entry key="url_yaml_parse">
+      <bean class="com.benzolamps.dict.directive.YamlParseMethod">
+        <property name="resourceType" value="URL"/>
+      </bean>
+    </entry>
+    <entry key="class_path_yaml_parse">
+      <bean class="com.benzolamps.dict.directive.YamlParseMethod">
+        <property name="resourceType" value="CLASS_PATH"/>
+      </bean>
+    </entry>
+    <entry key="file_system_yaml_parse">
+      <bean class="com.benzolamps.dict.directive.YamlParseMethod">
+        <property name="resourceType" value="FILE_SYSTEM"/>
+      </bean>
+    </entry>
+    <entry key="string_yaml_parse">
+      <bean class="com.benzolamps.dict.directive.YamlParseMethod">
+        <property name="resourceType" value="STRING"/>
+      </bean>
+    </entry>
+    <entry key="json_dump" value-ref="jsonDumpDirective"/>
+    <entry key="get_dict_property" value-ref="getDictPropertyMethod"/>
+    <entry key="abbreviate" value-ref="abbreviateMethod"/>
+    <entry key="constant" value-ref="constantMethod"/>
+    <entry key="current_user" value-ref="currentUserMethod"/>
+    <entry key="current_library" value-ref="currentLibraryMethod"/>
+    <entry key="all_libraries" value-ref="allLibrariesMethod"/>
+    <entry key="shuffle_strategy_loop" value-ref="shuffleStrategyDirective"/>
+    <entry key="compress" value-ref="compressDirective"/>
+  </util:map>
 </beans>

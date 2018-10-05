@@ -1,15 +1,19 @@
 package com.benzolamps.dict.cfg;
 
 import com.benzolamps.dict.util.DictLambda;
+import com.benzolamps.dict.util.DictLambda.Action2;
+import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
+import javax.annotation.Resource;
+import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import static com.benzolamps.dict.util.DictSpring.getBean;
@@ -23,11 +27,21 @@ import static com.benzolamps.dict.util.DictSpring.resolve;
  */
 @Component
 @Slf4j
+@ImportResource("classpath:freemarker.xml")
 public class RuntimeBeanConfig {
+
+    @Resource
+    private Configuration configuration;
+
+    @Resource(name = "freemarkerGlobals")
+    private Map<String, Object> freemarkerGlobals;
 
     @SuppressWarnings("unused")
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
-    public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws IOException {
+    public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws Exception {
+        /* 加载Freemarker共享变量 */
+        freemarkerGlobals.forEach((Action2<String, Object>) configuration::setSharedVariable);
+
         logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
         if (resolve("#{'${os.name}'.startsWith('Windows')}")) {
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost:2018/dict/index.html");
