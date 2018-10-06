@@ -22,7 +22,7 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RoseShuffleStrategySetup.class);
 
     @Value("10")
-    @DictOptions({"10", "15", "20", "25", "30"})
+    @DictOptions({"5", "10", "15", "20", "25", "30"})
     @DictPropertyInfo(display = "每个单元的单词个数")
     @NotNull
     private int unitSize;
