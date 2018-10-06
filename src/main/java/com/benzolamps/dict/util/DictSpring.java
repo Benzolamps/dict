@@ -137,7 +137,7 @@ public abstract class DictSpring {
      * 根据名称移除一个bean
      * @param name 名称
      */
-    public static void removeBean(String name) {
+    public static void removeBean(@Language("spring-bean-name") String name) {
         assertNull();
         Assert.hasText(name, "name不能为null或空");
         Assert.isTrue(containsBean(name), "未找到" + name + "对应的bean");
@@ -153,7 +153,7 @@ public abstract class DictSpring {
      * @param name 名称
      * @return 判断结果
      */
-    public static boolean containsBean(String name) {
+    public static boolean containsBean(@Language("spring-bean-name") String name) {
         assertNull();
         Assert.hasText(name, "name不能为null或空");
         return beanFactory.containsSingleton(name) || beanFactory.containsBeanDefinition(name);

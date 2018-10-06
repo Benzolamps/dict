@@ -1,8 +1,7 @@
 [
   {
     "title": "系统管理",
-    "children":
-    [
+    "children": [
       {
         "title": "系统信息",
         "href": "${base_url}/system/info.html"
@@ -19,8 +18,7 @@
   },
   {
     "title": "内容管理",
-    "children":
-    [
+    "children": [
       {
         "title": "单词管理",
         "href": "${base_url}/word/list.html"
@@ -49,8 +47,7 @@
   },
   {
     "title": "人员管理",
-    "children":
-    [
+    "children": [
       {
         "title": "学生管理",
         "href": "${base_url}/student/list.html"
