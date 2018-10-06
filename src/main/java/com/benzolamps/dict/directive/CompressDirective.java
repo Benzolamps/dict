@@ -26,7 +26,7 @@ public class CompressDirective implements TemplateDirectiveModel {
     public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
         StringWriter stringWriter = new StringWriter();
         body.render(stringWriter);
-        String str = DictSpring.<UnaryOperator<String>> getBean("compress").apply(stringWriter.toString());
+        String str = DictSpring.<UnaryOperator<String>>getBean("compress").apply(stringWriter.toString());
         env.getOut().write(str);
     }
 }

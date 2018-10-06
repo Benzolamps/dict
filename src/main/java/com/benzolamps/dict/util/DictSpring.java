@@ -3,6 +3,7 @@ package com.benzolamps.dict.util;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.intellij.lang.annotations.Language;
 import org.springframework.beans.factory.config.BeanExpressionContext;
 import org.springframework.beans.factory.config.BeanExpressionResolver;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -60,7 +61,7 @@ public abstract class DictSpring {
      * @param <T> 类型
      * @return bean对象
      */
-    public static <T> T getBean(String name) {
+    public static <T> T getBean(@Language("spring-bean-name") String name) {
         assertNull();
         Assert.hasText(name, "name不能为null或空");
         Assert.isTrue(DictSpring.containsBean(name), "未找到" + name + "对应的bean");
@@ -107,7 +108,7 @@ public abstract class DictSpring {
      * @param <T> 类型
      * @return bean对象
      */
-    public static <T> T createBean(String name, Class<?> requiredType, Properties properties, Object... args) {
+    public static <T> T createBean(@Language("spring-bean-name") String name, Class<?> requiredType, Properties properties, Object... args) {
         assertNull();
         Assert.hasText(name, "name不能为null或空");
         Assert.notNull(requiredType, "required type不能为null");
@@ -125,7 +126,7 @@ public abstract class DictSpring {
      * @param name 名称
      * @param bean 对象
      */
-    public static void setBean(String name, Object bean) {
+    public static void setBean(@Language("spring-bean-name") String name, Object bean) {
         assertNull();
         Assert.hasText(name, "name不能为null或空");
         DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) DictSpring.applicationContext.getBeanFactory();
@@ -181,7 +182,7 @@ public abstract class DictSpring {
      * @param <T> 类型
      * @return 结果
      */
-    public static <T> T resolve(String expression, Class<T> tClass) {
+    public static <T> T resolve(@Language("SpEL") String expression, Class<T> tClass) {
         assertNull();
         String placeholdersResolved = beanFactory.resolveEmbeddedValue(expression);
         BeanExpressionResolver beanExpressionResolver = beanFactory.getBeanExpressionResolver();
@@ -197,7 +198,7 @@ public abstract class DictSpring {
      * @param <T> 类型
      * @return 结果
      */
-    public static <T> T resolve(String expression) {
+    public static <T> T resolve(@Language("SpEL") String expression) {
         return (T) resolve(expression, Object.class);
     }
 }

@@ -7,18 +7,12 @@ import com.benzolamps.dict.dao.base.ClazzDao;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
-import com.benzolamps.dict.util.DictResource;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
-import org.springframework.util.StreamUtils;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -35,21 +29,18 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     @Resource
     private ClazzDao clazzDao;
 
-    @Value("classpath:sql/study_process.sql")
-    private InputStream inputStream;
-
+    // language=SpEL
+    @Value(
+        "#{" +
+        "T(org.springframework.util.StreamUtils)" +
+        ".copyToString(new org.springframework.core.io.ClassPathResource('sql/study_process.sql').inputStream, 'UTF-8')" +
+        "}"
+    )
     private String studyProcessSql;
-
-    @PostConstruct
-    private void postConstruct() throws IOException {
-        studyProcessSql = StreamUtils.copyToString(inputStream, Charset.forName("UTF-8"));
-        DictResource.closeCloseable(inputStream);
-    }
 
     @Override
     public Page<Student> findPage(Pageable pageable) {
         DictQuery<Student> dictQuery = new GeneratedDictQuery<Student>() {
-
             @Override
             public void applySearch(Search search) {
                 if (search.getField().equals("clazz")) {
@@ -69,9 +60,9 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
                     order = new Order.SizeOrder(null, order.getDirection()) {
                         @Override
                         protected void applyField(String field) {
-                           super.applyField("masteredWords");
-                           addSnippet(new OperatorSnippet("+"));
-                           super.applyField("masteredPhrases");
+                            super.applyField("masteredWords");
+                            addSnippet(new OperatorSnippet("+"));
+                            super.applyField("masteredPhrases");
                         }
                     };
                 } else {

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
+import org.intellij.lang.annotations.Language;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -46,7 +47,7 @@ public class DictJpa {
     @SuppressWarnings("unchecked")
     public static <T> TypedQuery<T> createJpqlQuery(
             EntityManager entityManager,
-            String jpql,
+            @Language("JPAQL") String jpql,
             Class<T> tClass,
             Map<String, Object> parameters,
             Object... positionParameters) {
@@ -75,7 +76,7 @@ public class DictJpa {
     @SuppressWarnings("unchecked")
     public static void executeJpqlQuery(
             EntityManager entityManager,
-            String jpql,
+            @Language("JPAQL") String jpql,
             Map<String, Object> parameters,
             Object... positionParameters) {
         Assert.notNull(entityManager, "entity manager不能为null");
@@ -104,7 +105,7 @@ public class DictJpa {
     @SuppressWarnings("unchecked")
     public static org.hibernate.Query createNativeQuery(
             EntityManager entityManager,
-            String sql,
+            @Language("MySQL") String sql,
             Class<?> tClass,
             Map<String, Object> parameters,
             Object... positionParameters) {
@@ -138,7 +139,7 @@ public class DictJpa {
     @SuppressWarnings("unchecked")
     public static void executeNativeQuery(
             EntityManager entityManager,
-            String sql,
+            @Language("MySQL") String sql,
             Map<String, Object> parameters,
             Object... positionParameters) {
         Assert.notNull(entityManager, "entity manager不能为null");
@@ -160,7 +161,7 @@ public class DictJpa {
      * @param sql SQL
      */
     @SuppressWarnings("unchecked")
-    public static void executeNativeQueryBatch(String... sql) {
+    public static void executeNativeQueryBatch(@Language("MySQL") String... sql) {
         Assert.notNull(sql, "sql不能为null或空");
         Assert.isTrue(Arrays.stream(sql).allMatch(StringUtils::hasText), "sql不能为null或空");
         logger.info("sql: " + String.join("\n", sql));
@@ -182,7 +183,7 @@ public class DictJpa {
      * @param positionParameters 位置参数
      */
     @SuppressWarnings("unused")
-    public static void executeNonTransactionNativeQuery(String sql, Object... positionParameters) {
+    public static void executeNonTransactionNativeQuery(@Language("MySQL") String sql, Object... positionParameters) {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
         DataSourceProperties dsp = DictSpring.getBean(DataSourceProperties.class);

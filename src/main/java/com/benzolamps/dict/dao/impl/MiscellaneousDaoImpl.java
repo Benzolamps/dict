@@ -26,7 +26,6 @@ public class MiscellaneousDaoImpl implements MiscellaneousDao {
     @Override
     @Transactional(readOnly = true)
     public String getMysqlVersion() {
-        // language=MySQL
         String sql = "select version();";
         List<String> results = DictJpa.createNativeQuery(entityManager, sql, String.class, null).list();
         return results.size() != 1 ? null : results.iterator().next();
@@ -41,14 +40,14 @@ public class MiscellaneousDaoImpl implements MiscellaneousDao {
         String sqlClean = "optimize table " + String.join(", ", tables) + ";";
         DictJpa.executeNativeQuery(entityManager, sqlClean, null);
         DictJpa.executeNativeQueryBatch(tables.stream()
-            .map(table -> "alter table " + table + " auto_increment = 1;").toArray(String[]::new));
+            .map(table -> /* language=MySQL */ "alter table " + table + " auto_increment = 1;").toArray(String[]::new));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     @Transactional(readOnly = true)
     public long dataSize() {
-        String sql = "select sum(`t`.`data_length` + `t`.`index_length`) from `information_schema`.`tables` as `t`";
+        String sql = "select sum(t.data_length + t.index_length) from information_schema.tables as t;";
         List<Number> results = DictJpa.createNativeQuery(entityManager, sql, Number.class, null).list();
         return results.get(0).longValue();
     }

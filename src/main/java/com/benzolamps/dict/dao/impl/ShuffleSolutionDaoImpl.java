@@ -15,7 +15,6 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,17 +34,18 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     private FileSystemResource resource;
 
     /* 默认乱序方案配置文件 */
-    @Value("file:#{dictProperties.universePath}/default.yml")
-    private InputStream defaultResource;
-
+    // language=SpEL
+    @Value(
+        "#{" +
+        "T(com.benzolamps.dict.util.Constant).YAML.loadAs(" +
+        "new org.springframework.core.io.FileSystemResource(dictProperties.universePath + '/default.yml').inputStream, " +
+        "T(com.benzolamps.dict.bean.DocSolutions)" +
+        ")" +
+        "}"
+    )
     private ShuffleSolution defaultSolution;
 
     private ShuffleSolutions solutions;
-
-    @PostConstruct
-    private void postConstruct() {
-        defaultSolution = Constant.YAML.loadAs(defaultResource, ShuffleSolution.class);
-    }
 
     @Override
     public List<ShuffleSolution> findAll() {
