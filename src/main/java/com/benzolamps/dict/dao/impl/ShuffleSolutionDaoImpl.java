@@ -39,7 +39,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         "#{" +
         "T(com.benzolamps.dict.util.Constant).YAML.loadAs(" +
         "new org.springframework.core.io.FileSystemResource(dictProperties.universePath + '/default.yml').inputStream, " +
-        "T(com.benzolamps.dict.bean.DocSolutions)" +
+        "T(com.benzolamps.dict.bean.ShuffleSolution)" +
         ")" +
         "}"
     )
