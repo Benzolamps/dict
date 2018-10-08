@@ -7,7 +7,7 @@
   <version>2.1.9</version>
   <packaging>jar</packaging>
   <name>dict</name>
-  <description>万聪英语</description>
+  <description>捷径英语 - 张文涛</description>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
