@@ -1,6 +1,9 @@
 package com.benzolamps.dict.controller;
 
-import com.benzolamps.dict.bean.*;
+import com.benzolamps.dict.bean.Clazz;
+import com.benzolamps.dict.bean.Group;
+import com.benzolamps.dict.bean.Phrase;
+import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
@@ -8,6 +11,7 @@ import com.benzolamps.dict.controller.vo.ClazzStudentTreeVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
+import com.benzolamps.dict.util.Constant;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -198,7 +202,6 @@ public class PhraseGroupController extends BaseController {
         return SUCCESS_VO;
     }
 
-
     /**
      * 移除短语
      * @param phraseGroupId 短语分组id
@@ -267,7 +270,7 @@ public class PhraseGroupController extends BaseController {
      */
     @WindowView
     @RequestMapping(value = "score.html", method = {RequestMethod.GET, RequestMethod.POST})
-    protected ModelAndView score(Integer id) {
+    protected ModelAndView score(Integer id, Integer studentId) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notNull(id, "phrase group id不能为null");
         Group phraseGroup = phraseGroupService.find(id);
@@ -283,7 +286,12 @@ public class PhraseGroupController extends BaseController {
 
         boolean hasMore = studentsOriented.size() > 1;
 
-        Student student = studentsOriented.get(0);
+        Student student;
+        if (studentId != null) {
+            student = studentsOriented.stream().filter(stu -> studentId.equals(stu.getId())).findFirst().get();
+        } else {
+            student = studentsOriented.get(Constant.RANDOM.nextInt(studentsOriented.size()));
+        }
 
         /* 分离已掌握的短语和未掌握的短语 */
         Set<Phrase> masteredPhrases = new LinkedHashSet<>(student.getMasteredPhrases());
@@ -294,6 +302,7 @@ public class PhraseGroupController extends BaseController {
         ModelAndView mv = new ModelAndView("view/phrase_group/score");
         mv.addObject("group", phraseGroup);
         mv.addObject("student", student);
+        mv.addObject("students", studentsOriented);
         mv.addObject("hasMore", hasMore);
         mv.addObject("masteredPhrases", masteredPhrases);
         mv.addObject("failedPhrases", failedPhrases);

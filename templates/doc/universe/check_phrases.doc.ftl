@@ -30,7 +30,7 @@
         <w:p wsp:rsidR="00220549" wsp:rsidRPr="00C2588E" wsp:rsidRDefault="00220549" wsp:rsidP="00220549">
           <w:pPr>
             <w:spacing w:line="${line_height}" w:line-rule="auto"/>
-            <w:jc w:val="center"/>
+            <w:jc w:val="left"/>
             <w:rPr>
               <w:rFonts w:ascii="${english_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${english_font_family}"/>
               <wx:font wx:val="${english_font_family}"/>

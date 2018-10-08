@@ -11,6 +11,7 @@ import com.benzolamps.dict.controller.vo.ClazzStudentTreeVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
+import com.benzolamps.dict.util.Constant;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -269,7 +270,7 @@ public class WordGroupController extends BaseController {
      */
     @WindowView
     @RequestMapping(value = "score.html", method = {RequestMethod.GET, RequestMethod.POST})
-    protected ModelAndView score(Integer id) {
+    protected ModelAndView score(Integer id, Integer studentId) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notNull(id, "word group id不能为null");
         Group wordGroup = wordGroupService.find(id);
@@ -285,7 +286,12 @@ public class WordGroupController extends BaseController {
 
         boolean hasMore = studentsOriented.size() > 1;
 
-        Student student = studentsOriented.get(0);
+        Student student;
+        if (studentId != null) {
+            student = studentsOriented.stream().filter(stu -> studentId.equals(stu.getId())).findFirst().get();
+        } else {
+            student = studentsOriented.get(Constant.RANDOM.nextInt(studentsOriented.size()));
+        }
 
         /* 分离已掌握的单词和未掌握的单词 */
         Set<Word> masteredWords = new LinkedHashSet<>(student.getMasteredWords());
@@ -296,6 +302,7 @@ public class WordGroupController extends BaseController {
         ModelAndView mv = new ModelAndView("view/word_group/score");
         mv.addObject("group", wordGroup);
         mv.addObject("student", student);
+        mv.addObject("students", studentsOriented);
         mv.addObject("hasMore", hasMore);
         mv.addObject("masteredWords", masteredWords);
         mv.addObject("failedWords", failedWords);

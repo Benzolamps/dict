@@ -19,7 +19,7 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
 
     private static final long serialVersionUID = -3170125922193664875L;
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(RoseShuffleStrategySetup.class);
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DictApplication.class);
 
     @Value("10")
     @DictOptions({"5", "10", "15", "20", "25", "30"})

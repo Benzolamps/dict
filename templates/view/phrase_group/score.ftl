@@ -1,5 +1,6 @@
 <#-- @ftlvariable name="group" type="com.benzolamps.dict.bean.Group" -->
 <#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
+<#-- @ftlvariable name="students" type="java.util.Collection<com.benzolamps.dict.bean.Student>" -->
 <#-- @ftlvariable name="hasMore" type="boolean" -->
 <#-- @ftlvariable name="masteredPhrases" type="java.util.Collection<com.benzolamps.dict.bean.Phrase>" -->
 <#-- @ftlvariable name="failedPhrases" type="java.util.Collection<com.benzolamps.dict.bean.Phrase>" -->
@@ -24,7 +25,12 @@
       </div>
       <br><br>
       <div class="layui-card-body" style="text-align: center">
-        ${student.name}<br>
+        <select id="change">
+          <#list students as stu>
+            <option value="${stu.id}"<#if stu == student> selected</#if>>${stu.name}</option>
+          </#list>
+        </select>
+        <br>
         ${student.number}<br>
         ${student.description!''}<br>
         ${student.clazz.name}<br>
@@ -127,6 +133,10 @@
       init();
     });
 
+    $('#change').change(function () {
+      location.replace(location.pathname + "?id=${group.id}&studentId=" + $(this).val());
+    });
+
     $('#submit').click(function () {
       parent.layer.confirm('确定当前学生已评分完毕？', {icon: 3, title: '提示'}, function (index) {
         var nodes = masteredTree.getNodes();
@@ -147,7 +157,7 @@
               end: function () {
                 parent.$('iframe')[0].contentWindow.dict.reload(true);
               <#if hasMore>
-                dict.reload(true);
+                location.replace(location.pathname + "?id=${group.id}");
               <#else>
                 var layerIndex = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(layerIndex);
@@ -182,7 +192,7 @@
               end: function () {
                 parent.$('iframe')[0].contentWindow.dict.reload(true);
               <#if hasMore>
-                dict.reload(true);
+                location.replace(location.pathname + "?id=${group.id}");
               <#else>
                 var layerIndex = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(layerIndex);

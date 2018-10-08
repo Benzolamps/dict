@@ -76,6 +76,9 @@ public interface Constant {
     /** Yaml */
     Yaml YAML = new Yaml();
 
+    /** 随机数 */
+    Random RANDOM = new Random();
+
     /** 空的Properties */
     Properties EMPTY_PROPERTIES = ((Supplier<Properties>) () -> {
         Enhancer enhancer = new Enhancer();
