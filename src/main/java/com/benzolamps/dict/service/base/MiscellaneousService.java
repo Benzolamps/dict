@@ -1,5 +1,8 @@
 package com.benzolamps.dict.service.base;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * 杂项Service接口
  * @author Benzolamps
@@ -25,4 +28,6 @@ public interface MiscellaneousService {
      * clean
      */
     void clean();
+
+    void backup(OutputStream outputStream) throws IOException;
 }

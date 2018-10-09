@@ -4,9 +4,13 @@ import com.benzolamps.dict.dao.base.MiscellaneousDao;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictFile;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * 杂项Service接口实现类
@@ -23,6 +27,9 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     @Resource
     private WordClazzService wordClazzService;
 
+    @Value("file:E:\\test")
+    private File path;
+
     @Override
     public String getMysqlVersion() {
         return miscellaneousDao.getMysqlVersion();
@@ -37,5 +44,10 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     public void clean() {
         wordClazzService.clearUseless();
         miscellaneousDao.clear();
+    }
+
+    @Override
+    public void backup(OutputStream outputStream) throws IOException {
+        DictFile.zip(path, outputStream);
     }
 }

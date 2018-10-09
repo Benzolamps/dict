@@ -15,7 +15,7 @@ a {
     user-select: none;
 }
 
-textarea {
+textarea,.selectable {
     -webkit-user-select: text;
     -moz-user-select: text;
     -ms-user-select: text;

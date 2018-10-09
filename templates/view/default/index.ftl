@@ -19,7 +19,7 @@
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/jquery.validate.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/additional-methods.js"></script>
       <script type="text/javascript" src="${base_url}/jquery-validation-1.17.0/localization/messages_zh.js"></script>
-      <script type="text/javascript" src="${base_url}/layui/layui.js"></script>
+      <script type="text/javascript" src="${base_url}/layui/layui.all.js"></script>
       <script type="text/javascript" src="${base_url}/res/js/common.js"></script>
       <script type="text/javascript" src="${base_url}/res/js/update-socket.js"></script>
       <style>
@@ -89,7 +89,7 @@
       <div class="layui-layout layui-layout-admin">
         <div class="layui-header" style="background-color: #FBFBFB">
           <div class="layui-logo" style="background-color: #FFB800">
-            <a onclick="dict.reload(true);" title="${system_title} ~ ${system_version}" >
+            <a href="javascript:dict.reload(true);" title="${system_title} ~ ${system_version}" >
               ${abbreviate('${system_title} ~ ${system_version}', 20, '...')?html}
             </a>
           </div>
@@ -166,133 +166,132 @@
         </div>
       </div>
       <script type="text/javascript">
-        layui.use(['element', 'layer', 'form', 'table', 'code'], function () {
+        element.render();
 
-          var columns = null;
+        var columns = null;
 
-          /* 请求栏目JSON */
-          dict.loadText({
-            type: "get",
-            url: '${base_url}/res/json/columns.json',
-            cache: true,
-            dataType: 'json',
-            success: function(data) {
-              columns = data;
-            }
-          });
-
-          var column = 0, child = 0;
-
-          if (localStorage.getItem('column')) {
-            column = localStorage.getItem('column');
-          }
-
-          if (localStorage.getItem('child')) {
-            child = localStorage.getItem('child');
-          }
-
-          /* 将找到的栏目设为选中 */
-          if (column >= 0 && child >= 0) {
-            var $li = $('ul.dict-nav-tree>li').eq(column);
-            $li.addClass('layui-nav-itemed');
-            /* language=JQuery-CSS */
-            var $dd = $li.find('dl.layui-nav-child>dd').eq(child);
-            $dd.addClass('layui-this');
-            $('#content-frame').attr('src', columns[column].children[child].href);
-            localStorage.setItem('column', column);
-            localStorage.setItem('child', child);
-          }
-
-          var tipsId;
-
-          $('.child-item').click(function () {
-            $('#content-frame').attr('src', $(this).attr('src'));
-            child = $(this).parentsUntil('dl').last().prevAll().length;
-            column = $(this).parentsUntil('ul').last().prevAll().length;
-            localStorage.setItem('column', column);
-            localStorage.setItem('child', child);
-          }).mouseenter(function () {
-            tipsId = layer.tips($(this).children('span').text(), this);
-          }).mouseleave(function () {
-            if (tipsId != null) {
-              layer.close(tipsId);
-              tipsId = null;
-            }
-          });
-
-          var $dictBg = $('.dict-bg');
-
-          $('#toggle-nav').click(function () {
-            if ($dictBg.css('display') != 'none') {
-              $('.dict-bg').slideUp(function () {
-                $('.dict-body,.dict-footer').animate({left: 0});
-              });
-            } else {
-              $('.dict-body,.dict-footer').animate({left: '200px'}, 'fast', function () {
-                $dictBg.slideDown();
-                }
-              );
-            }
-          });
-
-          $('#password-nav').click(function () {
-            layer.open({
-              type: 2,
-              content: '${base_url}/user/edit_password.html',
-              area: ['500px', '500px']
-            });
-          });
-
-          $('#lock-screen-nav').click(function () {
-            layer.open({
-              type: 2,
-              content: '${base_url}/user/lock_screen.html',
-              area: ['500px', '500px'],
-              anim: 5,
-              title: false,
-              closeBtn: 0,
-              shade: [0.8, '#393D49']
-            });
-          });
-
-          $('#logout').click(function () {
-            layer.confirm('确定要注销吗？', {icon: 3, title: '提示'}, function (index) {
-              dict.loadText({
-                url: '${base_url}/user/logout.json',
-                type: 'post',
-                success: function (result, status, request) {
-                  layer.alert('注销成功！', {
-                    icon: 1,
-                    end: function () {
-                      dict.reload(true);
-                    }
-                  });
-                },
-                error: function (result, status, request) {
-                  layer.alert(result.message, {
-                    icon: 2,
-                    title: result.status
-                  });
-                }
-              });
-            });
-          });
-
-          $('#profile-nav').click(function () {
-            layer.open({
-              type: 2,
-              content: '${base_url}/user/profile.html',
-              area: ['800px', '600px']
-            });
-          });
-
-          if (null != localStorage.getItem('password')) {
-            $('*').css('pointer-events', 'none');
-            setTimeout(function () {
-              $('#lock-screen-nav').trigger('click');
-            }, 500);
+        /* 请求栏目JSON */
+        dict.loadText({
+          type: "get",
+          url: '${base_url}/res/json/columns.json',
+          cache: true,
+          dataType: 'json',
+          success: function(data) {
+            columns = data;
           }
         });
+
+        var column = 0, child = 0;
+
+        if (localStorage.getItem('column')) {
+          column = localStorage.getItem('column');
+        }
+
+        if (localStorage.getItem('child')) {
+          child = localStorage.getItem('child');
+        }
+
+        /* 将找到的栏目设为选中 */
+        if (column >= 0 && child >= 0) {
+          var $li = $('ul.dict-nav-tree>li').eq(column);
+          $li.addClass('layui-nav-itemed');
+          /* language=JQuery-CSS */
+          var $dd = $li.find('dl.layui-nav-child>dd').eq(child);
+          $dd.addClass('layui-this');
+          $('#content-frame').attr('src', columns[column].children[child].href);
+          localStorage.setItem('column', column);
+          localStorage.setItem('child', child);
+        }
+
+        var tipsId;
+
+        $('.child-item').click(function () {
+          $('#content-frame').attr('src', $(this).attr('src'));
+          child = $(this).parentsUntil('dl').last().prevAll().length;
+          column = $(this).parentsUntil('ul').last().prevAll().length;
+          localStorage.setItem('column', column);
+          localStorage.setItem('child', child);
+        }).mouseenter(function () {
+          tipsId = layer.tips($(this).children('span').text(), this);
+        }).mouseleave(function () {
+          if (tipsId != null) {
+            layer.close(tipsId);
+            tipsId = null;
+          }
+        });
+
+        var $dictBg = $('.dict-bg');
+
+        $('#toggle-nav').click(function () {
+          if ($dictBg.css('display') != 'none') {
+            $('.dict-bg').slideUp(function () {
+              $('.dict-body,.dict-footer').animate({left: 0});
+            });
+          } else {
+            $('.dict-body,.dict-footer').animate({left: '200px'}, 'fast', function () {
+              $dictBg.slideDown();
+              }
+            );
+          }
+        });
+
+        $('#password-nav').click(function () {
+          layer.open({
+            type: 2,
+            content: '${base_url}/user/edit_password.html',
+            area: ['500px', '500px']
+          });
+        });
+
+        $('#lock-screen-nav').click(function () {
+          layer.open({
+            type: 2,
+            content: '${base_url}/user/lock_screen.html',
+            area: ['500px', '500px'],
+            anim: 5,
+            title: false,
+            closeBtn: 0,
+            shade: [0.8, '#393D49']
+          });
+        });
+
+        $('#logout').click(function () {
+          layer.confirm('确定要注销吗？', {icon: 3, title: '提示'}, function (index) {
+            dict.loadText({
+              url: '${base_url}/user/logout.json',
+              type: 'post',
+              success: function (result, status, request) {
+                layer.alert('注销成功！', {
+                  icon: 1,
+                  end: function () {
+                    dict.reload(true);
+                  }
+                });
+              },
+              error: function (result, status, request) {
+                layer.alert(result.message, {
+                  icon: 2,
+                  title: result.status
+                });
+              }
+            });
+          });
+        });
+
+        $('#profile-nav').click(function () {
+          layer.open({
+            type: 2,
+            content: '${base_url}/user/profile.html',
+            area: ['800px', '600px']
+          });
+        });
+
+        if (null != localStorage.getItem('password')) {
+          $('*').css('pointer-events', 'none');
+          setTimeout(function () {
+            $('#lock-screen-nav').trigger('click');
+          }, 500);
+        }
 
         var changeCurrentLibrary = function (id) {
           setTimeout(function () {

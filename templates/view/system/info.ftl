@@ -43,7 +43,7 @@
             </tr>
             <tr>
               <th title="IP地址">IP地址</th>
-              <td>${host_address}</td>
+              <td>${host_address?join('／')}</td>
             </tr>
             <tr>
               <th title="浏览器信息">浏览器信息</th>

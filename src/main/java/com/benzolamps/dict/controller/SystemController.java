@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static com.benzolamps.dict.util.DictSpring.resolve;
 
@@ -79,6 +83,28 @@ public class SystemController extends BaseController {
     }
 
     /**
+     * 数据库备份界面
+     * @return ModelAndView
+     */
+    @RequestMapping(value = "/backup.html", method = {RequestMethod.GET, RequestMethod.POST})
+    protected ModelAndView backup() {
+        return new ModelAndView("view/system/backup");
+    }
+
+    /**
+     * 备份数据库过程
+     * @return ModelAndView
+     */
+    @SuppressWarnings("SpellCheckingInspection")
+    @ResponseBody
+    @GetMapping("/backup.zip")
+    protected BaseVo backupProcess(HttpServletResponse response) throws IOException {
+        miscellaneousService.backup(response.getOutputStream());
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8'zh_cn'backup-" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".zip");
+        return SUCCESS_VO;
+    }
+
+    /**
      * 关闭系统服务界面
      * @return ModelAndView
      */
@@ -100,5 +126,14 @@ public class SystemController extends BaseController {
             System.exit(0);
         }).start();
         return SUCCESS_VO;
+    }
+
+    /**
+     * 局域网操作界面界面
+     * @return ModelAndView
+     */
+    @RequestMapping(value = "/lan.html", method = {RequestMethod.GET, RequestMethod.POST})
+    protected ModelAndView lan() {
+        return new ModelAndView("view/system/lan");
     }
 }

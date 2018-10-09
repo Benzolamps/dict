@@ -136,7 +136,7 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
         java.util.function.IntPredicate p = ¥¥¥$$$¥¥¥->¥$¥>>¥$¥-/**💰💰💰💰💰💰💰💰💰💰**/-¥$¥<<¥$¥<-¥¥¥$$$¥¥¥;
         logger.info(String.valueOf(¥$¥ >> ¥$¥ + ¥$¥ << ¥$¥));
         if (p.test(666666)) {
-            logger.info("不给钱就捣乱\ud83d\udcb0\ud83d\udcb0\ud83d\udcb0\ud83d\udcb0\ud83d\udcb0\ud83d\udcb0");
+            logger.info("不给钱就捣乱！！！");
         }
         return new RoseShuffleStrategy(size, hash, this);
     }

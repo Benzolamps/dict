@@ -39,9 +39,6 @@ Array.prototype.toString = function () {
             closeBtn: 2
         });
     };
-    layui.use(models, function () {
-        loadLayui();
-    });
     this.loadLayui();
 }();
 

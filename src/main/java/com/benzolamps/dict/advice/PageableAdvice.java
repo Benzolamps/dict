@@ -35,15 +35,21 @@ public class PageableAdvice {
         Class<?>[] paramTypes = signature.getParameterTypes();
         for (int i = 0; i < paramTypes.length; i++) {
             if (Pageable.class.equals(paramTypes[i]) && null == args[i]) {
+
+                /* 获取url参数 */
                 ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
                 HttpServletRequest request = requestAttributes.getRequest();
                 String queryString = request.getQueryString();
+
+                /* 根据参数生成Pageable对象 */
                 if (StringUtils.isEmpty(queryString)) {
                     args[i] = new Pageable();
                 } else {
                     String json = URLDecoder.decode(queryString, "UTF-8");
                     args[i] = objectMapper.readValue(json, Pageable.class);
                 }
+
+                break;
             }
         }
         return joinPoint.proceed(args);
