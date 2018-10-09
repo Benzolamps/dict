@@ -1,6 +1,6 @@
 set ws = wscript.createObject("wscript.shell")
 set indexProcess = ws.exec(".\jre\bin\javaw.exe index tmp/dict/")
-if not indexProcess.stdOut.atEndOfStream Then
+if not indexProcess.stdOut.atEndOfStream then
   parameter = indexProcess.stdOut.readAll
   ws.run("%comspec% /c .\mysql\bin\mysqld.exe --defaults-file=.\mysql\my.ini --port=3306"), 0, false
   ws.run(".\jre\bin\java.exe -jar dict.jar " + parameter), 1, true
