@@ -73,7 +73,7 @@ public class DocController extends BaseController {
         }
         StringWriter stringWriter = new StringWriter();
         template.process(modelMap, stringWriter);
-        String content = DictSpring.<UnaryOperator<String>> getBean("compress").apply(stringWriter.toString());
+        String content = DictSpring.<UnaryOperator<String>>getBean("compress").apply(stringWriter.toString());
         String token = UUID.randomUUID().toString().replace("-", "");
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         requestAttributes.setAttribute(token, content, RequestAttributes.SCOPE_SESSION);

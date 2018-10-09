@@ -1,9 +1,6 @@
 package com.benzolamps.dict;
 
 import java.io.*;
-import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -39,34 +36,22 @@ public final class index {
             succeed = false;
         }
 
-        try {
-            List<String> params = new ArrayList<>();
-            System.setProperty("java.class.path", "dict.jar");
-            params.add("--spring.profiles.active=release");
-            params.add("--file.encoding=GBK");
+        List<String> params = new ArrayList<>();
+        params.add("--spring.profiles.active=release");
+        params.add("--file.encoding=GBK");
 
-            if (null != succeed) {
-                if (succeed) {
-                    params.add("--install.succeed=true");
-                    params.add("--install.lastDelta=" + lastDelta);
-                    params.add("--install.total=" + total);
-                    params.add("--install.totalSize=" + totalSize);
-                } else {
-                    params.add("--install.succeed=false");
-                }
+        if (null != succeed) {
+            if (succeed) {
+                params.add("--install.succeed=true");
+                params.add("--install.lastDelta=" + lastDelta);
+                params.add("--install.total=" + total);
+                params.add("--install.totalSize=" + totalSize);
+            } else {
+                params.add("--install.succeed=false");
             }
-
-            Method add = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            add.setAccessible(true);
-            URLClassLoader classloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
-            URL url = new File("dict.jar").toURI().toURL();
-            add.invoke(classloader, url);
-            Class<?> clazz = Class.forName("com.benzolamps.dict.main.DictApplication");
-            Method method = clazz.getDeclaredMethod("main", String[].class);
-            method.invoke(null, new Object[] {params.toArray(new String[0])});
-        } catch (Throwable e) {
-            throw new RuntimeException(e);
         }
+
+        System.out.println(String.join(" ", params));
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -143,7 +128,7 @@ public final class index {
     private static boolean validate(File file) {
         if (file != null && file.exists() && !file.isDirectory()) {
             String fileName = file.getName();
-            return fileName.contains("-") && fileName.toLowerCase().endsWith(".zip");
+            return fileName.toLowerCase().endsWith(".zip");
         }
 
         return false;

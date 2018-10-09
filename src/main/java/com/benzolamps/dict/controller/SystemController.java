@@ -2,10 +2,12 @@ package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.vo.BaseVo;
+import com.benzolamps.dict.service.base.BackupService;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.util.DictLambda;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -29,6 +31,9 @@ public class SystemController extends BaseController {
 
     @Resource
     private MiscellaneousService miscellaneousService;
+
+    @Resource
+    private BackupService backupService;
 
     /**
      * 系统信息界面
@@ -93,14 +98,21 @@ public class SystemController extends BaseController {
 
     /**
      * 备份数据库过程
-     * @return ModelAndView
      */
     @SuppressWarnings("SpellCheckingInspection")
-    @ResponseBody
-    @GetMapping("/backup.zip")
-    protected BaseVo backupProcess(HttpServletResponse response) throws IOException {
-        miscellaneousService.backup(response.getOutputStream());
-        response.setHeader("Content-disposition", "attachment;filename*=utf-8'zh_cn'backup-" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date()) + ".zip");
+    @PostMapping("/backup.zip")
+    protected void backupProcess(HttpServletResponse response) throws IOException {
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8'zh_cn'backup" +
+            new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".zip");
+        backupService.backup(response.getOutputStream());
+    }
+
+    /**
+     * 恢复数据库过程
+     */
+    @PostMapping("/restore.json")
+    protected BaseVo restoreProcess(MultipartFile file) throws IOException {
+        backupService.restore(file.getInputStream());
         return SUCCESS_VO;
     }
 

@@ -58,7 +58,7 @@ public class VersionServiceImpl implements VersionService {
     private DictProperties dictProperties;
 
     @Value("tmp")
-    private String tempPath;
+    private File tempFile;
 
     private Thread thread;
 
@@ -162,8 +162,6 @@ public class VersionServiceImpl implements VersionService {
             status = Status.DOWNLOADING;
             callback.accept(status);
 
-            /* 创建临时路径 */
-            File tempFile = new File(tempPath);
             if (tempFile.exists()) {
                 if (tempFile.isDirectory()) FileSystemUtils.deleteRecursively(tempFile);
                 else tempFile.delete();
@@ -181,7 +179,7 @@ public class VersionServiceImpl implements VersionService {
                     /* 生成本地路径 */
                     String url = baseUrl + "/" + fileName;
                     UrlResource resource = new UrlResource(url);
-                    File file = new File(tempPath + "/" + fileName);
+                    File file = new File(tempFile, fileName);
 
                     /* 创建父路径 */
                     if (file.getParentFile() != null && !file.getParentFile().exists()) file.getParentFile().mkdirs();

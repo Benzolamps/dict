@@ -40,6 +40,9 @@ spring:
   http:
     encoding:
       force: true
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
   freemarker:
     template_loader_path: file:templates
     settings:

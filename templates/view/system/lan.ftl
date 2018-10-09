@@ -8,8 +8,8 @@
       <div class="layui-card-body">
         <table id="url-table" class="layui-table">
           <colgroup>
-            <col width="30">
             <col width="70">
+            <col width="30">
           </colgroup>
           <thead>
             <tr>
@@ -20,7 +20,8 @@
             <#list host_address as address>
               <tr>
                 <td class="selectable">
-                  <input type="text" readonly value="http://${address + base_url}/index.html" style="
+                  <#assign url='http://${address + base_url}/index.html'/>
+                  <input type="text" title="${url}" readonly value="${url}" style="
                     border: none; width: 100%; height: 100%; background-color: transparent; color: #666"/>
                 </td>
                 <td>

@@ -3,7 +3,6 @@ package com.benzolamps.dict.service.impl;
 import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.service.base.LocalAreaNetworkService;
 import com.benzolamps.dict.util.DictLambda.Action2;
-import com.benzolamps.dict.util.DictSpring;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,7 +52,7 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
                 logger.info(istr);
             }
             if (StringUtils.hasText(estr)) {
-                logger.error(estr);
+                // logger.error(estr);
                 throw new DictException(estr);
             }
         });
@@ -66,7 +65,7 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
                 logger.info(istr);
             }
             if (StringUtils.hasText(estr)) {
-                logger.error(estr);
+                // logger.error(estr);
                 throw new DictException(estr);
             }
         });
@@ -76,7 +75,7 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
                 logger.info(istr);
             }
             if (StringUtils.hasText(estr)) {
-                logger.error(estr);
+                // logger.error(estr);
                 throw new DictException(estr);
             }
         });
@@ -100,7 +99,7 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
                     }
                 }
             }
-            logger.info(ipv4s.toString());
+            // logger.info(ipv4s.toString());
             return ipv4s;
         } catch (Exception e) {
             throw new DictException(e);

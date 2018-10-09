@@ -95,7 +95,7 @@ public interface DictFile {
     @SuppressWarnings("ConstantConditions")
     static ZipOutputStream zip(File file, OutputStream outputStream, String rootName) throws IOException {
         Assert.isTrue(file != null && file.exists(), "file不能为null或不存在");
-        Path basePath = file.getParentFile().toPath();
+        Path basePath = file.getParentFile().getAbsoluteFile().toPath();
         var zos = new ZipOutputStream(outputStream);
         if (file.isFile()) {
             zos.putNextEntry(new ZipEntry(rootName + '/' + file.getName()));
@@ -113,7 +113,7 @@ public interface DictFile {
                 if (subFile.isDirectory()) {
                     stack.push(subFile);
                 } else {
-                    Path entryPath = subFile.toPath();
+                    Path entryPath = subFile.getAbsoluteFile().toPath();
                     zos.putNextEntry(new ZipEntry(rootName + '/' + entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString()));
                     try (var is = new FileInputStream(subFile)) {
                         StreamUtils.copy(is, zos);
