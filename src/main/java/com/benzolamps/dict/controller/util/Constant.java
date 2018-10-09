@@ -23,4 +23,6 @@ public class Constant {
     public static final String DOC = "application/msword";
 
     public static final String XLS = "application/x-xls";
+
+    public static final String ZIP = "multipart/x-zip";
 }

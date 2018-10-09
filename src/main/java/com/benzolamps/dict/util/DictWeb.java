@@ -35,6 +35,8 @@ public interface DictWeb {
                 return Constant.DOC;
             case "xls": case "xlsx":
                 return Constant.XLS;
+            case "zip": case "jar": case "war":
+                return Constant.ZIP;
             default:
                 return Constant.TXT;
         }

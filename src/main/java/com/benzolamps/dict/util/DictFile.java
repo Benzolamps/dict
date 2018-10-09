@@ -1,10 +1,12 @@
 package com.benzolamps.dict.util;
 
+import lombok.var;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
@@ -91,16 +93,17 @@ public interface DictFile {
     }
 
     @SuppressWarnings("ConstantConditions")
-    static void zip(File file, OutputStream outputStream) throws IOException {
-        ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
+    static ZipOutputStream zip(File file, OutputStream outputStream, String rootName) throws IOException {
         Assert.isTrue(file != null && file.exists(), "file不能为null或不存在");
+        Path basePath = file.getParentFile().toPath();
+        var zos = new ZipOutputStream(outputStream);
         if (file.isFile()) {
-            zipOutputStream.putNextEntry(new ZipEntry(file.getName()));
-            StreamUtils.copy(new FileInputStream(file), zipOutputStream);
-            zipOutputStream.closeEntry();
-            zipOutputStream.finish();
-            zipOutputStream.close();
-            return;
+            zos.putNextEntry(new ZipEntry(rootName + '/' + file.getName()));
+            try (var is = new FileInputStream(file)) {
+                StreamUtils.copy(is, zos);
+            }
+            zos.closeEntry();
+            return zos;
         }
         Stack<File> stack = new Stack<>();
         stack.push(file);
@@ -110,13 +113,15 @@ public interface DictFile {
                 if (subFile.isDirectory()) {
                     stack.push(subFile);
                 } else {
-                    zipOutputStream.putNextEntry(new ZipEntry(subFile.toPath().getName(file.getParentFile().toPath().getNameCount()).toString()));
-                    StreamUtils.copy(new FileInputStream(subFile), zipOutputStream);
+                    Path entryPath = subFile.toPath();
+                    zos.putNextEntry(new ZipEntry(rootName + '/' + entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString()));
+                    try (var is = new FileInputStream(subFile)) {
+                        StreamUtils.copy(is, zos);
+                    }
                 }
             }
         }
-        zipOutputStream.finish();
-        zipOutputStream.close();
+        return zos;
     }
 
 }

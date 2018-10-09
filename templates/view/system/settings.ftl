@@ -2,7 +2,7 @@
   <ul class="layui-tab-title">
     <li class="shutdown">关闭系统服务</li>
     <li class="clean">清理缓存</li>
-    <li class="backup">局域网操作</li>
+    <li class="backup">数据库备份</li>
     <li class="update">系统升级</li>
     <li class="lan">局域网操作</li>
   </ul>

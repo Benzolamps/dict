@@ -103,12 +103,7 @@
           var endTime = new Date().getTime();
           var delta = ((endTime - startTime) * 0.001).toFixed(3);
           parent.layer.close(loader);
-          parent.layer.alert('导入单词成功！<br>共导入 ' + result.data + ' 个单词！<br>用时 ' + delta + ' 秒！', {
-            icon: 1,
-            end: function () {
-              parent.$('iframe')[0].contentWindow.dict.reload(true);
-            }
-          });
+          parent.layer.alert('导入单词成功！<br>共导入 ' + result.data + ' 个单词！<br>用时 ' + delta + ' 秒！', {icon: 1});
         },
         error: function (request) {
           parent.layer.close(loader);
