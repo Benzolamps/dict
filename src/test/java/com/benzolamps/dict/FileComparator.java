@@ -12,11 +12,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import static com.benzolamps.dict.util.Constant.TEXT_FILES;
 import static com.benzolamps.dict.util.DictFile.deepListFiles;
 import static com.benzolamps.dict.util.DictResource.closeCloseable;
-import static java.util.stream.Collectors.toList;
 import static org.springframework.util.Assert.isTrue;
 import static org.springframework.util.Assert.notNull;
 import static org.springframework.util.FileCopyUtils.copy;
@@ -66,15 +66,15 @@ public class FileComparator {
     public void execute() throws IOException {
         Set<File> srcFiles = deepListFiles(src, null);
         Set<File> destFiles = deepListFiles(dest, null);
-        List<String> srcPaths = srcFiles.stream().map(this::comparablePart).collect(toList());
-        List<String> destPaths = destFiles.stream().map(this::comparablePart).collect(toList());
+        List<String> srcPaths = srcFiles.stream().map(this::comparablePart).collect(Collectors.toList());
+        List<String> destPaths = destFiles.stream().map(this::comparablePart).collect(Collectors.toList());
         List<String> srcOnly = srcPaths.stream()
-            .filter(((Predicate<String>) destPaths::contains).negate())
-            .collect(toList());
+                .filter(((Predicate<String>) destPaths::contains).negate())
+                .collect(Collectors.toList());
         List<String> destOnly = destPaths.stream()
-            .filter(((Predicate<String>) srcPaths::contains).negate())
-            .collect(toList());
-        List<String> same = srcPaths.stream().filter(destPaths::contains).collect(toList());
+                .filter(((Predicate<String>) srcPaths::contains).negate())
+                .collect(Collectors.toList());
+        List<String> same = srcPaths.stream().filter(destPaths::contains).collect(Collectors.toList());
         srcOnly.sort(String::compareToIgnoreCase);
         destOnly.sort(String::compareToIgnoreCase);
         same.sort(String::compareToIgnoreCase);
