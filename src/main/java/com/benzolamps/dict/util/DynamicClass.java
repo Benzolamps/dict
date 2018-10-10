@@ -13,6 +13,7 @@ import java.util.*;
 
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
 import static javax.tools.JavaFileObject.Kind;
+import static javax.tools.JavaFileObject.Kind.CLASS;
 
 /**
  * 动态编译并加载目录下的全部.java文件
@@ -85,7 +86,7 @@ public class DynamicClass {
     }
 
     /** 编译 */
-    @SuppressWarnings({"SpellCheckingInspection", "ConstantConditions"})
+    @SuppressWarnings("ConstantConditions")
     public void compile() {
         if (!compiled && (compiled = true)) {
             StandardJavaFileManager manager = compiler.getStandardFileManager(diagnosticListener, locale, charset);
@@ -106,7 +107,7 @@ public class DynamicClass {
             @Override
             public JavaFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling) throws IOException {
 
-                if (kind != Kind.CLASS) {
+                if (kind != CLASS) {
                     return super.getJavaFileForOutput(location, className, kind, sibling);
                 }
 

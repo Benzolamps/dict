@@ -16,6 +16,7 @@ import java.util.Set;
  * @version 1.1.1
  * @datetime 2018-6-5 21:10:34
  */
+@SuppressWarnings("SqlResolve")
 @Entity
 @Table(name = "dict_word", uniqueConstraints = @UniqueConstraint(name = "uk_word", columnNames = {"library", "prototype"}))
 @Getter

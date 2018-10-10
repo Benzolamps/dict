@@ -1,6 +1,5 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.util.DictSpring;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.springframework.util.StringUtils;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
+import static com.benzolamps.dict.util.DictSpring.getBean;
 
 /**
  * 分组日志
@@ -39,13 +39,13 @@ public class GroupLog implements Serializable {
         @Override
         public String convertToDatabaseColumn(GroupLog value) {
             if (null == value) return null;
-            return tryFunc(() -> DictSpring.getBean(ObjectMapper.class).writeValueAsString(value));
+            return tryFunc(() -> getBean(ObjectMapper.class).writeValueAsString(value));
         }
 
         @Override
         public GroupLog convertToEntityAttribute(String value) {
             if (!StringUtils.hasText(value)) return null;
-            return tryFunc(() -> DictSpring.getBean(ObjectMapper.class).readValue(value, GroupLog.class));
+            return tryFunc(() -> getBean(ObjectMapper.class).readValue(value, GroupLog.class));
         }
     }
 }

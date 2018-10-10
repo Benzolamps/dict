@@ -1,7 +1,6 @@
 package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.bean.Clazz;
-import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
@@ -16,7 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+
 import java.util.Arrays;
+
+import static com.benzolamps.dict.bean.Group.Status.NORMAL;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * 班级Controller
@@ -25,7 +29,7 @@ import java.util.Arrays;
  * @datetime 2018-9-19 22:09:18
  */
 @RestController
-@RequestMapping("clazz/")
+@RequestMapping("clazz")
 public class ClazzController extends BaseController {
 
     @Resource
@@ -41,7 +45,7 @@ public class ClazzController extends BaseController {
      * 列出所有班级
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/clazz/list");
@@ -54,7 +58,7 @@ public class ClazzController extends BaseController {
      * 添加班级
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         return new ModelAndView("view/clazz/add");
@@ -65,7 +69,7 @@ public class ClazzController extends BaseController {
      * @param clazz 班级
      * @return 保存后的班级
      */
-    @PostMapping("/save.json")
+    @PostMapping("save.json")
     @ResponseBody
     protected DataVo save(@RequestBody Clazz clazz) {
         clazz = clazzService.persist(clazz);
@@ -77,7 +81,7 @@ public class ClazzController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         ModelAndView mv = new ModelAndView("view/clazz/edit");
@@ -90,7 +94,7 @@ public class ClazzController extends BaseController {
      * @param clazz 班级
      * @return 更新后的班级
      */
-    @PostMapping("/update.json")
+    @PostMapping("update.json")
     @ResponseBody
     protected DataVo update(@RequestBody Clazz clazz) {
         clazz = clazzService.update(clazz);
@@ -101,7 +105,7 @@ public class ClazzController extends BaseController {
      * 删除班级
      * @return 提示信息
      */
-    @PostMapping("/delete.json")
+    @PostMapping("delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
         clazzService.remove(ids);
@@ -117,7 +121,7 @@ public class ClazzController extends BaseController {
     @GetMapping(value = "add_to_word_group.html")
     protected ModelAndView addToWordGroup(@RequestParam("clazzId") Integer... clazzIds) {
         ModelAndView mv = new ModelAndView("view/clazz/add_to_word_group");
-        mv.addObject("groups", wordGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
+        mv.addObject("groups", wordGroupService.findList(Filter.eq("status", NORMAL)));
         mv.addObject("clazzes", clazzService.findList(Filter.in("id", Arrays.asList(clazzIds))));
         return mv;
     }
@@ -131,7 +135,7 @@ public class ClazzController extends BaseController {
     @GetMapping(value = "add_to_phrase_group.html")
     protected ModelAndView addToPhraseGroup(@RequestParam("clazzId") Integer... clazzIds) {
         ModelAndView mv = new ModelAndView("view/clazz/add_to_phrase_group");
-        mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
+        mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", NORMAL)));
         mv.addObject("clazzes", clazzService.findList(Filter.in("id", Arrays.asList(clazzIds))));
         return mv;
     }

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <title>二分法</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      with (Math) {
+        var a = 1.0;
+        var b = 2.0;
+        var c;
+        var e = 0.5e-5;
+        var count = 0;
+
+        /* sin(x)代表x的正弦, pow(x, 2)代表x的2次方 */
+        var f = x => sin(x) - pow(x, 2) / 2;
+
+        /* 循环求职 */
+        while (b - a > e) {
+          ++count;
+          c = (a + b) / 2;
+          var ya = f(a);
+          var yc = f(c);
+          if (yc == 0) break;
+          if (yc * ya > 0) {
+            a = c;
+          } else {
+            b = c;
+          }
+        }
+        alert('近似值：' + c + "，迭代次数：" + count);
+      }
+    </script>
+  </body>
+</html>

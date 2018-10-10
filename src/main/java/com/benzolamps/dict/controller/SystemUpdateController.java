@@ -2,11 +2,9 @@ package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.service.base.VersionService;
-import com.benzolamps.dict.util.Constant;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,7 +14,11 @@ import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.benzolamps.dict.service.base.VersionService.Status.*;
+import static com.benzolamps.dict.util.Constant.EMPTY_MAP;
 import static java.util.Collections.singletonMap;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * 系统更新控制器
@@ -73,10 +75,10 @@ public class SystemUpdateController extends BaseController {
      * @return 是否有新版本
      */
     @Scheduled(fixedRate = 1000 * 60 * 15)
-    @RequestMapping(value = "/check_new_version.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/check_new_version.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo checkNewVersion() {
-        boolean hasNew = !versionService.isDead() && versionService.getStatus() == VersionService.Status.HAS_NEW;
+        boolean hasNew = !versionService.isDead() && versionService.getStatus() == HAS_NEW;
         if (hasNew) {
             Map<String, Object> result = singletonMap("newVersionName", versionService.getNewVersionName());
             messagingTemplate.convertAndSend("/version/has_new", wrapperData(result));
@@ -88,10 +90,10 @@ public class SystemUpdateController extends BaseController {
      * 检查是否下载完成
      * @return 是否下载完成
      */
-    @RequestMapping(value = "/check_downloaded.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/check_downloaded.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo checkDownloaded() {
-        boolean downloaded = !versionService.isDead() && versionService.getStatus() == VersionService.Status.DOWNLOADED;
+        boolean downloaded = !versionService.isDead() && versionService.getStatus() == DOWNLOADED;
         if (downloaded) {
             Map<String, Object> result = new HashMap<>();
             result.put("total", versionService.getTotal());
@@ -106,10 +108,10 @@ public class SystemUpdateController extends BaseController {
      * 检查是否安装完成
      * @return 是否安装完成
      */
-    @RequestMapping(value = "/check_installed.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/check_installed.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo checkInstalled() {
-        boolean installed = !versionService.isDead() && versionService.getStatus() == VersionService.Status.INSTALLED;
+        boolean installed = !versionService.isDead() && versionService.getStatus() == INSTALLED;
         if (installed) {
             Map<String, Object> result = new HashMap<>();
             result.put("total", versionService.getTotal());
@@ -124,12 +126,12 @@ public class SystemUpdateController extends BaseController {
      * 检查是否更新失败
      * @return 是否更新失败
      */
-    @RequestMapping(value = "/check_failed.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/check_failed.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo checkFailed() {
-        boolean failed = !versionService.isDead() && versionService.getStatus() == VersionService.Status.FAILED;
+        boolean failed = !versionService.isDead() && versionService.getStatus() == FAILED;
         if (failed) {
-            messagingTemplate.convertAndSend("/version/failed", Constant.EMPTY_MAP);
+            messagingTemplate.convertAndSend("/version/failed", EMPTY_MAP);
         }
         return SUCCESS_VO;
     }
@@ -138,7 +140,7 @@ public class SystemUpdateController extends BaseController {
      * 禁用
      * @return 状态
      */
-    @RequestMapping(value = "/die.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/die.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo die() {
         versionService.die();
@@ -149,7 +151,7 @@ public class SystemUpdateController extends BaseController {
      * 系统更新界面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/update.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/update.html", method = {GET, POST})
     protected ModelAndView update() {
         ModelAndView mv = new ModelAndView("view/system/update");
         mv.addObject("status", versionService.getStatus());
@@ -164,7 +166,7 @@ public class SystemUpdateController extends BaseController {
      * 系统更新开始
      * @return 开始
      */
-    @RequestMapping(value = "/update.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/update.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo updateProcess() {
         versionService.update();

@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.function.UnaryOperator;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 /**
  * 用户Controller
  * @author Benzolamps
@@ -41,7 +44,7 @@ public class UserController extends BaseController {
      * @throws IOException IOException
      * @throws TemplateException TemplateException
      */
-    @RequestMapping(value = "/login.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/login.html", method = {GET, POST})
     protected void login(HttpServletResponse response) throws IOException, TemplateException {
         if (userService.getCurrent() != null) {
             response.sendRedirect(baseUrl + "/");
@@ -89,7 +92,7 @@ public class UserController extends BaseController {
      * @param username 用户名
      * @return 检测结果
      */
-    @RequestMapping(value = "/username_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/username_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean usernameExists(String username) {
         return userService.usernameExists(username);
@@ -100,7 +103,7 @@ public class UserController extends BaseController {
      * @param password 密码
      * @return 验证结果
      */
-    @RequestMapping(value = "/check_password.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/check_password.json", method = {GET, POST})
     @ResponseBody
     protected boolean checkPassword(@RequestParam("oldPassword") String password) {
         User user = userService.getCurrent();
@@ -116,7 +119,7 @@ public class UserController extends BaseController {
      * @return 界面
      */
     @WindowView
-    @RequestMapping(value = "/edit_password.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/edit_password.html", method = {GET, POST})
     protected ModelAndView editPassword() {
         ModelAndView mv = new ModelAndView();
         User user = userService.getCurrent();
@@ -146,7 +149,7 @@ public class UserController extends BaseController {
      * @return 界面
      */
     @WindowView
-    @RequestMapping(value = "/lock_screen.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/lock_screen.html", method = {GET, POST})
     protected ModelAndView lockScreen() {
         ModelAndView mv = new ModelAndView();
         User user = userService.getCurrent();
@@ -163,7 +166,7 @@ public class UserController extends BaseController {
      * @return 界面
      */
     @WindowView
-    @RequestMapping(value = "/profile.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/profile.html", method = {GET, POST})
     protected ModelAndView profile() {
         ModelAndView mv = new ModelAndView();
         User user = userService.getCurrent();

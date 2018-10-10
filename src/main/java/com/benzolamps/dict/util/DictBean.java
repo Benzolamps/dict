@@ -23,6 +23,7 @@ import java.util.function.BiConsumer;
 public class DictBean<B> {
 
     /** 临时bean的名称 */
+    @SuppressWarnings("InjectedReferences")
     private static final String FLASH_BEAN_NAME = "flashBean";
 
     /** bean的类型 */

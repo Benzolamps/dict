@@ -19,6 +19,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import java.util.*;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 /**
  * 单词分组Controller
  * @author Benzolamps
@@ -48,7 +51,7 @@ public class WordGroupController extends BaseController {
      * 列出所有单词分组
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
@@ -65,7 +68,7 @@ public class WordGroupController extends BaseController {
      * 添加单词分组
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -90,7 +93,7 @@ public class WordGroupController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -129,7 +132,7 @@ public class WordGroupController extends BaseController {
      * @param name 名称
      * @return 检测结果
      */
-    @RequestMapping(value = "/name_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/name_not_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean nameNotExists(@RequestParam String name) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -246,7 +249,7 @@ public class WordGroupController extends BaseController {
      * @return ModelAndView
      */
     @NavigationView
-    @RequestMapping(value = "detail.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "detail.html", method = {GET, POST})
     protected ModelAndView detail(Integer id) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notNull(id, "word group id不能为null");
@@ -268,8 +271,9 @@ public class WordGroupController extends BaseController {
      * @param id 单词分组id
      * @return ModelAndView
      */
+    @SuppressWarnings("ConstantConditions")
     @WindowView
-    @RequestMapping(value = "score.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "score.html", method = {GET, POST})
     protected ModelAndView score(Integer id, Integer studentId) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notNull(id, "word group id不能为null");

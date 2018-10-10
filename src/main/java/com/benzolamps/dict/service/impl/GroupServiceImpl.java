@@ -1,7 +1,6 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.*;
-import com.benzolamps.dict.bean.Group.Status;
 import com.benzolamps.dict.bean.Group.Type;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.core.Filter;
@@ -16,6 +15,10 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
+
+import static com.benzolamps.dict.bean.Group.Status.*;
+import static com.benzolamps.dict.bean.Group.Type.PHRASE;
+import static com.benzolamps.dict.bean.Group.Type.WORD;
 
 /**
  * 单词短语分组Service接口实现类
@@ -58,7 +61,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.notNull(library, "未选中词库");
         Arrays.stream(groups).forEach(group -> {
             group.setType(type);
-            group.setStatus(Status.NORMAL);
+            group.setStatus(NORMAL);
             group.setLibrary(library);
             group.setScoreCount(0);
         });
@@ -70,7 +73,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Library library = libraryService.getCurrent();
         Assert.notNull(library, "未选中词库");
         group.setType(type);
-        group.setStatus(Status.NORMAL);
+        group.setStatus(NORMAL);
         group.setLibrary(library);
         group.setScoreCount(0);
         return super.persist(group);
@@ -82,7 +85,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.notNull(library, "未选中词库");
         groups.forEach(group -> {
             group.setType(type);
-            group.setStatus(Status.NORMAL);
+            group.setStatus(NORMAL);
             group.setLibrary(library);
             group.setScoreCount(0);
         });
@@ -109,7 +112,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     @Override
     public void remove(Collection<Group> groups) {
         Assert.isTrue(groups.stream().allMatch(Objects::nonNull), "groups中不能存在为null的元素");
-        Assert.isTrue(groups.stream().allMatch(group -> group.getStatus() != Status.SCORING), "无法删除正在评分的分组！");
+        Assert.isTrue(groups.stream().allMatch(group -> group.getStatus() != SCORING), "无法删除正在评分的分组！");
         super.remove(groups);
     }
 
@@ -169,7 +172,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void addWords(Group wordGroup, Word... words) {
         Assert.notNull(wordGroup, "word group不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
-        Assert.isTrue(type == Type.WORD && wordGroup.getType() == type, "group类型错误");
+        Assert.isTrue(type == WORD && wordGroup.getType() == type, "group类型错误");
         wordGroup.getWords().addAll(Arrays.asList(words));
     }
 
@@ -177,7 +180,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void addPhrases(Group phraseGroup, Phrase... phrases) {
         Assert.notNull(phraseGroup, "phrase group不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
-        Assert.isTrue(type == Type.PHRASE && phraseGroup.getType() == type, "group类型错误");
+        Assert.isTrue(type == PHRASE && phraseGroup.getType() == type, "group类型错误");
         phraseGroup.getPhrases().addAll(Arrays.asList(phrases));
     }
 
@@ -185,7 +188,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void removeWords(Group wordGroup, Word... words) {
         Assert.notNull(wordGroup, "word group不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
-        Assert.isTrue(type == Type.WORD && wordGroup.getType() == type, "group类型错误");
+        Assert.isTrue(type == WORD && wordGroup.getType() == type, "group类型错误");
         List<Word> wordList = Arrays.asList(words);
         wordGroup.getWords().removeAll(wordList);
         if (wordGroup.getGroupLog() != null) {
@@ -198,7 +201,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void removePhrases(Group phraseGroup, Phrase... phrases) {
         Assert.notNull(phraseGroup, "phrase group不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
-        Assert.isTrue(type == Type.PHRASE && phraseGroup.getType() == type, "group类型错误");
+        Assert.isTrue(type == PHRASE && phraseGroup.getType() == type, "group类型错误");
         phraseGroup.getPhrases().removeAll(Arrays.asList(phrases));
         List<Phrase> phraseList = Arrays.asList(phrases);
         phraseGroup.getPhrases().removeAll(phraseList);
@@ -214,7 +217,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.notNull(student, "student不能为null");
         Assert.notNull(words, "words不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
-        Assert.isTrue(type == Type.WORD && wordGroup.getType() == type, "group类型错误");
+        Assert.isTrue(type == WORD && wordGroup.getType() == type, "group类型错误");
         studentService.addFailedWords(student, wordGroup.getWords().toArray(new Word[0]));
         studentService.addMasteredWords(student, words);
         this.internalJump(wordGroup, student, words.length, null);
@@ -231,7 +234,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Assert.notNull(student, "student不能为null");
         Assert.notNull(phrases, "phrases不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
-        Assert.isTrue(type == Type.PHRASE && phraseGroup.getType() == type, "group类型错误");
+        Assert.isTrue(type == PHRASE && phraseGroup.getType() == type, "group类型错误");
         studentService.addFailedPhrases(student, phraseGroup.getPhrases().toArray(new Phrase[0]));
         studentService.addMasteredPhrases(student, phrases);
         this.internalJump(phraseGroup, student, null, phrases.length);
@@ -251,10 +254,10 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     private void internalJump(Group group, Student student, Integer wordsCount, Integer phrasesCount) {
         if (group.getStudentsOriented().size() - group.getStudentsScored().size() == 1) {
-            group.setStatus(Status.COMPLETED);
+            group.setStatus(COMPLETED);
             group.setScoreCount(group.getScoreCount() + 1);
         } else if (group.getStudentsScored().isEmpty()) {
-            group.setStatus(Status.SCORING);
+            group.setStatus(SCORING);
         }
         if (group.getGroupLog() == null) {
             group.setGroupLog(new GroupLog());
@@ -321,7 +324,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     @Override
     public void complete(Group group) {
         Assert.notNull(group, "group不能为null");
-        group.setStatus(Status.NORMAL);
+        group.setStatus(NORMAL);
         group.setGroupLog(null);
         group.getStudentsScored().clear();
     }

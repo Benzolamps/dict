@@ -2,7 +2,6 @@ package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.cfg.DictProperties;
 import com.benzolamps.dict.service.base.VersionService;
-import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictFile;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
@@ -19,6 +18,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.List;
 import java.util.function.Consumer;
+
+import static com.benzolamps.dict.service.base.VersionService.Status.*;
+import static com.benzolamps.dict.util.Constant.EMPTY_LIST;
+import static com.benzolamps.dict.util.Constant.YAML;
 
 /**
  * 版本Service接口实现类
@@ -45,14 +48,14 @@ public class VersionServiceImpl implements VersionService {
 
     private boolean dead;
 
-    private List<String> versionInfo = Constant.EMPTY_LIST;
+    private List<String> versionInfo = EMPTY_LIST;
 
     private String newVersionName;
 
     @Value("#{dictProperties.remoteBaseUrl}")
     private String baseUrl;
 
-    private Status status = Status.ALREADY_NEW;
+    private Status status = ALREADY_NEW;
 
     @Resource
     private DictProperties dictProperties;
@@ -67,7 +70,7 @@ public class VersionServiceImpl implements VersionService {
     @Override
     public void update() {
         /* 下载完成或者更新完成的状态时不能再次更新 */
-        if (status != Status.DOWNLOADED && status != Status.INSTALLED) {
+        if (status != DOWNLOADED && status != INSTALLED) {
 
             /* 开启一个更新线程 */
             if (thread == null) {
@@ -76,7 +79,7 @@ public class VersionServiceImpl implements VersionService {
                         updateProcess();
                     } catch (Throwable e) {
                         logger.error("下载更新失败：" + e.getMessage(), e);
-                        status = Status.FAILED;
+                        status = FAILED;
                         callback.accept(status);
                     } finally {
                         thread = null;
@@ -91,22 +94,22 @@ public class VersionServiceImpl implements VersionService {
     @Scheduled(fixedRate = 1000 * 60 * 15)
     private void resetVersionInfo() {
 
-        if (succeed != null && status == Status.ALREADY_NEW) {
-            status = succeed ? Status.INSTALLED : Status.FAILED;
+        if (succeed != null && status == ALREADY_NEW) {
+            status = succeed ? INSTALLED : FAILED;
             return;
         }
 
         try {
             /* 下载完成或者更新完成的状态时不能再次更新 */
-            if (status != Status.DOWNLOADED && status != Status.INSTALLED) {
+            if (status != DOWNLOADED && status != INSTALLED) {
                 UrlResource resource = new UrlResource(baseUrl + "/dict/version.yml");
-                versionInfo = Constant.YAML.loadAs(resource.getInputStream(), List.class);
+                versionInfo = YAML.loadAs(resource.getInputStream(), List.class);
 
                 /* 判断是否有新版本 */
                 newVersionName = getVersion(versionInfo.stream().max(String::compareToIgnoreCase).orElse(null));
                 if (dictProperties.getVersion().compareTo(newVersionName) < 0) {
-                    if (status != Status.FAILED && status != Status.HAS_NEW) {
-                        status = Status.HAS_NEW;
+                    if (status != FAILED && status != HAS_NEW) {
+                        status = HAS_NEW;
                     }
                 }
             }
@@ -159,7 +162,7 @@ public class VersionServiceImpl implements VersionService {
             long start = System.currentTimeMillis();
 
             /* 更改状态 */
-            status = Status.DOWNLOADING;
+            status = DOWNLOADING;
             callback.accept(status);
 
             if (tempFile.exists()) {
@@ -200,7 +203,7 @@ public class VersionServiceImpl implements VersionService {
             lastDelta = end - start;
 
             /* 更改状态 */
-            status = Status.DOWNLOADED;
+            status = DOWNLOADED;
             logger.info("下载更新完成");
             callback.accept(status);
         }

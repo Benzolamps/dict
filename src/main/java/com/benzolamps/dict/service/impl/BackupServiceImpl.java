@@ -5,6 +5,7 @@ import com.benzolamps.dict.util.DictFile;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
 
 import java.io.*;
@@ -47,13 +48,13 @@ public class BackupServiceImpl implements BackupService {
         File file = new File("tmp/dict/restore" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".zip");
 
         /* 创建父路径 */
-        if (file.getParentFile() != null && !file.getParentFile().exists()) file.getParentFile().mkdirs();
+        if (file.getParentFile() != null && !file.getParentFile().exists()) Assert.isTrue(file.getParentFile().mkdirs(), "创建父路径失败");
 
         /* 创建新文件 */
-        file.createNewFile();
+        Assert.isTrue(file.createNewFile(), "创建新文件失败");
 
         /* 流复制 */
-        try (var is = inputStream; var os = new FileOutputStream(file)) {
+        try (InputStream is = inputStream; OutputStream os = new FileOutputStream(file)) {
             StreamUtils.copy(is, os);
         }
     }

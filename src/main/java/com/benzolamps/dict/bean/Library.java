@@ -23,13 +23,6 @@ import java.util.Set;
 @Table(name = "dict_library")
 @Getter
 @Setter
-@NamedEntityGraphs(@NamedEntityGraph(
-    attributeNodes = {
-        @NamedAttributeNode(value = "words", subgraph = "size"),
-        @NamedAttributeNode(value = "phrases", subgraph = "size")
-    }
-
-))
 public class Library extends BaseEntity {
 
     private static final long serialVersionUID = -8525365652508791389L;

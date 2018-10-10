@@ -1,6 +1,5 @@
 package com.benzolamps.dict.directive;
 
-import com.benzolamps.dict.util.DictSpring;
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
 import freemarker.template.TemplateDirectiveModel;
@@ -8,6 +7,7 @@ import freemarker.template.TemplateException;
 import freemarker.template.TemplateModel;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
@@ -22,11 +22,14 @@ import java.util.function.UnaryOperator;
 @Component
 public class CompressDirective implements TemplateDirectiveModel {
 
+    @Resource
+    private UnaryOperator<String> compress;
+
     @Override
     public void execute(Environment env, Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws TemplateException, IOException {
         StringWriter stringWriter = new StringWriter();
         body.render(stringWriter);
-        String str = DictSpring.<UnaryOperator<String>>getBean("compress").apply(stringWriter.toString());
+        String str = compress.apply(stringWriter.toString());
         env.getOut().write(str);
     }
 }

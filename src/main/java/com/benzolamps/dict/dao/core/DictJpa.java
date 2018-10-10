@@ -2,7 +2,6 @@ package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.exception.DictException;
-import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictLambda.Action1;
 import com.benzolamps.dict.util.DictSpring;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +22,8 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Map;
 
+import static com.benzolamps.dict.util.Constant.EMPTY_MAP;
+import static com.benzolamps.dict.util.Constant.EMPTY_OBJECT_ARRAY;
 import static com.benzolamps.dict.util.DictLambda.tryAction;
 
 /**
@@ -54,8 +55,8 @@ public class DictJpa {
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(jpql, "sql不能为null或空");
         Assert.notNull(tClass, "t class不能为null");
-        if (parameters == null) parameters = Constant.EMPTY_MAP;
-        if (positionParameters == null) positionParameters = Constant.EMPTY_OBJECT_ARRAY;
+        if (parameters == null) parameters = EMPTY_MAP;
+        if (positionParameters == null) positionParameters = EMPTY_OBJECT_ARRAY;
         logger.info("jpql: " + jpql);
         TypedQuery<T> query = entityManager.createQuery(jpql, tClass);
         parameters.forEach(query::setParameter);
@@ -81,8 +82,8 @@ public class DictJpa {
             Object... positionParameters) {
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(jpql, "sql不能为null或空");
-        if (parameters == null) parameters = Constant.EMPTY_MAP;
-        if (positionParameters == null) positionParameters = Constant.EMPTY_OBJECT_ARRAY;
+        if (parameters == null) parameters = EMPTY_MAP;
+        if (positionParameters == null) positionParameters = EMPTY_OBJECT_ARRAY;
         logger.info("jpql: " + jpql);
         Query query = entityManager.createQuery(jpql);
         parameters.forEach(query::setParameter);
@@ -112,8 +113,8 @@ public class DictJpa {
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(sql, "sql不能为null或空");
         Assert.notNull(tClass, "t class不能为null");
-        if (parameters == null) parameters = Constant.EMPTY_MAP;
-        if (positionParameters == null) positionParameters = Constant.EMPTY_OBJECT_ARRAY;
+        if (parameters == null) parameters = EMPTY_MAP;
+        if (positionParameters == null) positionParameters = EMPTY_OBJECT_ARRAY;
         logger.info("sql: " + sql);
         Query query = entityManager.createNativeQuery(sql);
         parameters.forEach(query::setParameter);
@@ -144,8 +145,8 @@ public class DictJpa {
             Object... positionParameters) {
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(sql, "sql不能为null或空");
-        if (parameters == null) parameters = Constant.EMPTY_MAP;
-        if (positionParameters == null) positionParameters = Constant.EMPTY_OBJECT_ARRAY;
+        if (parameters == null) parameters = EMPTY_MAP;
+        if (positionParameters == null) positionParameters = EMPTY_OBJECT_ARRAY;
         logger.info("sql: " + sql);
         Query query = entityManager.createNativeQuery(sql);
         parameters.forEach(query::setParameter);

@@ -13,6 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 /**
  * 词库Controller
  * @author Benzolamps
@@ -30,7 +33,7 @@ public class LibraryController extends BaseController {
      * 列出所有词库
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/library/list");
@@ -43,7 +46,7 @@ public class LibraryController extends BaseController {
      * 添加词库
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         return new ModelAndView("view/library/add");
@@ -66,7 +69,7 @@ public class LibraryController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         ModelAndView mv = new ModelAndView("view/library/edit");
@@ -102,7 +105,7 @@ public class LibraryController extends BaseController {
      * @param name 名称
      * @return 检测结果
      */
-    @RequestMapping(value = "/name_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/name_not_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean nameExists(String name) {
         return !libraryService.nameExists(name);
@@ -113,7 +116,7 @@ public class LibraryController extends BaseController {
      * @param id id
      * @return 检测结果
      */
-    @RequestMapping(value = "/change_current.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/change_current.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo changeCurrent(Integer id) {
         Library library = libraryService.find(id);

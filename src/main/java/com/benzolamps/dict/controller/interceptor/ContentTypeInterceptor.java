@@ -24,7 +24,7 @@ public class ContentTypeInterceptor extends BaseInterceptor {
         Method method = ((HandlerMethod) handler).getMethod();
         if (!method.getDeclaringClass().equals(ErrorController.class)) {
             String contentType;
-            if ((method.getName().equals("index") || method.getName().equals("ping")) && method.getDeclaringClass().equals(IndexController.class)) {
+            if (("index".equals(method.getName()) || "ping".equals(method.getName())) && IndexController.class.equals(method.getDeclaringClass())) {
                 contentType = Constant.HTML;
             } else {
                 String url = request.getRequestURL().toString();

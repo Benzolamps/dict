@@ -2,6 +2,7 @@ package com.benzolamps.dict.util;
 
 import org.springframework.util.Assert;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * 自定义键值对
@@ -9,11 +10,11 @@ import java.util.Map;
  * @param <V> value
  * @author Benzolamps
  * @since 1.1.2
- * @see Map.Entry
+ * @see Entry
  * @datetime 2018年6月17日12:21:25
  */
 @SuppressWarnings("unused")
-public class KeyValuePairs<K, V> implements Map.Entry<K, V> {
+public class KeyValuePairs<K, V> implements Entry<K, V> {
 
     /* 键 */
     private K key;
@@ -35,7 +36,7 @@ public class KeyValuePairs<K, V> implements Map.Entry<K, V> {
      * 初始化键和值
      * @param entry entry
      */
-    public KeyValuePairs(Map.Entry<K, V> entry) {
+    public KeyValuePairs(Entry<K, V> entry) {
         Assert.notNull(entry, "entry不能为null");
         this.key = entry.getKey();
         setValue(entry.getValue());

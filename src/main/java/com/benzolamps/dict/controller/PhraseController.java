@@ -25,6 +25,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.benzolamps.dict.bean.Group.Status.NORMAL;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 /**
  * 短语Controller
  * @author Benzolamps
@@ -54,7 +58,7 @@ public class PhraseController extends BaseController {
      * 列出所有短语
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
@@ -73,7 +77,7 @@ public class PhraseController extends BaseController {
      * 导出短语页面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/export.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/export.html", method = {GET, POST})
     @WindowView
     protected ModelAndView export() {
         ModelAndView mv = new ModelAndView();
@@ -111,7 +115,7 @@ public class PhraseController extends BaseController {
      * 添加短语
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -138,7 +142,7 @@ public class PhraseController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -193,7 +197,7 @@ public class PhraseController extends BaseController {
      * @param prototype 短语原形
      * @return 检测结果
      */
-    @RequestMapping(value = "/prototype_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/prototype_not_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean prototypeExists(String prototype) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -209,7 +213,7 @@ public class PhraseController extends BaseController {
     @GetMapping(value = "add_to.html")
     protected ModelAndView addTo(@RequestParam("phraseId") Integer... phraseIds) {
         ModelAndView mv = new ModelAndView("view/phrase/add_to");
-        mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
+        mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", NORMAL)));
         mv.addObject("phrases", phraseService.findList(Filter.in("id", Arrays.asList(phraseIds))));
         return mv;
     }

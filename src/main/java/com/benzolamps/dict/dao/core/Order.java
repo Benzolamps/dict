@@ -50,7 +50,7 @@ public class Order extends SnippetResolver {
      */
     protected void applyField(String field) {
         Assert.hasText(field, "field不能为null或空");
-        if (field.equals("0")) {
+        if ("0".equals(field)) {
             addSnippet(new OperatorSnippet(field));
         } else {
             addSnippet(new FieldSnippet(field));

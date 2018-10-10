@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.benzolamps.dict.util.DictLambda.tryFunc;
+import static java.util.stream.Collectors.toSet;
 
 /**
  * 乱序方案Service接口实现类
