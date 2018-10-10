@@ -1,9 +1,8 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictReadonly;
-import com.benzolamps.dict.util.Constant;
-import com.benzolamps.dict.component.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,6 +13,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
+
+import static com.benzolamps.dict.util.Constant.CHINESE_TITLE_PATTERN;
 
 /**
  * 用户实体类
@@ -47,7 +48,7 @@ public class User extends BaseEntity {
     /** 用户名 */
     @NotEmpty(groups = LoginGroup.class)
     @Length(min = 6, max = 15, groups = LoginGroup.class)
-    @Pattern(regexp = Constant.CHINESE_TITLE_PATTERN, groups = LoginGroup.class)
+    @Pattern(regexp = CHINESE_TITLE_PATTERN, groups = LoginGroup.class)
     @DictReadonly
     @Column(nullable = false, updatable = false, unique = true)
     @DictPropertyInfo(display = "用户名")
@@ -65,7 +66,7 @@ public class User extends BaseEntity {
     /** 昵称 */
     @NotEmpty
     @Length(min = 1, max = 15)
-    @Pattern(regexp = Constant.CHINESE_TITLE_PATTERN)
+    @Pattern(regexp = CHINESE_TITLE_PATTERN)
     @Column(nullable = false)
     @DictPropertyInfo(display = "昵称", description = "昵称必须是汉字、数字、字母、下划线、短横线的组合")
     private String nickname;

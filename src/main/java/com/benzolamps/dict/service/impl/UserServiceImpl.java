@@ -7,13 +7,15 @@ import com.benzolamps.dict.service.base.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.annotation.Resource;
 import javax.persistence.NoResultException;
 import java.nio.charset.Charset;
+
+import static org.springframework.util.DigestUtils.md5DigestAsHex;
+import static org.springframework.web.context.request.RequestAttributes.SCOPE_SESSION;
 
 /**
  * 用户Service接口实现类
@@ -64,9 +66,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     public void setCurrent(User user) {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         if (user == null || user.isNew()) {
-            requestAttributes.removeAttribute("currentUser", RequestAttributes.SCOPE_SESSION);
+            requestAttributes.removeAttribute("currentUser", SCOPE_SESSION);
         } else {
-            requestAttributes.setAttribute(CURRENT_USER_ATTRIBUTE, user.getId(), RequestAttributes.SCOPE_SESSION);
+            requestAttributes.setAttribute(CURRENT_USER_ATTRIBUTE, user.getId(), SCOPE_SESSION);
         }
     }
 
@@ -74,7 +76,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     @Transactional(readOnly = true)
     public User getCurrent() {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-        Integer id = (Integer) requestAttributes.getAttribute(CURRENT_USER_ATTRIBUTE, RequestAttributes.SCOPE_SESSION);
+        Integer id = (Integer) requestAttributes.getAttribute(CURRENT_USER_ATTRIBUTE, SCOPE_SESSION);
         return id == null ? null : userDao.find(id);
     }
 
@@ -105,11 +107,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     private String encryptPassword(String password) {
         Assert.hasText(password, "password不能为null或空");
         Charset charset = Charset.forName("UTF-8");
-        String one = DigestUtils.md5DigestAsHex(password.getBytes(charset));
-        String two = DigestUtils.md5DigestAsHex(one.getBytes(charset));
-        String three = DigestUtils.md5DigestAsHex(two.getBytes(charset));
-        String four = DigestUtils.md5DigestAsHex(three.getBytes(charset));
-        String five = DigestUtils.md5DigestAsHex(four.getBytes(charset));
-        return DigestUtils.md5DigestAsHex(five.getBytes(charset));
+        String one = md5DigestAsHex(password.getBytes(charset));
+        String two = md5DigestAsHex(one.getBytes(charset));
+        String three = md5DigestAsHex(two.getBytes(charset));
+        String four = md5DigestAsHex(three.getBytes(charset));
+        String five = md5DigestAsHex(four.getBytes(charset));
+        return md5DigestAsHex(five.getBytes(charset));
     }
 }

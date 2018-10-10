@@ -12,6 +12,9 @@ import org.springframework.util.Assert;
 import java.util.Collection;
 import java.util.List;
 
+import static com.benzolamps.dict.bean.Group.Type.PHRASE;
+import static com.benzolamps.dict.bean.Group.Type.WORD;
+
 /**
  * 学生学习记录Service接口实现类
  * @author Benzolamps
@@ -47,12 +50,12 @@ public class StudyLogServiceImpl extends BaseServiceImpl<StudyLog> implements St
     @Override
     public Collection<StudyLog> findWordLogs(Student student) {
         Assert.notNull(student, "student不能为null");
-        return findList(Filter.eq("student", student).and(Filter.eq("groupType", Group.Type.WORD)), Order.asc("logDate"));
+        return findList(Filter.eq("student", student).and(Filter.eq("groupType", WORD)), Order.asc("logDate"));
     }
 
     @Override
     public Collection<StudyLog> findPhraseLogs(Student student) {
         Assert.notNull(student, "student不能为null");
-        return findList(Filter.eq("student", student).and(Filter.eq("groupType", Group.Type.PHRASE)), Order.asc("logDate"));
+        return findList(Filter.eq("student", student).and(Filter.eq("groupType", PHRASE)), Order.asc("logDate"));
     }
 }

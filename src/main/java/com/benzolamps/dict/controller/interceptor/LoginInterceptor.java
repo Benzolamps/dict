@@ -27,9 +27,9 @@ public class LoginInterceptor extends BaseInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HandlerMethod method = (HandlerMethod) handler;
         if (!(
-            method.getMethod().getDeclaringClass().equals(UserController.class) ||
-            method.getMethod().getDeclaringClass().equals(ErrorController.class) ||
-            method.getMethod().getDeclaringClass().equals(IndexController.class) && method.getMethod().getName().equals("ping")
+            UserController.class.equals(method.getMethod().getDeclaringClass()) ||
+            ErrorController.class.equals(method.getMethod().getDeclaringClass()) ||
+            IndexController.class.equals(method.getMethod().getDeclaringClass()) && "ping".equals(method.getMethod().getName())
         )) {
             if (userService.getCurrent() == null) {
                 if (response.getContentType().toLowerCase().contains(Constant.HTML)) {

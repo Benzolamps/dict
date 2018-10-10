@@ -1,7 +1,8 @@
 package com.benzolamps.dict.util;
 
-import com.benzolamps.dict.controller.util.Constant;
 import org.springframework.util.Assert;
+
+import static com.benzolamps.dict.controller.util.Constant.*;
 
 /**
  * Web工具类
@@ -20,25 +21,32 @@ public interface DictWeb {
         Assert.hasText(extension, "extension不能为null或空");
         switch (extension.toLowerCase()) {
             case "css":
-                return Constant.CSS;
+                return CSS;
             case "js":
-                return Constant.JS;
+                return JS;
             case "json":
-                return Constant.JSON;
-            case "html": case "htm":
-                return Constant.HTML;
+                return JSON;
+            case "html":
+            case "htm":
+                return HTML;
             case "txt":
-                return Constant.TXT;
-            case "xml": case "dtd": case "xsd":
-                return Constant.XML;
-            case "doc": case "docx":
-                return Constant.DOC;
-            case "xls": case "xlsx":
-                return Constant.XLS;
-            case "zip": case "jar": case "war":
-                return Constant.ZIP;
+                return TXT;
+            case "xml":
+            case "dtd":
+            case "xsd":
+                return XML;
+            case "doc":
+            case "docx":
+                return DOC;
+            case "xls":
+            case "xlsx":
+                return XLS;
+            case "zip":
+            case "jar":
+            case "war":
+                return ZIP;
             default:
-                return Constant.TXT;
+                return TXT;
         }
     }
 }

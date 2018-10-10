@@ -51,10 +51,13 @@ public class RuntimeBeanConfig {
 
     @Bean("compress")
     protected UnaryOperator<String> compress() {
+
+        boolean isRelease = getBean(Environment.class).acceptsProfiles("release");
+
         return (DictLambda.Operator1<String>) str -> {
             if (!StringUtils.hasText(str)) {
                 return "";
-            } else if (getBean(Environment.class).acceptsProfiles("release")) {
+            } else if (isRelease) {
                 return str.replaceAll("[\\s\\u00a0]+", " ").replaceAll("> <", "><").trim();
             } else {
                 return str.replaceAll("[\\t\\f\\u00a0 ]+", " ").replaceAll("[\\r\\n]+ ", "\r\n").trim();

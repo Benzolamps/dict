@@ -20,6 +20,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
+import static com.benzolamps.dict.bean.Group.Status.NORMAL;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 /**
  * 学生Controller
  * @author Benzolamps
@@ -55,7 +59,7 @@ public class StudentController extends BaseController {
      * 列出所有学生
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
@@ -74,7 +78,7 @@ public class StudentController extends BaseController {
      * 添加学生
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         ModelAndView mv = new ModelAndView("view/student/add");
@@ -100,7 +104,7 @@ public class StudentController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         ModelAndView mv = new ModelAndView("view/student/edit");
@@ -138,7 +142,7 @@ public class StudentController extends BaseController {
      * @param number 学号
      * @return 检测结果
      */
-    @RequestMapping(value = "/number_not_exists.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/number_not_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean numberNotExists(Integer number) {
         return !studentService.numberExists(number);
@@ -153,7 +157,7 @@ public class StudentController extends BaseController {
     @GetMapping(value = "add_to_word_group.html")
     protected ModelAndView addToWordGroup(@RequestParam("studentId") Integer... studentIds) {
         ModelAndView mv = new ModelAndView("view/student/add_to_word_group");
-        mv.addObject("groups", wordGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
+        mv.addObject("groups", wordGroupService.findList(Filter.eq("status", NORMAL)));
         mv.addObject("students", studentService.findList(Filter.in("id", Arrays.asList(studentIds))));
         return mv;
     }
@@ -167,7 +171,7 @@ public class StudentController extends BaseController {
     @GetMapping(value = "add_to_phrase_group.html")
     protected ModelAndView addToPhraseGroup(@RequestParam("studentId") Integer... studentIds) {
         ModelAndView mv = new ModelAndView("view/student/add_to_phrase_group");
-        mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", Group.Status.NORMAL)));
+        mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", NORMAL)));
         mv.addObject("students", studentService.findList(Filter.in("id", Arrays.asList(studentIds))));
         return mv;
     }
@@ -178,7 +182,7 @@ public class StudentController extends BaseController {
      * @return ModelAndView
      */
     @NavigationView
-    @RequestMapping(value = "detail.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "detail.html", method = {GET, POST})
     protected ModelAndView detail(Integer id) {
         Assert.notNull(id, "id不能为null");
         Student student = studentService.find(id);
@@ -204,7 +208,7 @@ public class StudentController extends BaseController {
      * @return ModelAndView
      */
     @NavigationView
-    @RequestMapping(value = "personal_word_group.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "personal_word_group.html", method = {GET, POST})
     protected ModelAndView personalWordGroup(@RequestParam Integer studentId, @RequestParam("wordId") Integer... wordIds) {
         ModelAndView mv = new ModelAndView("view/student/personal_word_group");
         Student student = studentService.find(studentId);
@@ -222,7 +226,7 @@ public class StudentController extends BaseController {
      * @return 保存成功
      */
     @ResponseBody
-    @RequestMapping(value = "personal_word_group_save.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "personal_word_group_save.json", method = {GET, POST})
     protected BaseVo personalWordGroupSave(HttpServletRequest request, @RequestParam Integer studentId, @RequestParam("wordId") Integer... wordIds) {
         Student student = studentService.find(studentId);
         Assert.notNull(student, "student不存在");
@@ -246,7 +250,7 @@ public class StudentController extends BaseController {
      * @return ModelAndView
      */
     @NavigationView
-    @RequestMapping(value = "personal_phrase_group.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "personal_phrase_group.html", method = {GET, POST})
     protected ModelAndView personalPhraseGroup(@RequestParam Integer studentId, @RequestParam("phraseId") Integer... phraseIds) {
         ModelAndView mv = new ModelAndView("view/student/personal_phrase_group");
         Student student = studentService.find(studentId);
@@ -264,7 +268,7 @@ public class StudentController extends BaseController {
      * @return 保存成功
      */
     @ResponseBody
-    @RequestMapping(value = "personal_phrase_group_save.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "personal_phrase_group_save.json", method = {GET, POST})
     protected BaseVo personalWordPhraseSave(HttpServletRequest request, @RequestParam Integer studentId, @RequestParam("phraseId") Integer... phraseIds) {
         Student student = studentService.find(studentId);
         Assert.notNull(student, "student不存在");

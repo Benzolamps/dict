@@ -18,6 +18,7 @@ import java.util.Set;
  * @version 2.1.1
  * @datetime 2018-7-1 22:29:33
  */
+@SuppressWarnings("SqlResolve")
 @Entity
 @Table(name = "dict_student")
 @Getter

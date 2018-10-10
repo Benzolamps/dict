@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.Locale;
 
 /**
  * 局域网操作Controller
@@ -30,7 +29,7 @@ public class LocalAreaNetworkController extends BaseController {
     public static class LanCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            return System.getProperty("os.name").startsWith("Windows") && Locale.getDefault().equals(Locale.SIMPLIFIED_CHINESE);
+            return System.getProperty("os.name").startsWith("Windows");
         }
     }
 

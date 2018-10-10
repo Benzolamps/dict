@@ -67,7 +67,7 @@ public final class index {
 
         for (File zipFile : zipFiles) {
             List<File> files = unzip(zipFile, path);
-            File start = files.stream().filter(f -> f.isFile() && f.getName().toLowerCase().equals("start.txt")).findFirst().orElse(null);
+            File start = files.stream().filter(f -> f.isFile() && "start.txt".equals(f.getName().toLowerCase())).findFirst().orElse(null);
             if (start == null) {
                 throw new IllegalArgumentException("start不能为null");
             } else {

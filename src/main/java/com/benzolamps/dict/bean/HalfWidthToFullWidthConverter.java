@@ -1,10 +1,10 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.util.Constant;
-
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.concurrent.atomic.AtomicReference;
+
+import static com.benzolamps.dict.util.Constant.HALF_WIDTH_FULL_WIDTH_MAPPING;
 
 /**
  * 半角转全角字符
@@ -17,14 +17,14 @@ public class HalfWidthToFullWidthConverter implements AttributeConverter<String,
     @Override
     public String convertToDatabaseColumn(String value) {
         AtomicReference<String> aa = new AtomicReference<>(value);
-        Constant.HALF_WIDTH_FULL_WIDTH_MAPPING.forEach(p -> aa.set(aa.get().replace(p.getKey(), p.getValue())));
+        HALF_WIDTH_FULL_WIDTH_MAPPING.forEach(p -> aa.set(aa.get().replace(p.getKey(), p.getValue())));
         return aa.get();
     }
 
     @Override
     public String convertToEntityAttribute(String value) {
         AtomicReference<String> aa = new AtomicReference<>(value);
-        Constant.HALF_WIDTH_FULL_WIDTH_MAPPING.forEach(p -> aa.set(aa.get().replace(p.getKey(), p.getValue())));
+        HALF_WIDTH_FULL_WIDTH_MAPPING.forEach(p -> aa.set(aa.get().replace(p.getKey(), p.getValue())));
         return aa.get();
     }
 }

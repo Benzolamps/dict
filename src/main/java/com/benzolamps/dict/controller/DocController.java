@@ -6,7 +6,6 @@ import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.service.base.DocSolutionService;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
-import com.benzolamps.dict.util.DictSpring;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import org.springframework.ui.ModelMap;
@@ -24,6 +23,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * Word文档界面
@@ -44,7 +46,10 @@ public class DocController extends BaseController {
     @Resource
     private freemarker.template.Configuration configuration;
 
-    @RequestMapping(value = "/export.json", method = {RequestMethod.GET, RequestMethod.POST})
+    @Resource
+    private UnaryOperator<String> compress;
+
+    @RequestMapping(value = "/export.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo export(DocExportVo docExportVo, ModelMap modelMap) throws IOException, TemplateException {
         Assert.notNull(docExportVo, "doc export vo不能为null");
@@ -73,7 +78,7 @@ public class DocController extends BaseController {
         }
         StringWriter stringWriter = new StringWriter();
         template.process(modelMap, stringWriter);
-        String content = DictSpring.<UnaryOperator<String>>getBean("compress").apply(stringWriter.toString());
+        String content = compress.apply(stringWriter.toString());
         String token = UUID.randomUUID().toString().replace("-", "");
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         requestAttributes.setAttribute(token, content, RequestAttributes.SCOPE_SESSION);

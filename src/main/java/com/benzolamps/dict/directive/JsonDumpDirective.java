@@ -1,6 +1,5 @@
 package com.benzolamps.dict.directive;
 
-import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import freemarker.core.Environment;
 import freemarker.template.TemplateDirectiveBody;
@@ -16,6 +15,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Map;
 
+import static com.fasterxml.jackson.core.JsonGenerator.Feature.AUTO_CLOSE_TARGET;
+
 /**
  * 将实体类转换为JSON串的Freemarker指令
  * @author Benzolamps
@@ -30,12 +31,12 @@ public class JsonDumpDirective implements TemplateDirectiveModel {
 
     @Override
     public void execute(Environment env, @SuppressWarnings("rawtypes") Map params, TemplateModel[] loopVars, TemplateDirectiveBody body) throws IOException, TemplateException {
-        mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+        mapper.configure(AUTO_CLOSE_TARGET, false);
         Assert.isTrue(params.containsKey("obj"), "obj未指定");
         Object obj = DeepUnwrap.unwrap((TemplateModel) params.get("obj"));
         Assert.notNull(obj, "obj不能为null");
         Writer out = env.getOut();
         mapper.writeValue(out, obj);
-        mapper.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, true);
+        mapper.configure(AUTO_CLOSE_TARGET, true);
     }
 }
