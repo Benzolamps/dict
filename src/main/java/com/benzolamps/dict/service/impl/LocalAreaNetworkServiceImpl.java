@@ -42,7 +42,7 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
     @Value("netsh advfirewall firewall delete rule name=#{dictProperties.name}")
     private String deleteRuleCmd;
 
-    @Resource(name = "compress")
+    @Resource
     private UnaryOperator<String> compress;
 
     @Override

@@ -1,6 +1,5 @@
 package com.benzolamps.dict.directive;
 
-import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.DictObject;
 import freemarker.template.TemplateMethodModelEx;
 import freemarker.template.TemplateModel;
@@ -37,7 +36,7 @@ public class AbbreviateMethod implements TemplateMethodModelEx {
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
             if (width > 0) {
-                if (String.valueOf(c).matches(Constant.CHINESE_PATTERN)) width -= 2;
+                if (c > 255) width -= 2;
                 else --width;
                 sb.append(c);
                 if (width <= 0 && i < chars.length - 1) {

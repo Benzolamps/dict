@@ -4,6 +4,7 @@ import com.benzolamps.dict.util.DictLambda;
 import com.benzolamps.dict.util.DictLambda.Action2;
 import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.MapFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -33,20 +34,19 @@ public class RuntimeBeanConfig {
     @Resource
     private Configuration configuration;
 
-    @Resource(name = "freemarkerGlobals")
-    private Map<String, Object> freemarkerGlobals;
-
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "unchecked", "rawtypes"})
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws Exception {
 
         /* 加载Freemarker共享变量 */
+        Map freemarkerGlobals = getBean("freemarkerGlobals", MapFactoryBean.class).getObject();
         freemarkerGlobals.forEach((Action2<String, Object>) configuration::setSharedVariable);
 
         logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
         if (resolve("#{'${os.name}'.startsWith('Windows')}")) {
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost:2018/dict/index.html");
         }
+
     }
 
     @Bean("compress")

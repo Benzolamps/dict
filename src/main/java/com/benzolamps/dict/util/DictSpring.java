@@ -73,6 +73,23 @@ public abstract class DictSpring {
     }
 
     /**
+     * 根据bean的名字获取bean
+     * @param name 名字
+     * @param <T> 类型
+     * @return bean对象
+     */
+    public static <T> T getBean(@Language("spring-bean-name") String name, Class<T> requiredType) {
+        assertNull();
+        Assert.hasText(name, "name不能为null或空");
+        Assert.isTrue(DictSpring.containsBean(name), "未找到" + name + "对应的bean");
+        if (beanFactory.isSingleton(name)) {
+            return (T) beanFactory.getSingleton(name);
+        } else {
+            return beanFactory.getBean(name, requiredType);
+        }
+    }
+
+    /**
      * 获取具有指定注解的bean
      * @param annotationClass 注解类型
      * @return bean列表

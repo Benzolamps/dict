@@ -14,6 +14,7 @@
 [#-- @ftlvariable name="user_name" type="java.lang.String" --]
 [#-- @ftlvariable name="host_name" type="java.lang.String" --]
 [#-- @ftlvariable name="host_address" type="java.util.List<java.lang.String>" --]
+[#-- @ftlvariable name="port" type="java.lang.Integer" --]
 [#-- @ftlvariable name="java_version" type="java.lang.String" --]
 [#-- @ftlvariable name="springboot_version" type="java.lang.String" --]
 [#-- @ftlvariable name="tomcat_version" type="java.lang.String" --]

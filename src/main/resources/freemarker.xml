@@ -24,6 +24,7 @@
     <entry key="springboot_version" value="#{T(org.springframework.boot.SpringBootVersion).version}"/>
     <entry key="host_address" value="#{localAreaNetworkService.ipv4}"/>
     <entry key="host_name" value="#{T(java.net.InetAddress).localHost.hostName}"/>
+    <entry key="port" value="#{serverProperties.port}"/>
     <entry key="tomcat_version" value="#{servletContext.serverInfo}"/>
     <entry key="servlet_version" value="#{servletContext.majorVersion + '.' + servletContext.minorVersion}"/>
     <entry key="hibernate_version" value="#{T(org.hibernate.Version).versionString}"/>

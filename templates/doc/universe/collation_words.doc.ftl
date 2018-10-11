@@ -23,6 +23,7 @@
     <w:tr wsp:rsidR="007813FA" wsp:rsidRPr="00C2588E" wsp:rsidTr="00C2588E">
       <w:trPr>
         <w:jc w:val="center"/>
+        <w:cantSplit/>
       </w:trPr>
       <w:tc>
         <w:tcPr>

@@ -1,5 +1,6 @@
 <#-- 单词排查表 -->
 <#-- @ftlvariable name="content" type="java.util.List<com.benzolamps.dict.bean.Word>" -->
+<#-- @ftlvariable name="is_definition" type="boolean" -->
 <w:tbl>
   <w:tblPr>
     <w:tblW w:w="0" w:type="auto"/>
@@ -22,6 +23,7 @@
     <w:tr wsp:rsidR="007813FA" wsp:rsidRPr="00C2588E" wsp:rsidTr="00C2588E">
       <w:trPr>
         <w:jc w:val="center"/>
+        <w:cantSplit/>
       </w:trPr>
       <w:tc>
         <w:tcPr>
@@ -70,7 +72,7 @@
                 <w:sz w:val="${font_size}"/>
                 <w:sz-cs w:val="${font_size}"/>
               </w:rPr>
-              <w:t>${word.prototype}</w:t>
+              <w:t>${abbreviate(is_definition?string(word.definition, word.prototype), 18, '...')}</w:t>
             </w:r>
         </w:p>
       </w:tc>

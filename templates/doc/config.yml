@@ -1,7 +1,7 @@
 baseProperties:
   chinese_font_family: 宋体
   english_font_family: Times New Roman
-  font_size: 21
+  font_size: 15
   line_height: 300
   separate_columns: 2
   show_separators: false
@@ -34,7 +34,18 @@ solutions:
     needShuffle: false
     properties:
       separate_columns: 4
+      is_definition: false
   - id: 3
+    name: 单词词义排查表
+    path: doc/universe/check_words.doc
+    remark: 单词词义排查表
+    needHeader: true
+    exportFor: WORD
+    needShuffle: false
+    properties:
+      separate_columns: 4
+      is_definition: true
+  - id: 4
     name: 单词对照表
     path: doc/universe/collation_words.doc
     remark: 单词对照表
@@ -42,7 +53,7 @@ solutions:
     exportFor: WORD
     needShuffle: false
     properties: {}
-  - id: 4
+  - id: 5
     name: 短语生词表
     path: doc/universe/new_phrases.doc
     remark: 短语生词表
@@ -50,7 +61,7 @@ solutions:
     exportFor: PHRASE
     needShuffle: false
     properties: {}
-  - id: 5
+  - id: 6
     name: 短语抄写表
     path: doc/universe/copy_phrases.doc
     remark: 短语抄写表
@@ -58,7 +69,7 @@ solutions:
     exportFor: PHRASE
     needShuffle: true
     properties: {}
-  - id: 6
+  - id: 7
     name: 短语排查表
     path: doc/universe/check_phrases.doc
     remark: 短语排查表
@@ -67,7 +78,18 @@ solutions:
     needShuffle: false
     properties:
       separate_columns: 4
-  - id: 7
+      is_definition: false
+  - id: 8
+    name: 短语词义排查表
+    path: doc/universe/check_phrases.doc
+    remark: 短语词义排查表
+    needHeader: true
+    exportFor: PHRASE
+    needShuffle: false
+    properties:
+      separate_columns: 4
+      is_definition: true
+  - id: 9
     name: 短语对照表
     path: doc/universe/collation_phrases.doc
     remark: 短语对照表

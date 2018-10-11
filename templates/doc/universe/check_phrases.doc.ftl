@@ -1,5 +1,6 @@
 <#-- 短语排查表 -->
 <#-- @ftlvariable name="content" type="java.util.List<com.benzolamps.dict.bean.Phrase>" -->
+<#-- @ftlvariable name="is_definition" type="boolean" -->
 <w:tbl>
   <w:tblPr>
     <w:tblW w:w="0" w:type="auto"/>
@@ -22,6 +23,7 @@
     <w:tr wsp:rsidR="007813FA" wsp:rsidRPr="00C2588E" wsp:rsidTr="00C2588E">
       <w:trPr>
         <w:jc w:val="center"/>
+        <w:cantSplit/>
       </w:trPr>
       <w:tc>
         <w:tcPr>
@@ -55,7 +57,7 @@
         <w:p wsp:rsidR="007813FA" wsp:rsidRPr="00C2588E" wsp:rsidRDefault="007813FA" wsp:rsidP="00C2588E">
           <w:pPr>
             <w:spacing w:line="${line_height}" w:line-rule="auto"/>
-            <w:jc w:val="right"/>
+            <w:jc w:val="left"/>
             <w:rPr>
               <w:rFonts w:ascii="${english_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${english_font_family}"/>
               <wx:font wx:val="${english_font_family}"/>
@@ -70,7 +72,7 @@
               <w:sz w:val="${font_size}"/>
               <w:sz-cs w:val="${font_size}"/>
             </w:rPr>
-            <w:t>${phrase.prototype}</w:t>
+            <w:t>${abbreviate(is_definition?string(phrase.definition, phrase.prototype), 18, '...')}</w:t>
           </w:r>
         </w:p>
       </w:tc>

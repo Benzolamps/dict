@@ -121,6 +121,7 @@ public interface Constant {
         mapping.add(new KeyValuePairs<>('`', 'ˋ'));
         mapping.add(new KeyValuePairs<>('+', '＋'));
         mapping.add(new KeyValuePairs<>('*', '＊'));
+        mapping.add(new KeyValuePairs<>('=', '＝'));
         mapping.add(new KeyValuePairs<>('%', '％'));
         mapping.add(new KeyValuePairs<>('$', '＄'));
         mapping.add(new KeyValuePairs<>('¥', '￥'));

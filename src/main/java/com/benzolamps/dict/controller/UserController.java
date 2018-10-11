@@ -4,7 +4,6 @@ import com.benzolamps.dict.bean.User;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.service.base.UserService;
-import com.benzolamps.dict.util.DictSpring;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -29,7 +28,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @datetime 2018-8-30 21:44:45
  */
 @RestController
-@RequestMapping("user/")
+@RequestMapping("user")
 public class UserController extends BaseController {
 
     @Resource
@@ -38,13 +37,16 @@ public class UserController extends BaseController {
     @Resource
     private Configuration configuration;
 
+    @Resource
+    private UnaryOperator<String> compress;
+
     /**
      * 登录界面
      * @param response HttpServletResponse
      * @throws IOException IOException
      * @throws TemplateException TemplateException
      */
-    @RequestMapping(value = "/login.html", method = {GET, POST})
+    @RequestMapping(value = "login.html", method = {GET, POST})
     protected void login(HttpServletResponse response) throws IOException, TemplateException {
         if (userService.getCurrent() != null) {
             response.sendRedirect(baseUrl + "/");
@@ -52,7 +54,7 @@ public class UserController extends BaseController {
             Template template = configuration.getTemplate("static/login.html");
             StringWriter stringWriter = new StringWriter();
             template.process(null, stringWriter);
-            String html = DictSpring.<UnaryOperator<String>> getBean("compress").apply(stringWriter.toString());
+            String html = compress.apply(stringWriter.toString());
             stringWriter.close();
             response.getWriter().print(html);
         }
@@ -63,7 +65,7 @@ public class UserController extends BaseController {
      * @param user 用户
      * @return 验证结果
      */
-    @PostMapping("/verify.json")
+    @PostMapping("verify.json")
     @ResponseBody
     protected boolean verify(@Validated(User.LoginGroup.class) User user) {
         boolean valid = userService.verifyUser(user);
@@ -78,7 +80,7 @@ public class UserController extends BaseController {
      * 注销登录
      * @return 注销登录成功
      */
-    @PostMapping("/logout.json")
+    @PostMapping("logout.json")
     @ResponseBody
     protected boolean logout() {
         if (userService.getCurrent() != null) {
@@ -92,7 +94,7 @@ public class UserController extends BaseController {
      * @param username 用户名
      * @return 检测结果
      */
-    @RequestMapping(value = "/username_exists.json", method = {GET, POST})
+    @RequestMapping(value = "username_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean usernameExists(String username) {
         return userService.usernameExists(username);
@@ -103,7 +105,7 @@ public class UserController extends BaseController {
      * @param password 密码
      * @return 验证结果
      */
-    @RequestMapping(value = "/check_password.json", method = {GET, POST})
+    @RequestMapping(value = "check_password.json", method = {GET, POST})
     @ResponseBody
     protected boolean checkPassword(@RequestParam("oldPassword") String password) {
         User user = userService.getCurrent();
@@ -119,7 +121,7 @@ public class UserController extends BaseController {
      * @return 界面
      */
     @WindowView
-    @RequestMapping(value = "/edit_password.html", method = {GET, POST})
+    @RequestMapping(value = "edit_password.html", method = {GET, POST})
     protected ModelAndView editPassword() {
         ModelAndView mv = new ModelAndView();
         User user = userService.getCurrent();
@@ -136,7 +138,7 @@ public class UserController extends BaseController {
      * @param password 密码
      * @return 修改密码成功
      */
-    @PostMapping("/save_password.json")
+    @PostMapping("save_password.json")
     @ResponseBody
     protected BaseVo savePassword(@RequestParam("newPassword") String password) {
         User user = userService.getCurrent();
@@ -149,7 +151,7 @@ public class UserController extends BaseController {
      * @return 界面
      */
     @WindowView
-    @RequestMapping(value = "/lock_screen.html", method = {GET, POST})
+    @RequestMapping(value = "lock_screen.html", method = {GET, POST})
     protected ModelAndView lockScreen() {
         ModelAndView mv = new ModelAndView();
         User user = userService.getCurrent();
@@ -166,7 +168,7 @@ public class UserController extends BaseController {
      * @return 界面
      */
     @WindowView
-    @RequestMapping(value = "/profile.html", method = {GET, POST})
+    @RequestMapping(value = "profile.html", method = {GET, POST})
     protected ModelAndView profile() {
         ModelAndView mv = new ModelAndView();
         User user = userService.getCurrent();
@@ -184,7 +186,7 @@ public class UserController extends BaseController {
      * @return 更新个人资料成功
      */
     @ResponseBody
-    @PostMapping(value = "/update.json")
+    @PostMapping(value = "update.json")
     protected BaseVo update(@RequestBody User user) {
         User current = userService.getCurrent();
         Assert.notNull(current, "还没有登录");

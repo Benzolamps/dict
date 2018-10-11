@@ -39,14 +39,14 @@ public class ErrorController extends BaseController implements org.springframewo
     @Resource
     private ErrorAttributes errorAttributes;
 
-    @RequestMapping(value = "/error", produces = "text/html")
+    @RequestMapping(value = "error", produces = "text/html")
     @NavigationView
     protected ModelAndView errorHtml(HttpServletRequest request) {
         Map<String, Object> model = getErrorAttributes(request, getTraceParameter(request));
         return new ModelAndView("view/default/error", model);
     }
 
-    @RequestMapping(value = "/error", produces = "application/json")
+    @RequestMapping(value = "error", produces = "application/json")
     @ResponseBody
     protected ResponseEntity<ErrorVo> error(HttpServletRequest request) {
         ErrorVo errorVo = convertToErrorVo(getErrorAttributes(request, getTraceParameter(request)));

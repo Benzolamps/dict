@@ -34,7 +34,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @datetime 2018-9-12 13:24:22
  */
 @RestController
-@RequestMapping("doc/")
+@RequestMapping("doc")
 public class DocController extends BaseController {
 
     @Resource
@@ -49,7 +49,7 @@ public class DocController extends BaseController {
     @Resource
     private UnaryOperator<String> compress;
 
-    @RequestMapping(value = "/export.json", method = {GET, POST})
+    @RequestMapping(value = "export.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo export(DocExportVo docExportVo, ModelMap modelMap) throws IOException, TemplateException {
         Assert.notNull(docExportVo, "doc export vo不能为null");
@@ -85,7 +85,7 @@ public class DocController extends BaseController {
         return wrapperData(token);
     }
 
-    @PostMapping(value = "/download.doc")
+    @PostMapping(value = "download.doc")
     @ResponseBody
     protected String download(String fileName, String token, HttpServletResponse response) throws UnsupportedEncodingException {
         response.setHeader("Content-disposition", "attachment;filename*=utf-8'zh_cn'" + URLEncoder.encode(fileName, "UTF-8") + ".doc");
