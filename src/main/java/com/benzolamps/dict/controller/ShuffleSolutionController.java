@@ -14,6 +14,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import java.util.Arrays;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 /**
  * 乱序方案Controller
  * @author Benzolamps
@@ -21,7 +24,7 @@ import java.util.Arrays;
  * @datetime 2018-7-26 16:13:45
  */
 @RestController
-@RequestMapping("shuffle_solution/")
+@RequestMapping("shuffle_solution")
 public class ShuffleSolutionController extends BaseController {
 
     @Resource
@@ -32,7 +35,7 @@ public class ShuffleSolutionController extends BaseController {
      * @return ModelAndView
      */
     @NavigationView
-    @RequestMapping(value = "/list.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "list.html", method = {GET, POST})
     protected ModelAndView list(Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/list");
         mv.addObject("page", shuffleSolutionService.findPage(pageable));
@@ -43,7 +46,7 @@ public class ShuffleSolutionController extends BaseController {
      * 添加乱序方案界面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/add");
@@ -56,7 +59,7 @@ public class ShuffleSolutionController extends BaseController {
      * @param shuffleSolution 乱序方案
      * @return 保存后的乱序方案
      */
-    @PostMapping("/save.json")
+    @PostMapping("save.json")
     @ResponseBody
     protected DataVo save(@RequestBody ShuffleSolution shuffleSolution) {
         Assert.isTrue(shuffleSolutionService.isSpare(), "最多只能添加 10 个乱序方案");
@@ -69,7 +72,7 @@ public class ShuffleSolutionController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         ModelAndView mv = new ModelAndView("view/shuffle_solution/edit");
@@ -83,7 +86,7 @@ public class ShuffleSolutionController extends BaseController {
      * @param shuffleSolution 乱序方案
      * @return 保存后的乱序方案
      */
-    @PostMapping("/update.json")
+    @PostMapping("update.json")
     @ResponseBody
     protected DataVo update(@RequestBody ShuffleSolution shuffleSolution) throws ClassNotFoundException {
         shuffleSolution = shuffleSolutionService.update(shuffleSolution);
@@ -94,7 +97,7 @@ public class ShuffleSolutionController extends BaseController {
      * 删除乱序方案
      * @return 提示信息
      */
-    @PostMapping("/delete.json")
+    @PostMapping("delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
         Arrays.stream(ids).forEach(shuffleSolutionService::remove);
@@ -106,7 +109,7 @@ public class ShuffleSolutionController extends BaseController {
      * @param className 乱序策略类名
      * @return vo
      */
-    @PostMapping("/property_info.json")
+    @PostMapping("property_info.json")
     @ResponseBody
     protected DataVo propertyInfo(String className) {
         return wrapperData(shuffleSolutionService.getShuffleSolutionPropertyInfo(className));

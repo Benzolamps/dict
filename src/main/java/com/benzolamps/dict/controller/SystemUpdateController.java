@@ -27,7 +27,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @SuppressWarnings("ScheduledMethodInspection")
 @RestController
-@RequestMapping("system/")
+@RequestMapping("system")
 public class SystemUpdateController extends BaseController {
 
     @Resource
@@ -75,7 +75,7 @@ public class SystemUpdateController extends BaseController {
      * @return 是否有新版本
      */
     @Scheduled(fixedRate = 1000 * 60 * 15)
-    @RequestMapping(value = "/check_new_version.json", method = {GET, POST})
+    @RequestMapping(value = "check_new_version.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo checkNewVersion() {
         boolean hasNew = !versionService.isDead() && versionService.getStatus() == HAS_NEW;
@@ -90,7 +90,7 @@ public class SystemUpdateController extends BaseController {
      * 检查是否下载完成
      * @return 是否下载完成
      */
-    @RequestMapping(value = "/check_downloaded.json", method = {GET, POST})
+    @RequestMapping(value = "check_downloaded.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo checkDownloaded() {
         boolean downloaded = !versionService.isDead() && versionService.getStatus() == DOWNLOADED;
@@ -108,7 +108,7 @@ public class SystemUpdateController extends BaseController {
      * 检查是否安装完成
      * @return 是否安装完成
      */
-    @RequestMapping(value = "/check_installed.json", method = {GET, POST})
+    @RequestMapping(value = "check_installed.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo checkInstalled() {
         boolean installed = !versionService.isDead() && versionService.getStatus() == INSTALLED;
@@ -126,7 +126,7 @@ public class SystemUpdateController extends BaseController {
      * 检查是否更新失败
      * @return 是否更新失败
      */
-    @RequestMapping(value = "/check_failed.json", method = {GET, POST})
+    @RequestMapping(value = "check_failed.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo checkFailed() {
         boolean failed = !versionService.isDead() && versionService.getStatus() == FAILED;
@@ -140,7 +140,7 @@ public class SystemUpdateController extends BaseController {
      * 禁用
      * @return 状态
      */
-    @RequestMapping(value = "/die.json", method = {GET, POST})
+    @RequestMapping(value = "die.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo die() {
         versionService.die();
@@ -151,7 +151,7 @@ public class SystemUpdateController extends BaseController {
      * 系统更新界面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/update.html", method = {GET, POST})
+    @RequestMapping(value = "update.html", method = {GET, POST})
     protected ModelAndView update() {
         ModelAndView mv = new ModelAndView("view/system/update");
         mv.addObject("status", versionService.getStatus());
@@ -166,7 +166,7 @@ public class SystemUpdateController extends BaseController {
      * 系统更新开始
      * @return 开始
      */
-    @RequestMapping(value = "/update.json", method = {GET, POST})
+    @RequestMapping(value = "update.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo updateProcess() {
         versionService.update();

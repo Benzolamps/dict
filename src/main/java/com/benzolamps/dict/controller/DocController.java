@@ -85,7 +85,7 @@ public class DocController extends BaseController {
         return wrapperData(token);
     }
 
-    @PostMapping(value = "download.doc")
+    @PostMapping("download.doc")
     @ResponseBody
     protected String download(String fileName, String token, HttpServletResponse response) throws UnsupportedEncodingException {
         response.setHeader("Content-disposition", "attachment;filename*=utf-8'zh_cn'" + URLEncoder.encode(fileName, "UTF-8") + ".doc");

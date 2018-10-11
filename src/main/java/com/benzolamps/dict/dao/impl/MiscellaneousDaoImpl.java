@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 杂项Dao接口实现类
@@ -39,8 +40,9 @@ public class MiscellaneousDaoImpl implements MiscellaneousDao {
         List<String> tables = DictJpa.createNativeQuery(entityManager, sql, String.class, null).list();
         String sqlClean = "optimize table " + String.join(", ", tables) + ";";
         DictJpa.executeNativeQuery(entityManager, sqlClean, null);
-        DictJpa.executeNativeQueryBatch(tables.stream()
-            .map(table -> /* language=MySQL */ "alter table " + table + " auto_increment = 1;").toArray(String[]::new));
+        DictJpa.executeSqlScript(tables.stream()
+            .map(table -> /* language=MySQL */ "alter table " + table + " auto_increment = 1;")
+            .collect(Collectors.joining("\n")));
     }
 
     @SuppressWarnings("unchecked")

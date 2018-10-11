@@ -11,6 +11,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
+
 /**
  * 主页Controller
  * @author Benzolamps
@@ -28,7 +31,7 @@ public class IndexController extends BaseController {
      * @param suffix 主页后缀
      * @return ModelAndView
      */
-    @GetMapping("/index.{suffix}")
+    @GetMapping("index.{suffix}")
     protected ModelAndView index(@PathVariable String suffix) {
         return new ModelAndView("html".equals(suffix) ? "view/default/index" : "redirect:index.html");
     }
@@ -37,7 +40,7 @@ public class IndexController extends BaseController {
      * 主页
      * @return ModelAndView
      */
-    @GetMapping({"", "/"})
+    @GetMapping("")
     protected ModelAndView index() {
         return new ModelAndView("redirect:index.html");
     }
@@ -47,7 +50,7 @@ public class IndexController extends BaseController {
      * @param request request
      * @return ModelAndView
      */
-    @RequestMapping(value = "/res/**", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "res/**", method = {GET, POST})
     protected ModelAndView res(HttpServletRequest request) {
         String url = request.getRequestURL().toString();
         int index = url.indexOf("res");
@@ -59,7 +62,7 @@ public class IndexController extends BaseController {
      * @param request request
      * @return ModelAndView
      */
-    @GetMapping("/remote/**")
+    @GetMapping("remote/**")
     protected ResponseEntity<Resource> remote(HttpServletRequest request) throws IOException {
         String url = request.getRequestURL().toString();
         int index = url.indexOf("remote") + 6;
@@ -75,7 +78,7 @@ public class IndexController extends BaseController {
      * ping
      * @return pong
      */
-    @RequestMapping("/ping")
+    @RequestMapping("ping")
     @ResponseBody
     protected String ping() {
         return "pong";

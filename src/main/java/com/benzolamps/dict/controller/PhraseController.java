@@ -36,7 +36,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @datetime 2018-9-2 23:10:10
  */
 @RestController
-@RequestMapping("phrase/")
+@RequestMapping("phrase")
 public class PhraseController extends BaseController {
 
     @Resource
@@ -58,7 +58,7 @@ public class PhraseController extends BaseController {
      * 列出所有短语
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {GET, POST})
+    @RequestMapping(value = "list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
@@ -77,7 +77,7 @@ public class PhraseController extends BaseController {
      * 导出短语页面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/export.html", method = {GET, POST})
+    @RequestMapping(value = "export.html", method = {GET, POST})
     @WindowView
     protected ModelAndView export() {
         ModelAndView mv = new ModelAndView();
@@ -91,7 +91,7 @@ public class PhraseController extends BaseController {
      * 导出短语
      * @return ModelAndView
      */
-    @PostMapping(value = "/export_save.json")
+    @PostMapping("export_save.json")
     protected ModelAndView exportSave(@RequestBody DocExportVo docExportVo, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView();
         Pageable pageable = docExportVo.getPageable();
@@ -115,7 +115,7 @@ public class PhraseController extends BaseController {
      * 添加短语
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {GET, POST})
+    @RequestMapping(value = "add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -127,7 +127,7 @@ public class PhraseController extends BaseController {
      * @param phraseVo 短语
      * @return 保存后的短语
      */
-    @PostMapping("/save.json")
+    @PostMapping("save.json")
     @ResponseBody
     protected DataVo save(@RequestBody PhraseVo phraseVo) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -142,7 +142,7 @@ public class PhraseController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {GET, POST})
+    @RequestMapping(value = "edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -156,7 +156,7 @@ public class PhraseController extends BaseController {
      * @param phraseVo 短语
      * @return 更新后的短语
      */
-    @PostMapping("/update.json")
+    @PostMapping("update.json")
     @ResponseBody
     protected DataVo update(@RequestBody PhraseVo phraseVo) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -170,7 +170,7 @@ public class PhraseController extends BaseController {
      * 删除短语
      * @return 提示信息
      */
-    @PostMapping("/delete.json")
+    @PostMapping("delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -183,7 +183,7 @@ public class PhraseController extends BaseController {
      * @param file 文件
      * @return 导入成功
      */
-    @PostMapping("/import.json")
+    @PostMapping("import.json")
     @ResponseBody
     protected BaseVo importPhrases(MultipartFile file) throws IOException {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -197,7 +197,7 @@ public class PhraseController extends BaseController {
      * @param prototype 短语原形
      * @return 检测结果
      */
-    @RequestMapping(value = "/prototype_not_exists.json", method = {GET, POST})
+    @RequestMapping(value = "prototype_not_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean prototypeExists(String prototype) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -210,7 +210,7 @@ public class PhraseController extends BaseController {
      * @return ModelAndView
      */
     @WindowView
-    @GetMapping(value = "add_to.html")
+    @GetMapping("add_to.html")
     protected ModelAndView addTo(@RequestParam("phraseId") Integer... phraseIds) {
         ModelAndView mv = new ModelAndView("view/phrase/add_to");
         mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", NORMAL)));

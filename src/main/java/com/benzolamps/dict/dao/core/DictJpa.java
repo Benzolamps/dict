@@ -2,29 +2,27 @@ package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.exception.DictException;
-import com.benzolamps.dict.util.DictLambda.Action1;
 import com.benzolamps.dict.util.DictSpring;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.intellij.lang.annotations.Language;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.util.Assert;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import java.sql.DriverManager;
+import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Map;
 
 import static com.benzolamps.dict.util.Constant.EMPTY_MAP;
 import static com.benzolamps.dict.util.Constant.EMPTY_OBJECT_ARRAY;
-import static com.benzolamps.dict.util.DictLambda.tryAction;
+import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * Jpql工具类
@@ -161,19 +159,22 @@ public class DictJpa {
      * 执行一个原生SQL语句
      * @param sql SQL
      */
-    @SuppressWarnings("unchecked")
-    public static void executeNativeQueryBatch(@Language("MySQL") String... sql) {
-        Assert.notNull(sql, "sql不能为null或空");
-        Assert.isTrue(Arrays.stream(sql).allMatch(StringUtils::hasText), "sql不能为null或空");
-        logger.info("sql: " + String.join("\n", sql));
-        DataSourceProperties dsp = DictSpring.getBean(DataSourceProperties.class);
-        try (var connection = DriverManager.getConnection(dsp.getUrl(), dsp.getUsername(), dsp.getPassword())) {
-            try (var statement = connection.createStatement()) {
-                tryAction(() -> ClassUtils.forName(dsp.getDriverClassName(), DictSpring.getClassLoader()));
-                Arrays.stream(sql).forEach((Action1<String>) statement::addBatch);
-                statement.executeBatch();
-            }
-        } catch (SQLException e) {
+    public static void executeSqlScript(@Language("MySQL") String sql) {
+        Assert.hasText(sql, "sql不能为null或空");
+        logger.info("sql: " + sql);
+        executeSqlScript(new ByteArrayResource(tryFunc(() -> sql.getBytes("UTF-8"))));
+    }
+
+    /**
+     * 执行一个原生SQL语句
+     * @param sqlResource SQL资源
+     */
+    public static void executeSqlScript(Resource sqlResource) {
+        Assert.notNull(sqlResource, "sql resource不能为null");
+        DataSource dataSource = DictSpring.getBean(DataSource.class);
+        try (var connection = dataSource.getConnection()) {
+            ScriptUtils.executeSqlScript(connection, sqlResource);
+        } catch (Exception e) {
             throw new DictException(e);
         }
     }
@@ -187,10 +188,9 @@ public class DictJpa {
     public static void executeNonTransactionNativeQuery(@Language("MySQL") String sql, Object... positionParameters) {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
-        DataSourceProperties dsp = DictSpring.getBean(DataSourceProperties.class);
-        try (var connection = DriverManager.getConnection(dsp.getUrl(), dsp.getUsername(), dsp.getPassword())) {
+        DataSource dataSource = DictSpring.getBean(DataSource.class);
+        try (var connection = dataSource.getConnection()) {
             try (var statement = connection.prepareStatement(sql)) {
-                tryAction(() -> ClassUtils.forName(dsp.getDriverClassName(), DictSpring.getClassLoader()));
                 for (int index = 0; index < positionParameters.length; index++) {
                     statement.setObject(index + 1, positionParameters[index]);
                 }

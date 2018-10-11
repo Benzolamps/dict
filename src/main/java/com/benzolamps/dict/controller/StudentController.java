@@ -31,7 +31,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @datetime 2018-9-20 18:57:56
  */
 @RestController
-@RequestMapping("student/")
+@RequestMapping("student")
 public class StudentController extends BaseController {
 
     @Resource
@@ -59,7 +59,7 @@ public class StudentController extends BaseController {
      * 列出所有学生
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {GET, POST})
+    @RequestMapping(value = "list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
@@ -78,7 +78,7 @@ public class StudentController extends BaseController {
      * 添加学生
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {GET, POST})
+    @RequestMapping(value = "add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         ModelAndView mv = new ModelAndView("view/student/add");
@@ -91,7 +91,7 @@ public class StudentController extends BaseController {
      * @param studentVo 学生
      * @return 保存后的学生
      */
-    @PostMapping("/save.json")
+    @PostMapping("save.json")
     @ResponseBody
     protected DataVo save(@RequestBody StudentVo studentVo) {
         Student student = StudentVo.convertToStudent(studentVo);
@@ -104,7 +104,7 @@ public class StudentController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {GET, POST})
+    @RequestMapping(value = "edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         ModelAndView mv = new ModelAndView("view/student/edit");
@@ -118,7 +118,7 @@ public class StudentController extends BaseController {
      * @param studentVo 学生
      * @return 更新后的学生
      */
-    @PostMapping("/update.json")
+    @PostMapping("update.json")
     @ResponseBody
     protected DataVo update(@RequestBody StudentVo studentVo) {
         Student student = StudentVo.convertToStudent(studentVo);
@@ -130,7 +130,7 @@ public class StudentController extends BaseController {
      * 删除学生
      * @return 提示信息
      */
-    @PostMapping("/delete.json")
+    @PostMapping("delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
         studentService.remove(ids);
@@ -142,7 +142,7 @@ public class StudentController extends BaseController {
      * @param number 学号
      * @return 检测结果
      */
-    @RequestMapping(value = "/number_not_exists.json", method = {GET, POST})
+    @RequestMapping(value = "number_not_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean numberNotExists(Integer number) {
         return !studentService.numberExists(number);
@@ -154,7 +154,7 @@ public class StudentController extends BaseController {
      * @return ModelAndView
      */
     @WindowView
-    @GetMapping(value = "add_to_word_group.html")
+    @GetMapping("add_to_word_group.html")
     protected ModelAndView addToWordGroup(@RequestParam("studentId") Integer... studentIds) {
         ModelAndView mv = new ModelAndView("view/student/add_to_word_group");
         mv.addObject("groups", wordGroupService.findList(Filter.eq("status", NORMAL)));
@@ -168,7 +168,7 @@ public class StudentController extends BaseController {
      * @return ModelAndView
      */
     @WindowView
-    @GetMapping(value = "add_to_phrase_group.html")
+    @GetMapping("add_to_phrase_group.html")
     protected ModelAndView addToPhraseGroup(@RequestParam("studentId") Integer... studentIds) {
         ModelAndView mv = new ModelAndView("view/student/add_to_phrase_group");
         mv.addObject("groups", phraseGroupService.findList(Filter.eq("status", NORMAL)));

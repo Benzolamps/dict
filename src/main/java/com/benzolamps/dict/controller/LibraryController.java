@@ -23,7 +23,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @datetime 2018-9-9 21:43:48
  */
 @RestController
-@RequestMapping("library/")
+@RequestMapping("library")
 public class LibraryController extends BaseController {
 
     @Resource
@@ -33,7 +33,7 @@ public class LibraryController extends BaseController {
      * 列出所有词库
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {GET, POST})
+    @RequestMapping(value = "list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView("view/library/list");
@@ -46,7 +46,7 @@ public class LibraryController extends BaseController {
      * 添加词库
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {GET, POST})
+    @RequestMapping(value = "add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         return new ModelAndView("view/library/add");
@@ -57,7 +57,7 @@ public class LibraryController extends BaseController {
      * @param library 词库
      * @return 保存后的词库
      */
-    @PostMapping("/save.json")
+    @PostMapping("save.json")
     @ResponseBody
     protected DataVo save(@RequestBody Library library) {
         library = libraryService.persist(library);
@@ -69,7 +69,7 @@ public class LibraryController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {GET, POST})
+    @RequestMapping(value = "edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         ModelAndView mv = new ModelAndView("view/library/edit");
@@ -82,7 +82,7 @@ public class LibraryController extends BaseController {
      * @param library 词库
      * @return 更新后的词库
      */
-    @PostMapping("/update.json")
+    @PostMapping("update.json")
     @ResponseBody
     protected DataVo update(@RequestBody Library library) {
         library = libraryService.update(library);
@@ -93,7 +93,7 @@ public class LibraryController extends BaseController {
      * 删除词库
      * @return 提示信息
      */
-    @PostMapping("/delete.json")
+    @PostMapping("delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
         libraryService.remove(ids);
@@ -105,7 +105,7 @@ public class LibraryController extends BaseController {
      * @param name 名称
      * @return 检测结果
      */
-    @RequestMapping(value = "/name_not_exists.json", method = {GET, POST})
+    @RequestMapping(value = "name_not_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean nameExists(String name) {
         return !libraryService.nameExists(name);
@@ -116,7 +116,7 @@ public class LibraryController extends BaseController {
      * @param id id
      * @return 检测结果
      */
-    @RequestMapping(value = "/change_current.json", method = {GET, POST})
+    @RequestMapping(value = "change_current.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo changeCurrent(Integer id) {
         Library library = libraryService.find(id);

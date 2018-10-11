@@ -51,7 +51,7 @@ public class PhraseGroupController extends BaseController {
      * 列出所有短语分组
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {GET, POST})
+    @RequestMapping(value = "list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
@@ -68,7 +68,7 @@ public class PhraseGroupController extends BaseController {
      * 添加短语分组
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {GET, POST})
+    @RequestMapping(value = "add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -80,7 +80,7 @@ public class PhraseGroupController extends BaseController {
      * @param phraseGroup 短语分组
      * @return 保存后的短语分组
      */
-    @PostMapping("/save.json")
+    @PostMapping("save.json")
     @ResponseBody
     protected DataVo save(@RequestBody Group phraseGroup) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -93,7 +93,7 @@ public class PhraseGroupController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {GET, POST})
+    @RequestMapping(value = "edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -107,7 +107,7 @@ public class PhraseGroupController extends BaseController {
      * @param phraseGroup 短语分组
      * @return 更新后的短语分组
      */
-    @PostMapping("/update.json")
+    @PostMapping("update.json")
     @ResponseBody
     protected DataVo update(@RequestBody Group phraseGroup) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -119,7 +119,7 @@ public class PhraseGroupController extends BaseController {
      * 删除短语分组
      * @return 提示信息
      */
-    @PostMapping("/delete.json")
+    @PostMapping("delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -132,7 +132,7 @@ public class PhraseGroupController extends BaseController {
      * @param name 名称
      * @return 检测结果
      */
-    @RequestMapping(value = "/name_not_exists.json", method = {GET, POST})
+    @RequestMapping(value = "name_not_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean nameNotExists(String name) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -145,7 +145,7 @@ public class PhraseGroupController extends BaseController {
      * @param phraseIds 短语id
      * @return 添加成功
      */
-    @PostMapping(value = "add_phrases.json")
+    @PostMapping("add_phrases.json")
     @ResponseBody
     protected BaseVo addPhrases(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("phraseId") Integer... phraseIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -167,7 +167,7 @@ public class PhraseGroupController extends BaseController {
      * @param studentIds 短语id
      * @return 添加成功
      */
-    @PostMapping(value = "add_students.json")
+    @PostMapping("add_students.json")
     @ResponseBody
     protected BaseVo addStudents(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("studentId") Integer[] studentIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -189,7 +189,7 @@ public class PhraseGroupController extends BaseController {
      * @param clazzIds 班级id
      * @return 添加成功
      */
-    @PostMapping(value = "add_clazzes.json")
+    @PostMapping("add_clazzes.json")
     @ResponseBody
     protected BaseVo addClazzes(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("clazzId") Integer[] clazzIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -211,7 +211,7 @@ public class PhraseGroupController extends BaseController {
      * @param phraseIds 短语id
      * @return 移除成功
      */
-    @PostMapping(value = "remove_phrases.json")
+    @PostMapping("remove_phrases.json")
     @ResponseBody
     protected BaseVo removePhrases(@RequestParam("groupId") Integer phraseGroupId, @RequestParam("phraseId") Integer[] phraseIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -230,7 +230,7 @@ public class PhraseGroupController extends BaseController {
      * @param studentIds 学生id
      * @return 移除成功
      */
-    @PostMapping(value = "remove_students.json")
+    @PostMapping("remove_students.json")
     @ResponseBody
     protected BaseVo removeStudents(@RequestParam("groupId") Integer phraseGroupId, @RequestParam("studentId") Integer[] studentIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -320,7 +320,7 @@ public class PhraseGroupController extends BaseController {
      * @param masteredPhraseIds 掌握的短语id
      * @return 保存成功
      */
-    @PostMapping(value = "score_save.json")
+    @PostMapping("score_save.json")
     protected BaseVo scoreSave(@RequestParam Integer groupId, @RequestParam Integer studentId, @RequestParam(value = "phraseId", required = false) Integer... masteredPhraseIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notNull(groupId, "phrase group id不能为null");
@@ -342,7 +342,7 @@ public class PhraseGroupController extends BaseController {
      * @param studentId 学生id
      * @return 操作成功
      */
-    @PostMapping(value = "jump.json")
+    @PostMapping("jump.json")
     protected BaseVo jump(Integer groupId, Integer studentId) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notNull(groupId, "id不能为null");
@@ -360,7 +360,7 @@ public class PhraseGroupController extends BaseController {
      * @param id 分组id
      * @return 操作成功
      */
-    @PostMapping(value = "finish.json")
+    @PostMapping("finish.json")
     protected BaseVo finish(Integer id) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notNull(id, "id不能为null");
@@ -375,7 +375,7 @@ public class PhraseGroupController extends BaseController {
      * @param id 分组id
      * @return 操作成功
      */
-    @PostMapping(value = "complete.json")
+    @PostMapping("complete.json")
     protected BaseVo complete(Integer id) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notNull(id, "id不能为null");

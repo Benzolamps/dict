@@ -17,6 +17,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static com.benzolamps.dict.util.DictSpring.resolve;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 /**
  * 系统管理Controller
@@ -26,7 +28,7 @@ import static com.benzolamps.dict.util.DictSpring.resolve;
  */
 @RestController
 @Slf4j
-@RequestMapping("system/")
+@RequestMapping("system")
 public class SystemController extends BaseController {
 
     @Resource
@@ -40,7 +42,7 @@ public class SystemController extends BaseController {
      * @return ModelAndView
      */
     @NavigationView
-    @GetMapping("/info.html")
+    @GetMapping("info.html")
     protected ModelAndView info() {
         return new ModelAndView("view/system/info");
     }
@@ -50,7 +52,7 @@ public class SystemController extends BaseController {
      * @return ModelAndView
      */
     @NavigationView
-    @GetMapping("/about.html")
+    @GetMapping("about.html")
     protected ModelAndView about() {
         return new ModelAndView("view/system/about");
     }
@@ -60,7 +62,7 @@ public class SystemController extends BaseController {
      * @return ModelAndView
      */
     @NavigationView
-    @GetMapping("/settings.html")
+    @GetMapping("settings.html")
     protected ModelAndView settings() {
         return new ModelAndView("view/system/settings");
     }
@@ -69,7 +71,7 @@ public class SystemController extends BaseController {
      * 清理缓存界面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/clean.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "clean.html", method = {GET, POST})
     protected ModelAndView clean() {
         ModelAndView mv = new ModelAndView("view/system/clean");
         mv.addObject("size", miscellaneousService.databaseFileSize());
@@ -81,7 +83,7 @@ public class SystemController extends BaseController {
      * @return ModelAndView
      */
     @ResponseBody
-    @GetMapping("/clean.json")
+    @GetMapping("clean.json")
     protected BaseVo cleanProcess() {
         miscellaneousService.clean();
         return SUCCESS_VO;
@@ -91,7 +93,7 @@ public class SystemController extends BaseController {
      * 数据库备份界面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/backup.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "backup.html", method = {GET, POST})
     protected ModelAndView backup() {
         return new ModelAndView("view/system/backup");
     }
@@ -100,7 +102,7 @@ public class SystemController extends BaseController {
      * 备份数据库过程
      */
     @SuppressWarnings("SpellCheckingInspection")
-    @PostMapping("/backup.zip")
+    @PostMapping("backup.zip")
     protected void backupProcess(HttpServletResponse response) throws IOException {
         response.setHeader("Content-disposition", "attachment;filename*=utf-8'zh_cn'backup" +
             new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".zip");
@@ -110,7 +112,7 @@ public class SystemController extends BaseController {
     /**
      * 恢复数据库过程
      */
-    @PostMapping("/restore.json")
+    @PostMapping("restore.json")
     protected BaseVo restoreProcess(MultipartFile file) throws IOException {
         backupService.restore(file.getInputStream());
         return SUCCESS_VO;
@@ -120,7 +122,7 @@ public class SystemController extends BaseController {
      * 关闭系统服务界面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/shutdown.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "shutdown.html", method = {GET, POST})
     protected ModelAndView shutdown() {
         return new ModelAndView("view/system/shutdown");
     }
@@ -144,7 +146,7 @@ public class SystemController extends BaseController {
      * 局域网操作界面界面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/lan.html", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "lan.html", method = {GET, POST})
     protected ModelAndView lan() {
         return new ModelAndView("view/system/lan");
     }

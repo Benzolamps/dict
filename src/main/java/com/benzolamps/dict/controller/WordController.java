@@ -37,7 +37,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * @datetime 2018-9-2 23:10:10
  */
 @RestController
-@RequestMapping("word/")
+@RequestMapping("word")
 public class WordController extends BaseController {
 
     @Resource
@@ -62,7 +62,7 @@ public class WordController extends BaseController {
      * 列出所有单词
      * @return ModelAndView
      */
-    @RequestMapping(value = "/list.html", method = {GET, POST})
+    @RequestMapping(value = "list.html", method = {GET, POST})
     @NavigationView
     protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
         ModelAndView mv = new ModelAndView();
@@ -86,7 +86,7 @@ public class WordController extends BaseController {
      * 导出单词页面
      * @return ModelAndView
      */
-    @RequestMapping(value = "/export.html", method = {GET, POST})
+    @RequestMapping(value = "export.html", method = {GET, POST})
     @WindowView
     protected ModelAndView export() {
         ModelAndView mv = new ModelAndView();
@@ -100,7 +100,7 @@ public class WordController extends BaseController {
      * 导出单词
      * @return ModelAndView
      */
-    @PostMapping(value = "/export_save.json")
+    @PostMapping("export_save.json")
     protected ModelAndView exportSave(@RequestBody DocExportVo docExportVo, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView();
         Pageable pageable = docExportVo.getPageable();
@@ -124,7 +124,7 @@ public class WordController extends BaseController {
      * 添加单词
      * @return ModelAndView
      */
-    @RequestMapping(value = "/add.html", method = {GET, POST})
+    @RequestMapping(value = "add.html", method = {GET, POST})
     @WindowView
     protected ModelAndView add() {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -138,7 +138,7 @@ public class WordController extends BaseController {
      * @param wordVo 单词
      * @return 保存后的单词
      */
-    @PostMapping("/save.json")
+    @PostMapping("save.json")
     @ResponseBody
     protected DataVo save(@RequestBody WordVo wordVo) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -153,7 +153,7 @@ public class WordController extends BaseController {
      * @param id id
      * @return ModelAndView
      */
-    @RequestMapping(value = "/edit.html", method = {GET, POST})
+    @RequestMapping(value = "edit.html", method = {GET, POST})
     @WindowView
     protected ModelAndView edit(Integer id) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -168,7 +168,7 @@ public class WordController extends BaseController {
      * @param wordVo 单词
      * @return 更新后的单词
      */
-    @PostMapping("/update.json")
+    @PostMapping("update.json")
     @ResponseBody
     protected DataVo update(@RequestBody WordVo wordVo) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -182,7 +182,7 @@ public class WordController extends BaseController {
      * 删除单词
      * @return 提示信息
      */
-    @PostMapping("/delete.json")
+    @PostMapping("delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -195,7 +195,7 @@ public class WordController extends BaseController {
      * @param file 文件
      * @return 导入成功
      */
-    @PostMapping("/import.json")
+    @PostMapping("import.json")
     @ResponseBody
     protected BaseVo importWords(MultipartFile file) throws IOException {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -208,7 +208,7 @@ public class WordController extends BaseController {
      * @param prototype 单词原形
      * @return 检测结果
      */
-    @RequestMapping(value = "/prototype_not_exists.json", method = {GET, POST})
+    @RequestMapping(value = "prototype_not_exists.json", method = {GET, POST})
     @ResponseBody
     protected boolean prototypeNotExists(String prototype) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
@@ -220,7 +220,7 @@ public class WordController extends BaseController {
      * @param wordIds 单词id
      * @return ModelAndView
      */
-    @GetMapping(value = "add_to.html")
+    @GetMapping("add_to.html")
     @WindowView
     protected ModelAndView addTo(@RequestParam("wordId") Integer... wordIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");

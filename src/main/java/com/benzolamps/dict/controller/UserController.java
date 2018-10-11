@@ -186,7 +186,7 @@ public class UserController extends BaseController {
      * @return 更新个人资料成功
      */
     @ResponseBody
-    @PostMapping(value = "update.json")
+    @PostMapping("update.json")
     protected BaseVo update(@RequestBody User user) {
         User current = userService.getCurrent();
         Assert.notNull(current, "还没有登录");
