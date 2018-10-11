@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
@@ -172,7 +173,7 @@ public class DictJpa {
     public static void executeSqlScript(Resource sqlResource) {
         Assert.notNull(sqlResource, "sql resource不能为null");
         DataSource dataSource = DictSpring.getBean(DataSource.class);
-        try (var connection = dataSource.getConnection()) {
+        try (Connection connection = dataSource.getConnection()) {
             ScriptUtils.executeSqlScript(connection, sqlResource);
         } catch (Exception e) {
             throw new DictException(e);
@@ -189,13 +190,11 @@ public class DictJpa {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
         DataSource dataSource = DictSpring.getBean(DataSource.class);
-        try (var connection = dataSource.getConnection()) {
-            try (var statement = connection.prepareStatement(sql)) {
-                for (int index = 0; index < positionParameters.length; index++) {
-                    statement.setObject(index + 1, positionParameters[index]);
-                }
-                statement.execute();
+        try (var connection = dataSource.getConnection(); var statement = connection.prepareStatement(sql)) {
+            for (int index = 0; index < positionParameters.length; index++) {
+                statement.setObject(index + 1, positionParameters[index]);
             }
+            statement.execute();
         } catch (SQLException e) {
             throw new DictException(e);
         }

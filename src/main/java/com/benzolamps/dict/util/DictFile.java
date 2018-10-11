@@ -1,6 +1,5 @@
 package com.benzolamps.dict.util;
 
-import lombok.var;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
@@ -96,10 +95,10 @@ public interface DictFile {
     static ZipOutputStream zip(File file, OutputStream outputStream, String rootName) throws IOException {
         Assert.isTrue(file != null && file.exists(), "file不能为null或不存在");
         Path basePath = file.getParentFile().getAbsoluteFile().toPath();
-        var zos = new ZipOutputStream(outputStream);
+        ZipOutputStream zos = new ZipOutputStream(outputStream);
         if (file.isFile()) {
             zos.putNextEntry(new ZipEntry(rootName + '/' + file.getName()));
-            try (var is = new FileInputStream(file)) {
+            try (InputStream is = new FileInputStream(file)) {
                 StreamUtils.copy(is, zos);
             }
             zos.closeEntry();
@@ -115,7 +114,7 @@ public interface DictFile {
                 } else {
                     Path entryPath = subFile.getAbsoluteFile().toPath();
                     zos.putNextEntry(new ZipEntry(rootName + '/' + entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString()));
-                    try (var is = new FileInputStream(subFile)) {
+                    try (InputStream is = new FileInputStream(subFile)) {
                         StreamUtils.copy(is, zos);
                     }
                 }

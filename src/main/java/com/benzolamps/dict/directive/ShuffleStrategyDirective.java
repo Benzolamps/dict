@@ -7,7 +7,6 @@ import com.benzolamps.dict.util.DictObject;
 import freemarker.core.Environment;
 import freemarker.template.*;
 import freemarker.template.utility.DeepUnwrap;
-import lombok.var;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -35,11 +34,11 @@ public class ShuffleStrategyDirective implements TemplateDirectiveModel {
         Assert.notNull(elements, "elements不能为null");
         IShuffleStrategy shuffleStrategy = shuffleStrategySetup.setup(elements.size(), elements.hashCode());
         int elementIndex = 0;
-        var oldVisible = env.getVariable("visible");
-        var oldElement = env.getVariable("element");
-        var oldIndex = env.getVariable("index");
-        var oldElementIndex = env.getVariable("element_index");
-        var oldHasNext = env.getVariable("has_next");
+        TemplateModel oldVisible = env.getVariable("visible");
+        TemplateModel oldElement = env.getVariable("element");
+        TemplateModel oldIndex = env.getVariable("index");
+        TemplateModel oldElementIndex = env.getVariable("element_index");
+        TemplateModel oldHasNext = env.getVariable("has_next");
         while (shuffleStrategy.hasNext()) {
             ObjectWrapper objectWrapper = new DefaultObjectWrapperBuilder(Configuration.getVersion()).build();
             int index = shuffleStrategy.next();

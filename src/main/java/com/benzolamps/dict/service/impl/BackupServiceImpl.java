@@ -2,7 +2,6 @@ package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.service.base.BackupService;
 import com.benzolamps.dict.util.DictFile;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -13,6 +12,7 @@ import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * 数据库备份恢复Service接口实现类
@@ -28,9 +28,9 @@ public class BackupServiceImpl implements BackupService {
 
     @Override
     public void backup(OutputStream outputStream) throws IOException {
-        try (var zos = DictFile.zip(path, outputStream, "mysql")) {
+        try (ZipOutputStream zos = DictFile.zip(path, outputStream, "mysql")) {
             zos.putNextEntry(new ZipEntry("start.txt"));
-            try (var pw = new PrintWriter(zos)) {
+            try (PrintWriter pw = new PrintWriter(zos)) {
                 pw.println("delete mysql");
                 Path root = new File("").getAbsoluteFile().toPath();
                 DictFile.deepListFiles(path, null).forEach(file -> {
