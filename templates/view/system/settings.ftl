@@ -3,6 +3,7 @@
     <li class="shutdown">关闭系统服务</li>
     <li class="clean">清理缓存</li>
     <li class="backup">数据库备份</li>
+    <li class="sql">执行SQL脚本</li>
     <li class="update">系统升级</li>
     <li class="lan">局域网操作</li>
   </ul>
@@ -20,6 +21,11 @@
     <div class="layui-tab-item" style="min-height: 400px;">
       <script type="text/javascript">
         document.write(dict.loadText({url: '${base_url}/system/backup.html'}));
+      </script>
+    </div>
+    <div class="layui-tab-item" style="min-height: 400px;">
+      <script type="text/javascript">
+        document.write(dict.loadText({url: '${base_url}/system/sql.html'}));
       </script>
     </div>
     <div class="layui-tab-item" style="min-height: 400px;">
@@ -84,7 +90,7 @@
     };
   };
 
-  $('.clean,.shutdown').click(function () {
+  $('.clean,.shutdown,.backup,.sql,.lan').click(function () {
     parent.dict.updateSocket.initCallback();
     $.each(callback, function (key, value) {
       parent.dict.updateSocket[key] = dict.extendsFunction(parent.dict.updateSocket[key], value);

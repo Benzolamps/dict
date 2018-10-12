@@ -1,5 +1,9 @@
 package com.benzolamps.dict.service.base;
 
+import org.intellij.lang.annotations.Language;
+
+import java.io.InputStream;
+
 /**
  * 杂项Service接口
  * @author Benzolamps
@@ -25,4 +29,16 @@ public interface MiscellaneousService {
      * clean
      */
     void clean();
+
+    /**
+     * 执行SQL脚本
+     * @param sql SQL
+     */
+    void executeSqlScript(@Language("MySQL") String sql);
+
+    /**
+     * 执行SQL脚本
+     * @param sqlStream SQL输入流
+     */
+    void executeSqlScript(InputStream sqlStream);
 }

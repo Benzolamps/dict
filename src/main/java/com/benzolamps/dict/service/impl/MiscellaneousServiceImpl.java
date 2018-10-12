@@ -1,12 +1,15 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.dao.base.MiscellaneousDao;
+import com.benzolamps.dict.dao.core.DictJpa;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictFile;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
 
 /**
  * 杂项Service接口实现类
@@ -37,5 +40,15 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     public void clean() {
         wordClazzService.clearUseless();
         miscellaneousDao.clear();
+    }
+
+    @Override
+    public void executeSqlScript(String sql) {
+        DictJpa.executeSqlScript(sql);
+    }
+
+    @Override
+    public void executeSqlScript(InputStream sqlStream) {
+        DictJpa.executeSqlScript(new InputStreamResource(sqlStream));
     }
 }

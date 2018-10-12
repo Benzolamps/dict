@@ -104,7 +104,7 @@
               <classpathPrefix>lib/</classpathPrefix>
             </manifest>
             <manifestEntries>
-              <Class-Path>.</Class-Path>
+              <Built-By>Benzolamps</Built-By>
             </manifestEntries>
           </archive>
         </configuration>

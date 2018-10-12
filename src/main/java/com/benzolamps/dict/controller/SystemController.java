@@ -150,4 +150,33 @@ public class SystemController extends BaseController {
     protected ModelAndView lan() {
         return new ModelAndView("view/system/lan");
     }
+
+    /**
+     * 执行SQL脚本界面
+     * @return ModelAndView
+     */
+    @RequestMapping(value = "sql.html", method = {GET, POST})
+    protected ModelAndView sql() {
+        return new ModelAndView("view/system/sql");
+    }
+
+    /**
+     * 执行SQL脚本
+     * @return 操作成功
+     */
+    @PostMapping(value = "sql.json", params = "type=sql")
+    protected BaseVo sqlProcess(String sql) {
+        miscellaneousService.executeSqlScript(sql);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 执行SQL脚本
+     * @return 操作成功
+     */
+    @PostMapping(value = "sql.json", params = "type!=sql")
+    protected BaseVo sqlProcess(MultipartFile file) throws IOException {
+        miscellaneousService.executeSqlScript(file.getInputStream());
+        return SUCCESS_VO;
+    }
 }
