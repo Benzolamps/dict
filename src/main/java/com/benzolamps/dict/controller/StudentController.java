@@ -68,6 +68,8 @@ public class StudentController extends BaseController {
         mv.addObject("clazzes", clazzService.findAll());
         mv.addObject("page", students.convertPage(student -> {
             StudentVo studentVo = StudentVo.convertFromStudent(student);
+            if (student.getDescription() != null)
+            studentVo.setName(student.getName() + "（" + student.getDescription() + "）");
             studentVo.setClazz(student.getClazz().getName());
             return studentVo;
         }));

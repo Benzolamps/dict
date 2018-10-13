@@ -111,8 +111,8 @@ public class StudentVo implements Serializable {
         StudentVo studentVo = new StudentVo();
         studentVo.setId(student.getId());
         studentVo.setNumber(student.getNumber());
-        if (student.getDescription() == null) studentVo.setName(student.getName());
-        else studentVo.setName(student.getName() + (" （" + student.getDescription() + '）'));
+        studentVo.setName(student.getName());
+        studentVo.setDescription(student.getDescription());
         // studentVo.setMasteredWordsCount(student.getMasteredWordsCount());
         // studentVo.setMasteredPhrasesCount(student.getMasteredPhrasesCount());
         // studentVo.setFailedWordsCount(student.getFailedWordsCount());
