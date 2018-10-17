@@ -47,7 +47,7 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
 
     @Override
     public void openFireWall() {
-        exec("net start mpssvc", (istr, estr) -> {
+        exec(openFireWallCmd, (istr, estr) -> {
             if (StringUtils.hasText(istr)) {
                 logger.info(istr);
             }
@@ -109,9 +109,10 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
     private void exec(String cmd, Action2<String, String> action) {
         Runtime runtime = Runtime.getRuntime();
         Process addProcess = tryFunc(() -> runtime.exec(cmd));
+        Charset gbk = Charset.forName("GBK");
         try (var is = addProcess.getInputStream(); var es = addProcess.getErrorStream()) {
-            String istr = StreamUtils.copyToString(is, Charset.forName("GBK"));
-            String estr = StreamUtils.copyToString(es, Charset.forName("GBK"));
+            String istr = StreamUtils.copyToString(is, gbk);
+            String estr = StreamUtils.copyToString(es, gbk);
             istr = compress.apply(istr);
             estr = compress.apply(estr);
             action.accept(istr, estr);

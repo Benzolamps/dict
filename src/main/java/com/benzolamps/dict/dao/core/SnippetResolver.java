@@ -72,7 +72,7 @@ public class SnippetResolver implements Serializable {
 
     /* 代码片段 */
     @JsonIgnore
-    private StringJoiner snippet;
+    private transient StringJoiner snippet;
 
     /**
      * 构建
