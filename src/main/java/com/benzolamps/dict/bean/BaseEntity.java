@@ -36,28 +36,28 @@ public abstract class BaseEntity implements Serializable {
     @Column(nullable = false)
     @DictIgnore
     @JsonIgnore
-    protected Integer version;
+    private Integer version;
 
     /** 创建时间 */
     @Column(nullable = false, updatable = false)
     @DictIgnore
     @JsonIgnore
     @CreationTimestamp
-    protected Date createDate;
+    private Date createDate;
 
     /** 修改时间 */
     @Column(nullable = false)
     @DictIgnore
     @JsonIgnore
     @UpdateTimestamp
-    protected Date modifyDate;
+    private Date modifyDate;
 
     /** 备注 */
     @Column
     @Length(max = 255)
     @DictIgnore
     @JsonIgnore
-    protected String remark;
+    private String remark;
 
     /** @return 判断是否为新建对象 */
     @Transient
