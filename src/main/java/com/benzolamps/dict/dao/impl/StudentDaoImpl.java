@@ -13,9 +13,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static java.util.Collections.singletonMap;
 
 /**
  * 学生Dao接口实现类
@@ -78,7 +79,7 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     @SuppressWarnings("unchecked")
     public StudyProcess[] getStudyProcess(Student student) {
         Assert.notNull(student, "student不能为null");
-        Map<String, Object> parameters = Collections.singletonMap("student_id", student.getId());
+        Map<String, Object> parameters = singletonMap("student_id", student.getId());
         Query query = DictJpa.createNativeQuery(entityManager, studyProcessSql, StudyProcess.class, parameters);
         List list = query.list();
         return ((List<StudyProcess>) list).toArray(new StudyProcess[0]);

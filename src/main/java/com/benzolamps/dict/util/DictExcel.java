@@ -7,6 +7,7 @@ import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.exception.ExcelFormatException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -38,8 +39,7 @@ public interface DictExcel {
         if (detectColumnNum != null) {
             int real = row.getLastCellNum();
             int acquired = detectColumnNum.value();
-            if (real != acquired)
-                throw new ExcelFormatException("错误的列数，应该为 " + acquired + "，得到 " + real, row.getRowNum(), 0);
+            if (real != acquired) throw new ExcelFormatException("错误的列数，应该为 " + acquired + "，得到 " + real, row.getRowNum(), 0);
         }
 
         /* 获取所有带有ExcelHeader注解的属性 */
@@ -53,8 +53,9 @@ public interface DictExcel {
             int index = excelHeader.value();
             Object value = null;
             try {
+                Cell cell = row.getCell(index);
                 /* 判断类型 */
-                switch (excelHeader.cellFormat()) {
+                if (cell != null) switch (excelHeader.cellFormat()) {
                     case STRING:
                         value = row.getCell(index).getStringCellValue();
                         break;
@@ -86,15 +87,16 @@ public interface DictExcel {
                     double dbValue = Number.class.cast(value).doubleValue();
                     if (dbValue < excelHeader.range().min() || dbValue > excelHeader.range().max()) {
                         throw new ExcelFormatException(
-                            "数字范围应该介于 "
-                                + excelHeader.range().min() + " 和 "
-                                + excelHeader.range().max() + " 之间, 得到 " + value,
-                            row.getRowNum(), index);
+                            "数字范围应该介于 " +
+                                excelHeader.range().min() + " 和 " +
+                                excelHeader.range().max() + " 之间, 得到 " + value,
+                            row.getRowNum(), index
+                        );
                     }
                 }
             }
 
-            if (excelHeader.cellFormat() == CellFormat.STRING) {
+            if (excelHeader.cellFormat() == CellFormat.STRING && null != value) {
                 value = value.toString().trim();
             }
 
