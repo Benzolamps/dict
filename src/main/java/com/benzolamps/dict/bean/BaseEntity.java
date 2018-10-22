@@ -2,7 +2,6 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
