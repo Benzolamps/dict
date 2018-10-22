@@ -1,7 +1,6 @@
 package com.benzolamps.dict.bean;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
@@ -21,7 +20,6 @@ import java.util.Set;
 @Table(name = "dict_word", uniqueConstraints = @UniqueConstraint(name = "uk_word", columnNames = {"library", "prototype"}))
 @Getter
 @Setter
-@NoArgsConstructor
 public class Word extends BaseElement {
 
     private static final long serialVersionUID = -7799252559204665509L;

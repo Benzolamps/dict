@@ -16,7 +16,6 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "dict_word_clazz")
-@SequenceGenerator(name = "sequenceGenerator", sequenceName = "seq_word_clazz")
 @Getter
 @Setter
 public class WordClazz extends BaseEntity {

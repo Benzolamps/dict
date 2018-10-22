@@ -1,7 +1,8 @@
 package com.benzolamps.dict.bean;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.AttributeConverter;
@@ -19,7 +20,8 @@ import static com.benzolamps.dict.util.DictSpring.getBean;
  * @version 2.1.5
  * @datetime 2018-10-1 00:00:10
  */
-@Data
+@Getter
+@Setter
 public class GroupLog implements Serializable {
 
     private static final long serialVersionUID = 367848676702331563L;

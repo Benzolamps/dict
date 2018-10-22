@@ -20,6 +20,7 @@ import java.util.Set;
  * @version 2.1.1
  * @datetime 2018-9-15 14:29:16
  */
+@SuppressWarnings("SqlResolve")
 @Getter
 @Setter
 @Entity

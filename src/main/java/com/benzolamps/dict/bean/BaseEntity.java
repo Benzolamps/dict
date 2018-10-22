@@ -2,6 +2,7 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,9 +10,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * 实体类的基类
@@ -22,14 +21,14 @@ import java.util.Objects;
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class BaseEntity implements Serializable {
+public abstract class BaseEntity extends BaseLombok {
 
     private static final long serialVersionUID = -1589883392937692838L;
 
     /** 主键 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    protected Integer id;
+    private Integer id;
 
     /** 版本 */
     @Version
@@ -64,33 +63,5 @@ public abstract class BaseEntity implements Serializable {
     @JsonIgnore
     public boolean isNew() {
         return getId() == null;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Entity of type %s with id: %s", getClass().getSimpleName(), getId());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (this == obj) {
-            return true;
-        }
-        if (!getClass().isAssignableFrom(obj.getClass())) {
-            return false;
-        }
-        return Objects.equals(getId(), ((BaseEntity) obj).getId());
-    }
-
-
-    @Override
-    public int hashCode() {
-        int hashCode = 17;
-        hashCode += getId() != null ? getId().hashCode() * 31 : 0;
-        hashCode += getClass().hashCode() * 31;
-        return hashCode;
     }
 }
