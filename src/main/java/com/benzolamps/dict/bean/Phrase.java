@@ -1,11 +1,13 @@
 package com.benzolamps.dict.bean;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import java.util.Set;
 
 /**
@@ -19,7 +21,6 @@ import java.util.Set;
 @Table(name = "dict_phrase", uniqueConstraints = @UniqueConstraint(name = "uk_phrase", columnNames = {"library", "prototype"}))
 @Getter
 @Setter
-@NoArgsConstructor
 public class Phrase extends BaseElement {
 
     private static final long serialVersionUID = 5771542562398020839L;

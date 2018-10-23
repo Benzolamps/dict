@@ -2,14 +2,14 @@ package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.util.AddOnlyList;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.experimental.Delegate;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.stream.Stream;
 
 /**
  * 代码片段解析器, 用于筛选和排序
@@ -23,17 +23,10 @@ public class SnippetResolver implements Serializable {
     private static final long serialVersionUID = 3374190442609095665L;
 
     /** 操作符代码片段 */
-    protected static class OperatorSnippet {
+    @AllArgsConstructor
+    protected static final class OperatorSnippet {
 
         private final String operator;
-
-        /**
-         * 构造器
-         * @param operator 操作符
-         */
-        public OperatorSnippet(String operator) {
-            this.operator = operator;
-        }
 
         @Override
         public String toString() {
@@ -42,16 +35,10 @@ public class SnippetResolver implements Serializable {
     }
 
     /** 字段代码片段 */
-    protected static class FieldSnippet {
-        private final String field;
+    @AllArgsConstructor
+    protected static final class FieldSnippet {
 
-        /**
-         * 构造器
-         * @param field 字段
-         */
-        public FieldSnippet(String field) {
-            this.field = field;
-        }
+        private final String field;
 
         @Override
         public String toString() {
@@ -60,7 +47,7 @@ public class SnippetResolver implements Serializable {
     }
 
     /** 别名代码片段 */
-    protected static class AliasSnippet {
+    protected static final class AliasSnippet {
     }
 
     /* 参数 */
@@ -68,6 +55,7 @@ public class SnippetResolver implements Serializable {
     private List<Object> parameters;
 
     /* 代码片段 */
+    @Delegate(types = List.class)
     private List<Object> snippets = new AddOnlyList<>();
 
     /* 代码片段 */
@@ -122,36 +110,12 @@ public class SnippetResolver implements Serializable {
         return this;
     }
 
-    protected void add(Object snippet) {
-        snippets.add(snippet);
-    }
-
-    protected void add(int index, Object snippet) {
-        snippets.add(index, snippet);
-    }
-
-    protected void addAll(SnippetResolver another) {
-        snippets.addAll(another.snippets);
-    }
-
-    protected void addAll(int index, SnippetResolver snippetResolver) {
-        snippets.addAll(index, snippetResolver.snippets);
-    }
-
-    protected boolean isEmpty() {
-        return snippets.isEmpty();
-    }
-
-    protected int size() {
-        return snippets.size();
-    }
-
-    protected Iterator<Object> iterator() {
-        return snippets.iterator();
-    }
-
-    protected Stream<Object> stream() {
-        return snippets.stream();
+    /**
+     * 两个代码片段合并
+     * @param another 另一个
+     */
+    public void addAll(SnippetResolver another) {
+        this.addAll(another.snippets);
     }
 
     @Override

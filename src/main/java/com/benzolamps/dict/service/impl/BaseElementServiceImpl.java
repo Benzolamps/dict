@@ -9,6 +9,7 @@ import com.benzolamps.dict.service.base.BaseElementService;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.util.DictArray;
 import com.benzolamps.dict.util.DictExcel;
+import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,6 @@ import org.springframework.util.Assert;
 
 import java.io.InputStream;
 import java.util.*;
-
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 单词或短语类的基类Service接口实现类
@@ -112,8 +111,9 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
 
     @Override
     @Transactional
+    @SneakyThrows
     public int imports(Resource resource) {
-        InputStream stream = tryFunc(resource::getInputStream);
+        InputStream stream = resource.getInputStream();
         Workbook workbook = DictExcel.inputStreamToWorkbook(stream);
         Sheet sheet = workbook.getSheetAt(0);
         /* 用List因为equals方法返回值相同 */

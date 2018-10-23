@@ -2,11 +2,9 @@ package com.benzolamps.dict.bean;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-import java.io.Serializable;
+import javax.persistence.Id;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Word文档方案实体类
@@ -16,12 +14,12 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@ToString
-public class DocSolution implements Serializable {
+public class DocSolution extends BaseBean {
 
     private static final long serialVersionUID = 2832049188732640789L;
 
     /** id */
+    @Id
     private Integer id;
 
     /** 名称 */
@@ -54,27 +52,4 @@ public class DocSolution implements Serializable {
 
     /** 属性 */
     private Map<String, Object> properties;
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (this == obj) {
-            return true;
-        }
-        if (!DocSolution.class.isAssignableFrom(obj.getClass())) {
-            return false;
-        }
-        return Objects.equals(getId(), ((DocSolution) obj).getId());
-    }
-
-
-    @Override
-    public int hashCode() {
-        int hashCode = 17;
-        hashCode += getId() != null ? getId().hashCode() * 31 : 0;
-        hashCode += getClass().hashCode() * 31;
-        return hashCode;
-    }
 }

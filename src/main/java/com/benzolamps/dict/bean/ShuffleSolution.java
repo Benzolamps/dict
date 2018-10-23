@@ -1,18 +1,16 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictTextArea;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * 乱序方案实体类
@@ -22,8 +20,7 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@ToString
-public class ShuffleSolution implements Serializable {
+public class ShuffleSolution extends BaseBean {
 
     private static final long serialVersionUID = 4614817880825423160L;
 
@@ -50,27 +47,6 @@ public class ShuffleSolution implements Serializable {
     private String strategyClass;
 
     /** 属性 */
-    private transient Map<String, Object> properties;
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (this == obj) {
-            return true;
-        }
-        if (!ShuffleSolution.class.isAssignableFrom(obj.getClass())) {
-            return false;
-        }
-        return Objects.equals(getId(), ((ShuffleSolution) obj).getId());
-    }
-
-    @Override
-    public int hashCode() {
-        int hashCode = 17;
-        hashCode += getId() != null ? getId().hashCode() * 31 : 0;
-        hashCode += getClass().hashCode() * 31;
-        return hashCode;
-    }
+    @DictIgnore
+    private Map<String, Object> properties;
 }

@@ -1,10 +1,10 @@
 package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
-import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.util.DictSpring;
+import lombok.Cleanup;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.intellij.lang.annotations.Language;
@@ -18,12 +18,12 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 
 import static com.benzolamps.dict.util.Constant.EMPTY_MAP;
 import static com.benzolamps.dict.util.Constant.EMPTY_OBJECT_ARRAY;
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * Jpql工具类
@@ -160,24 +160,23 @@ public class DictJpa {
      * 执行一个原生SQL语句
      * @param sql SQL
      */
+    @SneakyThrows
     public static void executeSqlScript(@Language("MySQL") String sql) {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
-        executeSqlScript(new ByteArrayResource(tryFunc(() -> sql.getBytes("UTF-8"))));
+        executeSqlScript(new ByteArrayResource(sql.getBytes("UTF-8")));
     }
 
     /**
      * 执行一个原生SQL语句
      * @param sqlResource SQL资源
      */
+    @SneakyThrows(SQLException.class)
     public static void executeSqlScript(Resource sqlResource) {
         Assert.notNull(sqlResource, "sql resource不能为null");
         DataSource dataSource = DictSpring.getBean(DataSource.class);
-        try (Connection connection = dataSource.getConnection()) {
-            ScriptUtils.executeSqlScript(connection, sqlResource);
-        } catch (Exception e) {
-            throw new DictException(e);
-        }
+        @Cleanup Connection connection = dataSource.getConnection();
+        ScriptUtils.executeSqlScript(connection, sqlResource);
     }
 
     /**
@@ -186,17 +185,16 @@ public class DictJpa {
      * @param positionParameters 位置参数
      */
     @SuppressWarnings("unused")
+    @SneakyThrows(SQLException.class)
     public static void executeNonTransactionNativeQuery(@Language("MySQL") String sql, Object... positionParameters) {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
         DataSource dataSource = DictSpring.getBean(DataSource.class);
-        try (var connection = dataSource.getConnection(); var statement = connection.prepareStatement(sql)) {
-            for (int index = 0; index < positionParameters.length; index++) {
-                statement.setObject(index + 1, positionParameters[index]);
-            }
-            statement.execute();
-        } catch (SQLException e) {
-            throw new DictException(e);
+        @Cleanup Connection connection = dataSource.getConnection();
+        @Cleanup PreparedStatement statement = connection.prepareStatement(sql);
+        for (int index = 0; index < positionParameters.length; index++) {
+            statement.setObject(index + 1, positionParameters[index]);
         }
+        statement.execute();
     }
 }

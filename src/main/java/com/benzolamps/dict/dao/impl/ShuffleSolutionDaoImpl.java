@@ -6,10 +6,9 @@ import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
-import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.util.Constant;
-import lombok.val;
-import lombok.var;
+import lombok.Cleanup;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
@@ -20,8 +19,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 乱序方案Dao接口实现类
@@ -84,7 +81,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     public ShuffleSolution update(ShuffleSolution shuffleSolution) {
         Assert.notNull(shuffleSolution, "shuffle solution不能为null");
         Assert.notNull(shuffleSolution.getId(), "shuffle solution不能为新建对象");
-        val ref = solutions.getSolutions().stream()
+        ShuffleSolution ref = solutions.getSolutions().stream()
             .filter(solution -> solution.getId().equals(shuffleSolution.getId()))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("shuffle solution不存在"));
         Assert.notNull(ref, "shuffle solution不存在");
@@ -98,20 +95,18 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     @Override
     public void remove(final Integer shuffleSolutionId) {
         Assert.notNull(shuffleSolutionId, "shuffle solution id不能为null");
-        val ref = solutions.getSolutions().stream()
+        ShuffleSolution ref = solutions.getSolutions().stream()
             .filter(solution -> solution.getId().equals(shuffleSolutionId))
             .findFirst().orElseThrow(() -> new IllegalArgumentException("shuffle solution不存在"));
         solutions.getSolutions().remove(ref);
     }
 
     @Override
+    @SneakyThrows(IOException.class)
     public void reload() {
         if (resource.exists()) {
-            try (InputStream inputStream = resource.getInputStream()) {
-                solutions = Constant.YAML.loadAs(inputStream, ShuffleSolutions.class);
-            } catch (IOException e) {
-                throw new DictException(e);
-            }
+            @Cleanup InputStream inputStream = resource.getInputStream();
+            solutions = Constant.YAML.loadAs(inputStream, ShuffleSolutions.class);
         }
 
         if (solutions == null) {
@@ -130,14 +125,13 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     }
 
     @Override
+    @SneakyThrows(IOException.class)
     public void flush() {
         File file = resource.getFile();
-        if (file.exists() || file.getParentFile().mkdirs() && tryFunc(file::createNewFile)) {
-            try (var os = new FileOutputStream(file); var osw = new OutputStreamWriter(os, "UTF-8") ) {
-                Constant.YAML.dump(solutions, osw);
-            }  catch (IOException e) {
-                throw new DictException(e);
-            }
+        if (file.exists() || file.getParentFile().mkdirs() && file.createNewFile()) {
+            @Cleanup OutputStream os = new FileOutputStream(file);
+            @Cleanup OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+            Constant.YAML.dump(solutions, osw);
         }
     }
 }

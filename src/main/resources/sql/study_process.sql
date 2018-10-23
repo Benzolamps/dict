@@ -3,7 +3,7 @@ select
   cast(d.mastered_count as signed) as masteredCount,
   cast(d.failed_count as signed) as failedCount,
   /* 计算出未学习的个数, cast强制转换 */
-	cast(case d.is_word when 1 then w.wc else p.pc end - failed_count - mastered_count as signed) as unstudiedCount,
+	cast(case d.is_word when 1 then w.wc else p.pc end - d.failed_count - d.mastered_count as signed) as unstudiedCount,
   /* 总数 */
   cast(case d.is_word when 1 then w.wc else p.pc end as signed) as wholeCount
 from

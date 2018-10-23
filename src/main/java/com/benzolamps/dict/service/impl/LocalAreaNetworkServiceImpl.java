@@ -3,6 +3,7 @@ package com.benzolamps.dict.service.impl;
 import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.service.base.LocalAreaNetworkService;
 import com.benzolamps.dict.util.DictLambda.Action2;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.function.UnaryOperator;
-
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 局域网操作Service接口实现类
@@ -106,9 +105,10 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
         }
     }
 
+    @SneakyThrows(IOException.class)
     private void exec(String cmd, Action2<String, String> action) {
         Runtime runtime = Runtime.getRuntime();
-        Process addProcess = tryFunc(() -> runtime.exec(cmd));
+        Process addProcess = runtime.exec(cmd);
         Charset gbk = Charset.forName("GBK");
         try (var is = addProcess.getInputStream(); var es = addProcess.getErrorStream()) {
             String istr = StreamUtils.copyToString(is, gbk);

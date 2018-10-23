@@ -1,6 +1,7 @@
 package com.benzolamps.dict.util;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 
@@ -10,9 +11,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
-
-import static com.benzolamps.dict.util.DictLambda.tryAction;
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * Property工具类
@@ -129,11 +127,12 @@ public class DictProperty {
      * @param <T> 类型
      * @return 值
      */
+    @SneakyThrows(ReflectiveOperationException.class)
     @SuppressWarnings("unchecked")
     public <T> T get(final Object obj) {
         Assert.notNull(obj, "obj不能为null");
         Assert.isTrue(bean.getType().isInstance(obj), "obj必须是" + bean.getType() + "的实例");
-        return get == null ? null : tryFunc(() -> (T) get.invoke(obj));
+        return get == null ? null : (T) get.invoke(obj);
     }
 
     /**
@@ -141,11 +140,10 @@ public class DictProperty {
      * @param obj 对象
      * @param value 值
      */
+    @SneakyThrows(ReflectiveOperationException.class)
     public void set(final Object obj, final Object value) {
         Assert.notNull(obj, "obj不能为null");
         Assert.isTrue(bean.getType().isInstance(obj), "obj必须是" + bean.getType() + "的实例");
-        if (set != null) {
-            tryAction(() -> set.invoke(obj, value));
-        }
+        if (set != null) set.invoke(obj, value);
     }
 }

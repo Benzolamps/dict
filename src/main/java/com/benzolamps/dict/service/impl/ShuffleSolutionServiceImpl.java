@@ -8,6 +8,7 @@ import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
 import com.benzolamps.dict.util.*;
+import lombok.SneakyThrows;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,6 @@ import org.springframework.util.ClassUtils;
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
-import static java.util.stream.Collectors.toSet;
 
 /**
  * 乱序方案Service接口实现类
@@ -59,9 +57,10 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
         return availableStrategySetups.stream().map(Class::getName).collect(Collectors.toSet());
     }
 
+    @SneakyThrows
     private IShuffleStrategySetup apply(ShuffleSolution shuffleSolution) {
         ClassLoader classLoader = DictSpring.getClassLoader();
-        val strategyClass = tryFunc(() -> ClassUtils.forName(shuffleSolution.getStrategyClass(), classLoader));
+        Class<?> strategyClass = ClassUtils.forName(shuffleSolution.getStrategyClass(), classLoader);
         Properties properties = DictMap.convertToProperties(shuffleSolution.getProperties());
         return (IShuffleStrategySetup) new DictBean<>(strategyClass).createSpringBean(properties);
     }

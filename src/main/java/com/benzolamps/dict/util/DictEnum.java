@@ -1,6 +1,7 @@
 package com.benzolamps.dict.util;
 
 import com.benzolamps.dict.exception.DictException;
+import lombok.SneakyThrows;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,12 +19,9 @@ public interface DictEnum {
      * @param enumClass 枚举类型
      * @return 枚举列表
      */
+    @SneakyThrows(ReflectiveOperationException.class)
     static List<? extends Enum<?>> getEnumList(Class<? extends Enum<?>> enumClass) {
-        try {
-            Enum<?>[] enums = (Enum<?>[]) enumClass.getDeclaredMethod("values").invoke(null);
-            return Arrays.asList(enums);
-        } catch (ReflectiveOperationException e) {
-            throw new DictException(e);
-        }
+        Enum<?>[] enums = (Enum<?>[]) enumClass.getDeclaredMethod("values").invoke(null);
+        return Arrays.asList(enums);
     }
 }

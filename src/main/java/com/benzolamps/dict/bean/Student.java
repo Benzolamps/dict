@@ -1,7 +1,6 @@
 package com.benzolamps.dict.bean;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
@@ -23,7 +22,6 @@ import java.util.Set;
 @Table(name = "dict_student")
 @Getter
 @Setter
-@NoArgsConstructor
 public class Student extends BaseEntity {
 
     private static final long serialVersionUID = -4963430274445493200L;

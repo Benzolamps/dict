@@ -3,6 +3,7 @@ package com.benzolamps.dict.controller.vo;
 import com.benzolamps.dict.component.*;
 import com.benzolamps.dict.util.*;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Range;
@@ -14,12 +15,11 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 自定义属性Vo
@@ -179,6 +179,7 @@ public class DictPropertyInfoVo implements Serializable {
         }
     }
 
+    @SneakyThrows(ParseException.class)
     private Object internalGetDefaultValue() {
         if (!dictProperty.hasAnnotation(Value.class)) {
             return null;
@@ -194,7 +195,7 @@ public class DictPropertyInfoVo implements Serializable {
         } else if ("boolean".equals(type)) {
             return Boolean.valueOf(value);
         } else if ("date".equals(type)) {
-            return tryFunc(() -> new SimpleDateFormat().parse(value));
+            return new SimpleDateFormat().parse(value);
         } else {
             return null;
         }

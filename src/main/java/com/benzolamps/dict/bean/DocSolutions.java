@@ -1,6 +1,7 @@
 package com.benzolamps.dict.bean;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -12,7 +13,8 @@ import java.util.Set;
  * @version 2.1.1
  * @datetime 2018-9-11 20:51:09
  */
-@Data
+@Getter
+@Setter
 public class DocSolutions implements Serializable {
 
     private static final long serialVersionUID = 1050848490302868965L;
