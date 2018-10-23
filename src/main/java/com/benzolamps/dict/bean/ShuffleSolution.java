@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictTextArea;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.Id;
 import javax.validation.constraints.Pattern;
 import java.util.Map;
 
@@ -18,9 +20,13 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class ShuffleSolution extends BaseLombok {
+public class ShuffleSolution extends BaseBean {
 
     private static final long serialVersionUID = 4614817880825423160L;
+
+    /** id */
+    @Id
+    private Integer id;
 
     /** 名称 */
     @NotEmpty
@@ -41,5 +47,6 @@ public class ShuffleSolution extends BaseLombok {
     private String strategyClass;
 
     /** 属性 */
-    private transient Map<String, Object> properties;
+    @DictIgnore
+    private Map<String, Object> properties;
 }

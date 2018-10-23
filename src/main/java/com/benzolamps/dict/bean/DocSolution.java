@@ -3,6 +3,7 @@ package com.benzolamps.dict.bean;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Id;
 import java.util.Map;
 
 /**
@@ -13,9 +14,13 @@ import java.util.Map;
  */
 @Getter
 @Setter
-public class DocSolution extends BaseLombok {
+public class DocSolution extends BaseBean {
 
     private static final long serialVersionUID = 2832049188732640789L;
+
+    /** id */
+    @Id
+    private Integer id;
 
     /** 名称 */
     private String name;

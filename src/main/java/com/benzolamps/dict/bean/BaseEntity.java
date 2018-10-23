@@ -20,7 +20,7 @@ import java.util.Date;
 @MappedSuperclass
 @Getter
 @Setter
-public abstract class BaseEntity extends BaseLombok {
+public abstract class BaseEntity extends BaseBean {
 
     private static final long serialVersionUID = -1589883392937692838L;
 
