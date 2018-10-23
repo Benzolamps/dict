@@ -151,7 +151,7 @@ public class DynamicClass {
         dynamicClassSet = new HashSet<>();
     }
 
-    @SneakyThrows
+    @SneakyThrows(ClassNotFoundException.class)
     public static <T> Class<T> loadClass(String className) {
         return (Class<T>) ClassUtils.forName(className, DictSpring.getClassLoader());
     }

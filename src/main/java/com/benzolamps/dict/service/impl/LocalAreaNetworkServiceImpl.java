@@ -15,6 +15,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -81,28 +82,25 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
     }
 
     @Override
+    @SneakyThrows(SocketException.class)
     public List<String> getIpv4() {
-        try {
-            List<String> ipv4s = new ArrayList<>();
-            Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
-            while (networkInterfaces.hasMoreElements()) {
-                NetworkInterface networkInterface = networkInterfaces.nextElement();
-                if (!networkInterface.isVirtual() && !networkInterface.isLoopback() && networkInterface.isUp()) {
-                    Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
-                    while (addresses.hasMoreElements()) {
-                        InetAddress address = addresses.nextElement();
-                        byte[] bs = address.getAddress();
-                        if (bs.length == 4) {
-                            ipv4s.add(address.getHostAddress());
-                        }
+        List<String> ipv4s = new ArrayList<>();
+        Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
+        while (networkInterfaces.hasMoreElements()) {
+            NetworkInterface networkInterface = networkInterfaces.nextElement();
+            if (!networkInterface.isVirtual() && !networkInterface.isLoopback() && networkInterface.isUp()) {
+                Enumeration<InetAddress> addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    InetAddress address = addresses.nextElement();
+                    byte[] bs = address.getAddress();
+                    if (bs.length == 4) {
+                        ipv4s.add(address.getHostAddress());
                     }
                 }
             }
-            // logger.info(ipv4s.toString());
-            return ipv4s;
-        } catch (Exception e) {
-            throw new DictException(e);
         }
+        // logger.info(ipv4s.toString());
+        return ipv4s;
     }
 
     @SneakyThrows(IOException.class)
@@ -116,8 +114,6 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
             istr = compress.apply(istr);
             estr = compress.apply(estr);
             action.accept(istr, estr);
-        } catch (IOException e) {
-            throw new DictException(e);
         }
     }
 }

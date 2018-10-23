@@ -77,9 +77,7 @@ public class DictBean<B> {
 
         for (Field field : fields) {
             DictProperty dictProperty = new DictProperty(field.getName(), this);
-            if (dictProperty.isValid()) {
-                dictProperties.add(dictProperty);
-            }
+            if (dictProperty.isValid()) dictProperties.add(dictProperty);
         }
         return new LinkedHashSet<>(dictProperties);
     }
@@ -116,9 +114,7 @@ public class DictBean<B> {
     }
 
     private static Field internalGetField(Class<?> type, String name) {
-        if (type == null) {
-            return null;
-        }
+        if (type == null) return null;
         try {
             try {
                 return type.getField(name);
@@ -167,9 +163,11 @@ public class DictBean<B> {
     public <A extends Annotation> void forEachAnnotatedProperty(Class<A> annoClazz, BiConsumer<DictProperty, A> action) {
         Assert.notNull(annoClazz, "anno class不能为null");
         Assert.notNull(action, "action不能为null");
-        getProperties().stream()
-            .filter(dictProperty -> dictProperty.hasAnnotation(annoClazz))
-            .forEach(dictProperty -> action.accept(dictProperty, dictProperty.getAnnotation(annoClazz)));
+        for (DictProperty dictProperty : getProperties()) {
+            if (dictProperty.hasAnnotation(annoClazz)) {
+                action.accept(dictProperty, dictProperty.getAnnotation(annoClazz));
+            }
+        }
     }
 
     /**

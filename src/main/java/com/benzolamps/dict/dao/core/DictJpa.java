@@ -2,9 +2,9 @@ package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.util.DictSpring;
-import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.intellij.lang.annotations.Language;
@@ -12,18 +12,18 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
-
-import static com.benzolamps.dict.util.Constant.EMPTY_MAP;
-import static com.benzolamps.dict.util.Constant.EMPTY_OBJECT_ARRAY;
+import java.util.stream.IntStream;
 
 /**
  * Jpql工具类
@@ -54,14 +54,12 @@ public class DictJpa {
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(jpql, "sql不能为null或空");
         Assert.notNull(tClass, "t class不能为null");
-        if (parameters == null) parameters = EMPTY_MAP;
-        if (positionParameters == null) positionParameters = EMPTY_OBJECT_ARRAY;
         logger.info("jpql: " + jpql);
+
         TypedQuery<T> query = entityManager.createQuery(jpql, tClass);
-        parameters.forEach(query::setParameter);
-        int bound = positionParameters.length;
-        for (int i = 0; i < bound; i++) {
-            query.setParameter(i, positionParameters[i]);
+        if (!CollectionUtils.isEmpty(parameters)) parameters.forEach(query::setParameter);
+        if (!ObjectUtils.isEmpty(positionParameters)) {
+            IntStream.range(0, positionParameters.length).forEach(i -> query.setParameter(i, positionParameters[i]));
         }
         return query;
     }
@@ -81,14 +79,12 @@ public class DictJpa {
             Object... positionParameters) {
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(jpql, "sql不能为null或空");
-        if (parameters == null) parameters = EMPTY_MAP;
-        if (positionParameters == null) positionParameters = EMPTY_OBJECT_ARRAY;
         logger.info("jpql: " + jpql);
+
         Query query = entityManager.createQuery(jpql);
-        parameters.forEach(query::setParameter);
-        int bound = positionParameters.length;
-        for (int i = 0; i < bound; i++) {
-            query.setParameter(i, positionParameters[i]);
+        if (!CollectionUtils.isEmpty(parameters)) parameters.forEach(query::setParameter);
+        if (!ObjectUtils.isEmpty(positionParameters)) {
+            IntStream.range(0, positionParameters.length).forEach(i -> query.setParameter(i, positionParameters[i]));
         }
         query.executeUpdate();
     }
@@ -109,18 +105,18 @@ public class DictJpa {
             Class<?> tClass,
             Map<String, Object> parameters,
             Object... positionParameters) {
+
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(sql, "sql不能为null或空");
         Assert.notNull(tClass, "t class不能为null");
-        if (parameters == null) parameters = EMPTY_MAP;
-        if (positionParameters == null) positionParameters = EMPTY_OBJECT_ARRAY;
         logger.info("sql: " + sql);
+
         Query query = entityManager.createNativeQuery(sql);
-        parameters.forEach(query::setParameter);
-        int bound = positionParameters.length;
-        for (int i = 0; i < bound; i++) {
-            query.setParameter(i, positionParameters[i]);
+        if (!CollectionUtils.isEmpty(parameters)) parameters.forEach(query::setParameter);
+        if (!ObjectUtils.isEmpty(positionParameters)) {
+            IntStream.range(0, positionParameters.length).forEach(i -> query.setParameter(i, positionParameters[i]));
         }
+
         SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
         if (!tClass.getPackage().equals(BaseEntity.class.getPackage())) {
             return sqlQuery;
@@ -142,16 +138,15 @@ public class DictJpa {
             @Language("MySQL") String sql,
             Map<String, Object> parameters,
             Object... positionParameters) {
+
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(sql, "sql不能为null或空");
-        if (parameters == null) parameters = EMPTY_MAP;
-        if (positionParameters == null) positionParameters = EMPTY_OBJECT_ARRAY;
         logger.info("sql: " + sql);
+
         Query query = entityManager.createNativeQuery(sql);
-        parameters.forEach(query::setParameter);
-        int bound = positionParameters.length;
-        for (int i = 0; i < bound; i++) {
-            query.setParameter(i, positionParameters[i]);
+        if (!CollectionUtils.isEmpty(parameters)) parameters.forEach(query::setParameter);
+        if (!ObjectUtils.isEmpty(positionParameters)) {
+            IntStream.range(0, positionParameters.length).forEach(i -> query.setParameter(i, positionParameters[i]));
         }
         query.executeUpdate();
     }
@@ -160,7 +155,7 @@ public class DictJpa {
      * 执行一个原生SQL语句
      * @param sql SQL
      */
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     public static void executeSqlScript(@Language("MySQL") String sql) {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
@@ -175,8 +170,9 @@ public class DictJpa {
     public static void executeSqlScript(Resource sqlResource) {
         Assert.notNull(sqlResource, "sql resource不能为null");
         DataSource dataSource = DictSpring.getBean(DataSource.class);
-        @Cleanup Connection connection = dataSource.getConnection();
-        ScriptUtils.executeSqlScript(connection, sqlResource);
+        try (Connection connection = dataSource.getConnection()) {
+            ScriptUtils.executeSqlScript(connection, sqlResource);
+        }
     }
 
     /**
@@ -190,11 +186,12 @@ public class DictJpa {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
         DataSource dataSource = DictSpring.getBean(DataSource.class);
-        @Cleanup Connection connection = dataSource.getConnection();
-        @Cleanup PreparedStatement statement = connection.prepareStatement(sql);
-        for (int index = 0; index < positionParameters.length; index++) {
-            statement.setObject(index + 1, positionParameters[index]);
+
+        try (var connection = dataSource.getConnection(); var statement = connection.prepareStatement(sql)) {
+            for (int index = 0; index < positionParameters.length; index++) {
+                statement.setObject(index + 1, positionParameters[index]);
+            }
+            statement.execute();
         }
-        statement.execute();
     }
 }

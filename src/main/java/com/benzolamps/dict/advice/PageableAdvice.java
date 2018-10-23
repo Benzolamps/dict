@@ -28,7 +28,7 @@ public class PageableAdvice {
     @Resource
     private ObjectMapper objectMapper;
 
-    @Around("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
+    @Around("@within(org.springframework.web.bind.annotation.RestController)")
     private Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Object[] args = joinPoint.getArgs();

@@ -9,7 +9,6 @@ import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
 import com.benzolamps.dict.util.*;
 import lombok.SneakyThrows;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,11 +43,9 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @PostConstruct
     private void postConstruct() {
         /* 将检测到的IShuffleStrategySetup实体类加入 */
-        for (val clazz : dictDynamicClass.getDynamicClassSet()) {
-            if (new DictBean<>(clazz).instantiable() && IShuffleStrategySetup.class.isAssignableFrom(clazz)) {
-                availableStrategySetups.add((Class<IShuffleStrategySetup>) clazz);
-            }
-        }
+        dictDynamicClass.getDynamicClassSet().stream()
+            .filter(clazz -> new DictBean<>(clazz).instantiable() && IShuffleStrategySetup.class.isAssignableFrom(clazz))
+            .forEach(clazz -> availableStrategySetups.add((Class<IShuffleStrategySetup>) clazz));
     }
 
     @Override
@@ -57,7 +54,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
         return availableStrategySetups.stream().map(Class::getName).collect(Collectors.toSet());
     }
 
-    @SneakyThrows
+    @SneakyThrows(ClassNotFoundException.class)
     private IShuffleStrategySetup apply(ShuffleSolution shuffleSolution) {
         ClassLoader classLoader = DictSpring.getClassLoader();
         Class<?> strategyClass = ClassUtils.forName(shuffleSolution.getStrategyClass(), classLoader);

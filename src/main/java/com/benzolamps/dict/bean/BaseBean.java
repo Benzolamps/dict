@@ -13,6 +13,8 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public abstract class BaseBean implements Serializable {
 
+    private static final long serialVersionUID = -6202558809616015461L;
+
     @SuppressWarnings("unused")
     @EqualsAndHashCode.Include
     private Class<? extends BaseBean> getEntityClass() {

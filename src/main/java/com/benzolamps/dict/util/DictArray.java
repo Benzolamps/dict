@@ -1,6 +1,7 @@
 package com.benzolamps.dict.util;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -19,12 +20,7 @@ public interface DictArray {
      */
     static boolean contains(Object[] array, Object obj) {
         if (array == null || array.length <= 0) return false;
-        for (Object item : array) {
-            if (Objects.deepEquals(obj, item)) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(array).anyMatch(item -> Objects.deepEquals(obj, item));
     }
 
     /**
@@ -36,9 +32,7 @@ public interface DictArray {
     static boolean contains(byte[] array, byte obj) {
         if (array == null || array.length <= 0) return false;
         for (byte item : array) {
-            if (obj == item) {
-                return true;
-            }
+            if (obj == item) return true;
         }
         return false;
     }
@@ -52,9 +46,7 @@ public interface DictArray {
     static boolean contains(short[] array, short obj) {
         if (array == null || array.length <= 0) return false;
         for (short item : array) {
-            if (obj == item) {
-                return true;
-            }
+            if (obj == item) return true;
         }
         return false;
     }
@@ -67,12 +59,7 @@ public interface DictArray {
      */
     static boolean contains(int[] array, int obj) {
         if (array == null || array.length <= 0) return false;
-        for (int item : array) {
-            if (obj == item) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(array).anyMatch(item -> obj == item);
     }
 
     /**
@@ -83,12 +70,7 @@ public interface DictArray {
      */
     static boolean contains(long[] array, long obj) {
         if (array == null || array.length <= 0) return false;
-        for (long item : array) {
-            if (obj == item) {
-                return true;
-            }
-        }
-        return false;
+        return Arrays.stream(array).anyMatch(item -> obj == item);
     }
 
     /**
@@ -100,9 +82,7 @@ public interface DictArray {
     static boolean contains(float[] array, float obj) {
         if (array == null || array.length <= 0) return false;
         for (float item : array) {
-            if (obj == item) {
-                return true;
-            }
+            if (obj == item) return true;
         }
         return false;
     }
@@ -116,9 +96,7 @@ public interface DictArray {
     static boolean contains(double[] array, double obj) {
         if (array == null || array.length <= 0) return false;
         for (double item : array) {
-            if (obj == item) {
-                return true;
-            }
+            if (obj == item) return true;
         }
         return false;
     }
@@ -132,9 +110,7 @@ public interface DictArray {
     static boolean contains(char[] array, char obj) {
         if (array == null || array.length <= 0) return false;
         for (char item : array) {
-            if (obj == item) {
-                return true;
-            }
+            if (obj == item) return true;
         }
         return false;
     }
@@ -148,9 +124,7 @@ public interface DictArray {
     static boolean contains(boolean[] array, boolean obj) {
         if (array == null || array.length <= 0) return false;
         for (boolean item : array) {
-            if (obj == item) {
-                return true;
-            }
+            if (obj == item) return true;
         }
         return false;
     }

@@ -176,7 +176,7 @@ public class Order extends SnippetResolver {
      * @param <T> 类型
      * @return 对象
      */
-    @SneakyThrows
+    @SneakyThrows(ReflectiveOperationException.class)
     public <T extends Order> T convert(Class<T> orderClass) {
         Assert.notNull(orderClass, "order class不能为null");
         return orderClass.getConstructor(String.class, Direction.class).newInstance(field, direction);
@@ -187,7 +187,7 @@ public class Order extends SnippetResolver {
      * @param orderClass 类型
      * @return 对象
      */
-    @SneakyThrows
+    @SneakyThrows(ReflectiveOperationException.class)
     public Order convertIf(Class<? extends Order> orderClass, String... fields) {
         Assert.notNull(orderClass, "order class不能为null");
 
@@ -204,7 +204,7 @@ public class Order extends SnippetResolver {
      * @param direction 排序方向
      * @return 生成后的order
      */
-    @SneakyThrows
+    @SneakyThrows(ReflectiveOperationException.class)
     public Order reverse(Direction direction) {
         Assert.notNull(direction, "direction不能为null");
         return getClass().getConstructor(String.class, Direction.class).newInstance(field, direction);

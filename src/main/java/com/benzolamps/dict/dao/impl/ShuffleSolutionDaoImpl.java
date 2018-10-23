@@ -7,8 +7,8 @@ import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.util.Constant;
-import lombok.Cleanup;
 import lombok.SneakyThrows;
+import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
@@ -104,24 +104,15 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     @Override
     @SneakyThrows(IOException.class)
     public void reload() {
-        if (resource.exists()) {
-            @Cleanup InputStream inputStream = resource.getInputStream();
+        if (resource.exists()) try (InputStream inputStream = resource.getInputStream()) {
             solutions = Constant.YAML.loadAs(inputStream, ShuffleSolutions.class);
         }
 
-        if (solutions == null) {
-            solutions = new ShuffleSolutions();
-        }
+        if (solutions == null) solutions = new ShuffleSolutions();
 
         Set<ShuffleSolution> shuffleSolutions = solutions.getSolutions();
-
-        if (shuffleSolutions == null) {
-            solutions.setSolutions(shuffleSolutions = new HashSet<>());
-        }
-
-        if (shuffleSolutions.isEmpty()) {
-            shuffleSolutions.add(defaultSolution);
-        }
+        if (shuffleSolutions == null) solutions.setSolutions(shuffleSolutions = new HashSet<>());
+        if (shuffleSolutions.isEmpty()) shuffleSolutions.add(defaultSolution);
     }
 
     @Override
@@ -129,9 +120,9 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     public void flush() {
         File file = resource.getFile();
         if (file.exists() || file.getParentFile().mkdirs() && file.createNewFile()) {
-            @Cleanup OutputStream os = new FileOutputStream(file);
-            @Cleanup OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
-            Constant.YAML.dump(solutions, osw);
+            try (var os = new FileOutputStream(file); var osw = new OutputStreamWriter(os, "UTF-8")) {
+                Constant.YAML.dump(solutions, osw);
+            }
         }
     }
 }

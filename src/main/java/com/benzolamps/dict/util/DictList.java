@@ -2,8 +2,9 @@ package com.benzolamps.dict.util;
 
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 
 /**
  * 操作List的工具类
@@ -30,13 +31,7 @@ public interface DictList {
      * @return 序列
      */
     static List<Long> range(long min, long max) {
-        List<Long> list = new ArrayList<>();
-
-        for (long i = min; i < max; i++) {
-            list.add(i);
-        }
-
-        return list;
+        return LongStream.range(min, max).boxed().collect(Collectors.toList());
     }
 
     /**

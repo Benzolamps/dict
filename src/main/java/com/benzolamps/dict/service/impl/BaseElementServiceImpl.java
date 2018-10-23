@@ -18,6 +18,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -111,7 +112,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
 
     @Override
     @Transactional
-    @SneakyThrows
+    @SneakyThrows(IOException.class)
     public int imports(Resource resource) {
         InputStream stream = resource.getInputStream();
         Workbook workbook = DictExcel.inputStreamToWorkbook(stream);

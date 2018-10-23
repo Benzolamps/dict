@@ -1,7 +1,6 @@
 package com.benzolamps.dict.advice;
 
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
-import lombok.val;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -54,7 +53,7 @@ public class ShuffleSolutionAdvice {
     private Transactional getTransactional(JoinPoint point) {
         MethodSignature signature = (MethodSignature) point.getSignature();
         Method method = signature.getMethod();
-        val clazz = Transactional.class;
+        Class<Transactional> clazz = Transactional.class;
         if (method.isAnnotationPresent(clazz)) {
             return method.getDeclaredAnnotation(clazz);
         }
