@@ -1,14 +1,9 @@
 package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.util.DictArray;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.Assert;
-
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * 排序
@@ -181,9 +176,10 @@ public class Order extends SnippetResolver {
      * @param <T> 类型
      * @return 对象
      */
+    @SneakyThrows
     public <T extends Order> T convert(Class<T> orderClass) {
         Assert.notNull(orderClass, "order class不能为null");
-        return tryFunc(() -> orderClass.getConstructor(String.class, Direction.class).newInstance(field, direction));
+        return orderClass.getConstructor(String.class, Direction.class).newInstance(field, direction);
     }
 
     /**
@@ -191,6 +187,7 @@ public class Order extends SnippetResolver {
      * @param orderClass 类型
      * @return 对象
      */
+    @SneakyThrows
     public Order convertIf(Class<? extends Order> orderClass, String... fields) {
         Assert.notNull(orderClass, "order class不能为null");
 
@@ -198,7 +195,7 @@ public class Order extends SnippetResolver {
             return this;
         }
 
-        return tryFunc(() -> orderClass.getConstructor(String.class, Direction.class).newInstance(field, direction));
+        return orderClass.getConstructor(String.class, Direction.class).newInstance(field, direction);
     }
 
 
@@ -207,8 +204,9 @@ public class Order extends SnippetResolver {
      * @param direction 排序方向
      * @return 生成后的order
      */
+    @SneakyThrows
     public Order reverse(Direction direction) {
         Assert.notNull(direction, "direction不能为null");
-        return tryFunc(() -> getClass().getConstructor(String.class, Direction.class).newInstance(field, direction));
+        return getClass().getConstructor(String.class, Direction.class).newInstance(field, direction);
     }
 }

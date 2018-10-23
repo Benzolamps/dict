@@ -1,7 +1,6 @@
 package com.benzolamps.dict.util;
 
-import com.benzolamps.dict.exception.DictException;
-import org.springframework.util.Assert;
+import lombok.SneakyThrows;
 
 import java.util.function.*;
 
@@ -13,38 +12,6 @@ import java.util.function.*;
  */
 @SuppressWarnings("unused")
 public interface DictLambda {
-
-    /***
-     * 忽略异常执行一个无参无返回值的action
-     * @param action action
-     */
-    static void tryAction(Action action) {
-        Assert.notNull(action, "action不能为null");
-        try {
-            action.execute();
-        } catch (RuntimeException | Error e) {
-            throw e;
-        } catch (Throwable e) {
-            throw new DictException(e);
-        }
-    }
-
-    /***
-     * 忽略异常执行一个无参有返回值的func
-     * @param func func
-     * @param <R> 返回值的类型
-     * @return 返回值
-     */
-    static <R> R tryFunc(Func<R> func) {
-        Assert.notNull(func, "func不能为null");
-        try {
-            return func.execute();
-        } catch (RuntimeException | Error e) {
-            throw e;
-        } catch (Throwable e) {
-            throw new DictException(e);
-        }
-    }
 
     /**
      * 无参无返回值action
@@ -60,8 +27,9 @@ public interface DictLambda {
         /**
          * 忽略异常执行
          */
+        @SneakyThrows(Throwable.class)
         default void tryExecute() {
-            tryAction(this);
+            this.execute();
         }
 
         /**
@@ -87,8 +55,9 @@ public interface DictLambda {
          * 忽略异常执行
          * @param t 参数1
          */
+        @SneakyThrows(Throwable.class)
         default void tryExecute(T t) {
-            tryAction(() -> execute(t));
+            this.execute(t);
         }
 
         /**
@@ -117,8 +86,9 @@ public interface DictLambda {
          * @param t 参数1
          * @param u 参数2
          */
+        @SneakyThrows
         default void tryExecute(T t, U u) {
-            tryAction(() -> execute(t, u));
+            execute(t, u);
         }
 
         /**
@@ -144,8 +114,9 @@ public interface DictLambda {
          * @param u 参数2
          * @param v 参数3
          */
+        @SneakyThrows
         default void tryExecute(T t, U u, V v) {
-            tryAction(() -> execute(t, u, v));
+            execute(t, u, v);
         }
 
         /**
@@ -173,8 +144,9 @@ public interface DictLambda {
          * @param u 参数2
          * @param v 参数3
          */
+        @SneakyThrows
         default void tryExecute(T t, U u, V v, W w) {
-            tryAction(() -> execute(t, u, v, w));
+            execute(t, u, v, w);
         }
 
         /**
@@ -204,8 +176,9 @@ public interface DictLambda {
          * 忽略异常执行
          * @return 返回值
          */
+        @SneakyThrows
         default R tryExecute() {
-            return tryFunc(this);
+            return this.execute();
         }
 
         /**
@@ -234,8 +207,9 @@ public interface DictLambda {
          * @param t 参数1
          * @return 返回值
          */
+        @SneakyThrows
         default R tryExecute(T t) {
-            return tryFunc(() -> execute(t));
+            return execute(t);
         }
 
         /**
@@ -267,8 +241,9 @@ public interface DictLambda {
          * @param u 参数2
          * @return 返回值
          */
+        @SneakyThrows
         default R tryExecute(T t, U u) {
-            return tryFunc(() -> execute(t, u));
+            return execute(t, u);
         }
 
         /**
@@ -297,8 +272,9 @@ public interface DictLambda {
          * @param v 参数3
          * @return 返回值
          */
+        @SneakyThrows
         default R tryExecute(T t, U u, V v) {
-            return tryFunc(() -> execute(t, u, v));
+            return execute(t, u, v);
         }
 
         /**
@@ -330,8 +306,9 @@ public interface DictLambda {
          * @param w 参数4
          * @return 返回值
          */
+        @SneakyThrows
         default R tryExecute(T t, U u, V v, W w) {
-            return tryFunc(() -> execute(t, u, v, w));
+            return execute(t, u, v, w);
         }
 
         /**

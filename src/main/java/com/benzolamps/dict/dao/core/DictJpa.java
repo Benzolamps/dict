@@ -24,7 +24,6 @@ import java.util.Map;
 
 import static com.benzolamps.dict.util.Constant.EMPTY_MAP;
 import static com.benzolamps.dict.util.Constant.EMPTY_OBJECT_ARRAY;
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 
 /**
  * Jpql工具类
@@ -161,10 +160,11 @@ public class DictJpa {
      * 执行一个原生SQL语句
      * @param sql SQL
      */
+    @SneakyThrows
     public static void executeSqlScript(@Language("MySQL") String sql) {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
-        executeSqlScript(new ByteArrayResource(tryFunc(() -> sql.getBytes("UTF-8"))));
+        executeSqlScript(new ByteArrayResource(sql.getBytes("UTF-8")));
     }
 
     /**

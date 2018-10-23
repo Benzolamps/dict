@@ -1,5 +1,6 @@
 package com.benzolamps.dict.util;
 
+import lombok.SneakyThrows;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -11,7 +12,6 @@ import java.net.URLClassLoader;
 import java.nio.charset.Charset;
 import java.util.*;
 
-import static com.benzolamps.dict.util.DictLambda.tryFunc;
 import static javax.tools.JavaFileObject.Kind;
 import static javax.tools.JavaFileObject.Kind.CLASS;
 
@@ -151,7 +151,8 @@ public class DynamicClass {
         dynamicClassSet = new HashSet<>();
     }
 
+    @SneakyThrows
     public static <T> Class<T> loadClass(String className) {
-        return (Class<T>) tryFunc(() -> ClassUtils.forName(className, DictSpring.getClassLoader()));
+        return (Class<T>) ClassUtils.forName(className, DictSpring.getClassLoader());
     }
 }
