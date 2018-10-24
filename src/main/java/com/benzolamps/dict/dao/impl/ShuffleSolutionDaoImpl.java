@@ -91,7 +91,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     }
 
     @Override
-    public void remove(final Integer shuffleSolutionId) {
+    public void remove(Integer shuffleSolutionId) {
         Assert.notNull(shuffleSolutionId, "shuffle solution id不能为null");
         ShuffleSolution ref = solutions.getSolutions().stream()
             .filter(solution -> solution.getId().equals(shuffleSolutionId))

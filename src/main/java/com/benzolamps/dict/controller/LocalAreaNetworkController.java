@@ -36,12 +36,20 @@ public class LocalAreaNetworkController extends BaseController {
     @Resource
     private LocalAreaNetworkService localAreaNetworkService;
 
+    /**
+     * 打开防火墙
+     * @return 操作成功
+     */
     @GetMapping("open_firewall.json")
     protected BaseVo openFireWall() {
         localAreaNetworkService.openFireWall();
         return SUCCESS_VO;
     }
 
+    /**
+     * 添加入站规则
+     * @return 操作成功
+     */
     @GetMapping("add_rule.json")
     protected BaseVo addRule() {
         localAreaNetworkService.addRule();

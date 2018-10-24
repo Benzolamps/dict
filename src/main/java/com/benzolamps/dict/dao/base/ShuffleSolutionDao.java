@@ -46,7 +46,7 @@ public interface ShuffleSolutionDao {
      * 删除一个乱序方案
      * @param shuffleSolutionId 乱序方案id
      */
-    void remove(final Integer shuffleSolutionId);
+    void remove(Integer shuffleSolutionId);
 
     /** 重新加载 */
     void reload();

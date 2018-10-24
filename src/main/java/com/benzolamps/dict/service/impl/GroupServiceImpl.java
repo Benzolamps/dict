@@ -124,7 +124,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     }
 
     @Override
-    protected void handleOrder(List<Order> orders) {
+    protected void handleOrder(final List<Order> orders) {
         orders.add(Order.asc("createDate"));
     }
 

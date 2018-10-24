@@ -129,7 +129,7 @@ public class DictProperty {
      */
     @SneakyThrows(ReflectiveOperationException.class)
     @SuppressWarnings("unchecked")
-    public <T> T get(final Object obj) {
+    public <T> T get(Object obj) {
         Assert.notNull(obj, "obj不能为null");
         Assert.isTrue(bean.getType().isInstance(obj), "obj必须是" + bean.getType() + "的实例");
         return get == null ? null : (T) get.invoke(obj);
@@ -141,7 +141,7 @@ public class DictProperty {
      * @param value 值
      */
     @SneakyThrows(ReflectiveOperationException.class)
-    public void set(final Object obj, final Object value) {
+    public void set(Object obj, Object value) {
         Assert.notNull(obj, "obj不能为null");
         Assert.isTrue(bean.getType().isInstance(obj), "obj必须是" + bean.getType() + "的实例");
         if (set != null) set.invoke(obj, value);

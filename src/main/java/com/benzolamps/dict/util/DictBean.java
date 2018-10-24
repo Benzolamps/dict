@@ -188,9 +188,8 @@ public class DictBean<B> {
     @SuppressWarnings("unchecked")
     public B createBean(Map<String, Object> properties) {
         Assert.isTrue(instantiable(), "类必须是可实例化的");
-        final B obj = BeanUtils.instantiate(type);
-        properties = properties == null ? Constant.EMPTY_MAP : properties;
-        properties.forEach((key, value) -> getProperty(key).set(obj, value));
+        B obj = BeanUtils.instantiate(type);
+        Optional.ofNullable(properties).ifPresent(map -> map.forEach((key, value) -> getProperty(key).set(obj, value)));
         return obj;
     }
 
