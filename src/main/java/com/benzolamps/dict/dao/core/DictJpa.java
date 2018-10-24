@@ -191,7 +191,7 @@ public class DictJpa {
         try (var connection = dataSource.getConnection(); var statement = connection.prepareStatement(sql)) {
             if (!ObjectUtils.isEmpty(positionParameters)) {
                 IntStream.range(0, positionParameters.length)
-                    .forEach((IntConsumer) index -> statement.setObject(index + 1, positionParameters[index]));
+                    .forEach((IntConsumer) i -> statement.setObject(i + 1, positionParameters[i]));
             }
             statement.execute();
         }
