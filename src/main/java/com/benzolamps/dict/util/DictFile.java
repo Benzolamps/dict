@@ -58,14 +58,14 @@ public interface DictFile {
      */
     static String fileSizeStr(long size) {
         String[] unit = {"B", "KB", "MB", "GB", "TB", "PB"};
-        int index = 0;
-        BigDecimal layer = new BigDecimal(1 << 10);
-        BigDecimal decimal = new BigDecimal(size);
-        while (index < 5 && decimal.compareTo(layer) > 0) {
+        byte index = 0;
+        BigDecimal divisor = new BigDecimal(1 << 10);
+        BigDecimal result = new BigDecimal(size);
+        while (index < unit.length - 1 && result.compareTo(divisor) > 0) {
             ++index;
-            decimal = decimal.divide(layer, 2, ROUND_HALF_UP);
+            result = result.divide(divisor, 2, ROUND_HALF_UP);
         }
-        return String.format("%.2f ", decimal) + unit[index];
+        return result + unit[index];
     }
 
     /**
