@@ -1,7 +1,7 @@
 package com.benzolamps.dict.directive;
 
-import com.benzolamps.dict.util.DictLambda;
 import freemarker.template.TemplateMethodModelEx;
+import lombok.Cleanup;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.springframework.core.io.ClassPathResource;
@@ -9,6 +9,8 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import static com.benzolamps.dict.directive.ResourceType.STRING;
@@ -31,7 +33,6 @@ public class YamlParseMethod implements TemplateMethodModelEx {
     }
 
     @Override
-    @SneakyThrows(Exception.class)
     public Object exec(@SuppressWarnings("rawtypes") List arguments) {
         Assert.notNull(resourceType, "resource type不能为null");
         Assert.notEmpty(arguments, "arguments不能为空");
@@ -40,16 +41,19 @@ public class YamlParseMethod implements TemplateMethodModelEx {
         return execInternal(str);
     }
 
-    private Object execInternal(String str) throws Exception {
+    @SuppressWarnings({"unused", "UnusedAssignment"})
+    @SneakyThrows(IOException.class)
+    private Object execInternal(String str) {
+        @Cleanup InputStream inputStream = null;
         switch (resourceType) {
             case STRING:
                 return YAML.load(str);
             case URL:
-                return YAML.load(new UrlResource(str).getInputStream());
+                return YAML.load(inputStream = new UrlResource(str).getInputStream());
             case CLASS_PATH:
-                return YAML.load(new ClassPathResource(str).getInputStream());
+                return YAML.load(inputStream = new ClassPathResource(str).getInputStream());
             case FILE_SYSTEM:
-                return YAML.load(new FileSystemResource(str).getInputStream());
+                return YAML.load(inputStream = new FileSystemResource(str).getInputStream());
             default:
                 return null;
         }

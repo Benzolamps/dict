@@ -43,7 +43,7 @@ public interface IntConsumer extends java.util.function.IntConsumer {
      * 忽略异常执行
      * @param i 参数
      */
-    @SneakyThrows(Throwable.class)
+    @SneakyThrows
     default void tryExecute(int i) {
         this.execute(i);
     }

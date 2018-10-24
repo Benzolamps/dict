@@ -19,7 +19,7 @@ public interface Action extends Runnable {
     /**
      * 忽略异常执行
      */
-    @SneakyThrows(Throwable.class)
+    @SneakyThrows
     default void tryExecute() {
         this.execute();
     }
