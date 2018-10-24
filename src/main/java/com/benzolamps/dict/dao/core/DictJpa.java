@@ -47,11 +47,12 @@ public class DictJpa {
      */
     @SuppressWarnings("unchecked")
     public static <T> TypedQuery<T> createJpqlQuery(
-            EntityManager entityManager,
-            @Language("JPAQL") String jpql,
-            Class<T> tClass,
-            Map<String, Object> parameters,
-            Object... positionParameters) {
+        EntityManager entityManager,
+        @Language("JPAQL") String jpql,
+        Class<T> tClass,
+        Map<String, Object> parameters,
+        Object... positionParameters) {
+
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(jpql, "sql不能为null或空");
         Assert.notNull(tClass, "t class不能为null");
@@ -74,10 +75,11 @@ public class DictJpa {
      */
     @SuppressWarnings("unchecked")
     public static void executeJpqlQuery(
-            EntityManager entityManager,
-            @Language("JPAQL") String jpql,
-            Map<String, Object> parameters,
-            Object... positionParameters) {
+        EntityManager entityManager,
+        @Language("JPAQL") String jpql,
+        Map<String, Object> parameters,
+        Object... positionParameters) {
+
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(jpql, "sql不能为null或空");
         logger.info("jpql: " + jpql);
@@ -101,11 +103,11 @@ public class DictJpa {
      */
     @SuppressWarnings("unchecked")
     public static org.hibernate.Query createNativeQuery(
-            EntityManager entityManager,
-            @Language("MySQL") String sql,
-            Class<?> tClass,
-            Map<String, Object> parameters,
-            Object... positionParameters) {
+        EntityManager entityManager,
+        @Language("MySQL") String sql,
+        Class<?> tClass,
+        Map<String, Object> parameters,
+        Object... positionParameters) {
 
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(sql, "sql不能为null或空");
@@ -119,10 +121,10 @@ public class DictJpa {
         }
 
         SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
-        if (!tClass.getPackage().equals(BaseEntity.class.getPackage())) {
-            return sqlQuery;
-        } else {
+        if (tClass.getPackage().equals(BaseEntity.class.getPackage())) {
             return sqlQuery.setResultTransformer(Transformers.aliasToBean(tClass));
+        } else {
+            return sqlQuery;
         }
     }
 
