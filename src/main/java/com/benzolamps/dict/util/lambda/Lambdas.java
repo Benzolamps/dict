@@ -1,7 +1,5 @@
 package com.benzolamps.dict.util.lambda;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * Lambda工具类
  * @author Benzolamps
@@ -9,14 +7,13 @@ import lombok.experimental.UtilityClass;
  * @datetime 2018-10-24 13:07:08
  */
 @SuppressWarnings("unused")
-@UtilityClass
-public class Lambdas {
+public interface Lambdas {
 
     /***
      * 忽略异常执行一个无参无返回值的action
      * @param action action
      */
-    public void tryAction(Action action) {
+    static void tryAction(Action action) {
         action.run();
     }
 
@@ -26,7 +23,7 @@ public class Lambdas {
      * @param <T> 返回值的类型
      * @return 返回值
      */
-    public <T> T tryFunc(Func<T> func) {
+    static <T> T tryFunc(Func<T> func) {
         return func.get();
     }
 }

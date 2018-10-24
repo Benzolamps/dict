@@ -1,7 +1,5 @@
 package com.benzolamps.dict.controller.util;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * Web常量
  * @author Benzolamps

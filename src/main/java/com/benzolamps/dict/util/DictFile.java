@@ -5,12 +5,15 @@ import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+
+import static java.math.BigDecimal.ROUND_HALF_UP;
 
 /**
  * 用于操作文件的类
@@ -56,14 +59,22 @@ public interface DictFile {
     static String fileSizeStr(long size) {
         String[] unit = {"B", "KB", "MB", "GB", "TB", "PB"};
         int index = 0;
-        double doubleSize = size;
-        while (index < 5 && doubleSize >= 1024) {
+        BigDecimal layer = new BigDecimal(1 << 10);
+        BigDecimal decimal = new BigDecimal(size);
+        while (index < 5 && decimal.compareTo(layer) > 0) {
             ++index;
-            doubleSize /= 1024;
+            decimal = decimal.divide(layer, 2, ROUND_HALF_UP);
         }
-        return String.format("%.2f ", doubleSize) + unit[index];
+        return String.format("%.2f ", decimal) + unit[index];
     }
 
+    /**
+     * 解压缩
+     * @param file 文件
+     * @param path 解压路径
+     * @return 文件列表
+     * @throws IOException IOException
+     */
     static List<File> unzip(File file, String path) throws IOException {
         List<File> files = new ArrayList<>();
         try (ZipFile zipFile = new ZipFile(file)) {
@@ -91,6 +102,14 @@ public interface DictFile {
         return files;
     }
 
+    /**
+     * 压缩文件
+     * @param file 文件
+     * @param outputStream 输出流
+     * @param rootName 根名称
+     * @return ZipOutputStream
+     * @throws IOException IOException
+     */
     @SuppressWarnings("ConstantConditions")
     static ZipOutputStream zip(File file, OutputStream outputStream, String rootName) throws IOException {
         Assert.isTrue(file != null && file.exists(), "file不能为null或不存在");
