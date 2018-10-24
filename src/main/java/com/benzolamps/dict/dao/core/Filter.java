@@ -73,7 +73,6 @@ public class Filter extends SnippetResolver {
      * 构建
      * @param alias 别名
      */
-    @SuppressWarnings("deprecation")
     @Override
     public void build(String alias) {
         if (this.isEmpty()) this.add(new OperatorSnippet("1 = 1"));

@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 /**
  * Bean工具类
@@ -73,13 +74,10 @@ public class DictBean<B> {
     }
 
     private Collection<DictProperty> internalGetProperties() {
-        List<DictProperty> dictProperties = new ArrayList<>();
-
-        for (Field field : fields) {
-            DictProperty dictProperty = new DictProperty(field.getName(), this);
-            if (dictProperty.isValid()) dictProperties.add(dictProperty);
-        }
-        return new LinkedHashSet<>(dictProperties);
+        return fields.stream()
+            .map(field -> new DictProperty(field.getName(), this))
+            .filter(DictProperty::isValid)
+            .collect(Collectors.toList());
     }
 
     /**

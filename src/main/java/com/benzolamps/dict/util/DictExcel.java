@@ -100,6 +100,7 @@ public interface DictExcel {
                 value = value.toString().trim();
             }
 
+
             /* 给属性赋值 */
             properties.put(property.getName(), value);
         });

@@ -42,15 +42,13 @@ public class GroupLog implements Serializable {
         @Override
         @SneakyThrows(IOException.class)
         public String convertToDatabaseColumn(GroupLog value) {
-            if (null == value) return null;
-            return getBean(ObjectMapper.class).writeValueAsString(value);
+            return null == value ? null : getBean(ObjectMapper.class).writeValueAsString(value);
         }
 
         @Override
         @SneakyThrows(IOException.class)
         public GroupLog convertToEntityAttribute(String value) {
-            if (!StringUtils.hasText(value)) return null;
-            return getBean(ObjectMapper.class).readValue(value, GroupLog.class);
+            return StringUtils.hasText(value) ? getBean(ObjectMapper.class).readValue(value, GroupLog.class) : null;
         }
     }
 }

@@ -12,10 +12,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.benzolamps.dict.dao.core.DictJpa.*;
 
@@ -208,7 +205,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     public T update(T entity, String... ignoreProperties) {
         Assert.notNull(entity, "entity不能为null");
         Assert.isTrue(!entity.isNew(), "entity不能为新建对象");
-        if (ignoreProperties == null) ignoreProperties = Constant.EMPTY_STRING_ARRAY;
+        ignoreProperties = Optional.ofNullable(ignoreProperties).orElse(Constant.EMPTY_STRING_ARRAY);
         String[] defaultIgnore = {"id", "version", "createDate", "updateDate"};
         T ref = find(entity.getId());
         DictBean<T> dictBean = new DictBean<>(entityClass);

@@ -6,7 +6,6 @@ import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
-import com.benzolamps.dict.util.Constant;
 import lombok.SneakyThrows;
 import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,10 +14,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static com.benzolamps.dict.util.Constant.YAML;
 
 /**
  * 乱序方案Dao接口实现类
@@ -105,13 +103,10 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     @SneakyThrows(IOException.class)
     public void reload() {
         if (resource.exists()) try (InputStream inputStream = resource.getInputStream()) {
-            solutions = Constant.YAML.loadAs(inputStream, ShuffleSolutions.class);
+            solutions = Optional.ofNullable(YAML.loadAs(inputStream, ShuffleSolutions.class)).orElseGet(ShuffleSolutions::new);
         }
-
-        if (solutions == null) solutions = new ShuffleSolutions();
-
-        Set<ShuffleSolution> shuffleSolutions = solutions.getSolutions();
-        if (shuffleSolutions == null) solutions.setSolutions(shuffleSolutions = new HashSet<>());
+        Set<ShuffleSolution> shuffleSolutions = Optional.ofNullable(solutions.getSolutions()).orElseGet(HashSet::new);
+        solutions.setSolutions(shuffleSolutions);
         if (shuffleSolutions.isEmpty()) shuffleSolutions.add(defaultSolution);
     }
 
@@ -121,7 +116,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         File file = resource.getFile();
         if (file.exists() || file.getParentFile().mkdirs() && file.createNewFile()) {
             try (var os = new FileOutputStream(file); var osw = new OutputStreamWriter(os, "UTF-8")) {
-                Constant.YAML.dump(solutions, osw);
+                YAML.dump(solutions, osw);
             }
         }
     }

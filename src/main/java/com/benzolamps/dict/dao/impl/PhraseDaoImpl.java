@@ -43,7 +43,6 @@ public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseD
                     if ("isMastered".equals(search.getField())) {
                         isMastered = DictObject.ofObject(search.getValue(), boolean.class);
                         if (studentId != null) break judge;
-
                     } else if ("studentId".equals(search.getField())) {
                         studentId = DictObject.ofObject(search.getValue(), int.class);
                         if (isMastered != null) break judge;

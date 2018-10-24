@@ -11,6 +11,7 @@ import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.benzolamps.dict.util.Constant.EMPTY_SET;
@@ -76,12 +77,8 @@ public class Pageable implements Serializable {
 	 */
 	@SuppressWarnings("unused")
 	public Pageable(Integer pageNumber, Integer pageSize) {
-		if (pageNumber != null) {
-			setPageNumber(pageNumber);
-		}
-		if (pageSize != null) {
-			setPageSize(pageSize);
-		}
+		Optional.ofNullable(pageNumber).ifPresent(this::setPageNumber);
+		Optional.ofNullable(pageSize).ifPresent(this::setPageSize);
 	}
 
 	/**
