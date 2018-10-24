@@ -2,6 +2,7 @@ package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.util.DictSpring;
+import com.benzolamps.dict.util.lambda.IntConsumer;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;
@@ -188,8 +189,9 @@ public class DictJpa {
         DataSource dataSource = DictSpring.getBean(DataSource.class);
 
         try (var connection = dataSource.getConnection(); var statement = connection.prepareStatement(sql)) {
-            for (int index = 0; index < positionParameters.length; index++) {
-                statement.setObject(index + 1, positionParameters[index]);
+            if (!ObjectUtils.isEmpty(positionParameters)) {
+                IntStream.range(0, positionParameters.length)
+                    .forEach((IntConsumer) index -> statement.setObject(index + 1, positionParameters[index]));
             }
             statement.execute();
         }

@@ -1,5 +1,6 @@
 package com.benzolamps.dict.util;
 
+import com.benzolamps.dict.util.lambda.Action1;
 import lombok.SneakyThrows;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
@@ -96,7 +97,7 @@ public class DynamicClass {
             JavaCompiler.CompilationTask task = compiler.getTask(null, produceJavaFileManager(manager), null, options, null, iterable);
             Boolean result = task.call();
             Assert.isTrue(result != null && result, "编译失败");
-            classBytes.keySet().forEach((DictLambda.Action1<String>) key -> dynamicClassSet.add(classLoader.loadClass(key)));
+            classBytes.keySet().forEach((Action1<String>) key -> dynamicClassSet.add(classLoader.loadClass(key)));
             DictSpring.setClassLoader(classLoader);
         }
     }

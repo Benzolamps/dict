@@ -1,6 +1,7 @@
 package com.benzolamps.dict.advice;
 
 import com.benzolamps.dict.dao.core.Pageable;
+import com.benzolamps.dict.util.lambda.IntConsumer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,6 +15,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
+import java.util.stream.IntStream;
 
 /**
  * 分页建言
@@ -33,25 +35,22 @@ public class PageableAdvice {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Object[] args = joinPoint.getArgs();
         Class<?>[] paramTypes = signature.getParameterTypes();
-        for (int i = 0; i < paramTypes.length; i++) {
-            if (Pageable.class.equals(paramTypes[i]) && null == args[i]) {
-
+        IntStream.range(0, paramTypes.length)
+            .filter(i -> Pageable.class.equals(paramTypes[i]) && null == args[i]).findFirst()
+            .ifPresent((IntConsumer) i -> {
                 /* 获取url参数 */
                 ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
                 HttpServletRequest request = requestAttributes.getRequest();
                 String queryString = request.getQueryString();
 
                 /* 根据参数生成Pageable对象 */
-                if (StringUtils.isEmpty(queryString)) {
-                    args[i] = new Pageable();
-                } else {
+                if (StringUtils.hasText(queryString)) {
                     String json = URLDecoder.decode(queryString, "UTF-8");
                     args[i] = objectMapper.readValue(json, Pageable.class);
+                } else {
+                    args[i] = new Pageable();
                 }
-
-                break;
-            }
-        }
+            });
         return joinPoint.proceed(args);
     }
 }

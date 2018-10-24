@@ -2,7 +2,7 @@ package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.service.base.LocalAreaNetworkService;
-import com.benzolamps.dict.util.DictLambda.Action2;
+import com.benzolamps.dict.util.lambda.Action2;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import lombok.var;

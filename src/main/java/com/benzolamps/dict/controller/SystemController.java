@@ -4,7 +4,7 @@ import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.service.base.BackupService;
 import com.benzolamps.dict.service.base.MiscellaneousService;
-import com.benzolamps.dict.util.DictLambda;
+import com.benzolamps.dict.util.lambda.Action;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -134,7 +134,7 @@ public class SystemController extends BaseController {
     @ResponseBody
     @PostMapping("shutdown.json")
     protected BaseVo shutdownProcess() {
-        new Thread((DictLambda.Action) () -> {
+        new Thread((Action) () -> {
             Thread.sleep(100);
             logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 已退出！'}"));
             System.exit(0);
