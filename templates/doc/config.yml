@@ -1,7 +1,7 @@
 baseProperties:
   chinese_font_family: 宋体
   english_font_family: Times New Roman
-  font_size: 15
+  font_size: 18
   line_height: 300
   separate_columns: 2
   show_separators: false

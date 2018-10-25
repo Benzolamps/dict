@@ -2,7 +2,7 @@
 <#-- @ftlvariable name="content" type="java.util.List<com.benzolamps.dict.bean.Word>" -->
 <w:tbl>
   <w:tblPr>
-    <w:tblW w:w="0" w:type="auto"/>
+    <w:tblW w:w="4500" w:type="pct"/>
     <w:tblBorders>
       <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="${table_border_color}"/>
       <w:left w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="${table_border_color}"/>
