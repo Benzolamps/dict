@@ -1,7 +1,6 @@
 [#ftl]
 [#-- @implicitly included --]
 [#-- @ftlroot "../../../templates/" --]
-[#-- @ftlvariable name="null" type="java.lang.Object" --]
 [#-- @ftlvariable name="base_url" type="java.lang.String" --]
 [#-- @ftlvariable name="base_path" type="java.lang.String" --]
 [#-- @ftlvariable name="remote_base_url" type="java.lang.String" --]

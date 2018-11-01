@@ -9,7 +9,6 @@
   http://www.springframework.org/schema/util/spring-util.xsd"
 >
   <util:map id="freemarkerGlobals">
-    <entry key="null" value="#{null}"/>
     <entry key="system_name" value="#{dictProperties.name}"/>
     <entry key="system_version" value="#{dictProperties.version}"/>
     <entry key="system_title" value="#{dictProperties.title}"/>
