@@ -9,7 +9,7 @@
 <div class="layui-card">
   <div class="layui-card-body">
     <blockquote class="layui-elem-quote">
-      请求出错啦！
+      请求出错啦！&nbsp;&nbsp;&nbsp;&nbsp;
       <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back();">
         <i class="fa fa-arrow-circle-left" style="font-size: 20px;"></i> &nbsp; 返回
       </button>
