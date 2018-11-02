@@ -111,12 +111,14 @@ public class WordController extends BaseController {
             Assert.notNull(group, "group不存在");
             Assert.notEmpty(group.getWords(), "words不能为null或空");
             words = new ArrayList<>(group.getWords());
+            docExportVo.setStudents(wordGroupService.getStudentsOriented(group));
+            mv.setViewName("redirect:/doc/export_personal.json");
         } else {
             words = wordService.findPage(pageable).getContent();
+            mv.setViewName("redirect:/doc/export_default.json");
         }
         docExportVo.setContent(words);
         redirectAttributes.addFlashAttribute("docExportVo", docExportVo);
-        mv.setViewName("redirect:/doc/export.json");
         return mv;
     }
 

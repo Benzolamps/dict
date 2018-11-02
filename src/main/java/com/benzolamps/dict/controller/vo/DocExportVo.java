@@ -1,6 +1,7 @@
 package com.benzolamps.dict.controller.vo;
 
 import com.benzolamps.dict.bean.BaseElement;
+import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -40,6 +42,11 @@ public class DocExportVo implements Serializable {
     /** 乱序方案 */
     private Integer shuffleSolutionId;
 
+    /** 内容 */
     @JsonIgnore
-    private List<? extends BaseElement> content;
+    private Collection<? extends BaseElement> content;
+
+    /** 学生 */
+    @JsonIgnore
+    private Collection<Student> students;
 }

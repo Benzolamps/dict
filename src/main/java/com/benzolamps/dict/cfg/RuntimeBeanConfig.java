@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
+import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 

@@ -1,5 +1,7 @@
 <#-- @ftlvariable name="content_path" type="java.lang.String" -->
 <#-- @ftlvariable name="title" type="java.lang.String" -->
+<#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
+<#-- @ftlvariable name="group" type="com.benzolamps.dict.bean.Group" -->
 <#include 'arrangement.ftl'/>
 <#escape x as x?html>
   <?xml version="1.0" encoding="utf-8" standalone="yes"?>
@@ -488,36 +490,39 @@
         <w:useFELayout />
       </w:compat>
       <wsp:rsids>
-        <wsp:rsidRoot wsp:val="004D154B" />
+        <wsp:rsidRoot wsp:val="004D154B"/>
         <wsp:rsid wsp:val="0004152A"/>
-        <wsp:rsid wsp:val="000F428B" />
-        <wsp:rsid wsp:val="00167B55" />
-        <wsp:rsid wsp:val="0024565D" />
-        <wsp:rsid wsp:val="0028394F" />
-        <wsp:rsid wsp:val="00301555" />
-        <wsp:rsid wsp:val="0036705E" />
-        <wsp:rsid wsp:val="003A3ADA" />
-        <wsp:rsid wsp:val="003F07E6" />
-        <wsp:rsid wsp:val="003F46FE" />
-        <wsp:rsid wsp:val="00433643" />
-        <wsp:rsid wsp:val="00482F13" />
-        <wsp:rsid wsp:val="004A79FD" />
-        <wsp:rsid wsp:val="004D154B" />
-        <wsp:rsid wsp:val="00631EE5" />
-        <wsp:rsid wsp:val="00672711" />
-        <wsp:rsid wsp:val="008E644D" />
-        <wsp:rsid wsp:val="009419D7" />
-        <wsp:rsid wsp:val="009938D6" />
-        <wsp:rsid wsp:val="00A86321" />
-        <wsp:rsid wsp:val="00B90DF8" />
-        <wsp:rsid wsp:val="00C226EB" />
+        <wsp:rsid wsp:val="000F428B"/>
+        <wsp:rsid wsp:val="00167B55"/>
+        <wsp:rsid wsp:val="0024565D"/>
+        <wsp:rsid wsp:val="0028394F"/>
+        <wsp:rsid wsp:val="00301555"/>
+        <wsp:rsid wsp:val="0036705E"/>
+        <wsp:rsid wsp:val="003A3ADA"/>
+        <wsp:rsid wsp:val="003F07E6"/>
+        <wsp:rsid wsp:val="003F46FE"/>
+        <wsp:rsid wsp:val="00433643"/>
+        <wsp:rsid wsp:val="00482F13"/>
+        <wsp:rsid wsp:val="004A79FD"/>
+        <wsp:rsid wsp:val="004D154B"/>
+        <wsp:rsid wsp:val="00631EE5"/>
+        <wsp:rsid wsp:val="00672711"/>
+        <wsp:rsid wsp:val="008E644D"/>
+        <wsp:rsid wsp:val="009419D7"/>
+        <wsp:rsid wsp:val="0097708E"/>
+        <wsp:rsid wsp:val="009938D6"/>
+        <wsp:rsid wsp:val="00A86321"/>
+        <wsp:rsid wsp:val="00B753B3"/>
+        <wsp:rsid wsp:val="00B90DF8"/>
+        <wsp:rsid wsp:val="00C226EB"/>
         <wsp:rsid wsp:val="00D24F0D"/>
-        <wsp:rsid wsp:val="00D434B7" />
-        <wsp:rsid wsp:val="00D47DEC" />
-        <wsp:rsid wsp:val="00DA22B8" />
-        <wsp:rsid wsp:val="00E526BC" />
-        <wsp:rsid wsp:val="00E81B2F" />
-        <wsp:rsid wsp:val="00F2450F" />
+        <wsp:rsid wsp:val="00D434B7"/>
+        <wsp:rsid wsp:val="00D47DEC"/>
+        <wsp:rsid wsp:val="00D605A9"/>
+        <wsp:rsid wsp:val="00DA22B8"/>
+        <wsp:rsid wsp:val="00E526BC"/>
+        <wsp:rsid wsp:val="00E81B2F"/>
+        <wsp:rsid wsp:val="00F2450F"/>
         <wsp:rsid wsp:val="00F417AE"/>
       </wsp:rsids>
     </w:docPr>
@@ -535,206 +540,9 @@
             </w:rPr>
           </w:pPr>
         </w:p>
-        <w:sectPr wsp:rsidR="00672711" wsp:rsidRPr="0028394F" wsp:rsidSect="00E81B2F">
+        <w:sectPr wsp:rsidR="00672711" wsp:rsidRPr="0028394F" wsp:rsidSect="0097708E">
           <w:hdr w:type="odd">
-            <w:tbl>
-              <w:tblPr>
-                <w:tblW w:w="0" w:type="auto"/>
-                <w:tblCellMar>
-                  <w:left w:w="0" w:type="dxa"/>
-                  <w:right w:w="0" w:type="dxa"/>
-                </w:tblCellMar>
-                <w:tblLook w:val="04A0"/>
-              </w:tblPr>
-              <w:tblGrid>
-                <w:gridCol w:w="2304"/>
-                <w:gridCol w:w="2305"/>
-                <w:gridCol w:w="2265"/>
-                <w:gridCol w:w="2222"/>
-                <w:gridCol w:w="2242"/>
-              </w:tblGrid>
-              <w:tr wsp:rsidR="0004152A" wsp:rsidRPr="0004152A" wsp:rsidTr="0004152A">
-                <w:tc>
-                  <w:tcPr>
-                    <w:tcW w:w="2351" w:type="dxa"/>
-                    <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-                    <w:vAlign w:val="bottom"/>
-                  </w:tcPr>
-                  <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
-                    <w:pPr>
-                      <w:pStyle w:val="a4" />
-                      <w:pBdr>
-                        <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
-                      </w:pBdr>
-                      <w:jc w:val="both"/>
-                      <w:rPr>
-                        <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                         <wx:font wx:val="楷体"/>
-                         <w:sz w:val="21"/>
-                        <w:sz-cs w:val="21"/>
-                      </w:rPr>
-                    </w:pPr>
-                    <w:r wsp:rsidRPr="0004152A">
-                      <w:rPr>
-                        <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                        <wx:font wx:val="楷体"/>
-                        <w:sz w:val="21"/>
-                        <w:sz-cs w:val="21"/>
-                      </w:rPr>
-                      <w:t>学号：1</w:t>
-                    </w:r>
-                  </w:p>
-                </w:tc>
-                <w:tc>
-                  <w:tcPr>
-                    <w:tcW w:w="2352" w:type="dxa"/>
-                    <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-                    <w:vAlign w:val="bottom"/>
-                  </w:tcPr>
-                  <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
-                    <w:pPr>
-                      <w:pStyle w:val="a4"/>
-                      <w:pBdr>
-                        <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
-                      </w:pBdr>
-                      <w:jc w:val="both"/>
-                        <w:rPr>
-                          <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                          <wx:font wx:val="楷体"/>
-                          <w:sz w:val="21" />
-                          <w:sz-cs w:val="21" />
-                        </w:rPr>
-                      </w:pPr>
-                      <w:r wsp:rsidRPr="0004152A">
-                        <w:rPr>
-                          <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                          <wx:font wx:val="楷体"/>
-                          <w:sz w:val="21" />
-                          <w:sz-cs w:val="21" />
-                        </w:rPr>
-                        <w:t>班级：2</w:t>
-                      </w:r>
-                      </w:p>
-                        </w:tc>
-                <w:tc>
-                  <w:tcPr>
-                    <w:tcW w:w="2311" w:type="dxa"/>
-                    <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-                    <w:vAlign w:val="bottom"/>
-                  </w:tcPr>
-                  <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
-                    <w:pPr>
-                      <w:pStyle w:val="a4"/>
-                      <w:pBdr>
-                        <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
-                      </w:pBdr>
-                      <w:jc w:val="both"/>
-                      <w:rPr>
-                        <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                        <wx:font wx:val="楷体"/>
-                        <w:sz w:val="21" />
-                        <w:sz-cs w:val="21" />
-                      </w:rPr>
-                    </w:pPr>
-                    <w:r wsp:rsidRPr="0004152A">
-                      <w:rPr>
-                        <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                        <wx:font wx:val="楷体"/>
-                        <w:sz w:val="21" />
-                        <w:sz-cs w:val="21" />
-                      </w:rPr>
-                      <w:t>姓名：国文源</w:t>
-                    </w:r>
-                  </w:p>
-                </w:tc>
-                <w:tc>
-                  <w:tcPr>
-                    <w:tcW w:w="2270" w:type="dxa"/>
-                    <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-                    <w:vAlign w:val="bottom"/>
-                  </w:tcPr>
-                  <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
-                    <w:pPr>
-                      <w:pStyle w:val="a4"/>
-                      <w:pBdr>
-                        <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
-                      </w:pBdr>
-                      <w:rPr>
-                        <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                        <wx:font wx:val="楷体"/>
-                        <w:b/>
-                        <w:sz w:val="30"/>
-                        <w:sz-cs w:val="30"/>
-                      </w:rPr>
-                    </w:pPr>
-                    <w:r wsp:rsidRPr="0004152A">
-                      <w:rPr>
-                        <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                        <wx:font wx:val="楷体"/>
-                        <w:b/>
-                        <w:sz w:val="30"/>
-                        <w:sz-cs w:val="30"/>
-                      </w:rPr>
-                      <w:t>标题</w:t>
-                    </w:r>
-                  </w:p>
-                </w:tc>
-                <w:tc>
-                  <w:tcPr>
-                    <w:tcW w:w="2270" w:type="dxa"/>
-                    <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-                    <w:vAlign w:val="bottom"/>
-                  </w:tcPr>
-                  <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
-                    <w:pPr>
-                      <w:pStyle w:val="a4"/>
-                      <w:pBdr>
-                        <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
-                      </w:pBdr>
-                      <w:jc w:val="right"/>
-                      <w:rPr>
-                        <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                        <wx:font wx:val="楷体"/>
-                      </w:rPr>
-                    </w:pPr>
-                    <w:r wsp:rsidRPr="0004152A">
-                      <w:rPr>
-                        <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                        <wx:font wx:val="楷体"/>
-                      </w:rPr>
-                      <w:pict>
-                        <v:shapetype id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
-                          <v:stroke joinstyle="miter" />
-                          <v:formulas>
-                            <v:f eqn="if lineDrawn pixelLineWidth 0" />
-                            <v:f eqn="sum @0 1 0" />
-                            <v:f eqn="sum 0 0 @1" />
-                            <v:f eqn="prod @2 1 2" />
-                            <v:f eqn="prod @3 21600 pixelWidth" />
-                            <v:f eqn="prod @3 21600 pixelHeight" />
-                            <v:f eqn="sum @0 0 1" />
-                            <v:f eqn="prod @6 1 2" />
-                            <v:f eqn="prod @7 21600 pixelWidth" />
-                            <v:f eqn="sum @8 21600 0" />
-                            <v:f eqn="prod @7 21600 pixelHeight" />
-                            <v:f eqn="sum @10 21600 0" />
-                          </v:formulas>
-                          <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect" />
-                          <o:lock v:ext="edit" aspectratio="t" />
-                        </v:shapetype>
-                        <w:binData w:name="wordml://02000001.jpg" xml:space="preserve">
-
-                        </w:binData>
-                        <v:shape id="_x0000_i1129" type="#_x0000_t75" style="width:57pt;height:57pt;mso-position-vertical:absolute">
-                          <v:imagedata src="wordml://02000001.jpg" o:title="1"/>
-                          <o:lock v:ext="edit" aspectratio="f"/>
-                        </v:shape>
-                      </w:pict>
-                    </w:r>
-                  </w:p>
-                </w:tc>
-              </w:tr>
-            </w:tbl>
+            <#include student???string('top-personal.ftl', 'top-default.ftl')/>
             <wx:pBdrGroup>
               <wx:borders>
                 <wx:bottom wx:val="solid" wx:bdrwidth="15" wx:space="1" wx:color="auto"/>
@@ -754,7 +562,7 @@
                     <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体"/>
                     <wx:font wx:val="楷体"/>
                   </w:rPr>
-                  <w:t></w:t>
+                  <w:t> </w:t>
                 </w:r>
               </w:p>
             </wx:pBdrGroup>
@@ -796,7 +604,7 @@
                 </w:rPr>
                 <w:fldChar w:fldCharType="separate" />
               </w:r>
-              <w:r wsp:rsidRPr="00E74F26">
+              <w:r wsp:rsidR="003F07E6" wsp:rsidRPr="00E74F26">
                 <w:rPr>
                   <w:rFonts w:ascii="${english_font_family}" w:h-ansi="${english_font_family}" />
                   <wx:font wx:val="${english_font_family}" />
@@ -815,7 +623,7 @@
                 </w:rPr>
                 <w:fldChar w:fldCharType="end" />
               </w:r>
-              <w:r wsp:rsidRPr="00E74F26">
+              <w:r wsp:rsidR="003F07E6" wsp:rsidRPr="00E74F26">
                 <w:rPr>
                   <w:rFonts w:ascii="${english_font_family}" w:h-ansi="${english_font_family}" />
                   <wx:font wx:val="${english_font_family}" />
@@ -851,7 +659,7 @@
                 </w:rPr>
                 <w:fldChar w:fldCharType="separate" />
               </w:r>
-              <w:r wsp:rsidRPr="00E74F26">
+              <w:r wsp:rsidR="003F07E6" wsp:rsidRPr="00E74F26">
                 <w:rPr>
                   <w:rFonts w:ascii="${english_font_family}" w:h-ansi="${english_font_family}" />
                   <wx:font wx:val="${english_font_family}" />

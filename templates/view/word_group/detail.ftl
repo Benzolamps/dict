@@ -210,7 +210,7 @@
                 parent.layer.alert('导出成功！', {
                   icon: 1,
                   end: function () {
-                    dict.postHref('${base_url}/doc/download.doc', {
+                    dict.postHref('${base_url}/doc/download', {
                       fileName: data.title,
                       token: result.data
                     });

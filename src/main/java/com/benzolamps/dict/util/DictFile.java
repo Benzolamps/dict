@@ -1,8 +1,13 @@
 package com.benzolamps.dict.util;
 
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -132,7 +137,11 @@ public interface DictFile {
                     stack.push(subFile);
                 } else {
                     Path entryPath = subFile.getAbsoluteFile().toPath();
-                    zos.putNextEntry(new ZipEntry(rootName + '/' + entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString()));
+                    if (StringUtils.isEmpty(rootName)) {
+                        zos.putNextEntry(new ZipEntry(entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString()));
+                    } else {
+                        zos.putNextEntry(new ZipEntry((rootName + '/' + entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString())));
+                    }
                     try (InputStream is = new FileInputStream(subFile)) {
                         StreamUtils.copy(is, zos);
                     }
@@ -142,4 +151,41 @@ public interface DictFile {
         return zos;
     }
 
+    /**
+     * 压缩文件项目
+     */
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @EqualsAndHashCode(exclude = "inputStream")
+    class ZipItem {
+        /** 名称 */
+        private String name;
+        /** 输入流 */
+        private InputStream inputStream;
+    }
+
+    /**
+     * 压缩文件
+     * @param zipItems 项目
+     * @param outputStream 输出流
+     * @param rootName 根名称
+     * @return ZipOutputStream
+     * @throws IOException IOException
+     */
+    static ZipOutputStream zip(Set<ZipItem> zipItems, OutputStream outputStream, String rootName) throws IOException {
+        Assert.notNull(zipItems, "zip items不能为null");
+        ZipOutputStream zos = new ZipOutputStream(outputStream);
+        for (ZipItem zipItem : zipItems) {
+            if (StringUtils.isEmpty(rootName)) {
+                zos.putNextEntry(new ZipEntry(zipItem.getName()));
+            } else {
+                zos.putNextEntry(new ZipEntry((rootName + '/' + zipItem.getName())));
+            }
+            try (InputStream is = zipItem.getInputStream()) {
+                StreamUtils.copy(is, zos);
+            }
+        }
+        return zos;
+    }
 }

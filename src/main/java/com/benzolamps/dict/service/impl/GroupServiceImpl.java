@@ -328,4 +328,10 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         group.setGroupLog(null);
         group.getStudentsScored().clear();
     }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Set<Student> getStudentsOriented(Group group) {
+        return new HashSet<>(group.getStudentsOriented());
+    }
 }

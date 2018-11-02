@@ -102,8 +102,11 @@ public class PhraseController extends BaseController {
             Assert.notNull(group, "group不存在");
             Assert.notEmpty(group.getPhrases(), "phrases不能为null或空");
             phrases = new ArrayList<>(group.getPhrases());
+            docExportVo.setStudents(phraseGroupService.getStudentsOriented(group));
+            mv.setViewName("redirect:/doc/export_personal.json");
         } else {
             phrases = phraseService.findPage(pageable).getContent();
+            mv.setViewName("redirect:/doc/export_default.json");
         }
         docExportVo.setContent(phrases);
         redirectAttributes.addFlashAttribute("docExportVo", docExportVo);
