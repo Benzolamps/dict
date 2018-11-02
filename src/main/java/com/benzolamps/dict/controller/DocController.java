@@ -96,6 +96,7 @@ public class DocController extends BaseController {
         Set<DictFile.ZipItem> zipItems = new HashSet<>();
         for (Student student : students) {
             modelMap.addAttribute("student", studentService.find(student.getId()));
+            modelMap.addAttribute("groupId", docExportVo.getGroupId());
             try (StringWriter stringWriter = new StringWriter()) {
                 template.process(modelMap, stringWriter);
                 String content = compress.apply(stringWriter.toString());

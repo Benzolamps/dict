@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="content_path" type="java.lang.String" -->
 <#-- @ftlvariable name="title" type="java.lang.String" -->
 <#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
-<#-- @ftlvariable name="group" type="com.benzolamps.dict.bean.Group" -->
+<#-- @ftlvariable name="groupId" type="java.lang.String" -->
 <#include 'arrangement.ftl'/>
 <#escape x as x?html>
   <?xml version="1.0" encoding="utf-8" standalone="yes"?>
@@ -682,7 +682,7 @@
           </w:ftr>
           <w:type w:val="continuous" />
           <w:pgSz w:w="11906" w:h="16838" />
-          <w:pgMar w:top="720" w:right="720" w:bottom="720" w:left="720" w:header="851" w:footer="992" w:gutter="0"/>
+          <w:pgMar w:top="284" w:right="284" w:bottom="284" w:left="284" w:header="567" w:footer="567" w:gutter="0"/>
           <w:cols w:num="${separate_columns}" w:sep="${show_separators?c}" w:space="425"/>
           <w:docGrid w:type="lines" w:line-pitch="312" />
         </w:sectPr>

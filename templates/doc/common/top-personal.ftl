@@ -1,6 +1,6 @@
 <#-- @ftlvariable name="title" type="java.lang.String" -->
 <#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
-<#-- @ftlvariable name="group" type="com.benzolamps.dict.bean.Group" -->
+<#-- @ftlvariable name="groupId" type="java.lang.String" -->
 <w:tbl>
   <w:tblPr>
     <w:tblW w:w="0" w:type="auto"/>
@@ -11,11 +11,11 @@
     <w:tblLook w:val="04A0"/>
   </w:tblPr>
   <w:tblGrid>
-    <w:gridCol w:w="2112"/>
     <w:gridCol w:w="2115"/>
-    <w:gridCol w:w="2079"/>
-    <w:gridCol w:w="2903"/>
-    <w:gridCol w:w="1257"/>
+    <w:gridCol w:w="2117"/>
+    <w:gridCol w:w="2081"/>
+    <w:gridCol w:w="3752"/>
+    <w:gridCol w:w="1140"/>
   </w:tblGrid>
   <w:tr wsp:rsidR="0004152A" wsp:rsidRPr="0004152A" wsp:rsidTr="0097708E">
     <w:tc>
@@ -113,7 +113,7 @@
     </w:tc>
     <w:tc>
       <w:tcPr>
-        <w:tcW w:w="2906" w:type="dxa"/>
+        <w:tcW w:w="3752" w:type="dxa"/>
         <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
         <w:vAlign w:val="bottom"/>
       </w:tcPr>
@@ -145,7 +145,7 @@
     </w:tc>
     <w:tc>
       <w:tcPr>
-        <w:tcW w:w="1257" w:type="dxa"/>
+        <w:tcW w:w="1140" w:type="dxa"/>
         <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
         <w:vAlign w:val="bottom"/>
       </w:tcPr>
@@ -168,27 +168,26 @@
           </w:rPr>
           <w:pict>
             <v:shapetype id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
-              <v:stroke joinstyle="miter" />
+              <v:stroke joinstyle="miter"/>
               <v:formulas>
-                <v:f eqn="if lineDrawn pixelLineWidth 0" />
-                <v:f eqn="sum @0 1 0" />
-                <v:f eqn="sum 0 0 @1" />
-                <v:f eqn="prod @2 1 2" />
-                <v:f eqn="prod @3 21600 pixelWidth" />
-                <v:f eqn="prod @3 21600 pixelHeight" />
-                <v:f eqn="sum @0 0 1" />
-                <v:f eqn="prod @6 1 2" />
-                <v:f eqn="prod @7 21600 pixelWidth" />
-                <v:f eqn="sum @8 21600 0" />
-                <v:f eqn="prod @7 21600 pixelHeight" />
-                <v:f eqn="sum @10 21600 0" />
+                <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+                <v:f eqn="sum @0 1 0"/>
+                <v:f eqn="sum 0 0 @1"/>
+                <v:f eqn="prod @2 1 2"/>
+                <v:f eqn="prod @3 21600 pixelWidth"/>
+                <v:f eqn="prod @3 21600 pixelHeight"/>
+                <v:f eqn="sum @0 0 1"/>
+                <v:f eqn="prod @6 1 2"/>
+                <v:f eqn="prod @7 21600 pixelWidth"/>
+                <v:f eqn="sum @8 21600 0"/>
+                <v:f eqn="prod @7 21600 pixelHeight"/>
+                <v:f eqn="sum @10 21600 0"/>
               </v:formulas>
-              <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect" />
-              <o:lock v:ext="edit" aspectratio="t" />
+              <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+              <o:lock v:ext="edit" aspectratio="t"/>
             </v:shapetype>
-            <w:binData w:name="wordml://03000001.png" xml:space="preserve">
-              iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQAAAABYmaj5AAABJklEQVR42rXUu42EMBAG4B85cMY2YMltOHNL0MACDUBLztwGEg1AtoHlucG7QncB4wvuEAGfJYPnBejbteNvlAADv0IDuqKBbHbmES3FijptOo+GTFOXnaJd4q80OjX6ugbiL2zLdbJ7cXx95PuK9k5nrvKZhiuDd0o9qeVld78dURZlv/YvmzWnTVZ6ag5uOwIvVNT6bXZ8nHd8stQUVkB99t2KlkBTTE9Pc0VpCKZ1pnMqe1lEYW0iOtjyFkk70PKjw1lbUbPfMmwGl1cW19YeVBa8LKKYmkCjVnNFCRyZW1ug07K4TbhhUx/Tg2SV+XPc1O8ukMTzN3oMvK8mnpUZdgTg6zrnj+tWlxlKzkoXSOKz7I4WSm1NJT4uLydD1n/8FX/oC5YN3PF1zDYiAAAAAElFTkSuQmCC
-            </w:binData>
+            <#assign content='{"student":${student.id},"group":${groupId}}'/>
+            <w:binData w:name="wordml://03000001.png" xml:space="preserve"><@qr_code_base64 content=content/></w:binData>
             <v:shape id="_x0000_i1130" type="#_x0000_t75" style="width:57pt;height:57pt;mso-position-vertical:absolute">
               <v:imagedata src="wordml://03000001.png" o:title="1"/>
               <o:lock v:ext="edit" aspectratio="f"/>

@@ -30,6 +30,7 @@
 [#macro json_dump obj][/#macro]
 [#macro shuffle_strategy_loop shuffle_strategy_setup elements][/#macro]
 [#macro compress][/#macro]
+[#macro qr_code_base64 content width=100 height=100][/#macro]
 [#function url_yaml_parse url][/#function]
 [#function class_path_yaml_parse class_path][/#function]
 [#function file_system_yaml_parse file_system][/#function]
