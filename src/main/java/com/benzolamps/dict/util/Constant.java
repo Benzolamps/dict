@@ -91,6 +91,7 @@ public interface Constant {
     /** 半角字符与全角字符映射 */
     List<KeyValuePairs<Character, Character>> HALF_WIDTH_FULL_WIDTH_MAPPING = ((Supplier<List>) () -> {
         List<KeyValuePairs<Character, Character>> mapping = new ArrayList<>();
+        mapping.add(new KeyValuePairs<>('.', '．'));
         mapping.add(new KeyValuePairs<>(',', '，'));
         mapping.add(new KeyValuePairs<>('\'', '’'));
         mapping.add(new KeyValuePairs<>('\'', '‘'));
@@ -125,6 +126,7 @@ public interface Constant {
         mapping.add(new KeyValuePairs<>('%', '％'));
         mapping.add(new KeyValuePairs<>('$', '＄'));
         mapping.add(new KeyValuePairs<>('¥', '￥'));
+        mapping.add(new KeyValuePairs<>(' ', '　'));
         return mapping;
     }).get();
 }

@@ -66,7 +66,7 @@
                     <w:sz w:val="${font_size}"/>
                     <w:sz-cs w:val="${font_size}"/>
                   </w:rPr>
-                  <w:t>${phrase_index + 1}. </w:t>
+                  <w:t>${phrase_index + 1}．</w:t>
                 </w:r>
                 <w:r wsp:rsidRPr="006C50AA">
                   <w:rPr>

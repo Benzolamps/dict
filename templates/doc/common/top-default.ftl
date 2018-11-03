@@ -9,173 +9,215 @@
     <w:tblLook w:val="04A0"/>
   </w:tblPr>
   <w:tblGrid>
-    <w:gridCol w:w="2112"/>
-    <w:gridCol w:w="2115"/>
-    <w:gridCol w:w="2079"/>
-    <w:gridCol w:w="2903"/>
-    <w:gridCol w:w="1257"/>
+    <w:gridCol w:w="9622"/>
+    <w:gridCol w:w="1150"/>
   </w:tblGrid>
-  <w:tr wsp:rsidR="0004152A" wsp:rsidRPr="0004152A" wsp:rsidTr="0097708E">
+  <w:tr wsp:rsidR="002A2BA6" wsp:rsidRPr="0004152A" wsp:rsidTr="002A2BA6">
     <w:tc>
       <w:tcPr>
-        <w:tcW w:w="2115" w:type="dxa"/>
+        <w:tcW w:w="9632" w:type="dxa"/>
         <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
         <w:vAlign w:val="bottom"/>
       </w:tcPr>
-      <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
-        <w:pPr>
-          <w:pStyle w:val="a4"/>
-          <w:pBdr>
-            <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
-          </w:pBdr>
-          <w:jc w:val="both"/>
-          <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
-            <w:sz w:val="21"/>
-            <w:sz-cs w:val="21"/>
-          </w:rPr>
-        </w:pPr>
-        <w:r wsp:rsidRPr="0004152A">
-          <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
-            <w:sz w:val="21"/>
-            <w:sz-cs w:val="21"/>
-          </w:rPr>
-          <w:t>学号：</w:t>
-        </w:r>
-        <#list 0..22 as i>
-          <w:r wsp:rsidR="007A4009" wsp:rsidRPr="007A4009">
+      <w:p wsp:rsidR="002A2BA6" wsp:rsidRDefault="002A2BA6"/>
+      <w:tbl>
+        <w:tblPr>
+          <w:tblW w:w="0" w:type="auto"/>
+          <w:tblCellMar>
+            <w:left w:w="0" w:type="dxa"/>
+            <w:right w:w="0" w:type="dxa"/>
+          </w:tblCellMar>
+          <w:tblLook w:val="04A0"/>
+        </w:tblPr>
+        <w:tblGrid>
+          <w:gridCol w:w="2024"/>
+          <w:gridCol w:w="2027"/>
+          <w:gridCol w:w="1993"/>
+          <w:gridCol w:w="3568"/>
+        </w:tblGrid>
+        <w:tr wsp:rsidR="002A2BA6" wsp:rsidRPr="0004152A" wsp:rsidTr="002A2BA6">
+          <w:tc>
+            <w:tcPr>
+              <w:tcW w:w="2115" w:type="dxa"/>
+              <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+              <w:vAlign w:val="bottom"/>
+            </w:tcPr>
+            <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
+              <w:pPr>
+                <w:pStyle w:val="a4"/>
+                <w:pBdr>
+                  <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
+                </w:pBdr>
+                <w:jc w:val="both"/>
+                <w:rPr>
+                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                  <wx:font wx:val="楷体"/>
+                  <w:sz w:val="21"/>
+                  <w:sz-cs w:val="21"/>
+                </w:rPr>
+              </w:pPr>
+              <w:r wsp:rsidRPr="0004152A">
+                <w:rPr>
+                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                  <wx:font wx:val="楷体"/>
+                  <w:sz w:val="21"/>
+                  <w:sz-cs w:val="21"/>
+                </w:rPr>
+                <w:t>学号：</w:t>
+              </w:r>
+              <#list 0..22 as i>
+                <w:r wsp:rsidR="007A4009" wsp:rsidRPr="007A4009">
+                  <w:rPr>
+                    <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                    <wx:font wx:val="楷体"/>
+                    <w:sz w:val="21"/>
+                    <w:sz-cs w:val="21"/>
+                    <w:u w:val="single"/>
+                  </w:rPr>
+                  <w:t> </w:t>
+                </w:r>
+              </#list>
+            </w:p>
+          </w:tc>
+          <w:tc>
+            <w:tcPr>
+              <w:tcW w:w="2117" w:type="dxa"/>
+              <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+              <w:vAlign w:val="bottom"/>
+            </w:tcPr>
+            <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
+              <w:pPr>
+                <w:pStyle w:val="a4"/>
+                <w:pBdr>
+                  <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
+                </w:pBdr>
+                <w:jc w:val="both"/>
+                <w:rPr>
+                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                  <wx:font wx:val="楷体"/>
+                  <w:sz w:val="21"/>
+                  <w:sz-cs w:val="21"/>
+                </w:rPr>
+              </w:pPr>
+              <w:r wsp:rsidRPr="0004152A">
+                <w:rPr>
+                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                  <wx:font wx:val="楷体"/>
+                  <w:sz w:val="21"/>
+                  <w:sz-cs w:val="21"/>
+                </w:rPr>
+                <w:t>班级：</w:t>
+              </w:r>
+              <#list 0..13 as i>
+                <w:r wsp:rsidR="007A4009" wsp:rsidRPr="007A4009">
+                  <w:rPr>
+                    <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                    <wx:font wx:val="楷体"/>
+                    <w:sz w:val="21"/>
+                    <w:sz-cs w:val="21"/>
+                    <w:u w:val="single"/>
+                  </w:rPr>
+                  <w:t> </w:t>
+                </w:r>
+              </#list>
+            </w:p>
+          </w:tc>
+          <w:tc>
+            <w:tcPr>
+              <w:tcW w:w="2081" w:type="dxa"/>
+              <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+              <w:vAlign w:val="bottom"/>
+            </w:tcPr>
+            <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
+              <w:pPr>
+                <w:pStyle w:val="a4"/>
+                <w:pBdr>
+                  <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
+                </w:pBdr>
+                <w:jc w:val="both"/>
+                <w:rPr>
+                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                  <wx:font wx:val="楷体"/>
+                  <w:sz w:val="21"/>
+                  <w:sz-cs w:val="21"/>
+                </w:rPr>
+              </w:pPr>
+              <w:r wsp:rsidRPr="0004152A">
+                <w:rPr>
+                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                  <wx:font wx:val="楷体"/>
+                  <w:sz w:val="21"/>
+                  <w:sz-cs w:val="21"/>
+                </w:rPr>
+                <w:t>姓名：</w:t>
+              </w:r>
+              <#list 0..13 as i>
+                <w:r wsp:rsidR="007A4009" wsp:rsidRPr="007A4009">
+                  <w:rPr>
+                    <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                    <wx:font wx:val="楷体"/>
+                    <w:sz w:val="21"/>
+                    <w:sz-cs w:val="21"/>
+                    <w:u w:val="single"/>
+                  </w:rPr>
+                  <w:t> </w:t>
+                </w:r>
+              </#list>
+            </w:p>
+          </w:tc>
+          <w:tc>
+            <w:tcPr>
+              <w:tcW w:w="2906" w:type="dxa"/>
+              <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+              <w:vAlign w:val="bottom"/>
+            </w:tcPr>
+            <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
+              <w:pPr>
+                <w:pStyle w:val="a4"/>
+                <w:pBdr>
+                  <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
+                </w:pBdr>
+                <w:rPr>
+                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                  <wx:font wx:val="楷体"/>
+                  <w:b/>
+                  <w:sz w:val="30"/>
+                  <w:sz-cs w:val="30"/>
+                </w:rPr>
+              </w:pPr>
+              <w:r wsp:rsidRPr="0004152A">
+                <w:rPr>
+                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+                  <wx:font wx:val="楷体"/>
+                  <w:b/>
+                  <w:sz w:val="30"/>
+                  <w:sz-cs w:val="30"/>
+                </w:rPr>
+                <w:t>${title}</w:t>
+              </w:r>
+            </w:p>
+          </w:tc>
+        </w:tr>
+      </w:tbl>
+      <#if need_top_info>
+        <#include 'top-info.ftl'/>
+      <#else>
+        <w:p wsp:rsidR="0081488E" wsp:rsidRPr="002A2BA6" wsp:rsidRDefault="0081488E" wsp:rsidP="002A2BA6">
+          <w:pPr>
+            <w:pStyle w:val="a4"/>
+            <w:pBdr>
+              <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
+            </w:pBdr>
+            <w:spacing w:line="240" w:line-rule="at-least"/>
+            <w:jc w:val="left"/>
             <w:rPr>
-              <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
+              <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体"/>
               <wx:font wx:val="楷体"/>
-              <w:sz w:val="21"/>
-              <w:sz-cs w:val="21"/>
-              <w:u w:val="single"/>
             </w:rPr>
-            <w:t> </w:t>
-          </w:r>
-        </#list>
-      </w:p>
-    </w:tc>
-    <w:tc>
-      <w:tcPr>
-        <w:tcW w:w="2117" w:type="dxa"/>
-        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-        <w:vAlign w:val="bottom"/>
-      </w:tcPr>
-      <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
-        <w:pPr>
-          <w:pStyle w:val="a4"/>
-          <w:pBdr>
-            <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
-          </w:pBdr>
-          <w:jc w:val="both"/>
-          <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
-            <w:sz w:val="21"/>
-            <w:sz-cs w:val="21"/>
-          </w:rPr>
-        </w:pPr>
-        <w:r wsp:rsidRPr="0004152A">
-          <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
-            <w:sz w:val="21"/>
-            <w:sz-cs w:val="21"/>
-          </w:rPr>
-          <w:t>班级：</w:t>
-        </w:r>
-        <#list 0..13 as i>
-          <w:r wsp:rsidR="007A4009" wsp:rsidRPr="007A4009">
-            <w:rPr>
-              <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-              <wx:font wx:val="楷体"/>
-              <w:sz w:val="21"/>
-              <w:sz-cs w:val="21"/>
-              <w:u w:val="single"/>
-            </w:rPr>
-            <w:t> </w:t>
-          </w:r>
-        </#list>
-      </w:p>
-    </w:tc>
-    <w:tc>
-      <w:tcPr>
-        <w:tcW w:w="2081" w:type="dxa"/>
-        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-        <w:vAlign w:val="bottom"/>
-      </w:tcPr>
-      <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
-        <w:pPr>
-          <w:pStyle w:val="a4"/>
-          <w:pBdr>
-            <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
-          </w:pBdr>
-          <w:jc w:val="both"/>
-          <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
-            <w:sz w:val="21"/>
-            <w:sz-cs w:val="21"/>
-          </w:rPr>
-        </w:pPr>
-        <w:r wsp:rsidRPr="0004152A">
-          <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
-            <w:sz w:val="21"/>
-            <w:sz-cs w:val="21"/>
-          </w:rPr>
-          <w:t>姓名：</w:t>
-        </w:r>
-        <#list 0..13 as i>
-          <w:r wsp:rsidR="007A4009" wsp:rsidRPr="007A4009">
-            <w:rPr>
-              <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-              <wx:font wx:val="楷体"/>
-              <w:sz w:val="21"/>
-              <w:sz-cs w:val="21"/>
-              <w:u w:val="single"/>
-            </w:rPr>
-            <w:t> </w:t>
-          </w:r>
-        </#list>
-      </w:p>
-    </w:tc>
-    <w:tc>
-      <w:tcPr>
-        <w:tcW w:w="2906" w:type="dxa"/>
-        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-        <w:vAlign w:val="bottom"/>
-      </w:tcPr>
-      <w:p wsp:rsidR="00F417AE" wsp:rsidRPr="0004152A" wsp:rsidRDefault="00F417AE" wsp:rsidP="0004152A">
-        <w:pPr>
-          <w:pStyle w:val="a4"/>
-          <w:pBdr>
-            <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
-          </w:pBdr>
-          <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
-            <w:b/>
-            <w:sz w:val="30"/>
-            <w:sz-cs w:val="30"/>
-          </w:rPr>
-        </w:pPr>
-        <w:r wsp:rsidRPr="0004152A">
-          <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
-            <w:b/>
-            <w:sz w:val="30"/>
-            <w:sz-cs w:val="30"/>
-          </w:rPr>
-          <w:t>${title}</w:t>
-        </w:r>
-      </w:p>
+          </w:pPr>
+          <wx:allowEmptyCollapse/>
+        </w:p>
+      </#if>
     </w:tc>
     <w:tc>
       <w:tcPr>
@@ -220,11 +262,9 @@
               <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
               <o:lock v:ext="edit" aspectratio="t"/>
             </v:shapetype>
-            <w:binData w:name="wordml://03000001.png" xml:space="preserve">
-              iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAVSURBVBhXY/z//z8DAwMTEDMwMAAAJAYDAbrboo8AAAAASUVORK5CYII=
-            </w:binData>
+            <w:binData w:name="wordml://03000002.png" xml:space="preserve">${white_base64}</w:binData>
             <v:shape id="_x0000_i1130" type="#_x0000_t75" style="width:57pt;height:57pt;mso-position-vertical:absolute">
-              <v:imagedata src="wordml://03000001.png" o:title="1"/>
+              <v:imagedata src="wordml://03000002.png" o:title="1"/>
               <o:lock v:ext="edit" aspectratio="f"/>
             </v:shape>
           </w:pict>

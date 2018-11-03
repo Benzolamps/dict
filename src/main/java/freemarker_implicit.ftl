@@ -54,3 +54,8 @@
 [#-- @ftlvariable name="insert_blank_line_between_words" type="java.lang.Boolean" --]
 [#-- @ftlvariable name="definition_arranges_vertically" type="java.lang.Boolean" --]
 [#-- @ftlvariable name="table_border_color" type="java.lang.String" --]
+[#-- @ftlvariable name="is_definition" type="java.lang.Boolean" --]
+[#-- @ftlvariable name="need_top_info" type="java.lang.Boolean" --]
+[#-- @ftlvariable name="top_info" type="java.lang.String" --]
+[#-- @ftlvariable name="top_info_base64" type="java.lang.String" --]
+[#-- @ftlvariable name="white_base64" type="java.lang.String" --]

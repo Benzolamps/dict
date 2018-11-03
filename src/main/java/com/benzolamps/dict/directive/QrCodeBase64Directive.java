@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * 文字转二维码Base64 Freemarker指令
@@ -43,6 +44,12 @@ public class QrCodeBase64Directive implements TemplateDirectiveModel {
         if (height == null) {
             height = 100;
         }
+        byte[] bytes = content.getBytes("UTF-8");
+        Random random = new Random(2018);
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] ^= (random.nextInt(Byte.MAX_VALUE * 2) - Byte.MAX_VALUE);
+        }
+        content = Base64.getEncoder().encodeToString(bytes);
         String base64 = Base64.getEncoder().encodeToString(DictQrCode.createQrCode(content, width, height));
         env.getOut().write(base64);
     }
