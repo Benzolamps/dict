@@ -30,7 +30,7 @@
         <w:sz w:val="${font_size}"/>
         <w:sz-cs w:val="${font_size}"/>
       </w:rPr>
-      <w:t>${abbreviate(is_definition?string(phrase.definition, phrase.prototype), 15, '...')}</w:t>
+      <w:t>${abbreviate(is_definition?string(phrase.definition, phrase.prototype), 18, '...')}</w:t>
     </w:r>
   </w:p>
 </#list>

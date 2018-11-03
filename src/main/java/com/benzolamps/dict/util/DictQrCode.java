@@ -47,15 +47,20 @@ public interface DictQrCode {
         }
     }
 
-    @SneakyThrows({IOException.class, NotFoundException.class})
+    /**
+     * 识别二维码
+     * @param qr 二维码
+     * @return 内容
+     */
+    @SneakyThrows(IOException.class)
     @SuppressWarnings({"unchecked", "ConstantConditions"})
-    static String readQrCode(byte[] qr) {
-        Result result = null;
-            BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(qr));
-            BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));
-            HashMap hints = new HashMap<>();
-            hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
-            result = new MultiFormatReader().decode(bitmap, hints);
+    static String readQrCode(byte[] qr) throws NotFoundException {
+        Result result;
+        BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(qr));
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));
+        HashMap hints = new HashMap<>();
+        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        result = new MultiFormatReader().decode(bitmap, hints);
         return result.getText();
     }
 }

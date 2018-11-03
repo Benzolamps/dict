@@ -65,7 +65,7 @@
                   <w:sz w:val="21"/>
                   <w:sz-cs w:val="21"/>
                 </w:rPr>
-                <w:t>学号：${student.id}</w:t>
+                <w:t>学号：${student.number}</w:t>
               </w:r>
             </w:p>
           </w:tc>
