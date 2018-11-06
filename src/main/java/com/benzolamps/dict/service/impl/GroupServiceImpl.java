@@ -270,13 +270,13 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
                 for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
                     String word = (String) res.getJSONArray("words_result").getJSONObject(i).get("words");
                     if (word.matches("[ \\s\\u00a0]*[0-9]+[ \\s\\u00a0]*[.．][ \\s\\u00a0]*[^ \\s\\u00a0]+.*")) {
-                        word = word.split("[.．]")[1].replaceAll("[ \\s\\u00a0]+", " ");
+                        word = word.split("[.．]")[1].replaceAll("[ \\s\\u00a0]+", " ").replaceAll("(^[ \\s\\u00a0]+)|([ \\s\\u00a0]+$)", "");
                         words.add(word);
                     }
                 }
             }
             Collection<Word> wordsContains = new ArrayList<>(wordGroup.getWords());
-            wordsContains.removeIf(word -> words.contains(word.getPrototype()));
+            wordsContains.removeIf(word -> !words.contains(word.getPrototype()));
             this.scoreWords(wordGroup, student, wordsContains.toArray(new Word[0]));
         }
     }
