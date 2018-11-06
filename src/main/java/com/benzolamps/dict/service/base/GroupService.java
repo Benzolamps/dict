@@ -4,6 +4,8 @@ import com.benzolamps.dict.bean.Clazz;
 import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 
+import java.io.InputStream;
+import java.util.Collection;
 import java.util.Set;
 
 /**

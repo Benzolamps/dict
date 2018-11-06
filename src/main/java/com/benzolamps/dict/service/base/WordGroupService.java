@@ -3,6 +3,10 @@ package com.benzolamps.dict.service.base;
 import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.Word;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
+import java.util.Collection;
 
 /**
  * 单词短语分组Service接口
@@ -33,4 +37,12 @@ public interface WordGroupService extends GroupService {
      * @param words 已掌握的单词
      */
     void scoreWords(Group wordGroup, Student student, Word... words);
+
+    /**
+     * 导入学习进度
+     * @param group 分组
+     * @param student 学生
+     * @param files 文件
+     */
+    void importWords(Group group, Student student, MultipartFile... files);
 }

@@ -2,6 +2,7 @@ package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.*;
 import com.benzolamps.dict.bean.Group.Type;
+import com.benzolamps.dict.cfg.AipProperties;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Order;
@@ -10,10 +11,15 @@ import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.StudentService;
 import com.benzolamps.dict.service.base.StudyLogService;
 import com.benzolamps.dict.util.DictArray;
+import lombok.SneakyThrows;
+import org.json.JSONObject;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 import static com.benzolamps.dict.bean.Group.Status.*;
@@ -41,6 +47,9 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     @Resource
     private StudentService studentService;
+
+    @Resource
+    private AipProperties aipProperties;
 
     protected GroupServiceImpl(Type type) {
         Assert.notNull(type, "type不能为null");
@@ -243,6 +252,64 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
             phraseReview.setMasteredStudentsCount(phraseReview.getMasteredStudentsCount() + 1);
         }
     }
+
+    @SuppressWarnings("ConstantConditions")
+    @SneakyThrows(IOException.class)
+    public void importWords(Group wordGroup, Student student, MultipartFile... files) {
+        Assert.notEmpty(files, "input streams不能为null或空");
+        if (wordGroup != null && student == null) {
+            importWords(wordGroup, files);
+        } else if (wordGroup == null && student != null) {
+            importWords(student, files);
+        } else if (wordGroup == null && student == null) {
+            importWords(files);
+        } else {
+            for (MultipartFile file : files) {
+                JSONObject res = aipProperties.accurateGeneral(file.getInputStream());
+                System.out.println(res.toString());
+                for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
+                    System.out.print(res.getJSONArray("words_result").getJSONObject(i).get("words") + ", ");
+                }
+            }
+        }
+    }
+
+    private void importWords(Group wordGroup, MultipartFile... files) {
+        throw new IllegalArgumentException("word group不为空时student不能为空");
+    }
+
+    private void importWords(Student student, MultipartFile... files) {
+    }
+
+    private void importWords(MultipartFile... files) {
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    public void importPhrases(Group phraseGroup, Student student, MultipartFile... files) {
+        Assert.notEmpty(files, "input streams不能为null或空");
+        if (phraseGroup != null && student == null) {
+            importWords(phraseGroup, files);
+        } else if (phraseGroup == null && student != null) {
+            importWords(student, files);
+        } else if (phraseGroup == null && student == null) {
+            importWords(files);
+        } else {
+
+        }
+    }
+
+    private void importPhrases(Group phraseGroup, MultipartFile... files) {
+        throw new IllegalArgumentException("word group不为空时student不能为空");
+    }
+
+    private void importPhrases(Student student, MultipartFile... files) {
+    }
+
+    private void importPhrases(MultipartFile... files) {
+    }
+
+
+
 
     @Transactional
     @Override

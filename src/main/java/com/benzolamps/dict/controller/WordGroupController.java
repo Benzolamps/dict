@@ -14,6 +14,7 @@ import com.benzolamps.dict.service.base.*;
 import com.benzolamps.dict.util.Constant;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -382,6 +383,19 @@ public class WordGroupController extends BaseController {
         Group wordGroup = wordGroupService.find(id);
         Assert.notNull(wordGroup, "word group不存在");
         wordGroupService.complete(wordGroup);
+        return SUCCESS_VO;
+    }
+
+    @PostMapping(value = "import.json")
+    protected BaseVo imports(Integer groupId, Integer studentId, @RequestParam("file") MultipartFile... files) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(groupId, "id不能为null");
+        Group wordGroup = wordGroupService.find(groupId);
+        Assert.notNull(wordGroup, "word group不存在");
+        Assert.notNull(studentId, "id不能为null");
+        Student student = studentService.find(studentId);
+        Assert.notNull(student, "student不存在");
+        wordGroupService.importWords(wordGroup, student, files);
         return SUCCESS_VO;
     }
 }

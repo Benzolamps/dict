@@ -3,6 +3,10 @@ package com.benzolamps.dict.service.base;
 import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.bean.Student;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
+import java.util.Collection;
 
 /**
  * 单词短语分组Service接口
@@ -33,4 +37,12 @@ public interface PhraseGroupService extends GroupService {
      * @param phrases 已掌握的单词
      */
     void scorePhrases(Group phraseGroup, Student student, Phrase... phrases);
+
+    /**
+     * 导入学习进度
+     * @param group 分组
+     * @param student 学生
+     * @param files 文件
+     */
+    void importPhrases(Group group, Student student, MultipartFile... files);
 }

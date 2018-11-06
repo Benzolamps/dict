@@ -1,6 +1,11 @@
 <#-- @ftlvariable name="group" type="com.benzolamps.dict.bean.Group" -->
 <#-- @ftlvariable name="students" type="java.util.List<com.benzolamps.dict.controller.vo.ClazzStudentTreeVo>" -->
 <#assign title>单词分组详情</#assign>
+
+<form id="upload-form" method="post" enctype="multipart/form-data" style="display: none;">
+  <input type="file" name="file" multiple accept="image/*">
+</form>
+
 <blockquote class="layui-elem-quote" style="margin-top: 10px;">
   ${group.name}&nbsp;&nbsp;&nbsp;&nbsp;
   <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back();">
@@ -11,6 +16,9 @@
   </button>
   <button id="export" class="layui-btn layui-btn-primary layui-btn-sm">
     <i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出单词
+  </button>
+  <button id="import" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
+    <i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入学习进度
   </button>
   <button id="score" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
     去评分
@@ -109,6 +117,7 @@
           <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
           <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
           <button class="layui-btn layui-btn-danger layui-btn-xs delete">删除</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs import">导入学习进度</button>
         </#if>
         <div class="ztree" id="students-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
@@ -121,6 +130,8 @@
 <script type="text/javascript" src="${base_url}/js/echarts.min.js"></script>
 <script>
   <#escape x as x?js_string>
+    var $wordsTree = $('#words-tree'), $studentsTree = $('#students-tree');
+
     var setting = {
       <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
         check: {
@@ -374,7 +385,7 @@
     </#if>
 
     <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
-      $('#students-tree').parent().find('.delete').click(function () {
+      $studentsTree.parent().find('.delete').click(function () {
         var nodes = studentsTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
@@ -417,7 +428,7 @@
         }
       });
 
-      $('#words-tree').parent().find('.delete').click(function () {
+      $wordsTree.parent().find('.delete').click(function () {
         var nodes = wordsTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
@@ -456,6 +467,62 @@
                 });
               }
             });
+          });
+        }
+      });
+    </#if>
+
+    <#if group.status == 'NORMAL' || group.status == 'SCORING'>
+      var uploadFile = function (data) {
+        var $file = $('#upload-form input');
+        $('#upload-form').attr('action', 'import.json');
+        $file.trigger('click');
+        $file.unbind('change');
+        $file.change(function () {
+          var loader = parent.layer.load();
+          setTimeout(function () {
+            var startTime = new Date().getTime();
+            $('#upload-form').ajaxSubmit({
+              data: data,
+              success: function (result, status, request) {
+                var endTime = new Date().getTime();
+                var delta = ((endTime - startTime) * 0.001).toFixed(3);
+                parent.layer.close(loader);
+                parent.layer.alert('导入学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+              },
+              error: function (request) {
+                parent.layer.close(loader);
+                var result = JSON.parse(request.responseText);
+                parent.layer.alert(result.message, {
+                  icon: 2,
+                  anim: 6,
+                  title: result.status
+                });
+              }
+            });
+          }, 500);
+        });
+      };
+
+      $studentsTree.parent().find('.import').click(function () {
+        var nodes = studentsTree.getCheckedNodes().filter(function (node) {
+          return !node.isParent;
+        });
+        console.log(nodes);
+        if (nodes.length <= 0) {
+          parent.layer.alert('请选中要导入单词进度的学生！', {
+            icon: 2,
+            title: '提示'
+          });
+        } else if (nodes.length > 1) {
+          parent.layer.alert('当前导入方式只能对一名学生进行导入！', {
+            icon: 2,
+            title: '提示'
+          });
+        } else {
+          uploadFile({
+            studentId: nodes[0].id,
+            groupId: ${group.id}
           });
         }
       });
