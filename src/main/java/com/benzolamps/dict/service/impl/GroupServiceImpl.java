@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 import static com.benzolamps.dict.bean.Group.Status.*;
@@ -264,13 +263,21 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         } else if (wordGroup == null && student == null) {
             importWords(files);
         } else {
+            List<String> words = new ArrayList<>();
             for (MultipartFile file : files) {
                 JSONObject res = aipProperties.accurateGeneral(file.getInputStream());
                 System.out.println(res.toString());
                 for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
-                    System.out.print(res.getJSONArray("words_result").getJSONObject(i).get("words") + ", ");
+                    String word = (String) res.getJSONArray("words_result").getJSONObject(i).get("words");
+                    if (word.matches("[ \\s\\u00a0]*[0-9]+[ \\s\\u00a0]*[.．][ \\s\\u00a0]*[^ \\s\\u00a0]+.*")) {
+                        word = word.split("[.．]")[1].replaceAll("[ \\s\\u00a0]+", " ");
+                        words.add(word);
+                    }
                 }
             }
+            Collection<Word> wordsContains = new ArrayList<>(wordGroup.getWords());
+            wordsContains.removeIf(word -> words.contains(word.getPrototype()));
+            this.scoreWords(wordGroup, student, wordsContains.toArray(new Word[0]));
         }
     }
 

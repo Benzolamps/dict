@@ -56,7 +56,7 @@ public class WordExcelVo implements BaseElementVo<Word> {
         word.setBritishPronunciation(this.getBritishPronunciation());
         word.setDefinition(this.getDefinition());
         word.setIndex(this.getIndex());
-        String[] clazzes = this.getClazzes().split("[ \\s\\u00a0 ]*[,，;；][ \\s\\u00a0]*");
+        String[] clazzes = this.getClazzes().split("[ \\s\\u00a0]*[,，;；][ \\s\\u00a0]*");
         Set<WordClazz> wordClazzes = new LinkedHashSet<>();
         for (int i = 0; i < clazzes.length; i++) {
             String clazz = clazzes[i];

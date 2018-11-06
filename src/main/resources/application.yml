@@ -6,9 +6,9 @@ dict:
     remote_base_url: http://benzolamps.oss-cn-beijing.aliyuncs.com
     universe_path: templates/java/universe
   aip:
-    app_id: ####
-    api_key: ####
-    secret_key: ####
+    app_id: 14460224
+    api_key: Xg095yu3b0NUEgZslz55SZee
+    secret_key: su7dZB3sIn2Ypf6fdUPawU9GTTLYExqz
 spring:
   datasource:
     driver_class_name: com.mysql.jdbc.Driver
