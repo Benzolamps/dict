@@ -5,6 +5,10 @@ dict:
     version: @project.version@
     remote_base_url: http://benzolamps.oss-cn-beijing.aliyuncs.com
     universe_path: templates/java/universe
+  aip:
+    app_id: ####
+    api_key: ####
+    secret_key: ####
 spring:
   datasource:
     driver_class_name: com.mysql.jdbc.Driver
