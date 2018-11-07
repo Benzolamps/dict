@@ -61,9 +61,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         Assert.notNull(student, "student不能为null");
         Assert.notNull(words, "words不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
-        Assert.isTrue(!Group.Status.COMPLETED.equals(wordGroup.getStatus()), "该分组当前处于已完成状态，无法进行评分！");
-        Assert.isTrue(wordGroup.getStudentsOriented().contains(student), "该学生不在此分组中");
-        Assert.isTrue(!wordGroup.getStudentsScored().contains(student), "该学生已评分");
+        Assert.isTrue(!Group.Status.COMPLETED.equals(wordGroup.getStatus()), wordGroup.getName() + "分组当前处于已完成状态，无法进行评分！");
+        Assert.isTrue(wordGroup.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
+        Assert.isTrue(!wordGroup.getStudentsScored().contains(student), student.getName() + "已评分！");
         studentService.addFailedWords(student, wordGroup.getWords().toArray(new Word[0]));
         studentService.addMasteredWords(student, words);
         this.internalJump(wordGroup, student, words.length, null);
@@ -198,6 +198,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                         }
                         group = this.find(groupId);
                         Assert.notNull(group, "word group不存在");
+                        Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
+                        Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
+                        Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分！");
                         words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
                     }
                 }

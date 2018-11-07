@@ -61,9 +61,9 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
         Assert.notNull(student, "student不能为null");
         Assert.notNull(phrases, "phrases不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
-        Assert.isTrue(!Group.Status.COMPLETED.equals(phraseGroup.getStatus()), "该分组当前处于已完成状态，无法进行评分！");
-        Assert.isTrue(phraseGroup.getStudentsOriented().contains(student), "该学生不在此分组中");
-        Assert.isTrue(!phraseGroup.getStudentsScored().contains(student), "该学生已评分");
+        Assert.isTrue(!Group.Status.COMPLETED.equals(phraseGroup.getStatus()), phraseGroup.getName() + "分组当前处于已完成状态，无法进行评分！");
+        Assert.isTrue(phraseGroup.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
+        Assert.isTrue(!phraseGroup.getStudentsScored().contains(student), student.getName() + "已评分！");
         studentService.addFailedPhrases(student, phraseGroup.getPhrases().toArray(new Phrase[0]));
         studentService.addMasteredPhrases(student, phrases);
         this.internalJump(phraseGroup, student, null, phrases.length);
@@ -198,6 +198,9 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
                         }
                         group = this.find(groupId);
                         Assert.notNull(group, "phrase group不存在");
+                        Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
+                        Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
+                        Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分！");
                         phrases = new HashSet<>(getPhrases(processImportVo.getData(), processImportVo.getName(), group.getPhrases()));
                     }
                 }
