@@ -7,7 +7,7 @@
 
 /** nothing function */
 dict.nothing = function () {
-    return !1;
+  return !1;
 };
 
 /**
@@ -17,7 +17,7 @@ dict.nothing = function () {
  * @throws Error
  */
 dict.assert = function (value, msg) {
-    if (!value) throw Error(msg ? msg : '断言失败');
+  if (!value) throw Error(msg ? msg : '断言失败');
 };
 
 /**
@@ -27,14 +27,14 @@ dict.assert = function (value, msg) {
  * @return {string}
  */
 dict.format = function (source, params) {
-    if (arguments.length < 2) return source;
-    if (arguments.length > 2 || (null == params || params.constructor != Array)) {
-        params = $.makeArray(arguments).slice(1);
-    }
-    $.each(params, function (i, n) {
-        source = source.replace(new RegExp('\\{' + i + '\\}', 'g'), n);
-    });
-    return source;
+  if (arguments.length < 2) return source;
+  if (arguments.length > 2 || (null == params || params.constructor != Array)) {
+    params = $.makeArray(arguments).slice(1);
+  }
+  $.each(params, function (i, n) {
+    source = source.replace(new RegExp('\\{' + i + '\\}', 'g'), n);
+  });
+  return source;
 };
 
 /**
@@ -43,7 +43,7 @@ dict.format = function (source, params) {
  * @return {string}
  */
 dict.quote = function (str) {
-    return '"' + str + '"';
+  return '"' + str + '"';
 };
 
 /**
@@ -52,7 +52,7 @@ dict.quote = function (str) {
  * @return {string}
  */
 dict.singleQuote = function (str) {
-    return "'" + str + "'";
+  return "'" + str + "'";
 };
 
 /**
@@ -61,22 +61,22 @@ dict.singleQuote = function (str) {
  * @return {Object} 新对象
  */
 dict.generateObject = function (obj) {
-    dict.assert(obj, 'obj不能为空');
-    var returnObj = {};
-    for (var key in obj) {
-        var variable = 'returnObj';
-        var layers = key.split('.');
-        $.each(layers, function (index, item) {
-            dict.assert(/^[$_a-z][$_a-z0-9]*$/i.test(item), '标识符不符合规范');
-            variable += '.' + item;
-            if (index == layers.length - 1) {
-                eval(dict.format('{0} = {1};', variable, 'obj[key]'));
-            } else if (!eval(variable)) {
-                eval(dict.format('{0} = {1};', variable, '{}'));
-            }
-        });
-    }
-    return returnObj;
+  dict.assert(obj, 'obj不能为空');
+  var returnObj = {};
+  for (var key in obj) {
+    var variable = 'returnObj';
+    var layers = key.split('.');
+    $.each(layers, function (index, item) {
+      dict.assert(/^[$_a-z][$_a-z0-9]*$/i.test(item), '标识符不符合规范');
+      variable += '.' + item;
+      if (index == layers.length - 1) {
+        eval(dict.format('{0} = {1};', variable, 'obj[key]'));
+      } else if (!eval(variable)) {
+        eval(dict.format('{0} = {1};', variable, '{}'));
+      }
+    });
+  }
+  return returnObj;
 };
 
 /**
@@ -87,21 +87,25 @@ dict.generateObject = function (obj) {
  * @return {String}
  */
 dict.abbreviate = function (str, width, ellipsis) {
-    width = parseInt(width);
-    if (str == null || str.length <= 0 || width == null || isNaN(width) || isFinite(width)) return str;
-    if (ellipsis == null) ellipsis = '';
-    var chars = str.split('');
-    var returnValue;
-    for (var i = 0; i < chars.length; i++) {
-        if (width > 0) {
-            if (${regexp(constant('CHINESE_PATTERN'))}.test(chars[i])) width -= 2;
-            else width--;
-            returnValue += chars[i];
-        } else {
-            break;
-        }
-
+  width = parseInt(width);
+  if (str == null || str.length <= 0 || width == null || isNaN(width) || isFinite(width)) return str;
+  if (ellipsis == null) ellipsis = '';
+  var chars = str.split('');
+  var returnValue;
+  for (var i = 0; i < chars.length; i++) {
+    if (width > 0) {
+      if (${regexp(constant('CHINESE_PATTERN'))}.
+      test(chars[i])
+    )
+      width -= 2;
+    else
+      width--;
+      returnValue += chars[i];
+    } else {
+      break;
     }
+
+  }
 };
 
 /**
@@ -110,12 +114,12 @@ dict.abbreviate = function (str, width, ellipsis) {
  * @return {String}
  */
 dict.encrypt = function (str) {
-    dict.assert(str, "str不能为null");
+  dict.assert(str, "str不能为null");
 
-    for (var i = 0; i < 6; i++) {
-        str = hex_md5(str);
-    }
-    return str;
+  for (var i = 0; i < 6; i++) {
+    str = hex_md5(str);
+  }
+  return str;
 };
 
 /**
@@ -125,38 +129,38 @@ dict.encrypt = function (str) {
  * @returns {function(): *}
  */
 dict.extendsFunction = function (func1, func2) {
-    if (!func1 || 'function' != typeof func1) {
-        func1 = dict.nothing;
+  if (!func1 || 'function' != typeof func1) {
+    func1 = dict.nothing;
+  }
+  if (!func2 || 'function' != typeof func2) {
+    func2 = dict.nothing;
+  }
+
+  var extended = function () {
+    var returnValue;
+    for (var i = 0; i < extended.callArray.length; i++) {
+      returnValue = extended.callArray[i].apply(this, arguments);
     }
-    if (!func2 || 'function' != typeof func2) {
-        func2 = dict.nothing;
+    return returnValue;
+  };
+
+  extended.callArray = [];
+
+  if (func1.callArray) {
+    for (var i = 0; i < func1.callArray.length; i++) {
+      extended.callArray.push(func1.callArray[i]);
     }
+  } else {
+    extended.callArray.push(func1);
+  }
 
-    var extended = function () {
-        var returnValue;
-        for (var i = 0; i < extended.callArray.length; i++) {
-            returnValue = extended.callArray[i].apply(this, arguments);
-        }
-        return returnValue;
-    };
-
-    extended.callArray = [];
-
-    if (func1.callArray) {
-        for (var i = 0; i < func1.callArray.length; i++) {
-            extended.callArray.push(func1.callArray[i]);
-        }
-    } else {
-        extended.callArray.push(func1);
+  if (func2.callArray) {
+    for (var i = 0; i < func2.callArray.length; i++) {
+      extended.callArray.push(func2.callArray[i]);
     }
+  } else {
+    extended.callArray.push(func2);
+  }
 
-    if (func2.callArray) {
-        for (var i = 0; i < func2.callArray.length; i++) {
-            extended.callArray.push(func2.callArray[i]);
-        }
-    } else {
-        extended.callArray.push(func2);
-    }
-
-    return extended;
+  return extended;
 };

@@ -22,6 +22,7 @@ import java.util.List;
  * @version 2.1.1
  * @datetime 2018-7-1 21:52:46
  */
+@Transactional
 public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
     @Autowired

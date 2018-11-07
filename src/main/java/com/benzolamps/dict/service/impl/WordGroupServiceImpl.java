@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
+import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.WordGroupService;
 import com.benzolamps.dict.service.base.WordService;
@@ -110,7 +111,11 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
 
     private Collection<Word> getWords(byte[] data, String name, Collection<Word> ref) {
         List<String> words = new ArrayList<>();
-        JSONObject res = aipProperties.accurateGeneral(data);
+        JSONObject res = aipProperties.basicAccurateGeneral(data);
+        Object errorCode = res.opt("error_code");
+        if (errorCode != null) {
+            throw new DictException(errorCode + "：" + res.get("error_msg"));
+        }
         for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
             String word = (String) res.getJSONArray("words_result").getJSONObject(i).get("words");
             if (word.matches("[ \\s\\u00a0]*[0-9]+[ \\s\\u00a0]*[.．][ \\s\\u00a0]*[^ \\s\\u00a0]+.*")) {
@@ -127,7 +132,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         } else {
             resultWords = wordService.findByPrototypes(words);
         }
-        logger.info(name + "导入的单词：" + String.join(", ", resultWords.stream().map(Word::getPrototype).collect(Collectors.toList())));
+        logger.info(name + "导入 " + resultWords.size() + " 个单词：" + String.join(", ", resultWords.stream().map(Word::getPrototype).collect(Collectors.toList())));
         return resultWords;
     }
 

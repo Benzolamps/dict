@@ -22,47 +22,47 @@ $.getScript('${base_url}/res/js/dynamic-form.js');
 $.getScript('${base_url}/js/md5.js');
 
 Array.prototype.toString = function () {
-    return this.join('，');
+  return this.join('，');
 };
 
 !function () {
-    this.models = ['element', 'layer', 'form', 'table', 'code', 'laypage'];
-    this.loadLayui = function () {
-        $.each(models, function (index, value) {
-            window[value] || (window[value] = layui[value]);
-        });
+  this.models = ['element', 'layer', 'form', 'table', 'code', 'laypage'];
+  this.loadLayui = function () {
+    $.each(models, function (index, value) {
+      window[value] || (window[value] = layui[value]);
+    });
 
-        layer && layer.config({
-            title: '提示',
-            resize: false,
-            move: false,
-            closeBtn: 2
-        });
-    };
-    this.loadLayui();
+    layer && layer.config({
+      title: '提示',
+      resize: false,
+      move: false,
+      closeBtn: 2
+    });
+  };
+  this.loadLayui();
 }();
 
-$.validator.addMethod('func', function(value, element, param) {
-    return eval('(' + param + ').call(this, value, element, param)');
+$.validator.addMethod('func', function (value, element, param) {
+  return eval('(' + param + ').call(this, value, element, param)');
 }, "输入错误");
 
-$.validator.addMethod('constant', function(value, element, param) {
-    return value == param;
+$.validator.addMethod('constant', function (value, element, param) {
+  return value == param;
 }, "输入错误");
 
-$.validator.methods.remote = function(value, element, param) {
-    if ('string' == typeof param) {
-        param = {url: param};
-    }
-    console.log(param);
-    return $.validator.methods.constant.call(this, value, element, param.ignore) ||
-        dict.loadText({
-            url: param.url,
-            type: 'get',
-            cache: true,
-            data: new (function () {
-                this[element.name] = value;
-            })
-        }) != 'false'
+$.validator.methods.remote = function (value, element, param) {
+  if ('string' == typeof param) {
+    param = {url: param};
+  }
+  console.log(param);
+  return $.validator.methods.constant.call(this, value, element, param.ignore) ||
+    dict.loadText({
+      url: param.url,
+      type: 'get',
+      cache: true,
+      data: new (function () {
+        this[element.name] = value;
+      })
+    }) != 'false'
 };
 

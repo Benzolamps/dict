@@ -4,6 +4,7 @@
 <#-- @ftlvariable name="hasMore" type="boolean" -->
 <#-- @ftlvariable name="masteredPhrases" type="java.util.Collection<com.benzolamps.dict.bean.Phrase>" -->
 <#-- @ftlvariable name="failedPhrases" type="java.util.Collection<com.benzolamps.dict.bean.Phrase>" -->
+<#-- @ftlvariable name="scored" type="boolean" -->
 <div class="layui-row">
   <div class="layui-col-xs5">
     <div class="layui-card" style="height: 500px;">
@@ -11,9 +12,11 @@
         <div style="text-align: center">未掌握的短语</div>
       </div>
       <div class="layui-card-body">
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
+        <#if !scored>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
+        </#if>
         <div class="ztree" id="failed-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
     </div>
@@ -25,11 +28,15 @@
       </div>
       <br><br>
       <div class="layui-card-body" style="text-align: center">
-        <select id="change">
-          <#list students as stu>
-            <option value="${stu.id}"<#if stu == student> selected</#if>>${stu.name}</option>
-          </#list>
-        </select>
+        <#if !scored>
+          <select id="change">
+            <#list students as stu>
+              <option value="${stu.id}"<#if stu == student> selected</#if>>${stu.name}</option>
+            </#list>
+          </select>
+        <#else>
+          ${student.name}<br>
+        </#if>
         <br>
         ${student.number}<br>
         ${student.description!''}<br>
@@ -50,8 +57,11 @@
             </td>
           </tr>
         </table>
-        <input id="submit" type="button" value="完成" class="layui-btn layui-btn-normal layui-btn-sm" style="margin-top: 150px; width: 100%">
-        <br><input id="jump" type="button" value="跳过" class="layui-btn layui-btn-danger layui-btn-sm" style="margin-top: 10px; width: 100%">
+        <input id="submit" type="button" value="完成" class="layui-btn layui-btn-normal layui-btn-sm" style="margin-top: 100px; width: 100%">
+        <#if !scored>
+          <br><input id="jump" type="button" value="跳过" class="layui-btn layui-btn-danger layui-btn-sm" style="margin-top: 10px; width: 100%">
+          <br><input id="import" type="button" value="导入学习进度" class="layui-btn layui-btn-primary layui-btn-sm" style="margin-top: 10px; width: 100%">
+        </#if>
       </div>
     </div>
   </div>
@@ -61,9 +71,11 @@
         <div style="text-align: center">已掌握的短语</div>
       </div>
       <div class="layui-card-body">
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
-        <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
+        <#if !scored>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-all">全选</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
+          <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
+        </#if>
         <div class="ztree" id="mastered-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
     </div>
@@ -75,10 +87,12 @@
 <script>
   <#escape x as x?js_string>
     var setting = {
-      check: {
-        enable: true,
-        chkStyle: "checkbox"
-      },
+      <#if !scored>
+        check: {
+          enable: true,
+            chkStyle: 'checkbox'
+        },
+      </#if>
       callback: {
         beforeClick: dict.nothing
       }
@@ -138,76 +152,98 @@
     });
 
     $('#submit').click(function () {
-      parent.layer.confirm('确定当前学生已评分完毕？', {icon: 3, title: '提示'}, function (index) {
-        var nodes = masteredTree.getNodes();
-        dict.loadText({
-          url: '${base_url}/phrase_group/score_save.json',
-          type: 'post',
-          data: {
-            groupId: ${group.id},
-            studentId: ${student.id},
-            phraseId: nodes.map(function (item) {
-              return item.id;
-            })
-          },
-          dataType: 'json',
-          success: function (result, status, request) {
-            parent.layer.alert('操作成功！', {
-              icon: 1,
-              end: function () {
-                parent.$('iframe')[0].contentWindow.dict.reload(true);
-              <#if hasMore>
-                location.replace(location.pathname + "?id=${group.id}");
-              <#else>
-                var layerIndex = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(layerIndex);
-              </#if>
-              }
-            });
-          },
-          error: function (result, status, request) {
-            parent.layer.alert(result.message, {
-              icon: 2,
-              title: result.status
-            });
-          }
+      <#if !scored>
+        parent.layer.confirm('确定当前学生已评分完毕？', {icon: 3, title: '提示'}, function (index) {
+          var nodes = masteredTree.getNodes();
+          dict.loadText({
+            url: 'score_save.json',
+            type: 'post',
+            data: {
+              groupId: ${group.id},
+              studentId: ${student.id},
+              phraseId: nodes.map(function (item) {
+                return item.id;
+              })
+            },
+            dataType: 'json',
+            success: function (result, status, request) {
+              parent.layer.alert('操作成功！', {
+                icon: 1,
+                end: function () {
+                  parent.$('iframe')[0].contentWindow.dict.reload(true);
+                  <#if hasMore>
+                    location.replace(location.pathname + "?id=${group.id}");
+                  <#else>
+                    var layerIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(layerIndex);
+                  </#if>
+                }
+              });
+            },
+            error: function (result, status, request) {
+              parent.layer.alert(result.message, {
+                icon: 2,
+                title: result.status
+              });
+            }
+          });
         });
-      });
+      <#else>
+        location.replace(location.pathname + "?id=${group.id}");
+      </#if>
     });
 
-    $('#jump').click(function () {
-      parent.layer.confirm('确定要跳过当前学生的评分？', {icon: 3, title: '提示'}, function (index) {
-        var nodes = masteredTree.getNodes();
-        dict.loadText({
-          url: '${base_url}/phrase_group/jump.json',
-          type: 'post',
+    <#if !scored>
+      $('#jump').click(function () {
+        parent.layer.confirm('确定要跳过当前学生的评分？', {icon: 3, title: '提示'}, function (index) {
+          var nodes = masteredTree.getNodes();
+          dict.loadText({
+            url: 'jump.json',
+            type: 'post',
+            data: {
+              groupId: ${group.id},
+              studentId: ${student.id}
+            },
+            dataType: 'json',
+            success: function (result, status, request) {
+              parent.layer.alert('操作成功！', {
+                icon: 1,
+                end: function () {
+                  parent.$('iframe')[0].contentWindow.dict.reload(true);
+                  <#if hasMore>
+                    location.replace(location.pathname + "?id=${group.id}");
+                  <#else>
+                    var layerIndex = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(layerIndex);
+                  </#if>
+                }
+              });
+            },
+            error: function (result, status, request) {
+              parent.layer.alert(result.message, {
+                icon: 2,
+                title: result.status
+              });
+            }
+          });
+        });
+      });
+
+      $('#import').click(function () {
+        dict.uploadFile({
+          action: 'import.json',
           data: {
-            groupId: ${group.id},
-            studentId: ${student.id}
+            studentId: ${student.id},
+            groupId: ${group.id}
           },
-          dataType: 'json',
-          success: function (result, status, request) {
-            parent.layer.alert('操作成功！', {
-              icon: 1,
-              end: function () {
-                parent.$('iframe')[0].contentWindow.dict.reload(true);
-              <#if hasMore>
-                location.replace(location.pathname + "?id=${group.id}");
-              <#else>
-                var layerIndex = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(layerIndex);
-              </#if>
-              }
-            });
-          },
-          error: function (result, status, request) {
-            parent.layer.alert(result.message, {
-              icon: 2,
-              title: result.status
-            });
+          multiple: true,
+          accept: 'image/*',
+          success: function (delta) {
+            location.replace(location.pathname + "?id=${group.id}&studentId=${student.id}");
+            parent.layer.alert('导入学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
           }
         });
       });
-    });
+    </#if>
   </#escape>
 </script>

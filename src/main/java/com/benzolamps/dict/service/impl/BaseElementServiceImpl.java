@@ -30,6 +30,7 @@ import java.util.*;
  * @version 2.1.1
  * @datetime 2018-9-5 21:06:39
  */
+@Transactional
 public abstract class BaseElementServiceImpl<T extends BaseElement, R extends BaseElementVo<T>>
     extends BaseServiceImpl<T> implements BaseElementService<T> {
 

@@ -228,7 +228,7 @@
               <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
               <o:lock v:ext="edit" aspectratio="t"/>
             </v:shapetype>
-            <#assign content='${student.id},${groupId}}'/>
+            <#assign content='${student.id},${groupId}'/>
             <w:binData w:name="wordml://03000002.png" xml:space="preserve"><@qr_code_base64 content=content/></w:binData>
             <v:shape id="_x0000_i1130" type="#_x0000_t75" style="width:57pt;height:57pt;mso-position-vertical:absolute">
               <v:imagedata src="wordml://03000002.png" o:title="1"/>

@@ -1,108 +1,108 @@
 @charset "UTF-8";
 
-body,canvas {
-    overflow-y: hidden;
-    overflow-x: hidden;
-    width: 100%;
-    margin: 0;
-    background-color: #EEEEEE;
+body, canvas {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  width: 100%;
+  margin: 0;
+  background-color: #EEEEEE;
 }
 
-:not(input),input[type=password] {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+:not(input), input[type=password] {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .tou {
-    background: url(../img/tou.png) no-repeat;
-    width: 97px;
-    height: 92px;
-    position: absolute;
-    top: -87px;
-    left: 140px;
+  background: url(../img/tou.png) no-repeat;
+  width: 97px;
+  height: 92px;
+  position: absolute;
+  top: -87px;
+  left: 140px;
 }
 
 .left-hand {
-    background: url(../img/left-hand.png) no-repeat;
-    width: 32px;
-    height: 37px;
-    position: absolute;
-    top: -38px;
-    left: 150px;
+  background: url(../img/left-hand.png) no-repeat;
+  width: 32px;
+  height: 37px;
+  position: absolute;
+  top: -38px;
+  left: 150px;
 }
 
 .right-hand {
-    background: url(../img/right-hand.png) no-repeat;
-    width: 32px;
-    height: 37px;
-    position: absolute;
-    top: -38px;
-    right: -64px;
+  background: url(../img/right-hand.png) no-repeat;
+  width: 32px;
+  height: 37px;
+  position: absolute;
+  top: -38px;
+  right: -64px;
 }
 
 .initial-left-hand {
-    background: url(../img/hand.png) no-repeat;
-    width: 30px;
-    height: 20px;
-    position: absolute;
-    top: -12px;
-    left: 100px;
+  background: url(../img/hand.png) no-repeat;
+  width: 30px;
+  height: 20px;
+  position: absolute;
+  top: -12px;
+  left: 100px;
 }
 
 .initial-right-hand {
-    background: url(../img/hand.png) no-repeat;
-    width: 30px;
-    height: 20px;
-    position: absolute;
-    top: -12px;
-    right: -112px;
+  background: url(../img/hand.png) no-repeat;
+  width: 30px;
+  height: 20px;
+  position: absolute;
+  top: -12px;
+  right: -112px;
 }
 
 .left-handing {
-    background: url(../img/left-handing.png) no-repeat;
-    width: 30px;
-    height: 20px;
-    position: absolute;
-    top: -12px;
-    left: 100px;
+  background: url(../img/left-handing.png) no-repeat;
+  width: 30px;
+  height: 20px;
+  position: absolute;
+  top: -12px;
+  left: 100px;
 }
 
 .right-handing {
-    background: url(../img/right-handing.png) no-repeat;
-    width: 30px;
-    height: 20px;
-    position: absolute;
-    top: -12px;
-    right: -112px;
+  background: url(../img/right-handing.png) no-repeat;
+  width: 30px;
+  height: 20px;
+  position: absolute;
+  top: -12px;
+  right: -112px;
 }
 
 .login-panel {
-    width: 480px;
-    height: 300px;
-    background: #ffffff;
-    position: absolute;
-    left: 50%;
-    top: 200px;
-    text-align: center;
-    margin-left: -240px;
-    border: 1px solid #e7e7e7
+  width: 480px;
+  height: 300px;
+  background: #ffffff;
+  position: absolute;
+  left: 50%;
+  top: 200px;
+  text-align: center;
+  margin-left: -240px;
+  border: 1px solid #e7e7e7
 }
 
 .animation {
-    width: 165px;
-    height: 96px;
-    left: 50px;
-    position: absolute;
-    z-index: 0
+  width: 165px;
+  height: 96px;
+  left: 50px;
+  position: absolute;
+  z-index: 0
 }
 
 div.login {
-    width: 420px;
-    left: 30px;
-    top: 50px;
-    position: absolute;
-    z-index: 1;
-    display: none
+  width: 420px;
+  left: 30px;
+  top: 50px;
+  position: absolute;
+  z-index: 1;
+  display: none
 }

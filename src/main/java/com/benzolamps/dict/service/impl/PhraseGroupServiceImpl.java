@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
+import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.PhraseGroupService;
 import com.benzolamps.dict.service.base.PhraseService;
@@ -110,7 +111,11 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
 
     private Collection<Phrase> getPhrases(byte[] data, String name, Collection<Phrase> ref) {
         List<String> phrases = new ArrayList<>();
-        JSONObject res = aipProperties.accurateGeneral(data);
+        JSONObject res = aipProperties.basicAccurateGeneral(data);
+        Object errorCode = res.opt("error_code");
+        if (errorCode != null) {
+            throw new DictException(errorCode + "：" + res.get("error_msg"));
+        }
         for (int i = 0; i < res.getJSONArray("phrases_result").length(); i++) {
             String phrase = (String) res.getJSONArray("phrases_result").getJSONObject(i).get("phrases");
             if (phrase.matches("[ \\s\\u00a0]*[0-9]+[ \\s\\u00a0]*[.．][ \\s\\u00a0]*[^ \\s\\u00a0]+.*")) {
@@ -127,7 +132,7 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
         } else {
             resultPhrases = phraseService.findByPrototypes(phrases);
         }
-        logger.info(name + "导入的短语：" + String.join(", ", resultPhrases.stream().map(Phrase::getPrototype).collect(Collectors.toList())));
+        logger.info(name + "导入 " + resultPhrases.size() + " 个短语：" + String.join(", ", resultPhrases.stream().map(Phrase::getPrototype).collect(Collectors.toList())));
         return resultPhrases;
     }
 

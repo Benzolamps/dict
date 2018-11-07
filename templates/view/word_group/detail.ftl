@@ -1,11 +1,6 @@
 <#-- @ftlvariable name="group" type="com.benzolamps.dict.bean.Group" -->
 <#-- @ftlvariable name="students" type="java.util.List<com.benzolamps.dict.controller.vo.ClazzStudentTreeVo>" -->
 <#assign title>单词分组详情</#assign>
-
-<form id="upload-form" method="post" enctype="multipart/form-data" style="display: none;">
-  <input type="file" name="file" multiple accept="image/*">
-</form>
-
 <blockquote class="layui-elem-quote" style="margin-top: 10px;">
   ${group.name}&nbsp;&nbsp;&nbsp;&nbsp;
   <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back();">
@@ -267,26 +262,38 @@
       });
 
       $('#import').click(function () {
-        dict.uploadFile({
-          action: 'import.json',
-          data: {
-            groupId: ${group.id}
-          },
-          multiple: true,
-          accept: 'image/*',
-          success: function (delta) {
-            location.reload(true);
-            parent.layer.alert('导入学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
-          }
-        });
-      })
+        <#if group.wordsCount lte 0>
+          parent.layer.alert('加点单词再来吧！', {
+            icon: 2,
+            title: '提示'
+          });
+        <#elseif group.studentsOrientedCount lte 0>
+          parent.layer.alert('还没有学生呢！', {
+            icon: 2,
+            title: '提示'
+          });
+        <#else>
+          dict.uploadFile({
+            action: 'import.json',
+            data: {
+              groupId: ${group.id}
+            },
+            multiple: true,
+            accept: 'image/*',
+            success: function (delta) {
+              location.reload(true);
+              parent.layer.alert('导入单词学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+            }
+          });
+        </#if>
+      });
     </#if>
 
     <#if group.status == 'SCORING'>
       $('#finish').click(function () {
       parent.layer.confirm('确定要结束当前评分吗？', {icon: 3, title: '提示'}, function (index) {
         dict.loadText({
-          url: '${base_url}/word_group/finish.json',
+          url: 'finish.json',
           type: 'post',
           data: {
             id: ${group.id}
@@ -371,7 +378,7 @@
       $('#complete').click(function () {
         parent.layer.confirm('确定要开始新一轮的评分吗？', {icon: 3, title: '提示'}, function (index) {
           dict.loadText({
-            url: '${base_url}/word_group/complete.json',
+            url: 'complete.json',
             type: 'post',
             data: {
               id: ${group.id}
@@ -412,7 +419,7 @@
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
             dict.loadText({
-              url: '${base_url}/word_group/remove_students.json',
+              url: 'remove_students.json',
               type: 'post',
               data: {
                 groupId: ${group.id},
@@ -455,7 +462,7 @@
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
             dict.loadText({
-              url: '${base_url}/word_group/remove_words.json',
+              url: 'remove_words.json',
               type: 'post',
               data: {
                 groupId: ${group.id},

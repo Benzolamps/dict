@@ -17,6 +17,7 @@ import java.util.HashMap;
  * @version 2.2.3
  * @datetime 2018-11-6 16:03:55
  */
+@SuppressWarnings("unused")
 @Lazy(false)
 @Configuration
 @ConfigurationProperties(prefix = "dict.aip")
@@ -42,7 +43,39 @@ public class AipProperties implements Serializable {
         client.setSocketTimeoutInMillis(60000);
     }
 
+    /**
+     * 通用文字识别 高精度 500
+     * @param data byte[]
+     * @return JSONObject
+     */
+    public JSONObject basicAccurateGeneral(byte[] data) {
+        return client.basicAccurateGeneral(data, new HashMap<>());
+    }
+
+    /**
+     * 通用文字识别 50000
+     * @param data byte[]
+     * @return JSONObject
+     */
+    public JSONObject basicGeneral(byte[] data) {
+        return client.basicGeneral(data, new HashMap<>());
+    }
+
+    /**
+     * 通用文字识别 高精度 含位置信息 50
+     * @param data byte[]
+     * @return JSONObject
+     */
     public JSONObject accurateGeneral(byte[] data) {
         return client.accurateGeneral(data, new HashMap<>());
+    }
+
+    /**
+     * 通用文字识别 含位置信息 500
+     * @param data byte[]
+     * @return JSONObject
+     */
+    public JSONObject general(byte[] data) {
+        return client.general(data, new HashMap<>());
     }
 }

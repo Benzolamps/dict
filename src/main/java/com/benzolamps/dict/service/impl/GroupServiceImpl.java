@@ -6,9 +6,11 @@ import com.benzolamps.dict.cfg.AipProperties;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Order;
-import com.benzolamps.dict.service.base.*;
+import com.benzolamps.dict.service.base.GroupService;
+import com.benzolamps.dict.service.base.LibraryService;
+import com.benzolamps.dict.service.base.StudentService;
+import com.benzolamps.dict.service.base.StudyLogService;
 import com.benzolamps.dict.util.DictArray;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
@@ -23,7 +25,7 @@ import static com.benzolamps.dict.bean.Group.Status.*;
  * @version 2.1.4
  * @datetime 2018-9-21 22:09:55
  */
-@Slf4j
+@Transactional
 public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements GroupService {
 
     private final Type type;

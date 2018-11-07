@@ -4,7 +4,7 @@
 <#-- @ftlvariable name="hasMore" type="boolean" -->
 <#-- @ftlvariable name="masteredWords" type="java.util.Collection<com.benzolamps.dict.bean.Word>" -->
 <#-- @ftlvariable name="failedWords" type="java.util.Collection<com.benzolamps.dict.bean.Word>" -->
-<#-- @ftlvariable name="scored" type="java.lang.Boolean" -->
+<#-- @ftlvariable name="scored" type="boolean" -->
 <div class="layui-row">
   <div class="layui-col-xs5">
     <div class="layui-card" style="height: 500px;">
@@ -156,7 +156,7 @@
         parent.layer.confirm('确定当前学生已评分完毕？', {icon: 3, title: '提示'}, function (index) {
           var nodes = masteredTree.getNodes();
           dict.loadText({
-            url: '${base_url}/word_group/score_save.json',
+            url: 'score_save.json',
             type: 'post',
             data: {
               groupId: ${group.id},
@@ -198,7 +198,7 @@
         parent.layer.confirm('确定要跳过当前学生的评分？', {icon: 3, title: '提示'}, function (index) {
           var nodes = masteredTree.getNodes();
           dict.loadText({
-            url: '${base_url}/word_group/jump.json',
+            url: 'jump.json',
             type: 'post',
             data: {
               groupId: ${group.id},
@@ -246,4 +246,4 @@
       });
     </#if>
   </#escape>
-</script
+</script>

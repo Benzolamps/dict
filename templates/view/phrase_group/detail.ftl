@@ -12,6 +12,9 @@
   <button id="export" class="layui-btn layui-btn-primary layui-btn-sm">
     <i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出短语
   </button>
+  <button id="import" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
+    <i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入学习进度
+  </button>
   <button id="score" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
     去评分
   </button>
@@ -121,6 +124,8 @@
 <script type="text/javascript" src="${base_url}/js/echarts.min.js"></script>
 <script>
   <#escape x as x?js_string>
+    var $phraseTree = $('#phrases-tree'), $studentsTree = $('#students-tree');
+
     var setting = {
       <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
         check: {
@@ -255,13 +260,40 @@
           });
         </#if>
       });
+
+      $('#import').click(function () {
+        <#if group.phrasesCount lte 0>
+          parent.layer.alert('加点短语再来吧！', {
+            icon: 2,
+            title: '提示'
+          });
+        <#elseif group.studentsOrientedCount lte 0>
+          parent.layer.alert('还没有学生呢！', {
+            icon: 2,
+            title: '提示'
+          });
+        <#else>
+          dict.uploadFile({
+            action: 'import.json',
+            data: {
+              groupId: ${group.id}
+            },
+            multiple: true,
+            accept: 'image/*',
+            success: function (delta) {
+              location.reload(true);
+              parent.layer.alert('导入短语学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+            }
+          });
+        </#if>
+      });
     </#if>
 
     <#if group.status == 'SCORING'>
       $('#finish').click(function () {
       parent.layer.confirm('确定要结束当前评分吗？', {icon: 3, title: '提示'}, function (index) {
         dict.loadText({
-          url: '${base_url}/phrase_group/finish.json',
+          url: 'finish.json',
           type: 'post',
           data: {
             id: ${group.id}
@@ -346,7 +378,7 @@
       $('#complete').click(function () {
         parent.layer.confirm('确定要开始新一轮的评分吗？', {icon: 3, title: '提示'}, function (index) {
           dict.loadText({
-            url: '${base_url}/phrase_group/complete.json',
+            url: 'complete.json',
             type: 'post',
             data: {
               id: ${group.id}
@@ -374,7 +406,7 @@
     </#if>
 
     <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
-      $('#students-tree').parent().find('.delete').click(function () {
+      $studentsTree.parent().find('.delete').click(function () {
         var nodes = studentsTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
@@ -387,7 +419,7 @@
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
             dict.loadText({
-              url: '${base_url}/phrase_group/remove_students.json',
+              url: 'remove_students.json',
               type: 'post',
               data: {
                 groupId: ${group.id},
@@ -417,7 +449,7 @@
         }
       });
 
-      $('#phrases-tree').parent().find('.delete').click(function () {
+      $phraseTree.parent().find('.delete').click(function () {
         var nodes = phrasesTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
@@ -430,7 +462,7 @@
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
             dict.loadText({
-              url: '${base_url}/phrase_group/remove_phrases.json',
+              url: 'remove_phrases.json',
               type: 'post',
               data: {
                 groupId: ${group.id},
