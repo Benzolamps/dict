@@ -6,6 +6,7 @@ import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.WordGroupService;
+import com.benzolamps.dict.service.base.WordService;
 import com.benzolamps.dict.util.DictQrCode;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,9 @@ import java.util.stream.Collectors;
 @Service("wordGroupService")
 @Transactional
 public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupService {
+
+    @Resource
+    private WordService wordService;
 
     protected WordGroupServiceImpl() {
         super(Group.Type.WORD);
@@ -62,8 +67,8 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         Assert.notNull(words, "words不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
         Assert.isTrue(!Group.Status.COMPLETED.equals(wordGroup.getStatus()), wordGroup.getName() + "分组当前处于已完成状态，无法进行评分！");
-        Assert.isTrue(wordGroup.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
-        Assert.isTrue(!wordGroup.getStudentsScored().contains(student), student.getName() + "已评分！");
+        Assert.isTrue(wordGroup.getStudentsOriented().contains(student), student.getName() + "不在" + wordGroup.getName() + "分组中！");
+        Assert.isTrue(!wordGroup.getStudentsScored().contains(student), student.getName() + "已评分" + wordGroup.getName() + "！");
         studentService.addFailedWords(student, wordGroup.getWords().toArray(new Word[0]));
         studentService.addMasteredWords(student, words);
         this.internalJump(wordGroup, student, words.length, null);
@@ -195,15 +200,17 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                         if (!studentId.equals(student.getId())) {
                             student = studentService.find(studentId);
                             Assert.notNull(student, "student不存在");
-                            Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
-                            Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
-                            Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分！");
+                            if (group.getId() != null) {
+                                Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
+                                Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
+                                Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
+                            }
                         }
                         group = this.find(groupId);
                         Assert.notNull(group, "word group不存在");
                         Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
-                        Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
-                        Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分！");
+                        Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
+                        Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
                         words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
                     }
                 }

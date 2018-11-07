@@ -43,12 +43,6 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     @Resource
     protected AipProperties aipProperties;
 
-    @Resource
-    protected WordService wordService;
-
-    @Resource
-    protected PhraseService phraseService;
-
     protected GroupServiceImpl(Type type) {
         Assert.notNull(type, "type不能为null");
         this.type = type;

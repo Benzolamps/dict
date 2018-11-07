@@ -6,6 +6,7 @@ import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.PhraseGroupService;
+import com.benzolamps.dict.service.base.PhraseService;
 import com.benzolamps.dict.util.DictQrCode;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,9 @@ import java.util.stream.Collectors;
 @Service("phraseGroupService")
 @Transactional
 public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGroupService {
+
+    @Resource
+    private PhraseService phraseService;
 
     protected PhraseGroupServiceImpl() {
         super(Group.Type.PHRASE);
@@ -62,8 +67,8 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
         Assert.notNull(phrases, "phrases不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
         Assert.isTrue(!Group.Status.COMPLETED.equals(phraseGroup.getStatus()), phraseGroup.getName() + "分组当前处于已完成状态，无法进行评分！");
-        Assert.isTrue(phraseGroup.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
-        Assert.isTrue(!phraseGroup.getStudentsScored().contains(student), student.getName() + "已评分！");
+        Assert.isTrue(phraseGroup.getStudentsOriented().contains(student), student.getName() + "不在" + phraseGroup.getName() + "分组中！");
+        Assert.isTrue(!phraseGroup.getStudentsScored().contains(student), student.getName() + "已评分" + phraseGroup.getName() + "！");
         studentService.addFailedPhrases(student, phraseGroup.getPhrases().toArray(new Phrase[0]));
         studentService.addMasteredPhrases(student, phrases);
         this.internalJump(phraseGroup, student, null, phrases.length);
@@ -195,15 +200,17 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
                         if (!studentId.equals(student.getId())) {
                             student = studentService.find(studentId);
                             Assert.notNull(student, "student不存在");
-                            Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
-                            Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
-                            Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分！");
+                            if (group.getId() != null) {
+                                Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
+                                Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
+                                Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
+                            }
                         }
                         group = this.find(groupId);
                         Assert.notNull(group, "phrase group不存在");
                         Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
-                        Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
-                        Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分！");
+                        Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
+                        Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
                         phrases = new HashSet<>(getPhrases(processImportVo.getData(), processImportVo.getName(), group.getPhrases()));
                     }
                 }
