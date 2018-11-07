@@ -3,23 +3,23 @@ package com.benzolamps.dict.service.impl;
 import com.benzolamps.dict.bean.*;
 import com.benzolamps.dict.bean.Group.Type;
 import com.benzolamps.dict.cfg.AipProperties;
+import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Order;
-import com.benzolamps.dict.service.base.GroupService;
-import com.benzolamps.dict.service.base.LibraryService;
-import com.benzolamps.dict.service.base.StudentService;
-import com.benzolamps.dict.service.base.StudyLogService;
+import com.benzolamps.dict.exception.ProcessImportException;
+import com.benzolamps.dict.service.base.*;
 import com.benzolamps.dict.util.DictArray;
-import lombok.SneakyThrows;
+import com.benzolamps.dict.util.DictQrCode;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.benzolamps.dict.bean.Group.Status.*;
 import static com.benzolamps.dict.bean.Group.Type.PHRASE;
@@ -31,6 +31,7 @@ import static com.benzolamps.dict.bean.Group.Type.WORD;
  * @version 2.1.4
  * @datetime 2018-9-21 22:09:55
  */
+@Slf4j
 public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements GroupService {
 
     private final Type type;
@@ -49,6 +50,12 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     @Resource
     private AipProperties aipProperties;
+
+    @Resource
+    private WordService wordService;
+
+    @Resource
+    private PhraseService phraseService;
 
     protected GroupServiceImpl(Type type) {
         Assert.notNull(type, "type不能为null");
@@ -252,71 +259,281 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         }
     }
 
-    @SuppressWarnings("ConstantConditions")
-    @SneakyThrows(IOException.class)
-    public void importWords(Group wordGroup, Student student, MultipartFile... files) {
-        Assert.notEmpty(files, "input streams不能为null或空");
-        if (wordGroup != null && student == null) {
-            importWords(wordGroup, files);
-        } else if (wordGroup == null && student != null) {
-            importWords(student, files);
-        } else if (wordGroup == null && student == null) {
-            importWords(files);
-        } else {
-            List<String> words = new ArrayList<>();
-            for (MultipartFile file : files) {
-                JSONObject res = aipProperties.accurateGeneral(file.getInputStream());
-                System.out.println(res.toString());
-                for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
-                    String word = (String) res.getJSONArray("words_result").getJSONObject(i).get("words");
-                    if (word.matches("[ \\s\\u00a0]*[0-9]+[ \\s\\u00a0]*[.．][ \\s\\u00a0]*[^ \\s\\u00a0]+.*")) {
-                        word = word.split("[.．]")[1].replaceAll("[ \\s\\u00a0]+", " ").replaceAll("(^[ \\s\\u00a0]+)|([ \\s\\u00a0]+$)", "");
-                        words.add(word);
+    @Transactional
+    public void importWords(ProcessImportVo... processImportVos) {
+        Assert.notEmpty(processImportVos, "process import vos不能为null或空");
+        for (ProcessImportVo processImportVo : processImportVos) {
+            if (processImportVo.getStudentId() == null) {
+                try {
+                    String content = DictQrCode.readQrCode(processImportVo.getData());
+                    byte[] bytes = Base64.getDecoder().decode(content);
+                    Random random = new Random(2018);
+                    for (int i = 0; i < bytes.length; i++) {
+                        bytes[i] ^= (random.nextInt(Byte.MAX_VALUE * 2) - Byte.MAX_VALUE);
                     }
+                    String[] value = new String(bytes, "UTF-8").split(",");
+                    Integer studentId = Integer.valueOf(value[0]);
+                    Integer groupId = Integer.valueOf(value[1]);
+                    processImportVo.setStudentId(studentId);
+                    if (processImportVo.getGroupId() == null) {
+                        processImportVo.setGroupId(groupId);
+                    }
+                } catch (Throwable e) {
+                    throw new ProcessImportException(processImportVo.getName(), e);
                 }
             }
-            Collection<Word> wordsContains = new ArrayList<>(wordGroup.getWords());
-            wordsContains.removeIf(word -> !words.contains(word.getPrototype()));
-            this.scoreWords(wordGroup, student, wordsContains.toArray(new Word[0]));
         }
+        internalImportWords(processImportVos);
     }
 
-    private void importWords(Group wordGroup, MultipartFile... files) {
-        throw new IllegalArgumentException("word group不为空时student不能为空");
-    }
-
-    private void importWords(Student student, MultipartFile... files) {
-    }
-
-    private void importWords(MultipartFile... files) {
-    }
-
-    @SuppressWarnings("ConstantConditions")
-    public void importPhrases(Group phraseGroup, Student student, MultipartFile... files) {
-        Assert.notEmpty(files, "input streams不能为null或空");
-        if (phraseGroup != null && student == null) {
-            importWords(phraseGroup, files);
-        } else if (phraseGroup == null && student != null) {
-            importWords(student, files);
-        } else if (phraseGroup == null && student == null) {
-            importWords(files);
+    private Collection<Word> getWords(byte[] data, String name, Collection<Word> ref) {
+        List<String> words = new ArrayList<>();
+        JSONObject res = aipProperties.accurateGeneral(data);
+        for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
+            String word = (String) res.getJSONArray("words_result").getJSONObject(i).get("words");
+            if (word.matches("[ \\s\\u00a0]*[0-9]+[ \\s\\u00a0]*[.．][ \\s\\u00a0]*[^ \\s\\u00a0]+.*")) {
+                word = word.substring(1 + word.split("[.．]")[0].length())
+                    .replaceAll("[ \\s\\u00a0]+", " ")
+                    .replaceAll("(^[ \\s\\u00a0]+)|([ \\s\\u00a0]+$)", "");
+                words.add(word);
+            }
+        }
+        Collection<Word> resultWords;
+        if (!CollectionUtils.isEmpty(ref)) {
+            resultWords = new ArrayList<>(ref);
+            resultWords.removeIf(word -> !words.contains(word.getPrototype()));
         } else {
+            resultWords = wordService.findByPrototypes(words);
+        }
+        logger.info(name + "导入的单词：" + String.join(", ", resultWords.stream().map(Word::getPrototype).collect(Collectors.toList())));
+        return resultWords;
+    }
 
+    private void internalImportWords(ProcessImportVo... processImportVos) {
+        Student student = new Student();
+        Group group = new Group();
+        Set<Word> words = new HashSet<>();
+        Arrays.sort(processImportVos, (processImportVo1, processImportVo2) -> {
+            int result = 0;
+            if (processImportVo1.getGroupId() != null && processImportVo2.getGroupId() != null) {
+                result = processImportVo1.getGroupId().compareTo(processImportVo2.getGroupId());
+            }
+            if (processImportVo1.getGroupId() == null && processImportVo2.getGroupId() != null) {
+                result = -1;
+            }
+            if (processImportVo1.getGroupId() != null && processImportVo2.getGroupId() == null) {
+                result = 1;
+            }
+            if (result == 0) {
+                result = processImportVo1.getStudentId().compareTo(processImportVo2.getStudentId());
+            }
+            return result;
+        });
+
+        for (ProcessImportVo processImportVo : processImportVos) {
+            try {
+                Integer groupId = processImportVo.getGroupId();
+                Integer studentId = processImportVo.getStudentId();
+                if (groupId == null) {
+                    if (null == group.getId()) {
+                        if (studentId.equals(student.getId())) {
+                            words.addAll(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
+                        } else {
+                            if (null != student.getId()) {
+                                studentService.addMasteredWords(student, words.toArray(new Word[0]));
+                            }
+                            student = studentService.find(studentId);
+                            words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
+                        }
+                    } else {
+                        if (studentId.equals(student.getId())) {
+                            words.addAll(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
+                        } else {
+                            if (null != student.getId()) {
+                                this.scoreWords(group, student, words.toArray(new Word[0]));
+                            }
+                            student = studentService.find(studentId);
+                            words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
+                        }
+                    }
+                } else {
+                    if (Objects.equals(group.getId(), groupId)) {
+                        if (studentId.equals(student.getId())) {
+                            words.addAll(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
+                        } else {
+                            if (null != student.getId()) {
+                                this.scoreWords(group, student, words.toArray(new Word[0]));
+                            }
+                            student = studentService.find(studentId);
+                            words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
+                        }
+                    } else {
+                        if (null != student.getId()) {
+                            if (null != group.getId()) {
+                                this.scoreWords(group, student, words.toArray(new Word[0]));
+                            } else {
+                                studentService.addMasteredWords(student, words.toArray(new Word[0]));
+                            }
+                        }
+                        if (!studentId.equals(student.getId())) {
+                            student = studentService.find(studentId);
+                            Assert.notNull(student, "student不存在");
+                        }
+                        group = this.find(groupId);
+                        Assert.notNull(group, "word group不存在");
+                        words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
+                    }
+                }
+            } catch (Throwable e) {
+                throw new ProcessImportException(processImportVo.getName(), e);
+            }
+        }
+        if (null != student.getId()) {
+            if (null != group.getId()) {
+                this.scoreWords(group, student, words.toArray(new Word[0]));
+            } else {
+                studentService.addMasteredWords(student, words.toArray(new Word[0]));
+            }
         }
     }
 
-    private void importPhrases(Group phraseGroup, MultipartFile... files) {
-        throw new IllegalArgumentException("word group不为空时student不能为空");
+    @Transactional
+    public void importPhrases(ProcessImportVo... processImportVos) {
+        Assert.notEmpty(processImportVos, "process import vos不能为null或空");
+        for (ProcessImportVo processImportVo : processImportVos) {
+            if (processImportVo.getStudentId() == null) {
+                try {
+                    String content = DictQrCode.readQrCode(processImportVo.getData());
+                    byte[] bytes = Base64.getDecoder().decode(content);
+                    Random random = new Random(2018);
+                    for (int i = 0; i < bytes.length; i++) {
+                        bytes[i] ^= (random.nextInt(Byte.MAX_VALUE * 2) - Byte.MAX_VALUE);
+                    }
+                    String[] value = new String(bytes, "UTF-8").split(",");
+                    Integer studentId = Integer.valueOf(value[0]);
+                    Integer groupId = Integer.valueOf(value[1]);
+                    processImportVo.setStudentId(studentId);
+                    if (processImportVo.getGroupId() == null) {
+                        processImportVo.setGroupId(groupId);
+                    }
+                } catch (Throwable e) {
+                    throw new ProcessImportException(processImportVo.getName(), e);
+                }
+            }
+        }
+        internalImportPhrases(processImportVos);
     }
 
-    private void importPhrases(Student student, MultipartFile... files) {
+    private Collection<Phrase> getPhrases(byte[] data, String name, Collection<Phrase> ref) {
+        List<String> phrases = new ArrayList<>();
+        JSONObject res = aipProperties.accurateGeneral(data);
+        for (int i = 0; i < res.getJSONArray("phrases_result").length(); i++) {
+            String phrase = (String) res.getJSONArray("phrases_result").getJSONObject(i).get("phrases");
+            if (phrase.matches("[ \\s\\u00a0]*[0-9]+[ \\s\\u00a0]*[.．][ \\s\\u00a0]*[^ \\s\\u00a0]+.*")) {
+                phrase = phrase.substring(1 + phrase.split("[.．]")[0].length())
+                        .replaceAll("[ \\s\\u00a0]+", " ")
+                        .replaceAll("(^[ \\s\\u00a0]+)|([ \\s\\u00a0]+$)", "");
+                phrases.add(phrase);
+            }
+        }
+        Collection<Phrase> resultPhrases;
+        if (!CollectionUtils.isEmpty(ref)) {
+            resultPhrases = new ArrayList<>(ref);
+            resultPhrases.removeIf(phrase -> !phrases.contains(phrase.getPrototype()));
+        } else {
+            resultPhrases = phraseService.findByPrototypes(phrases);
+        }
+        logger.info(name + "导入的短语：" + String.join(", ", resultPhrases.stream().map(Phrase::getPrototype).collect(Collectors.toList())));
+        return resultPhrases;
     }
 
-    private void importPhrases(MultipartFile... files) {
+    private void internalImportPhrases(ProcessImportVo... processImportVos) {
+        Student student = new Student();
+        Group group = new Group();
+        Set<Phrase> phrases = new HashSet<>();
+        Arrays.sort(processImportVos, (processImportVo1, processImportVo2) -> {
+            int result = 0;
+            if (processImportVo1.getGroupId() != null && processImportVo2.getGroupId() != null) {
+                result = processImportVo1.getGroupId().compareTo(processImportVo2.getGroupId());
+            }
+            if (processImportVo1.getGroupId() == null && processImportVo2.getGroupId() != null) {
+                result = -1;
+            }
+            if (processImportVo1.getGroupId() != null && processImportVo2.getGroupId() == null) {
+                result = 1;
+            }
+            if (result == 0) {
+                result = processImportVo1.getStudentId().compareTo(processImportVo2.getStudentId());
+            }
+            return result;
+        });
+
+        for (ProcessImportVo processImportVo : processImportVos) {
+            try {
+                Integer groupId = processImportVo.getGroupId();
+                Integer studentId = processImportVo.getStudentId();
+                if (groupId == null) {
+                    if (null == group.getId()) {
+                        if (studentId.equals(student.getId())) {
+                            phrases.addAll(getPhrases(processImportVo.getData(), processImportVo.getName(), group.getPhrases()));
+                        } else {
+                            if (null != student.getId()) {
+                                studentService.addMasteredPhrases(student, phrases.toArray(new Phrase[0]));
+                            }
+                            student = studentService.find(studentId);
+                            phrases = new HashSet<>(getPhrases(processImportVo.getData(), processImportVo.getName(), group.getPhrases()));
+                        }
+                    } else {
+                        if (studentId.equals(student.getId())) {
+                            phrases.addAll(getPhrases(processImportVo.getData(), processImportVo.getName(), group.getPhrases()));
+                        } else {
+                            if (null != student.getId()) {
+                                this.scorePhrases(group, student, phrases.toArray(new Phrase[0]));
+                            }
+                            student = studentService.find(studentId);
+                            phrases = new HashSet<>(getPhrases(processImportVo.getData(), processImportVo.getName(), group.getPhrases()));
+                        }
+                    }
+                } else {
+                    if (Objects.equals(group.getId(), groupId)) {
+                        if (studentId.equals(student.getId())) {
+                            phrases.addAll(getPhrases(processImportVo.getData(), processImportVo.getName(), group.getPhrases()));
+                        } else {
+                            if (null != student.getId()) {
+                                this.scorePhrases(group, student, phrases.toArray(new Phrase[0]));
+                            }
+                            student = studentService.find(studentId);
+                            phrases = new HashSet<>(getPhrases(processImportVo.getData(), processImportVo.getName(), group.getPhrases()));
+                        }
+                    } else {
+                        if (null != student.getId()) {
+                            if (null != group.getId()) {
+                                this.scorePhrases(group, student, phrases.toArray(new Phrase[0]));
+                            } else {
+                                studentService.addMasteredPhrases(student, phrases.toArray(new Phrase[0]));
+                            }
+                        }
+                        if (!studentId.equals(student.getId())) {
+                            student = studentService.find(studentId);
+                            Assert.notNull(student, "student不存在");
+                        }
+                        group = this.find(groupId);
+                        Assert.notNull(group, "phrase group不存在");
+                        phrases = new HashSet<>(getPhrases(processImportVo.getData(), processImportVo.getName(), group.getPhrases()));
+                    }
+                }
+            } catch (Throwable e) {
+                throw new ProcessImportException(processImportVo.getName(), e);
+            }
+        }
+        if (null != student.getId()) {
+            if (null != group.getId()) {
+                this.scorePhrases(group, student, phrases.toArray(new Phrase[0]));
+            } else {
+                studentService.addMasteredPhrases(student, phrases.toArray(new Phrase[0]));
+            }
+        }
     }
-
-
-
 
     @Transactional
     @Override

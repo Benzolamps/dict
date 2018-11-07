@@ -117,7 +117,6 @@
           <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
           <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
           <button class="layui-btn layui-btn-danger layui-btn-xs delete">删除</button>
-          <button class="layui-btn layui-btn-primary layui-btn-xs import">导入学习进度</button>
         </#if>
         <div class="ztree" id="students-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
@@ -266,6 +265,21 @@
           });
         </#if>
       });
+
+      $('#import').click(function () {
+        dict.uploadFile({
+          action: 'import.json',
+          data: {
+            groupId: ${group.id}
+          },
+          multiple: true,
+          accept: 'image/*',
+          success: function (delta) {
+            location.reload(true);
+            parent.layer.alert('导入学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+          }
+        });
+      })
     </#if>
 
     <#if group.status == 'SCORING'>
@@ -467,62 +481,6 @@
                 });
               }
             });
-          });
-        }
-      });
-    </#if>
-
-    <#if group.status == 'NORMAL' || group.status == 'SCORING'>
-      var uploadFile = function (data) {
-        var $file = $('#upload-form input');
-        $('#upload-form').attr('action', 'import.json');
-        $file.trigger('click');
-        $file.unbind('change');
-        $file.change(function () {
-          var loader = parent.layer.load();
-          setTimeout(function () {
-            var startTime = new Date().getTime();
-            $('#upload-form').ajaxSubmit({
-              data: data,
-              success: function (result, status, request) {
-                var endTime = new Date().getTime();
-                var delta = ((endTime - startTime) * 0.001).toFixed(3);
-                parent.layer.close(loader);
-                parent.layer.alert('导入学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
-              },
-              error: function (request) {
-                parent.layer.close(loader);
-                var result = JSON.parse(request.responseText);
-                parent.layer.alert(result.message, {
-                  icon: 2,
-                  anim: 6,
-                  title: result.status
-                });
-              }
-            });
-          }, 500);
-        });
-      };
-
-      $studentsTree.parent().find('.import').click(function () {
-        var nodes = studentsTree.getCheckedNodes().filter(function (node) {
-          return !node.isParent;
-        });
-        console.log(nodes);
-        if (nodes.length <= 0) {
-          parent.layer.alert('请选中要导入单词进度的学生！', {
-            icon: 2,
-            title: '提示'
-          });
-        } else if (nodes.length > 1) {
-          parent.layer.alert('当前导入方式只能对一名学生进行导入！', {
-            icon: 2,
-            title: '提示'
-          });
-        } else {
-          uploadFile({
-            studentId: nodes[0].id,
-            groupId: ${group.id}
           });
         }
       });

@@ -431,3 +431,51 @@ dict.validateForm = function (selector, rules, messages, submitHandler) {
         submitHandler: submitHandler
     })
 };
+
+dict.uploadFile = function (data) {
+    dict.assert(data, 'data不能为null');
+    dict.assert(data.action, 'data.action不能为null');
+    var $form = $(document.createElement('form')).attr('enctype', 'multipart/form-data').attr('action', data.action).attr('method', 'POST').hide();
+    var $file = $(document.createElement('input')).attr('type', 'file').attr('name', 'file');
+    if (data.multiple) {
+        $file.attr('multiple', true);
+    }
+    if (data.accept) {
+        $file.attr('accept', data.accept);
+    }
+    $form.append($file);
+    $('body').append($form);
+    $file.trigger('click');
+    $file.change(function () {
+        alert('hhh')
+        var loader = parent.layer.load();
+        var startTime = new Date().getTime();
+        setTimeout(function () {
+            $form.ajaxSubmit({
+                async: true,
+                data: data.data,
+                success: function (result, status, request) {
+                    var endTime = new Date().getTime();
+                    var delta = ((endTime - startTime) * 0.001).toFixed(3);
+                    parent.layer.close(loader);
+                    $form.remove();
+                    if (data.success) {
+                      data.success(delta);
+                    } else {
+                      parent.layer.alert('导入成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+                    }
+                },
+                error: function (request) {
+                    parent.layer.close(loader);
+                    $form.remove();
+                    var result = JSON.parse(request.responseText);
+                    parent.layer.alert(result.message, {
+                        icon: 2,
+                        anim: 6,
+                        title: result.status
+                    });
+                }
+            });
+        }, 500);
+    });
+}

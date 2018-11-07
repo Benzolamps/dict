@@ -2,7 +2,7 @@
 <#-- @ftlvariable name="wordClazzes" type="java.util.Collection<com.benzolamps.dict.bean.WordClazz>" -->
 
 <form id="upload-form" method="post" action="import.json" enctype="multipart/form-data" style="display: none;">
-  <input type="file" name="file" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
+  <input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
 </form>
 
 <@nothing><script type="text/javascript"></@nothing>

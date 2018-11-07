@@ -3,10 +3,7 @@ package com.benzolamps.dict.service.base;
 import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.bean.Student;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.InputStream;
-import java.util.Collection;
+import com.benzolamps.dict.controller.vo.ProcessImportVo;
 
 /**
  * 单词短语分组Service接口
@@ -40,9 +37,7 @@ public interface PhraseGroupService extends GroupService {
 
     /**
      * 导入学习进度
-     * @param group 分组
-     * @param student 学生
-     * @param files 文件
+     * @param processImportVos ProcessImportVo
      */
-    void importPhrases(Group group, Student student, MultipartFile... files);
+    void importPhrases(ProcessImportVo... processImportVos);
 }

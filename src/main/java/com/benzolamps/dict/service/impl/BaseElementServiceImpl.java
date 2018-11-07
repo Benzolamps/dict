@@ -142,4 +142,10 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         Library current = libraryService.getCurrent();
         return findSingle(Filter.eq("prototype", prototype).and(Filter.eq("library", current)));
     }
+
+    @Override
+    public Collection<T> findByPrototypes(Collection<String> prototypes) {
+        Library current = libraryService.getCurrent();
+        return findList(Filter.in("prototype", prototypes).and(Filter.eq("library", current)));
+    }
 }

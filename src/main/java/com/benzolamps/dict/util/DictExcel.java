@@ -73,7 +73,7 @@ public interface DictExcel {
                         break;
                 }
             } catch (Exception e) {
-                throw new ExcelFormatException(e.getMessage() + ", " + e.getClass().getName(), row.getRowNum(), index);
+                throw new ExcelFormatException(e, row.getRowNum(), index);
             }
 
             /* 判断非空 */

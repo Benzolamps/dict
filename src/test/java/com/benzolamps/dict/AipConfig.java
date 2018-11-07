@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 public class AipConfig {
     //设置APPID/AK/SK
-    public static final String APP_ID = "****";
-    public static final String API_KEY = "****";
-    public static final String SECRET_KEY = "****";
+    public static final String APP_ID = "14460224";
+    public static final String API_KEY = "Xg095yu3b0NUEgZslz55SZee";
+    public static final String SECRET_KEY = "su7dZB3sIn2Ypf6fdUPawU9GTTLYExqz";
 
     public static void main(String[] args) throws JSONException {
         // 初始化一个AipOcr
@@ -29,8 +29,9 @@ public class AipConfig {
         // System.setProperty("aip.log4j.conf", "path/to/your/log4j.properties");
 
         // 调用接口
-        String path = "E:\\test1.jpg";
+        String path = "E:\\test1573.jpg";
         JSONObject res = client.accurateGeneral(path, new HashMap<>());
+        System.out.println(res.toString());
         for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
             System.out.print(res.getJSONArray("words_result").getJSONObject(i).get("words") + ", ");
         }

@@ -2,16 +2,12 @@ package com.benzolamps.dict.cfg;
 
 import com.baidu.aip.ocr.AipOcr;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import org.json.JSONObject;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.util.StreamUtils;
 
 import javax.annotation.PostConstruct;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -46,10 +42,7 @@ public class AipProperties implements Serializable {
         client.setSocketTimeoutInMillis(60000);
     }
 
-    @SneakyThrows(IOException.class)
-    public JSONObject accurateGeneral(InputStream inputStream) {
-        try (InputStream is = inputStream) {
-            return client.accurateGeneral(StreamUtils.copyToByteArray(is), new HashMap<>());
-        }
+    public JSONObject accurateGeneral(byte[] data) {
+        return client.accurateGeneral(data, new HashMap<>());
     }
 }

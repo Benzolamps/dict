@@ -9,9 +9,11 @@ import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.ClazzStudentTreeVo;
 import com.benzolamps.dict.controller.vo.DataVo;
+import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
 import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.lambda.Func1;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -291,11 +293,15 @@ public class WordGroupController extends BaseController {
 
         boolean hasMore = studentsOriented.size() > 1;
 
+        ModelAndView mv = new ModelAndView("view/word_group/score");
         Student student;
         if (studentId != null) {
-            student = studentsOriented.stream().filter(stu -> studentId.equals(stu.getId())).findFirst().get();
+            student = wordGroup.getStudentsOriented().stream().filter(stu -> studentId.equals(stu.getId())).findFirst().get();
+            Assert.notNull(student, "分组中没有这名学生");
+            mv.addObject("scored", !studentsOriented.contains(student));
         } else {
             student = studentsOriented.get(Constant.RANDOM.nextInt(studentsOriented.size()));
+            mv.addObject("scored", false);
         }
 
         /* 分离已掌握的单词和未掌握的单词 */
@@ -304,7 +310,6 @@ public class WordGroupController extends BaseController {
         masteredWords.retainAll(failedWords);
         failedWords.removeAll(masteredWords);
 
-        ModelAndView mv = new ModelAndView("view/word_group/score");
         mv.addObject("group", wordGroup);
         mv.addObject("student", student);
         mv.addObject("students", studentsOriented);
@@ -389,13 +394,11 @@ public class WordGroupController extends BaseController {
     @PostMapping(value = "import.json")
     protected BaseVo imports(Integer groupId, Integer studentId, @RequestParam("file") MultipartFile... files) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
-        Assert.notNull(groupId, "id不能为null");
-        Group wordGroup = wordGroupService.find(groupId);
-        Assert.notNull(wordGroup, "word group不存在");
-        Assert.notNull(studentId, "id不能为null");
-        Student student = studentService.find(studentId);
-        Assert.notNull(student, "student不存在");
-        wordGroupService.importWords(wordGroup, student, files);
+        wordGroupService.importWords(
+            Arrays.stream(files)
+                .map((Func1<MultipartFile, ProcessImportVo>) file -> new ProcessImportVo(groupId, studentId, file.getOriginalFilename(), file.getBytes()))
+                .toArray(ProcessImportVo[]::new)
+        );
         return SUCCESS_VO;
     }
 }
