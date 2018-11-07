@@ -6,7 +6,7 @@
 <#-- @ftlvariable name="averageWordStudyProcess" type="com.benzolamps.dict.bean.StudyProcess" -->
 <#-- @ftlvariable name="averagePhraseStudyProcess" type="com.benzolamps.dict.bean.StudyProcess" -->
 <#assign title>学生详情</#assign>
-<blockquote class="layui-elem-quote" style="margin-top: 10px;">
+<blockquote class="layui-elem-quote" style="margin-top: 10px; line-height: 20px">
   ${student.name}&nbsp;&nbsp;&nbsp;&nbsp;
   <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back();">
     <i class="fa fa-arrow-circle-left" style="font-size: 20px;"></i> &nbsp; 返回
@@ -14,27 +14,39 @@
   <button class="layui-btn layui-btn-warm layui-btn-sm" onclick="location.reload(true);">
     <i class="fa fa-refresh" style="font-size: 20px;"></i> &nbsp; 刷新
   </button>
-  <button id="mastered-words" class="layui-btn layui-btn-primary layui-btn-sm">
-    查看已掌握单词
+  <button id="import-word-process" class="layui-btn layui-btn-primary layui-btn-sm">
+    <i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入单词学习进度
   </button>
-  <button id="failed-words"  class="layui-btn layui-btn-primary layui-btn-sm">
-    查看未掌握单词
-  </button>
-  <button id="personal-word-group" class="layui-btn layui-btn-primary layui-btn-sm">
-    查看专属单词分组
-  </button>
-  <button id="mastered-phrases" class="layui-btn layui-btn-primary layui-btn-sm">
-    查看已掌握短语
-  </button>
-  <button id="failed-phrases" class="layui-btn layui-btn-primary layui-btn-sm">
-    查看未掌握短语
-  </button>
-  <button id="personal-phrase-group" class="layui-btn layui-btn-primary layui-btn-sm">
-    查看专属短语分组
+  <button id="import-phrase-process" class="layui-btn layui-btn-primary layui-btn-sm">
+    <i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入短语学习进度
   </button>
 </blockquote>
 <div class="layui-row">
-  <div class="layui-col-xs6">
+  <div class="layui-col-xs3" style="vertical-align: center; text-align: center">
+    <br><br>
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <button id="mastered-words" class="layui-btn layui-btn-primary layui-btn-sm">
+      查看已掌握单词
+    </button>
+    <button id="failed-words"  class="layui-btn layui-btn-primary layui-btn-sm">
+      查看未掌握单词
+    </button>
+    <button id="personal-word-group" class="layui-btn layui-btn-primary layui-btn-sm">
+      查看专属单词分组
+    </button>
+    <br><br>
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <button id="mastered-phrases" class="layui-btn layui-btn-primary layui-btn-sm">
+      查看已掌握短语
+    </button>
+    <button id="failed-phrases" class="layui-btn layui-btn-primary layui-btn-sm">
+      查看未掌握短语
+    </button>
+    <button id="personal-phrase-group" class="layui-btn layui-btn-primary layui-btn-sm">
+      查看专属短语分组
+    </button>
+  </div>
+  <div class="layui-col-xs4">
     <div class="layui-card">
       <div class="layui-card-body">
         <table class="layui-table">
@@ -65,7 +77,7 @@
       </div>
     </div>
   </div>
-  <div class="layui-col-xs6">
+  <div class="layui-col-xs4">
     <div class="layui-card">
       <div class="layui-card-body">
         <table class="layui-table">
@@ -422,6 +434,36 @@
         }));
       console.log(baseUrl);
       location.href = baseUrl;
+    });
+
+    $('#import-word-process').click(function () {
+      dict.uploadFile({
+        action: '${base_url}/word_group/import.json',
+        multiple: true,
+        data: {
+          studentId: ${student.id}
+        },
+        accept: 'image/*',
+        success: function (delta) {
+          location.reload(true);
+          parent.layer.alert('导入单词学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+        }
+      });
+    });
+
+    $('#import-phrase-process').click(function () {
+      dict.uploadFile({
+        action: '${base_url}/phrase_group/import.json',
+        multiple: true,
+        data: {
+          studentId: ${student.id}
+        },
+        accept: 'image/*',
+        success: function (delta) {
+          location.reload(true);
+          parent.layer.alert('导入单词学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+        }
+      });
     });
   </#escape>
 </script>

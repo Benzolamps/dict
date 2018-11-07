@@ -62,6 +62,31 @@
     });
   }
 </#assign>
+
+<#assign import_word_process>
+  dict.uploadFile({
+    action: '${base_url}/word_group/import.json',
+    multiple: true,
+    accept: 'image/*',
+    success: function (delta) {
+      location.reload(true);
+      parent.layer.alert('导入单词学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+    }
+  });
+</#assign>
+
+<#assign import_phrase_process>
+  dict.uploadFile({
+    action: '${base_url}/phrase_group/import.json',
+    multiple: true,
+    accept: 'image/*',
+    success: function (delta) {
+      location.reload(true);
+      parent.layer.alert('导入短语学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+    }
+  });
+</#assign>
+
 <@nothing></script></@nothing>
 
 <@data_list
@@ -87,6 +112,14 @@
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到短语分组',
       'handler': add_to_phrase_group,
       'needSelected': true
+    },
+    {
+      'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入单词学习进度',
+      'handler': import_word_process
+    },
+    {
+      'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入短语学习进度',
+      'handler': import_phrase_process
     }
   ]
   toolbar=[
