@@ -9,11 +9,14 @@ import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.ClazzStudentTreeVo;
 import com.benzolamps.dict.controller.vo.DataVo;
+import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
 import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.lambda.Func1;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -290,11 +293,14 @@ public class PhraseGroupController extends BaseController {
 
         boolean hasMore = studentsOriented.size() > 1;
 
+        ModelAndView mv = new ModelAndView("view/word_group/score");
         Student student;
         if (studentId != null) {
-            student = studentsOriented.stream().filter(stu -> studentId.equals(stu.getId())).findFirst().get();
+            student = phraseGroup.getStudentsOriented().stream().filter(stu -> studentId.equals(stu.getId())).findFirst().get();
+            mv.addObject("scored", !studentsOriented.contains(student));
         } else {
             student = studentsOriented.get(Constant.RANDOM.nextInt(studentsOriented.size()));
+            mv.addObject("scored", false);
         }
 
         /* 分离已掌握的短语和未掌握的短语 */
@@ -303,7 +309,6 @@ public class PhraseGroupController extends BaseController {
         masteredPhrases.retainAll(failedPhrases);
         failedPhrases.removeAll(masteredPhrases);
 
-        ModelAndView mv = new ModelAndView("view/phrase_group/score");
         mv.addObject("group", phraseGroup);
         mv.addObject("student", student);
         mv.addObject("students", studentsOriented);
@@ -382,6 +387,24 @@ public class PhraseGroupController extends BaseController {
         Group phraseGroup = phraseGroupService.find(id);
         Assert.notNull(phraseGroup, "phrase group不存在");
         phraseGroupService.complete(phraseGroup);
+        return SUCCESS_VO;
+    }
+
+    /**
+     * 导入学习进度
+     * @param groupId 分组id
+     * @param studentId 学生id
+     * @param files 文件
+     * @return 操作成功
+     */
+    @PostMapping(value = "import.json")
+    protected BaseVo imports(Integer groupId, Integer studentId, @RequestParam("file") MultipartFile... files) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        phraseGroupService.importPhrases(
+            Arrays.stream(files)
+                .map((Func1<MultipartFile, ProcessImportVo>) file -> new ProcessImportVo(groupId, studentId, file.getOriginalFilename(), file.getBytes()))
+                .toArray(ProcessImportVo[]::new)
+        );
         return SUCCESS_VO;
     }
 }

@@ -297,7 +297,6 @@ public class WordGroupController extends BaseController {
         Student student;
         if (studentId != null) {
             student = wordGroup.getStudentsOriented().stream().filter(stu -> studentId.equals(stu.getId())).findFirst().get();
-            Assert.notNull(student, "分组中没有这名学生");
             mv.addObject("scored", !studentsOriented.contains(student));
         } else {
             student = studentsOriented.get(Constant.RANDOM.nextInt(studentsOriented.size()));
@@ -391,6 +390,13 @@ public class WordGroupController extends BaseController {
         return SUCCESS_VO;
     }
 
+    /**
+     * 导入学习进度
+     * @param groupId 分组id
+     * @param studentId 学生id
+     * @param files 文件
+     * @return 操作成功
+     */
     @PostMapping(value = "import.json")
     protected BaseVo imports(Integer groupId, Integer studentId, @RequestParam("file") MultipartFile... files) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
