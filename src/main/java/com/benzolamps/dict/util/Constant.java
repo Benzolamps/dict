@@ -20,13 +20,13 @@ import java.util.function.Supplier;
 public interface Constant {
 
     /** 日期格式 */
-    String DATE_FORMAT = "yyyy-MM-dd";
+    DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
     /** 时间格式 */
-    String TIME_FORMAT = "HH:mm:ss";
+    DateFormat TIME_FORMAT = new SimpleDateFormat("HH:mm:ss");
 
     /** SimpleDateFormat */
-    DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat(DATE_FORMAT + " " + TIME_FORMAT);
+    DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /** 标识符正则表达式 */
     // language=RegExp
