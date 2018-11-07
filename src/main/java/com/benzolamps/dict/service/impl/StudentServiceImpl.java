@@ -21,6 +21,7 @@ import java.util.Arrays;
  * @datetime 2018-9-19 23:13:26
  */
 @Service("studentService")
+@Transactional
 public class StudentServiceImpl extends BaseServiceImpl<Student> implements StudentService {
 
     @Resource

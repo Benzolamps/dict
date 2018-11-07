@@ -7,6 +7,7 @@ import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.service.base.StudyLogService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.Collection;
@@ -22,6 +23,7 @@ import static com.benzolamps.dict.bean.Group.Type.WORD;
  * @datetime 2018-10-1 22:03:13
  */
 @Service("studyLogService")
+@Transactional
 public class StudyLogServiceImpl extends BaseServiceImpl<StudyLog> implements StudyLogService {
 
     @Override

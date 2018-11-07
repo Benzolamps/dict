@@ -447,7 +447,6 @@ dict.uploadFile = function (data) {
     $('body').append($form);
     $file.trigger('click');
     $file.change(function () {
-        alert('hhh')
         var loader = parent.layer.load();
         var startTime = new Date().getTime();
         setTimeout(function () {

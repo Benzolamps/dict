@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service("phraseGroupService")
+@Transactional
 public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGroupService {
 
     protected PhraseGroupServiceImpl() {
@@ -85,7 +86,6 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
                     String[] value = new String(bytes, "UTF-8").split(",");
                     Integer studentId = Integer.valueOf(value[0]);
                     Integer groupId = Integer.valueOf(value[1]);
-                    processImportVo.setStudentId(studentId);
                     if (processImportVo.getStudentId() == null) {
                         processImportVo.setStudentId(studentId);
                     }
