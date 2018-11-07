@@ -103,8 +103,9 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     @SneakyThrows(IOException.class)
     public void reload() {
         if (resource.exists()) try (InputStream inputStream = resource.getInputStream()) {
-            solutions = Optional.ofNullable(YAML.loadAs(inputStream, ShuffleSolutions.class)).orElseGet(ShuffleSolutions::new);
+            solutions = YAML.loadAs(inputStream, ShuffleSolutions.class);
         }
+        solutions = Optional.ofNullable(solutions).orElseGet(ShuffleSolutions::new);
         Set<ShuffleSolution> shuffleSolutions = Optional.ofNullable(solutions.getSolutions()).orElseGet(HashSet::new);
         solutions.setSolutions(shuffleSolutions);
         if (shuffleSolutions.isEmpty()) shuffleSolutions.add(defaultSolution);
