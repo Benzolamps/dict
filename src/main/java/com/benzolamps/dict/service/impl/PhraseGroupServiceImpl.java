@@ -61,6 +61,9 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
         Assert.notNull(student, "student不能为null");
         Assert.notNull(phrases, "phrases不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
+        Assert.isTrue(!Group.Status.COMPLETED.equals(phraseGroup.getStatus()), "该分组当前处于已完成状态，无法进行评分！");
+        Assert.isTrue(phraseGroup.getStudentsOriented().contains(student), "该学生不在此分组中");
+        Assert.isTrue(!phraseGroup.getStudentsScored().contains(student), "该学生已评分");
         studentService.addFailedPhrases(student, phraseGroup.getPhrases().toArray(new Phrase[0]));
         studentService.addMasteredPhrases(student, phrases);
         this.internalJump(phraseGroup, student, null, phrases.length);
