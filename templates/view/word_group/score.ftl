@@ -238,7 +238,7 @@
           },
           multiple: true,
           accept: 'image/*',
-          success: function (delta) {
+          success: function (data, delta) {
             location.replace(location.pathname + "?id=${group.id}&studentId=${student.id}");
             parent.layer.alert('导入学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
           }

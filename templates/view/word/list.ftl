@@ -1,12 +1,6 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Word>" -->
 <#-- @ftlvariable name="wordClazzes" type="java.util.Collection<com.benzolamps.dict.bean.WordClazz>" -->
-
-<form id="upload-form" method="post" action="import.json" enctype="multipart/form-data" style="display: none;">
-  <input type="file" name="file" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
-</form>
-
 <@nothing><script type="text/javascript"></@nothing>
-
 <#list page.searches as search>
   <#if search.field == 'studentId'><#assign student_id = search.value/></#if>
 </#list>
@@ -91,32 +85,17 @@
 <@nothing>;</@nothing>
 
 <#assign file_upload>
-  var $file = $('#upload-form input');
-  $file.trigger('click');
-  $file.unbind('change');
-  $file.change(function () {
-    var loader = parent.layer.load();
-    setTimeout(function () {
-      var startTime = new Date().getTime();
-      $('#upload-form').ajaxSubmit({
-        success: function (result, status, request) {
-          var endTime = new Date().getTime();
-          var delta = ((endTime - startTime) * 0.001).toFixed(3);
-          parent.layer.close(loader);
-          parent.layer.alert('导入单词成功！<br>共导入 ' + result.data + ' 个单词！<br>用时 ' + delta + ' 秒！', {icon: 1});
-        },
-        error: function (request) {
-          parent.layer.close(loader);
-          var result = JSON.parse(request.responseText);
-          parent.layer.alert(result.message, {
-            icon: 2,
-            anim: 6,
-            title: result.status
-          });
-        }
-      });
-    }, 500);
-  });
+   $('#import').click(function () {
+     dict.uploadFile({
+       action: 'import.json',
+       multiple: true,
+       accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+       success: function (data, delta) {
+         location.reload(true);
+         parent.layer.alert('导入单词成功！<br>共导入' + data.data + '个单词！<br>用时 ' + delta + ' 秒！', {icon: 1});
+       }
+     });
+   });
 </#assign>
 
 <#function file_export pageDisabled>

@@ -280,7 +280,7 @@
             },
             multiple: true,
             accept: 'image/*',
-            success: function (delta) {
+            success: function (data, delta) {
               location.reload(true);
               parent.layer.alert('导入短语学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
             }

@@ -68,7 +68,7 @@
     action: '${base_url}/word_group/import.json',
     multiple: true,
     accept: 'image/*',
-    success: function (delta) {
+    success: function (data, delta) {
       location.reload(true);
       parent.layer.alert('导入单词学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
     }
@@ -80,7 +80,7 @@
     action: '${base_url}/phrase_group/import.json',
     multiple: true,
     accept: 'image/*',
-    success: function (delta) {
+    success: function (data, delta) {
       location.reload(true);
       parent.layer.alert('导入短语学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
     }

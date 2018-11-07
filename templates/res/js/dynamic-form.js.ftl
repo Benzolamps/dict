@@ -459,7 +459,7 @@ dict.uploadFile = function (data) {
           parent.layer.close(loader);
           $form.remove();
           if (data.success) {
-            data.success(delta);
+            data.success(result, delta);
           } else {
             parent.layer.alert('导入成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
           }
