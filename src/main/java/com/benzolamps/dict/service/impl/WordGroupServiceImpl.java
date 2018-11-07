@@ -195,6 +195,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                         if (!studentId.equals(student.getId())) {
                             student = studentService.find(studentId);
                             Assert.notNull(student, "student不存在");
+                            Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
+                            Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在此分组中！");
+                            Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分！");
                         }
                         group = this.find(groupId);
                         Assert.notNull(group, "word group不存在");
