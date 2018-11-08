@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +41,6 @@ public interface DictQrCode {
         BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints);
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             MatrixToImageWriter.writeToStream(bitMatrix, "png", outputStream);
-            MatrixToImageWriter.writeToPath(bitMatrix, "png", new File("E:\\test.png").toPath());
             return outputStream.toByteArray();
         }
     }
