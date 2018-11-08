@@ -28,19 +28,21 @@
     <button id="mastered-words" class="layui-btn layui-btn-primary layui-btn-sm">
       查看已掌握单词
     </button>
-    <button id="failed-words"  class="layui-btn layui-btn-primary layui-btn-sm">
-      查看未掌握单词
-    </button>
-    <button id="personal-word-group" class="layui-btn layui-btn-primary layui-btn-sm">
-      查看专属单词分组
-    </button>
-    <br><br>
-    &nbsp; &nbsp; &nbsp; &nbsp;
     <button id="mastered-phrases" class="layui-btn layui-btn-primary layui-btn-sm">
       查看已掌握短语
     </button>
+    <br><br>
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <button id="failed-words"  class="layui-btn layui-btn-primary layui-btn-sm">
+      查看未掌握单词
+    </button>
     <button id="failed-phrases" class="layui-btn layui-btn-primary layui-btn-sm">
       查看未掌握短语
+    </button>
+    <br><br>
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <button id="personal-word-group" class="layui-btn layui-btn-primary layui-btn-sm">
+      查看专属单词分组
     </button>
     <button id="personal-phrase-group" class="layui-btn layui-btn-primary layui-btn-sm">
       查看专属短语分组
