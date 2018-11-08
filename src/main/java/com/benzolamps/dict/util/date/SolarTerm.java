@@ -18,6 +18,7 @@ public class SolarTerm {
     private static final double D = 0.2422;
     /* +1偏移 */
     private final static Map<String, Integer[]> INCREASE_OFFSET_MAP = new HashMap<>();
+    /* -1偏移 */
     private final static Map<String, Integer[]> DECREASE_OFFSET_MAP = new HashMap<>();
 
     /* 24节气 **/
@@ -50,24 +51,24 @@ public class SolarTerm {
     }
 
     static {
-        DECREASE_OFFSET_MAP.put(SolarTermsEnum.YUSHUI.name(), new Integer[] { 2026 }); // 雨水
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.CHUNFEN.name(), new Integer[] { 2084 }); // 春分
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOMAN.name(), new Integer[] { 2008 }); // 小满
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.MANGZHONG.name(), new Integer[] { 1902 }); // 芒种
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAZHI.name(), new Integer[] { 1928 }); // 夏至
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOSHU.name(), new Integer[] { 1925, 2016 }); // 小暑
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DASHU.name(), new Integer[] { 1922 }); // 大暑
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.LIQIU.name(), new Integer[] { 2002 }); // 立秋
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.BAILU.name(), new Integer[] { 1927 }); // 白露
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.QIUFEN.name(), new Integer[] { 1942 }); // 秋分
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.SHUANGJIANG.name(), new Integer[] { 2089 }); // 霜降
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.LIDONG.name(), new Integer[] { 2089 }); // 立冬
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOXUE.name(), new Integer[] { 1978 }); // 小雪
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DAXUE.name(), new Integer[] { 1954 }); // 大雪
-        DECREASE_OFFSET_MAP.put(SolarTermsEnum.DONGZHI.name(), new Integer[] { 1918, 2021 }); // 冬至
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOHAN.name(), new Integer[] { 1982 }); // 小寒
-        DECREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOHAN.name(), new Integer[] { 2019 }); // 小寒
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DAHAN.name(), new Integer[] { 2082 }); // 大寒
+        DECREASE_OFFSET_MAP.put(SolarTermsEnum.YUSHUI.name(), new Integer[] {2026}); // 雨水
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.CHUNFEN.name(), new Integer[] {2084}); // 春分
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOMAN.name(), new Integer[] {2008}); // 小满
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.MANGZHONG.name(), new Integer[] {1902}); // 芒种
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAZHI.name(), new Integer[] {1928}); // 夏至
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOSHU.name(), new Integer[] {1925, 2016}); // 小暑
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DASHU.name(), new Integer[] {1922}); // 大暑
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.LIQIU.name(), new Integer[] {2002}); // 立秋
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.BAILU.name(), new Integer[] {1927}); // 白露
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.QIUFEN.name(), new Integer[] {1942}); // 秋分
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.SHUANGJIANG.name(), new Integer[] {2089}); // 霜降
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.LIDONG.name(), new Integer[] {2089}); // 立冬
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOXUE.name(), new Integer[] {1978}); // 小雪
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DAXUE.name(), new Integer[] {1954}); // 大雪
+        DECREASE_OFFSET_MAP.put(SolarTermsEnum.DONGZHI.name(), new Integer[] {1918, 2021}); // 冬至
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOHAN.name(), new Integer[] {1982}); // 小寒
+        DECREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOHAN.name(), new Integer[] {2019}); // 小寒
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DAHAN.name(), new Integer[] {2082}); // 大寒
     }
 
     /* 定义一个二维数组，第一维数组存储的是20世纪的节气C值，第二维数组存储的是21世纪的节气C值,0到23个，依次代表立春、雨水...大寒节气的C值 */

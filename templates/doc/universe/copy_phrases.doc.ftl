@@ -65,7 +65,7 @@
           <w:pPr>
             <w:spacing w:line="${line_height}" w:line-rule="auto"/>
             <w:rPr>
-              <w:rFonts w:ascii="${chinese_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${chinese_font_family}"/>
+              <w:rFonts w:ascii="${english_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${english_font_family}"/>
               <wx:font wx:val="${chinese_font_family}"/>
               <w:sz w:val="${font_size}"/>
               <w:sz-cs w:val="${font_size}"/>
@@ -74,7 +74,7 @@
           </w:pPr>
           <w:r>
             <w:rPr>
-              <w:rFonts w:ascii="${chinese_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${chinese_font_family}" w:hint="fareast"/>
+              <w:rFonts w:ascii="${english_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${english_font_family}" w:hint="fareast"/>
               <wx:font wx:val="${chinese_font_family}"/>
               <w:sz w:val="${font_size}"/>
               <w:sz-cs w:val="${font_size}"/>

@@ -48,6 +48,7 @@
 [#-- for Word --]
 [#-- @ftlvariable name="chinese_font_family" type="java.lang.String" --]
 [#-- @ftlvariable name="english_font_family" type="java.lang.String" --]
+[#-- @ftlvariable name="top_font_family" type="java.lang.String" --]
 [#-- @ftlvariable name="font_size" type="java.lang.String" --]
 [#-- @ftlvariable name="line_height" type="java.lang.String" --]
 [#-- @ftlvariable name="separate_columns" type="java.lang.String" --]

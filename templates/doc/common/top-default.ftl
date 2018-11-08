@@ -50,16 +50,16 @@
                 </w:pBdr>
                 <w:jc w:val="both"/>
                 <w:rPr>
-                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                  <wx:font wx:val="楷体"/>
+                  <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                  <wx:font wx:val="${top_font_family}"/>
                   <w:sz w:val="21"/>
                   <w:sz-cs w:val="21"/>
                 </w:rPr>
               </w:pPr>
               <w:r wsp:rsidRPr="0004152A">
                 <w:rPr>
-                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                  <wx:font wx:val="楷体"/>
+                  <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                  <wx:font wx:val="${top_font_family}"/>
                   <w:sz w:val="21"/>
                   <w:sz-cs w:val="21"/>
                 </w:rPr>
@@ -68,8 +68,8 @@
               <#list 0..22 as i>
                 <w:r wsp:rsidR="007A4009" wsp:rsidRPr="007A4009">
                   <w:rPr>
-                    <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                    <wx:font wx:val="楷体"/>
+                    <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                    <wx:font wx:val="${top_font_family}"/>
                     <w:sz w:val="21"/>
                     <w:sz-cs w:val="21"/>
                     <w:u w:val="single"/>
@@ -93,16 +93,16 @@
                 </w:pBdr>
                 <w:jc w:val="both"/>
                 <w:rPr>
-                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                  <wx:font wx:val="楷体"/>
+                  <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                  <wx:font wx:val="${top_font_family}"/>
                   <w:sz w:val="21"/>
                   <w:sz-cs w:val="21"/>
                 </w:rPr>
               </w:pPr>
               <w:r wsp:rsidRPr="0004152A">
                 <w:rPr>
-                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                  <wx:font wx:val="楷体"/>
+                  <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                  <wx:font wx:val="${top_font_family}"/>
                   <w:sz w:val="21"/>
                   <w:sz-cs w:val="21"/>
                 </w:rPr>
@@ -111,8 +111,8 @@
               <#list 0..13 as i>
                 <w:r wsp:rsidR="007A4009" wsp:rsidRPr="007A4009">
                   <w:rPr>
-                    <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                    <wx:font wx:val="楷体"/>
+                    <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                    <wx:font wx:val="${top_font_family}"/>
                     <w:sz w:val="21"/>
                     <w:sz-cs w:val="21"/>
                     <w:u w:val="single"/>
@@ -136,16 +136,16 @@
                 </w:pBdr>
                 <w:jc w:val="both"/>
                 <w:rPr>
-                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                  <wx:font wx:val="楷体"/>
+                  <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                  <wx:font wx:val="${top_font_family}"/>
                   <w:sz w:val="21"/>
                   <w:sz-cs w:val="21"/>
                 </w:rPr>
               </w:pPr>
               <w:r wsp:rsidRPr="0004152A">
                 <w:rPr>
-                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                  <wx:font wx:val="楷体"/>
+                  <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                  <wx:font wx:val="${top_font_family}"/>
                   <w:sz w:val="21"/>
                   <w:sz-cs w:val="21"/>
                 </w:rPr>
@@ -154,8 +154,8 @@
               <#list 0..13 as i>
                 <w:r wsp:rsidR="007A4009" wsp:rsidRPr="007A4009">
                   <w:rPr>
-                    <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                    <wx:font wx:val="楷体"/>
+                    <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                    <wx:font wx:val="${top_font_family}"/>
                     <w:sz w:val="21"/>
                     <w:sz-cs w:val="21"/>
                     <w:u w:val="single"/>
@@ -178,8 +178,8 @@
                   <w:bottom w:val="none" w:sz="0" wx:bdrwidth="0" w:space="0" w:color="auto"/>
                 </w:pBdr>
                 <w:rPr>
-                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                  <wx:font wx:val="楷体"/>
+                  <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                  <wx:font wx:val="${top_font_family}"/>
                   <w:b/>
                   <w:sz w:val="30"/>
                   <w:sz-cs w:val="30"/>
@@ -187,8 +187,8 @@
               </w:pPr>
               <w:r wsp:rsidRPr="0004152A">
                 <w:rPr>
-                  <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-                  <wx:font wx:val="楷体"/>
+                  <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+                  <wx:font wx:val="${top_font_family}"/>
                   <w:b/>
                   <w:sz w:val="30"/>
                   <w:sz-cs w:val="30"/>
@@ -211,8 +211,8 @@
             <w:spacing w:line="240" w:line-rule="at-least"/>
             <w:jc w:val="left"/>
             <w:rPr>
-              <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体"/>
-              <wx:font wx:val="楷体"/>
+              <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}"/>
+              <wx:font wx:val="${top_font_family}"/>
             </w:rPr>
           </w:pPr>
           <wx:allowEmptyCollapse/>
@@ -233,14 +233,14 @@
           </w:pBdr>
           <w:jc w:val="right"/>
           <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
+            <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+            <wx:font wx:val="${top_font_family}"/>
           </w:rPr>
         </w:pPr>
         <w:r wsp:rsidRPr="00B753B3">
           <w:rPr>
-            <w:rFonts w:ascii="楷体" w:fareast="楷体" w:h-ansi="楷体" w:hint="fareast"/>
-            <wx:font wx:val="楷体"/>
+            <w:rFonts w:ascii="${top_font_family}" w:fareast="${top_font_family}" w:h-ansi="${top_font_family}" w:hint="fareast"/>
+            <wx:font wx:val="${top_font_family}"/>
           </w:rPr>
           <w:pict>
             <v:shapetype id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t" path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
