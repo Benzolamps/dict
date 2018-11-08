@@ -100,7 +100,7 @@ public class DocController extends BaseController {
                 template.process(modelMap, stringWriter);
                 String content = compress.apply(stringWriter.toString());
                 String name = (String) modelMap.get("title");
-                InputStream inputStream = new ByteArrayInputStream(content.getBytes());
+                InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
                 zipItems.add(new DictFile.ZipItem(name + " - " + student.getId() + " - " + student.getName() + ".doc", inputStream));
             }
         }
@@ -127,7 +127,7 @@ public class DocController extends BaseController {
             String content = compress.apply(stringWriter.toString());
             Map<String, Object> exportAttribute = new HashMap<>();
             exportAttribute.put("ext", "doc");
-            exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> outputStream.write(content.getBytes()));
+            exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> outputStream.write(content.getBytes("UTF-8")));
             String token = UUID.randomUUID().toString().replace("-", "");
             RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
             requestAttributes.setAttribute(token, exportAttribute, RequestAttributes.SCOPE_SESSION);

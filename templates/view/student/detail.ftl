@@ -22,7 +22,7 @@
   </button>
 </blockquote>
 <div class="layui-row">
-  <div class="layui-col-xs3" style="vertical-align: center; text-align: center">
+  <div class="layui-col-xs4" style="vertical-align: center; text-align: center">
     <br><br>
     &nbsp; &nbsp; &nbsp; &nbsp;
     <button id="mastered-words" class="layui-btn layui-btn-primary layui-btn-sm">
