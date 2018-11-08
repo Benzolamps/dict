@@ -124,7 +124,7 @@ public class DocController extends BaseController {
         Template template = this.getTemplate(docExportVo, modelMap);
         try (StringWriter stringWriter = new StringWriter()) {
             template.process(modelMap, stringWriter);
-            String content = compress.apply(stringWriter.toString());
+            String content = stringWriter.toString().replaceAll("[\\t\\f\\u00a0 ]+", " ").replaceAll("[\\r\\n]+ ", "\r\n").trim();
             Map<String, Object> exportAttribute = new HashMap<>();
             exportAttribute.put("ext", "doc");
             exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> outputStream.write(content.getBytes()));
