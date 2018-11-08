@@ -26,7 +26,6 @@ import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 import java.util.zip.ZipOutputStream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -54,9 +53,6 @@ public class DocController extends BaseController {
 
     @Resource
     private StudentService studentService;
-
-    @Resource
-    private UnaryOperator<String> compress;
 
     private Template getTemplate(DocExportVo docExportVo, ModelMap modelMap) throws IOException {
         Assert.notNull(docExportVo, "doc export vo不能为null");
@@ -98,7 +94,7 @@ public class DocController extends BaseController {
             modelMap.addAttribute("groupId", docExportVo.getGroupId());
             try (StringWriter stringWriter = new StringWriter()) {
                 template.process(modelMap, stringWriter);
-                String content = compress.apply(stringWriter.toString());
+                String content = stringWriter.toString().replaceAll("[\\t\\f\\u00a0 ]+", " ").replaceAll("[\\r\\n]+ ", "\r\n").trim();
                 String name = (String) modelMap.get("title");
                 InputStream inputStream = new ByteArrayInputStream(content.getBytes());
                 zipItems.add(new DictFile.ZipItem(name + " - " + student.getId() + " - " + student.getName() + ".doc", inputStream));
