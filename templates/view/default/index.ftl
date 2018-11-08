@@ -338,10 +338,12 @@
             type: 'get',
             dataType: 'text',
             success: function (result) {
-              layer.alert(result, {
-                icon: 6
-              });
-              localStorage.setItem("lastTime", new Date().getTime());
+              if ($.trim(result) != '') {
+                layer.alert(result, {
+                  icon: 6
+                });
+                localStorage.setItem("lastTime", new Date().getTime());
+              }
             },
             error: function (result) {
               layer.alert(JSON.stringify(result), {
