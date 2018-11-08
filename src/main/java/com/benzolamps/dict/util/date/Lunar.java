@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
 import static com.benzolamps.dict.util.Constant.DATE_FORMAT;
@@ -21,7 +22,7 @@ public class Lunar {
     private final int month;
     private final int day;
     private boolean isLeap;
-    private final static long[] LUNAR_INFO = new long[] {
+    private static final long[] LUNAR_INFO = new long[] {
         0x04bd8, 0x04ae0, 0x0a570, 0x054d5, 0x0d260, 0x0d950, 0x16554, 0x056a0, 0x09ad0, 0x055d2,
         0x04ae0, 0x0a5b6, 0x0a4d0, 0x0d250, 0x1d255, 0x0b540, 0x0d6a0, 0x0ada2, 0x095b0, 0x14977,
         0x04970, 0x0a4b0, 0x0b4b5, 0x06a50, 0x06d40, 0x1ab54, 0x02b60, 0x09570, 0x052f2, 0x04970,
@@ -44,17 +45,18 @@ public class Lunar {
         0x0e968, 0x0d520, 0x0daa0, 0x16aa6, 0x056d0, 0x04ae0, 0x0a9d4, 0x0a2d0, 0x0d150, 0x0f252,
         0x0d520
     };
-    private final static String MONTH_STR[] = {"正", "二", "三", "四", "五", "六", "七", "八", "九", "十", "冬", "腊"};
+    private static final String[] MONTH_STR = {"正", "二", "三", "四", "五", "六", "七", "八", "九", "十", "冬", "腊"};
     private static final String[] ANIMALS = new String[] {"鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"};
     private static final String[] GAN = new String[] {"甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"};
     private static final String[] ZHI = new String[] {"子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"};
-    private static final String CHINESE_NUMBER[] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
+    private static final String[] CHINESE_NUMBER = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
 
     @SneakyThrows(ParseException.class)
     public Lunar(Date date) {
         int leapMonth;
         Date baseDate = DATE_FORMAT.parse("1900-1-31");
-        int offset = (int) ((date.getTime() - baseDate.getTime()) / (1000 * 3600 * 24));
+        Calendar calendar = Calendar.getInstance();
+        int offset = (int) ((date.getTime() - baseDate.getTime()) / (1000 * 60 * 60 * 24));
         /*
          * 用offset减去每农历年的天数
          * 计算当天是农历第几天
@@ -140,7 +142,6 @@ public class Lunar {
     }
 
     public String getAnimal() {
-
         return ANIMALS[(year - 4) % 12];
     }
 
@@ -154,8 +155,6 @@ public class Lunar {
     }
 
     public static String getDayStr(int day) {
-
-
         switch (day) {
             case 10:
                 return "初十";

@@ -115,10 +115,16 @@
               </li>
             </#if>
             <li class="layui-nav-item" lay-unselect>
-              <a style="color: #333333" class="date-time-text"><#include '/res/txt/current_time.txt.ftl'/></a>
+              <a style="color: #333333" class="date-time-text">
+                <script type="text/javascript">
+                  document.write(dict.dateToStr(new Date()));
+                </script>
+              </a>
             </li>
             <li class="layui-nav-item" lay-unselect>
-              <a style="color: #333333">${current_lunar_date()}</a>
+              <a style="color: #333333" class="lunar-date-text">
+                ${current_lunar_date()}
+              </a>
             </li>
           </ul>
           <ul class="layui-nav layui-layout-right">
@@ -174,7 +180,26 @@
       <script type="text/javascript">
         element.render();
 
-        dict.rtDateTimeText('.date-time-text');
+        setInterval(function () {
+          var now = new Date();
+          $('.date-time-text').text(dict.dateToStr(now));
+          if (now.getHours() == 0 && now.getMinutes() == 0 &&now.getSeconds() == 0) {
+            dict.loadText({
+              type: "get",
+              url: '${base_url}/res/txt/lunar_date.txt',
+              dataType: 'text',
+              success: function(data) {
+                $('.lunar-date-text').text(data);
+              },
+              error: function (result) {
+                layer.alert(result.message, {
+                  icon: 2,
+                  title: result.status
+                });
+              }
+            });
+          }
+        }, 500);
 
         var columns = null;
 

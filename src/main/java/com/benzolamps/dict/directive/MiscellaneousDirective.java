@@ -2,12 +2,16 @@ package com.benzolamps.dict.directive;
 
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.UserService;
+import com.benzolamps.dict.util.date.Festival;
+import com.benzolamps.dict.util.date.Lunar;
+import com.benzolamps.dict.util.date.SolarTerm;
 import freemarker.template.TemplateMethodModelEx;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * 杂项Freemarker指令
@@ -41,5 +45,17 @@ public class MiscellaneousDirective {
     @Bean
     protected TemplateMethodModelEx allLibrariesMethod() {
         return arguments -> libraryService.findAll();
+    }
+
+    /** @return 查看所有词库 */
+    @Bean
+    protected TemplateMethodModelEx currentLunarDateMethod() {
+        return arguments -> {
+            Date date = new Date();
+            String[] festivals = Festival.getFestival(date);
+            String solarTerm = SolarTerm.getSolarTerm(date);
+            Lunar lunar = new Lunar(date);
+            return lunar + (festivals.length > 0 ? " " + String.join(" ", festivals) : "") + (solarTerm != null ? " " + solarTerm : "");
+        };
     }
 }

@@ -1,1 +1,0 @@
-${.now?string(request.getParameter('pattern')!'yyyy年M月d日 H时mm分ss秒')}

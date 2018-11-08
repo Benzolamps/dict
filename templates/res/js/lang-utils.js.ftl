@@ -164,3 +164,27 @@ dict.extendsFunction = function (func1, func2) {
 
   return extended;
 };
+
+/**
+ * 日期转字符串
+ *  @param date {Date} 日期
+ *  @returns {string}
+ */
+dict.dateToStr = function (date) {
+  dict.assert(date.constructor === Date, "date不是日期类型");
+  var str = date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日 ';
+  switch (date.getDay()) {
+    case 0: str += '星期日'; break;
+    case 1: str += '星期一'; break;
+    case 2: str += '星期二'; break;
+    case 3: str += '星期三'; break;
+    case 4: str += '星期四'; break;
+    case 5: str += '星期五'; break;
+    case 6: str += '星期六'; break;
+  }
+  str += ' ' + date.getHours() + ':' +
+    (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':' +
+    (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
+
+  return str;
+};
