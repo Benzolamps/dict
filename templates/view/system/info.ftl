@@ -18,10 +18,6 @@
               <td>${system_version}</td>
             </tr>
             <tr>
-              <th title="当前时间">当前时间</th>
-              <td class="date-time-text"><#include '/res/txt/current_time.txt.ftl'/></td>
-            </tr>
-            <tr>
               <th title="操作系统名称">操作系统名称</th>
               <td>${os_name}</td>
             </tr>
@@ -106,6 +102,3 @@
     </div>
   </div>
 </div>
-<script type="text/javascript">
-  dict.rtDateTimeText('.date-time-text');
-</script>

@@ -61,5 +61,6 @@
     <entry key="shuffle_strategy_loop" value-ref="shuffleStrategyDirective"/>
     <entry key="compress" value-ref="compressDirective"/>
     <entry key="qr_code_base64" value-ref="qrCodeBase64Directive"/>
+    <entry key="current_lunar_date" value-ref="currentLunarDateMethod"/>
   </util:map>
 </beans>

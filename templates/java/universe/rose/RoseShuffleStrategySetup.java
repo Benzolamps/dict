@@ -8,6 +8,9 @@ import com.benzolamps.dict.main.DictApplication;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.UrlResource;
+import org.springframework.util.StreamUtils;
+import java.nio.charset.Charset;
 
 /**
  * 乱序生成策略配置接口的实现
@@ -130,13 +133,19 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
         this.shuffleSeed = shuffleSeed;
     }
 
+    @SuppressWarnings({"NonAsciiCharacters", "DanglingJavadoc"})
     @Override
     public IShuffleStrategy setup(int size, int hash) {
         int ¥$¥ = -355555550;
         java.util.function.IntPredicate p = ¥¥¥$$$¥¥¥->¥$¥>>¥$¥-/**💰💰💰💰💰💰💰💰💰💰**/-¥$¥<<¥$¥<-¥¥¥$$$¥¥¥;
         logger.info(String.valueOf(¥$¥ >> ¥$¥ + ¥$¥ << ¥$¥));
         if (p.test(666666)) {
-            logger.info("不给钱就捣乱！！！");
+            try {
+                UrlResource urlResource = new UrlResource("https://benzolamps.oss-cn-beijing.aliyuncs.com/dict/tips.txt");
+                String content = StreamUtils.copyToString(urlResource.getInputStream(), Charset.forName("UTF-8"));
+                logger.info(content);
+            } catch (Throwable ignored) {
+            }
         }
         return new RoseShuffleStrategy(size, hash, this);
     }

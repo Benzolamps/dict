@@ -41,6 +41,7 @@
 [#function current_user][/#function]
 [#function current_library][/#function]
 [#function all_libraries][/#function]
+[#function current_lunar_date][/#function]
 [#include '/view/includes/main.ftl'/]
 [#include '/doc/common/arrangement.ftl'/]
 

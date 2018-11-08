@@ -1,25 +1,26 @@
 package com.benzolamps.dict.util.date;
 
-import java.text.ParseException;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.benzolamps.dict.util.Constant.DATE_FORMAT;
-import static java.util.Calendar.DATE;
-import static java.util.Calendar.MONTH;
-import static java.util.Calendar.YEAR;
+import static java.util.Calendar.*;
 
 /**
- *
+ * 二十四节气
  * @author Benzolamps
- *
+ * @version 2.2.3
+ * @datetime 2018-11-8 10:08:09
  */
 @SuppressWarnings("MagicConstant")
 public class SolarTerm {
     private static final double D = 0.2422;
-    private final static Map<String, Integer[]> INCREASE_OFFSET_MAP = new HashMap<>();// +1偏移
-    private final static Map<String, Integer[]> DECREASE_OFFSET_MAP = new HashMap<>();// -1偏移
+    /* +1偏移 */
+    private final static Map<String, Integer[]> INCREASE_OFFSET_MAP = new HashMap<>();
+    private final static Map<String, Integer[]> DECREASE_OFFSET_MAP = new HashMap<>();
 
-    /** 24节气 **/
+    /* 24节气 **/
     @SuppressWarnings("SpellCheckingInspection")
     private enum SolarTermsEnum {
         LICHUN, // 立春
@@ -49,42 +50,47 @@ public class SolarTerm {
     }
 
     static {
-        DECREASE_OFFSET_MAP.put(SolarTermsEnum.YUSHUI.name(), new Integer[] { 2026 });// 雨水
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.CHUNFEN.name(), new Integer[] { 2084 });// 春分
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOMAN.name(), new Integer[] { 2008 });// 小满
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.MANGZHONG.name(), new Integer[] { 1902 });// 芒种
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAZHI.name(), new Integer[] { 1928 });// 夏至
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOSHU.name(), new Integer[] { 1925, 2016 });// 小暑
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DASHU.name(), new Integer[] { 1922 });// 大暑
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.LIQIU.name(), new Integer[] { 2002 });// 立秋
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.BAILU.name(), new Integer[] { 1927 });// 白露
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.QIUFEN.name(), new Integer[] { 1942 });// 秋分
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.SHUANGJIANG.name(), new Integer[] { 2089 });// 霜降
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.LIDONG.name(), new Integer[] { 2089 });// 立冬
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOXUE.name(), new Integer[] { 1978 });// 小雪
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DAXUE.name(), new Integer[] { 1954 });// 大雪
-        DECREASE_OFFSET_MAP.put(SolarTermsEnum.DONGZHI.name(), new Integer[] { 1918, 2021 });// 冬至
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOHAN.name(), new Integer[] { 1982 });// 小寒
-        DECREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOHAN.name(), new Integer[] { 2019 });// 小寒
-        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DAHAN.name(), new Integer[] { 2082 });// 大寒
+        DECREASE_OFFSET_MAP.put(SolarTermsEnum.YUSHUI.name(), new Integer[] { 2026 }); // 雨水
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.CHUNFEN.name(), new Integer[] { 2084 }); // 春分
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOMAN.name(), new Integer[] { 2008 }); // 小满
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.MANGZHONG.name(), new Integer[] { 1902 }); // 芒种
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAZHI.name(), new Integer[] { 1928 }); // 夏至
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOSHU.name(), new Integer[] { 1925, 2016 }); // 小暑
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DASHU.name(), new Integer[] { 1922 }); // 大暑
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.LIQIU.name(), new Integer[] { 2002 }); // 立秋
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.BAILU.name(), new Integer[] { 1927 }); // 白露
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.QIUFEN.name(), new Integer[] { 1942 }); // 秋分
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.SHUANGJIANG.name(), new Integer[] { 2089 }); // 霜降
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.LIDONG.name(), new Integer[] { 2089 }); // 立冬
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOXUE.name(), new Integer[] { 1978 }); // 小雪
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DAXUE.name(), new Integer[] { 1954 }); // 大雪
+        DECREASE_OFFSET_MAP.put(SolarTermsEnum.DONGZHI.name(), new Integer[] { 1918, 2021 }); // 冬至
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOHAN.name(), new Integer[] { 1982 }); // 小寒
+        DECREASE_OFFSET_MAP.put(SolarTermsEnum.XIAOHAN.name(), new Integer[] { 2019 }); // 小寒
+        INCREASE_OFFSET_MAP.put(SolarTermsEnum.DAHAN.name(), new Integer[] { 2082 }); // 大寒
     }
 
-    // 定义一个二维数组，第一维数组存储的是20世纪的节气C值，第二维数组存储的是21世纪的节气C值,0到23个，依次代表立春、雨水...大寒节气的C值
+    /* 定义一个二维数组，第一维数组存储的是20世纪的节气C值，第二维数组存储的是21世纪的节气C值,0到23个，依次代表立春、雨水...大寒节气的C值 */
     private static final double[][] CENTURY_ARRAY = {
-            { 4.6295, 19.4599, 6.3826, 21.4155, 5.59, 20.888, 6.318, 21.86, 6.5, 22.2, 7.928, 23.65, 8.35, 23.95, 8.44,
-                    23.822, 9.098, 24.218, 8.218, 23.08, 7.9, 22.6, 6.11, 20.84 },
-            { 3.87, 18.73, 5.63, 20.646, 4.81, 20.1, 5.52, 21.04, 5.678, 21.37, 7.108, 22.83, 7.5, 23.13, 7.646, 23.042,
-                    8.318, 23.438, 7.438, 22.36, 7.18, 21.94, 5.4055, 20.12 } };
+        {
+            4.6295, 19.4599, 6.3826, 21.4155, 5.59, 20.888, 6.318, 21.86, 6.5, 22.2,
+            7.928, 23.65, 8.35, 23.95, 8.44, 23.822, 9.098, 24.218, 8.218, 23.08,
+            7.9, 22.6, 6.11, 20.84
+        },
+        {
+            3.87, 18.73, 5.63, 20.646, 4.81, 20.1, 5.52, 21.04, 5.678, 21.37,
+            7.108, 22.83, 7.5, 23.13, 7.646, 23.042, 8.318, 23.438, 7.438, 22.36,
+            7.18, 21.94, 5.4055, 20.12
+        }
+    };
 
     /**
      *
-     * @param year
-     *            年份
-     * @param name
-     *            节气的名称
+     * @param year 年份
+     * @param name 节气的名称
      * @return 返回节气是相应月份的第几天
      */
-    public static int getSolarTermNum(int year, String name) {
+    private static int getSolarTermNum(int year, String name) {
         double centuryValue;// 节气的世纪值，每个节气的每个世纪值都不同
         name = name.trim().toUpperCase();
         int ordinal = SolarTermsEnum.valueOf(name).ordinal();
@@ -98,32 +104,29 @@ public class SolarTerm {
         }
         centuryValue = CENTURY_ARRAY[centuryIndex][ordinal];
         int dateNum;
-        /**
+        /*
          * 计算 num =[Y*D+C]-L这是传说中的寿星通用公式 公式解读：年数的后2位乘0.2422加C(即：centuryValue)取整数后，减闰年数
          */
-        int y = year % 100;// 步骤1:取年分的后两位数
-        if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {// 闰年
+        int y = year % 100; // 步骤1:取年分的后两位数
+        if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) { // 闰年
             if (ordinal == SolarTermsEnum.XIAOHAN.ordinal() || ordinal == SolarTermsEnum.DAHAN.ordinal()
                     || ordinal == SolarTermsEnum.LICHUN.ordinal() || ordinal == SolarTermsEnum.YUSHUI.ordinal()) {
                 // 注意：凡闰年3月1日前闰年数要减一，即：L=[(Y-1)/4],因为小寒、大寒、立春、雨水这两个节气都小于3月1日,所以 y = y-1
-                y = y - 1;// 步骤2
+                y = y - 1; // 步骤2
             }
         }
-        dateNum = (int) (y * D + centuryValue) - (y / 4);// 步骤3，使用公式[Y*D+C]-L计算
-        dateNum += specialYearOffset(year, name);// 步骤4，加上特殊的年分的节气偏移量
+        dateNum = (int) (y * D + centuryValue) - (y / 4); // 步骤3，使用公式[Y*D+C]-L计算
+        dateNum += specialYearOffset(year, name); // 步骤4，加上特殊的年分的节气偏移量
         return dateNum;
     }
 
     /**
      * 特例,特殊的年分的节气偏移量,由于公式并不完善，所以算出的个别节气的第几天数并不准确，在此返回其偏移量
-     *
-     * @param year
-     *            年份
-     * @param name
-     *            节气名称
+     * @param year 年份
+     * @param name 节气名称
      * @return 返回其偏移量
      */
-    public static int specialYearOffset(int year, String name) {
+    private static int specialYearOffset(int year, String name) {
         int offset = 0;
         offset += getOffset(DECREASE_OFFSET_MAP, year, name, -1);
         offset += getOffset(INCREASE_OFFSET_MAP, year, name, 1);
@@ -131,7 +134,7 @@ public class SolarTerm {
         return offset;
     }
 
-    public static int getOffset(Map<String, Integer[]> map, int year, String name, int offset) {
+    private static int getOffset(Map<String, Integer[]> map, int year, String name, int offset) {
         int off = 0;
         Integer[] years = map.get(name);
         if (null != years) {
@@ -148,7 +151,7 @@ public class SolarTerm {
     public static String getSolarTerm(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        if (calendar.get(YEAR) >= 1901 && calendar.get(YEAR) <= 2100)
+        if (calendar.get(YEAR) >= 1901 && calendar.get(YEAR) <= 2100) {
             switch (calendar.get(MONTH) + 1) {
                 case 1: {
                     if (getSolarTermNum(calendar.get(YEAR), SolarTermsEnum.XIAOHAN.name()) == calendar.get(DATE))
@@ -245,19 +248,7 @@ public class SolarTerm {
                         return "冬至";
                 }
             }
+        }
         return null;
-    }
-
-    public static void main(String[] args) throws ParseException {
-        Date date = DATE_FORMAT.parse("2018-9-24");
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        System.out.println(calendar.get(YEAR));
-        System.out.println(calendar.get(MONTH));
-        System.out.println(calendar.get(DATE));
-        System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
-        System.out.println(new Lunar(date));
-        System.out.println(SolarTerm.getSolarTerm(date));
-        System.out.println((Arrays.toString(Festival.getFestival(date))));
     }
 }

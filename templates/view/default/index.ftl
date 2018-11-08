@@ -114,6 +114,12 @@
                 </dl>
               </li>
             </#if>
+            <li class="layui-nav-item" lay-unselect>
+              <a style="color: #333333" class="date-time-text"><#include '/res/txt/current_time.txt.ftl'/></a>
+            </li>
+            <li class="layui-nav-item" lay-unselect>
+              <a style="color: #333333">${current_lunar_date()}</a>
+            </li>
           </ul>
           <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item" lay-unselect>
@@ -167,6 +173,8 @@
       </div>
       <script type="text/javascript">
         element.render();
+
+        dict.rtDateTimeText('.date-time-text');
 
         var columns = null;
 
@@ -312,6 +320,36 @@
           }, 500);
         };
         dict.updateSocket.connect();
+
+        lastTimeStr = localStorage.getItem("lastTime");
+        var needShow = lastTimeStr == null;
+        if (!needShow) {
+          var now = new Date();
+          var lastTime = new Date(parseInt(lastTimeStr));
+          console.log(now.getDate());
+          if (!(now.getFullYear() == lastTime.getFullYear() && now.getMonth() == lastTime.getMonth() && now.getDate() == lastTime.getDate())) {
+            needShow = true;
+          }
+        }
+
+        if (needShow) {
+          dict.loadText({
+            url: 'https://benzolamps.oss-cn-beijing.aliyuncs.com/dict/tips.txt',
+            type: 'get',
+            dataType: 'text',
+            success: function (result) {
+              layer.alert(result, {
+                icon: 6
+              });
+              localStorage.setItem("lastTime", new Date().getTime());
+            },
+            error: function (result) {
+              layer.alert(JSON.stringify(result), {
+                icon: 2
+              });
+            }
+          });
+        }
       </script>
     </body>
   </html>
