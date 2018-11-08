@@ -69,11 +69,11 @@ public class FileComparator {
         List<String> srcPaths = srcFiles.stream().map(this::comparablePart).collect(Collectors.toList());
         List<String> destPaths = destFiles.stream().map(this::comparablePart).collect(Collectors.toList());
         List<String> srcOnly = srcPaths.stream()
-                .filter(((Predicate<String>) destPaths::contains).negate())
-                .collect(Collectors.toList());
+            .filter(((Predicate<String>) destPaths::contains).negate())
+            .collect(Collectors.toList());
         List<String> destOnly = destPaths.stream()
-                .filter(((Predicate<String>) srcPaths::contains).negate())
-                .collect(Collectors.toList());
+            .filter(((Predicate<String>) srcPaths::contains).negate())
+            .collect(Collectors.toList());
         List<String> same = srcPaths.stream().filter(destPaths::contains).collect(Collectors.toList());
         srcOnly.sort(String::compareToIgnoreCase);
         destOnly.sort(String::compareToIgnoreCase);
