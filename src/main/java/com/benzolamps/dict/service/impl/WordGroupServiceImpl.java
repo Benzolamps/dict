@@ -86,7 +86,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         for (ProcessImportVo processImportVo : processImportVos) {
             if (processImportVo.getStudentId() == null || processImportVo.getGroupId() == null) {
                 try {
-                    String content = DictQrCode.readQrCode(processImportVo.getData(), 0.5F, 0.5F, 0F, 0.5F);
+                    String content = DictQrCode.readQrCode(processImportVo.getData(), 0.75F, 0.25F, 0F, 0.15F);
                     byte[] bytes = Base64.getDecoder().decode(content);
                     Random random = new Random(2018);
                     for (int i = 0; i < bytes.length; i++) {
