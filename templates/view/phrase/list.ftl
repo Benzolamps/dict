@@ -150,8 +150,8 @@
 </#assign>
 
 <#assign create_personal>
-  if (data.length > 100) {
-    parent.layer.alert('一次最多只能添加100个短语！', {icon: 2});
+  if (data.length > 500) {
+    parent.layer.alert('一次最多只能添加 500 个短语！', {icon: 2});
   } else {
     parent.layer.open({
       type: 2,
