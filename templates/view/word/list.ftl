@@ -5,6 +5,17 @@
   <#if search.field == 'studentId'><#assign student_id = search.value/></#if>
 </#list>
 
+<#assign file_upload>
+   dict.uploadFile({
+     action: 'import.json',
+     accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+     success: function (data, delta) {
+       location.reload(true);
+       parent.layer.alert('导入单词成功！<br>共导入' + data.data + '个单词！<br>用时 ' + delta + ' 秒！', {icon: 1});
+     }
+   });
+</#assign>
+
 <#assign fields>
   [
     {'field': 'prototype', 'title': '单词', 'sort': true, 'minWidth': 120},
@@ -83,20 +94,6 @@
   ]
 </#assign>
 <@nothing>;</@nothing>
-
-<#assign file_upload>
-   $('#import').click(function () {
-     dict.uploadFile({
-       action: 'import.json',
-       multiple: true,
-       accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-       success: function (data, delta) {
-         location.reload(true);
-         parent.layer.alert('导入单词成功！<br>共导入' + data.data + '个单词！<br>用时 ' + delta + ' 秒！', {icon: 1});
-       }
-     });
-   });
-</#assign>
 
 <#function file_export pageDisabled>
   <#assign returnValue>

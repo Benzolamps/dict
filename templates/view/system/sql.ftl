@@ -47,7 +47,6 @@
   $('#file-execute').click(function () {
     dict.uploadFile({
       action: 'sql.json',
-      multiple: true,
       accept: '.sql, .txt',
       success: function (data, delta) {
         parent.layer.alert('操作成功！', {icon: 1});

@@ -19,8 +19,8 @@ public class ProcessImportException extends DictException {
         super(
             "导入 " + name + " 时出现异常，" +
             cause.getClass().getName() +
-            (msg != null ? ": " + msg : "") +
-            (cause.getMessage() != null ? ": " + cause.getMessage() : ""),
+            (msg != null ? "：" + msg : "") +
+            (cause.getMessage() != null ? "：" + cause.getMessage() : ""),
             cause
         );
     }

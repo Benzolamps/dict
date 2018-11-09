@@ -189,7 +189,12 @@
           });
         });
       <#else>
-        location.replace(location.pathname + "?id=${group.id}");
+        <#if hasMore>
+          location.replace(location.pathname + "?id=${group.id}");
+        <#else>
+          var layerIndex = parent.layer.getFrameIndex(window.name);
+          parent.layer.close(layerIndex);
+        </#if>
       </#if>
     });
 
