@@ -1,6 +1,7 @@
 package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DictIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -39,12 +40,14 @@ public abstract class BaseEntity extends BaseBean {
     @Column(nullable = false, updatable = false)
     @DictIgnore
     @CreationTimestamp
+    @JsonFormat(pattern = "yyyy年MM月dd日 H:mm:ss")
     private Date createDate;
 
     /** 修改时间 */
     @Column(nullable = false)
     @DictIgnore
     @UpdateTimestamp
+    @JsonFormat(pattern = "yyyy年MM月dd日 H:mm:ss")
     private Date modifyDate;
 
     /** 备注 */

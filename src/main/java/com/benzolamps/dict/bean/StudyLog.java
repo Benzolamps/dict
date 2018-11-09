@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
@@ -37,6 +38,7 @@ public class StudyLog extends BaseEntity {
     /** 记录时间 */
     @Column(nullable = false, updatable = false)
     @Past
+    @JsonFormat(pattern = "yyyy年MM月dd日 H:mm:ss")
     private Date logDate;
 
     /** 分组名称 */
@@ -52,6 +54,7 @@ public class StudyLog extends BaseEntity {
     /** 分组创建时间 */
     @Column(nullable = false, updatable = false)
     @Past
+    @JsonFormat(pattern = "yyyy年MM月dd日 H:mm:ss")
     private Date groupCreateDate;
 
     /** 词库名称 */

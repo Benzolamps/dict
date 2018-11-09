@@ -139,7 +139,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         } else {
             resultWords = wordService.findByPrototypes(words);
         }
-        logger.info(name + "导入 " + resultWords.size() + " 个单词：" + String.join(", ", resultWords.stream().map(Word::getPrototype).collect(Collectors.toList())));
+        logger.info(name + " 导入 " + resultWords.size() + " 个单词：" + String.join(", ", resultWords.stream().map(Word::getPrototype).collect(Collectors.toList())));
         return resultWords;
     }
 

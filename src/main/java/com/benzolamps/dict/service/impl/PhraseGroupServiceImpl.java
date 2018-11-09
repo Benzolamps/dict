@@ -137,7 +137,7 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
         } else {
             resultPhrases = phraseService.findByPrototypes(phrases);
         }
-        logger.info(name + "导入 " + resultPhrases.size() + " 个短语：" + String.join(", ", resultPhrases.stream().map(Phrase::getPrototype).collect(Collectors.toList())));
+        logger.info(name + " 导入 " + resultPhrases.size() + " 个短语：" + String.join(", ", resultPhrases.stream().map(Phrase::getPrototype).collect(Collectors.toList())));
         return resultPhrases;
     }
 

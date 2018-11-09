@@ -24,8 +24,8 @@
 </#assign>
 
 <#assign add_to_phrase_group>
-  if (data.length > 100) {
-    parent.layer.alert('一次最多只能添加100个班级！', {icon: 2});
+  if (data.length > 500) {
+    parent.layer.alert('一次最多只能添加 500 个班级！', {icon: 2});
   } else {
     parent.layer.open({
       type: 2,
