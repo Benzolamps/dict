@@ -2,6 +2,7 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import java.util.Set;
 @Table(name = "dict_library")
 @Getter
 @Setter
+@JsonIgnoreProperties({"createDate", "modifyDate", "version", "remark"})
 public class Library extends BaseEntity {
 
     private static final long serialVersionUID = -8525365652508791389L;

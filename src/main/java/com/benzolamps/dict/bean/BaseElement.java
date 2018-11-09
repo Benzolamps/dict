@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @MappedSuperclass
 @Setter
 @Getter
+@JsonIgnoreProperties({"createDate", "modifyDate", "version", "remark"})
 public abstract class BaseElement extends BaseEntity {
 
     private static final long serialVersionUID = -3019993342620190686L;

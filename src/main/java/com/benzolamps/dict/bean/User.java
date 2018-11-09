@@ -4,6 +4,7 @@ import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictReadonly;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,7 @@ import static com.benzolamps.dict.util.Constant.CHINESE_TITLE_PATTERN;
 @Getter
 @Setter
 @NoArgsConstructor
+@JsonIgnoreProperties({"createDate", "modifyDate", "version", "remark"})
 public class User extends BaseEntity {
 
     private static final long serialVersionUID = -5309444370236159463L;

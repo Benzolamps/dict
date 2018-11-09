@@ -126,11 +126,6 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         filter.and(Filter.eq("type", type)).and(Filter.eq("library", library));
     }
 
-    @Override
-    protected void handleOrder(final List<Order> orders) {
-        orders.add(Order.asc("createDate"));
-    }
-
     @Transactional(readOnly = true)
     @Override
     public boolean nameExists(String name) {

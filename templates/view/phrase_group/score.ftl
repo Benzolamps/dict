@@ -9,7 +9,7 @@
   <div class="layui-col-xs5">
     <div class="layui-card" style="height: 500px;">
       <div class="layui-card-header">
-        <div style="text-align: center">未掌握的短语</div>
+        <div style="text-align: center">未掌握的短语（<span id="failed-phrase-count">${failedPhrases?size}</span>）</div>
       </div>
       <div class="layui-card-body">
         <#if !scored>
@@ -68,7 +68,7 @@
   <div class="layui-col-xs5">
     <div class="layui-card" style="height: 500px;">
       <div class="layui-card-header">
-        <div style="text-align: center">已掌握的短语</div>
+        <div style="text-align: center">已掌握的短语（<span id="mastered-phrase-count">${masteredPhrases?size}</span>）</div>
       </div>
       <div class="layui-card-body">
         <#if !scored>
@@ -127,6 +127,8 @@
         var node = failedNode.splice(item.getIndex(), 1)[0];
         masteredNode.push(node);
       });
+      $('#mastered-phrase-count').text(masteredNode.length);
+      $('#failed-phrase-count').text(failedNode.length);
       masteredNode.sort(function (a, b) {
         return a.index - b.index;
       });
@@ -141,6 +143,8 @@
         var node = masteredNode.splice(item.getIndex(), 1)[0];
         failedNode.push(node);
       });
+      $('#mastered-phrase-count').text(masteredNode.length);
+      $('#failed-phrase-count').text(failedNode.length);
       failedNode.sort(function (a, b) {
         return a.index - b.index;
       });
@@ -189,6 +193,7 @@
           });
         });
       <#else>
+        parent.$('iframe')[0].contentWindow.dict.reload(true);
         <#if hasMore>
           location.replace(location.pathname + "?id=${group.id}");
         <#else>
@@ -245,6 +250,7 @@
           accept: 'image/*',
           success: function (data, delta) {
             location.replace(location.pathname + "?id=${group.id}&studentId=${student.id}");
+            parent.$('iframe')[0].contentWindow.dict.reload(true);
             parent.layer.alert('导入学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
           }
         });

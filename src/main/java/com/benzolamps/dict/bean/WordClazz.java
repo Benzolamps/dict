@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Table(name = "dict_word_clazz")
 @Getter
 @Setter
+@JsonIgnoreProperties({"createDate", "modifyDate", "version", "remark"})
 public class WordClazz extends BaseEntity {
 
     private static final long serialVersionUID = -7259857902911189092L;

@@ -289,7 +289,9 @@ public class WordGroupController extends BaseController {
         Set<Student> studentsScored = wordGroup.getStudentsScored();
         studentsOriented.removeAll(studentsScored);
 
-        Assert.notEmpty(studentsOriented, "评分完毕");
+        if (studentId == null) {
+            Assert.notEmpty(studentsOriented, "评分完毕");
+        }
 
         boolean hasMore = studentsOriented.size() > 1;
 

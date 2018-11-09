@@ -31,6 +31,7 @@
   fields=[
     {'field': 'name', 'title': '名称', 'sort': true, 'minWidth': 120},
     {'field': 'description', 'title': '描述', 'sort': true, 'minWidth': 120},
+    {'field': 'createDate', 'title': '创建时间', 'sort': true, 'minWidth': 120},
     {'field': 'status', 'title': '状态', 'sort': true, 'minWidth': 10},
     {'field': 'scoreCount', 'title': '已考核次数', 'sort': true, 'minWidth': 120}
   ]

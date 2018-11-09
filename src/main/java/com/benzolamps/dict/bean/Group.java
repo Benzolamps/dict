@@ -2,6 +2,7 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.Set;
 @Entity
 @Table(name = "dict_group")
 @Alias("groups")
+@JsonIgnoreProperties({"modifyDate", "version", "remark"})
 public class Group extends BaseEntity {
 
     private static final long serialVersionUID = -756587292984332161L;

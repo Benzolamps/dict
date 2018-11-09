@@ -19,6 +19,8 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -121,19 +123,19 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         if (errorCode != null) {
             throw new DictException(errorCode + "：" + res.get("error_msg"));
         }
+        String regex = "[A-Za-z]+";
         for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
             String word = (String) res.getJSONArray("words_result").getJSONObject(i).get("words");
-            if (word.matches("[ \\s\\u00a0]*[0-9]+[ \\s\\u00a0]*[.．][ \\s\\u00a0]*[^ \\s\\u00a0]+.*")) {
-                word = word.substring(1 + word.split("[.．]")[0].length())
-                        .replaceAll("[ \\s\\u00a0]+", " ")
-                        .replaceAll("(^[ \\s\\u00a0]+)|([ \\s\\u00a0]+$)", "");
+            Matcher matcher = Pattern.compile(regex).matcher(word);
+            while (matcher.find()) {
+                word = matcher.group().toLowerCase();
                 words.add(word);
             }
         }
         Collection<Word> resultWords;
         if (!CollectionUtils.isEmpty(ref)) {
             resultWords = new ArrayList<>(ref);
-            resultWords.removeIf(word -> !words.contains(word.getPrototype()));
+            resultWords.removeIf(word -> !words.contains(word.getPrototype().toLowerCase()));
         } else {
             resultWords = wordService.findByPrototypes(words);
         }
@@ -235,5 +237,12 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                 studentService.addMasteredWords(student, words.toArray(new Word[0]));
             }
         }
+    }
+
+    public static void main(String[] args) {
+        String regex = "[A-Za-z]+";
+        Matcher matcher = Pattern.compile(regex).matcher("45.vvvv");
+        matcher.find();
+        System.out.println(matcher.group());
     }
 }

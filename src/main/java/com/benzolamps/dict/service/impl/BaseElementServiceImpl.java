@@ -135,18 +135,18 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     @Override
     public boolean prototypeExists(String prototype) {
         Library current = libraryService.getCurrent();
-        return count(Filter.eq("prototype", prototype).and(Filter.eq("library", current))) > 0;
+        return count(Filter.eqic("prototype", prototype).and(Filter.eq("library", current))) > 0;
     }
 
     @Override
     public T findByPrototype(String prototype) {
         Library current = libraryService.getCurrent();
-        return findSingle(Filter.eq("prototype", prototype).and(Filter.eq("library", current)));
+        return findSingle(Filter.eqic("prototype", prototype).and(Filter.eq("library", current)));
     }
 
     @Override
     public Collection<T> findByPrototypes(Collection<String> prototypes) {
         Library current = libraryService.getCurrent();
-        return findList(Filter.in("prototype", prototypes).and(Filter.eq("library", current)));
+        return findList(Filter.inIgnoreCase("prototype", prototypes).and(Filter.eq("library", current)));
     }
 }
