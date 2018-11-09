@@ -13,9 +13,11 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 二维码工具类
@@ -52,9 +54,20 @@ public interface DictQrCode {
      */
     @SneakyThrows(IOException.class)
     @SuppressWarnings({"unchecked", "ConstantConditions"})
-    static String readQrCode(byte[] qr) throws NotFoundException {
+    static String readQrCode(byte[] qr, Float x, Float width, Float y, Float height) throws NotFoundException {
         Result result;
         BufferedImage bufferedImage = ImageIO.read(new ByteArrayInputStream(qr));
+        x = Optional.ofNullable(x).orElse(0F);
+        width = Optional.ofNullable(width).orElse(1F);
+        y = Optional.ofNullable(y).orElse(0F);
+        height = Optional.ofNullable(height).orElse(1F);
+        bufferedImage = bufferedImage.getSubimage(
+            (int) (x * bufferedImage.getWidth()),
+            (int) (y * bufferedImage.getHeight()),
+            (int) (width * bufferedImage.getWidth()),
+            (int) (height * bufferedImage.getHeight())
+        );
+        ImageIO.write(bufferedImage, "png", new File("C:\\test.png"));
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));
         HashMap hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
