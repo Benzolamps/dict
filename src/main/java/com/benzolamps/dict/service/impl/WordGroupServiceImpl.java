@@ -103,7 +103,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                         processImportVo.setGroupId(groupId);
                     }
                 } catch (NotFoundException e) {
-                    throw new ProcessImportException(processImportVo.getName(), "未识别到二维码", e);
+                    if (processImportVo.getStudentId() == null) {
+                        throw new ProcessImportException(processImportVo.getName(), "未识别到二维码", e);
+                    }
                 } catch (Throwable e) {
                     throw new ProcessImportException(processImportVo.getName(), null, e);
                 }
