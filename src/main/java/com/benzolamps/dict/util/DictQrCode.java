@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +66,6 @@ public interface DictQrCode {
             (int) (width * bufferedImage.getWidth()),
             (int) (height * bufferedImage.getHeight())
         );
-        ImageIO.write(bufferedImage, "png", new File("C:\\test.png"));
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));
         HashMap hints = new HashMap<>();
         hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
