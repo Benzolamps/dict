@@ -55,7 +55,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         Library library = libraryService.getCurrent();
         Assert.notNull(library, "未选中词库");
         Group group = super.find(id);
-        return library.equals(group.getLibrary()) && type.equals(group.getType()) ? group : null;
+        return group != null && library.equals(group.getLibrary()) && type.equals(group.getType()) ? group : null;
     }
 
     @Override
