@@ -2,14 +2,13 @@ package com.benzolamps.dict.cfg;
 
 import com.baidu.aip.ocr.AipOcr;
 import lombok.Setter;
-import org.json.JSONObject;
+import lombok.experimental.Delegate;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
-import java.util.HashMap;
 
 /**
  * AIP文字识别配置
@@ -34,6 +33,7 @@ public class AipProperties implements Serializable {
     @Setter
     private String secretKey;
 
+    @Delegate(types = AipOcr.class)
     private transient AipOcr client;
 
     @PostConstruct
@@ -41,41 +41,5 @@ public class AipProperties implements Serializable {
         client = new AipOcr(appId, apiKey, secretKey);
         client.setConnectionTimeoutInMillis(2000);
         client.setSocketTimeoutInMillis(60000);
-    }
-
-    /**
-     * 通用文字识别 高精度 500
-     * @param data byte[]
-     * @return JSONObject
-     */
-    public JSONObject basicAccurateGeneral(byte[] data) {
-        return client.basicAccurateGeneral(data, new HashMap<>());
-    }
-
-    /**
-     * 通用文字识别 50000
-     * @param data byte[]
-     * @return JSONObject
-     */
-    public JSONObject basicGeneral(byte[] data) {
-        return client.basicGeneral(data, new HashMap<>());
-    }
-
-    /**
-     * 通用文字识别 高精度 含位置信息 50
-     * @param data byte[]
-     * @return JSONObject
-     */
-    public JSONObject accurateGeneral(byte[] data) {
-        return client.accurateGeneral(data, new HashMap<>());
-    }
-
-    /**
-     * 通用文字识别 含位置信息 500
-     * @param data byte[]
-     * @return JSONObject
-     */
-    public JSONObject general(byte[] data) {
-        return client.general(data, new HashMap<>());
     }
 }

@@ -4,22 +4,18 @@ import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
-import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.PhraseGroupService;
 import com.benzolamps.dict.service.base.PhraseService;
 import com.benzolamps.dict.util.DictQrCode;
 import com.google.zxing.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 短语分组Service接口实现类
@@ -27,6 +23,7 @@ import java.util.stream.Collectors;
  * @version 2.1.4
  * @datetime 2018-9-21 22:40:44
  */
+@SuppressWarnings("unused")
 @Slf4j
 @Service("phraseGroupService")
 @Transactional
@@ -115,8 +112,8 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
     }
 
     private Collection<Phrase> getPhrases(byte[] data, String name, Collection<Phrase> ref) {
-        List<String> phrases = new ArrayList<>();
-        JSONObject res = aipProperties.basicAccurateGeneral(data);
+        /*List<String> phrases = new ArrayList<>();
+        JSONObject res = aipProperties.basicAccurateGeneral(data, new HashMap<>());
         Object errorCode = res.opt("error_code");
         if (errorCode != null) {
             throw new DictException(errorCode + "：" + res.get("error_msg"));
@@ -138,7 +135,8 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
             resultPhrases = phraseService.findByPrototypes(phrases);
         }
         logger.info(name + " 导入 " + resultPhrases.size() + " 个短语：" + String.join(", ", resultPhrases.stream().map(Phrase::getPrototype).collect(Collectors.toList())));
-        return resultPhrases;
+        return resultPhrases;*/
+        throw new UnsupportedOperationException();
     }
 
     private void internalImportPhrases(ProcessImportVo... processImportVos) {

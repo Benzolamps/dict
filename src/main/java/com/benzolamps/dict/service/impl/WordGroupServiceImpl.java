@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
  * @version 2.1.4
  * @datetime 2018-9-21 22:40:39
  */
+@SuppressWarnings("SerializableNonStaticInnerClassWithoutSerialVersionUID")
 @Slf4j
 @Service("wordGroupService")
 @Transactional
@@ -117,13 +118,26 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
     }
 
     private Collection<Word> getWords(byte[] data, String name, Collection<Word> ref) {
-        List<String> words = new ArrayList<>();
-        JSONObject res = aipProperties.basicAccurateGeneral(data);
+        Set<String> words = new HashSet<>();
+        JSONObject res = aipProperties.basicAccurateGeneral(data, new HashMap<>());
         Object errorCode = res.opt("error_code");
         if (errorCode != null) {
             throw new DictException(errorCode + "：" + res.get("error_msg"));
         }
         String regex = "[A-Za-z]+";
+        for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
+            String word = (String) res.getJSONArray("words_result").getJSONObject(i).get("words");
+            Matcher matcher = Pattern.compile(regex).matcher(word);
+            while (matcher.find()) {
+                word = matcher.group().toLowerCase();
+                words.add(word);
+            }
+        }
+        res = aipProperties.basicGeneral(data, new HashMap<>());
+        errorCode = res.opt("error_code");
+        if (errorCode != null) {
+            throw new DictException(errorCode + "：" + res.get("error_msg"));
+        }
         for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
             String word = (String) res.getJSONArray("words_result").getJSONObject(i).get("words");
             Matcher matcher = Pattern.compile(regex).matcher(word);
