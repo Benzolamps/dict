@@ -15,7 +15,13 @@ public class ProcessImportException extends DictException {
      * @param name 文件名
      * @param cause 原因
      */
-    public ProcessImportException(String name, Throwable cause) {
-        super("导入" + name + "时出现异常，" + cause.getClass().getName() + "：" + cause.getMessage(), cause);
+    public ProcessImportException(String name, String msg, Throwable cause) {
+        super(
+            "导入 " + name + " 时出现异常，" +
+            cause.getClass().getName() +
+            (msg != null ? ": " + msg : "") +
+            (cause.getMessage() != null ? ": " + cause.getMessage() : ""),
+            cause
+        );
     }
 }

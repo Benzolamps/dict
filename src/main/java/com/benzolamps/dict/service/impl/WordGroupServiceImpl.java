@@ -9,6 +9,7 @@ import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.WordGroupService;
 import com.benzolamps.dict.service.base.WordService;
 import com.benzolamps.dict.util.DictQrCode;
+import com.google.zxing.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -101,8 +102,10 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                     if (processImportVo.getGroupId() == null) {
                         processImportVo.setGroupId(groupId);
                     }
+                } catch (NotFoundException e) {
+                    throw new ProcessImportException(processImportVo.getName(), "未识别到二维码", e);
                 } catch (Throwable e) {
-                    throw new ProcessImportException(processImportVo.getName(), e);
+                    throw new ProcessImportException(processImportVo.getName(), null, e);
                 }
             }
         }
@@ -220,7 +223,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                     }
                 }
             } catch (Throwable e) {
-                throw new ProcessImportException(processImportVo.getName(), e);
+                throw new ProcessImportException(processImportVo.getName(), null, e);
             }
         }
         if (null != student.getId()) {
