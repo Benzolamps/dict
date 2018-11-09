@@ -238,11 +238,4 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             }
         }
     }
-
-    public static void main(String[] args) {
-        String regex = "[A-Za-z]+";
-        Matcher matcher = Pattern.compile(regex).matcher("45.vvvv");
-        matcher.find();
-        System.out.println(matcher.group());
-    }
 }
