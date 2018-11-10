@@ -7,7 +7,6 @@ import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.WordGroupService;
 import com.benzolamps.dict.service.base.WordService;
-import com.benzolamps.dict.util.lambda.Action1;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -84,12 +83,13 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         AtomicReference<Throwable> throwable = new AtomicReference<>();
         Collection<Thread> threads = Arrays.stream(processImportVos)
             .map(GroupQrCodeThread::new)
-            .peek((Action1<Thread>) thread -> {
-                thread.start();
-                thread.setUncaughtExceptionHandler((t, e) -> throwable.set(e));
-            })
             .collect(Collectors.toList());
-        while (throwable.get() == null && threads.stream().anyMatch(Thread::isAlive));
+        while (throwable.get() == null && threads.stream().noneMatch(Thread::isInterrupted)) {
+            long count = threads.stream().filter(Thread::isAlive).count();
+            if (count < 5) {
+                threads.stream().filter(thread -> !thread.isInterrupted()).limit(5 - count).forEach(Thread::start);
+            }
+        }
         if (throwable.get() != null) {
             threads.forEach(Thread::interrupt);
             throw throwable.get();
@@ -150,13 +150,14 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         handle(processImportVos);
         AtomicReference<Throwable> throwable = new AtomicReference<>();
         Collection<Thread> threads = Arrays.stream(processImportVos)
-            .map(GroupBaseElementThread::new)
-            .peek((Action1<Thread>) thread -> {
-                thread.start();
-                thread.setUncaughtExceptionHandler((t, e) -> throwable.set(e));
-            })
+            .map(GroupQrCodeThread::new)
             .collect(Collectors.toList());
-        while (throwable.get() == null && threads.stream().anyMatch(Thread::isAlive));
+        while (throwable.get() == null && threads.stream().noneMatch(Thread::isInterrupted)) {
+            long count = threads.stream().filter(Thread::isAlive).count();
+            if (count < 5) {
+                threads.stream().filter(thread -> !thread.isInterrupted()).limit(5 - count).forEach(Thread::start);
+            }
+        }
         if (throwable.get() != null) {
             threads.forEach(Thread::interrupt);
             throw throwable.get();
