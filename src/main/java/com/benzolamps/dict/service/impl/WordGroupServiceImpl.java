@@ -4,14 +4,12 @@ import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
-import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.WordGroupService;
 import com.benzolamps.dict.service.base.WordService;
-import com.benzolamps.dict.util.DictQrCode;
-import com.google.zxing.NotFoundException;
+import com.benzolamps.dict.util.lambda.Action1;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -19,8 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -66,13 +63,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
     @SuppressWarnings("ConstantConditions")
     @Transactional
     public void scoreWords(Group wordGroup, Student student, Word... words) {
-        Assert.notNull(wordGroup, "word group不能为null");
-        Assert.notNull(student, "student不能为null");
         Assert.notNull(words, "words不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
-        Assert.isTrue(!Group.Status.COMPLETED.equals(wordGroup.getStatus()), wordGroup.getName() + "分组当前处于已完成状态，无法进行评分！");
-        Assert.isTrue(wordGroup.getStudentsOriented().contains(student), student.getName() + "不在" + wordGroup.getName() + "分组中！");
-        Assert.isTrue(!wordGroup.getStudentsScored().contains(student), student.getName() + "已评分" + wordGroup.getName() + "！");
+        this.assertGroupAndStudent(wordGroup, student);
         studentService.addFailedWords(student, wordGroup.getWords().toArray(new Word[0]));
         studentService.addMasteredWords(student, words);
         this.internalJump(wordGroup, student, words.length, null);
@@ -82,71 +75,29 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         }
     }
 
+    @SuppressWarnings({"unchecked", "StatementWithEmptyBody"})
     @Override
     @Transactional
+    @SneakyThrows
     public void importWords(ProcessImportVo... processImportVos) {
         Assert.notEmpty(processImportVos, "process import vos不能为null或空");
-        for (ProcessImportVo processImportVo : processImportVos) {
-            if (processImportVo.getStudentId() == null || processImportVo.getGroupId() == null) {
-                try {
-                    String content = DictQrCode.readQrCode(processImportVo.getData(), 0.75F, 0.25F, 0F, 0.15F);
-                    byte[] bytes = Base64.getDecoder().decode(content);
-                    Random random = new Random(2018);
-                    for (int i = 0; i < bytes.length; i++) {
-                        bytes[i] ^= (random.nextInt(Byte.MAX_VALUE * 2) - Byte.MAX_VALUE);
-                    }
-                    String[] value = new String(bytes, "UTF-8").split(",");
-                    Integer studentId = Integer.valueOf(value[0]);
-                    Integer groupId = Integer.valueOf(value[1]);
-                    if (processImportVo.getStudentId() == null) {
-                        processImportVo.setStudentId(studentId);
-                    }
-                    if (processImportVo.getGroupId() == null) {
-                        processImportVo.setGroupId(groupId);
-                    }
-                } catch (NotFoundException e) {
-                    if (processImportVo.getStudentId() == null) {
-                        throw new ProcessImportException(processImportVo.getName(), "未识别到二维码", e);
-                    }
-                } catch (Throwable e) {
-                    throw new ProcessImportException(processImportVo.getName(), null, e);
-                }
-            }
+        AtomicReference<Throwable> throwable = new AtomicReference<>();
+        Collection<Thread> threads = Arrays.stream(processImportVos)
+            .map(GroupQrCodeThread::new)
+            .peek((Action1<Thread>) thread -> {
+                thread.start();
+                thread.setUncaughtExceptionHandler((t, e) -> throwable.set(e));
+            })
+            .collect(Collectors.toList());
+        while (throwable.get() == null && threads.stream().anyMatch(Thread::isAlive));
+        if (throwable.get() != null) {
+            threads.forEach(Thread::interrupt);
+            throw throwable.get();
         }
         internalImportWords(processImportVos);
     }
 
-    private Collection<Word> getWords(byte[] data, String name, Collection<Word> ref) {
-        List<String> words = new ArrayList<>();
-        JSONObject res = aipProperties.basicAccurateGeneral(data);
-        Object errorCode = res.opt("error_code");
-        if (errorCode != null) {
-            throw new DictException(errorCode + "：" + res.get("error_msg"));
-        }
-        String regex = "[A-Za-z]+";
-        for (int i = 0; i < res.getJSONArray("words_result").length(); i++) {
-            String word = (String) res.getJSONArray("words_result").getJSONObject(i).get("words");
-            Matcher matcher = Pattern.compile(regex).matcher(word);
-            while (matcher.find()) {
-                word = matcher.group().toLowerCase();
-                words.add(word);
-            }
-        }
-        Collection<Word> resultWords;
-        if (!CollectionUtils.isEmpty(ref)) {
-            resultWords = new ArrayList<>(ref);
-            resultWords.removeIf(word -> !words.contains(word.getPrototype().toLowerCase()));
-        } else {
-            resultWords = wordService.findByPrototypes(words);
-        }
-        logger.info(name + " 导入 " + resultWords.size() + " 个单词：" + String.join(", ", resultWords.stream().map(Word::getPrototype).collect(Collectors.toList())));
-        return resultWords;
-    }
-
-    private void internalImportWords(ProcessImportVo... processImportVos) {
-        Student student = new Student();
-        Group group = new Group();
-        Set<Word> words = new HashSet<>();
+    private void handle(ProcessImportVo... processImportVos) {
         Arrays.sort(processImportVos, (processImportVo1, processImportVo2) -> {
             int result = 0;
             if (processImportVo1.getGroupId() != null && processImportVo2.getGroupId() != null) {
@@ -163,78 +114,76 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             }
             return result;
         });
-
-        for (ProcessImportVo processImportVo : processImportVos) {
+        Arrays.stream(processImportVos).forEach(processImportVo -> {
             try {
-                Integer groupId = processImportVo.getGroupId();
-                Integer studentId = processImportVo.getStudentId();
-                if (groupId == null) {
-                    if (null == group.getId()) {
-                        if (studentId.equals(student.getId())) {
-                            words.addAll(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
-                        } else {
-                            if (null != student.getId()) {
-                                studentService.addMasteredWords(student, words.toArray(new Word[0]));
-                            }
-                            student = studentService.find(studentId);
-                            words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
-                        }
-                    } else {
-                        if (studentId.equals(student.getId())) {
-                            words.addAll(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
-                        } else {
-                            if (null != student.getId()) {
-                                this.scoreWords(group, student, words.toArray(new Word[0]));
-                            }
-                            student = studentService.find(studentId);
-                            words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
-                        }
-                    }
-                } else {
-                    if (Objects.equals(group.getId(), groupId)) {
-                        if (studentId.equals(student.getId())) {
-                            words.addAll(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
-                        } else {
-                            if (null != student.getId()) {
-                                this.scoreWords(group, student, words.toArray(new Word[0]));
-                            }
-                            student = studentService.find(studentId);
-                            words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
-                        }
-                    } else {
-                        if (null != student.getId()) {
-                            if (null != group.getId()) {
-                                this.scoreWords(group, student, words.toArray(new Word[0]));
-                            } else {
-                                studentService.addMasteredWords(student, words.toArray(new Word[0]));
-                            }
-                        }
-                        if (!studentId.equals(student.getId())) {
-                            student = studentService.find(studentId);
-                            Assert.notNull(student, "student不存在");
-                            if (group.getId() != null) {
-                                Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
-                                Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
-                                Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
-                            }
-                        }
-                        group = this.find(groupId);
-                        Assert.notNull(group, "word group不存在");
-                        Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
-                        Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
-                        Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
-                        words = new HashSet<>(getWords(processImportVo.getData(), processImportVo.getName(), group.getWords()));
-                    }
+                if (processImportVo.getStudentId() != null) {
+                    processImportVo.setStudent(studentService.find(processImportVo.getStudentId()));
+                }
+                if (processImportVo.getGroupId() != null) {
+                    processImportVo.setGroup(this.find(processImportVo.getGroupId()));
+                    this.assertGroupAndStudent(processImportVo.getGroup(), processImportVo.getStudent());
                 }
             } catch (Throwable e) {
                 throw new ProcessImportException(processImportVo.getName(), null, e);
             }
+        });
+    }
+
+    private Collection<Word> getWords(ProcessImportVo processImportVo, Collection<Word> ref) {
+        Collection<Word> resultWords;
+        if (!CollectionUtils.isEmpty(ref)) {
+            resultWords = new ArrayList<>(ref);
+            resultWords.removeIf(word -> !processImportVo.getWords().contains(word.getPrototype().toLowerCase()));
+        } else {
+            resultWords = wordService.findByPrototypes(processImportVo.getWords());
         }
-        if (null != student.getId()) {
-            if (null != group.getId()) {
-                this.scoreWords(group, student, words.toArray(new Word[0]));
+        logger.info(
+            processImportVo.getName() + " 导入 " + resultWords.size() + " 个单词：" +
+            String.join(", ", resultWords.stream().map(Word::getPrototype).collect(Collectors.toList()))
+        );
+        return resultWords;
+    }
+
+    @SneakyThrows
+    @SuppressWarnings({"unchecked", "StatementWithEmptyBody"})
+    private void internalImportWords(ProcessImportVo... processImportVos) {
+        handle(processImportVos);
+        AtomicReference<Throwable> throwable = new AtomicReference<>();
+        Collection<Thread> threads = Arrays.stream(processImportVos)
+            .map(GroupBaseElementThread::new)
+            .peek((Action1<Thread>) thread -> {
+                thread.start();
+                thread.setUncaughtExceptionHandler((t, e) -> throwable.set(e));
+            })
+            .collect(Collectors.toList());
+        while (throwable.get() == null && threads.stream().anyMatch(Thread::isAlive));
+        if (throwable.get() != null) {
+            threads.forEach(Thread::interrupt);
+            throw throwable.get();
+        }
+        Set<Word> words = new HashSet<>();
+        ProcessImportVo curr = new ProcessImportVo(null, null, null, null);
+        for (ProcessImportVo piv : processImportVos) {
+            if (curr.getGroup().equals(piv.getGroup()) && curr.getStudent().equals(piv.getStudent())) {
+                words.addAll(getWords(piv, piv.getGroup().getWords()));
             } else {
-                studentService.addMasteredWords(student, words.toArray(new Word[0]));
+                if (null != curr.getStudent().getId()) {
+                    if (curr.getGroup().getId() != null) {
+                        this.scoreWords(curr.getGroup(), curr.getStudent(), words.toArray(new Word[0]));
+                    } else {
+                        studentService.addMasteredWords(curr.getStudent(), words.toArray(new Word[0]));
+                    }
+                }
+                words = new HashSet<>(getWords(piv, piv.getGroup().getWords()));
+
+            }
+            curr = piv;
+        }
+        if (null != curr.getStudent().getId()) {
+            if (curr.getGroup().getId() != null) {
+                this.scoreWords(curr.getGroup(), curr.getStudent(), words.toArray(new Word[0]));
+            } else {
+                studentService.addMasteredWords(curr.getStudent(), words.toArray(new Word[0]));
             }
         }
     }

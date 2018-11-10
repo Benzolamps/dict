@@ -39,5 +39,6 @@ public interface WordGroupService extends GroupService {
      * 导入学习进度
      * @param processImportVos ProcessImportVo
      */
+    @SuppressWarnings("unchecked")
     void importWords(ProcessImportVo... processImportVos);
 }
