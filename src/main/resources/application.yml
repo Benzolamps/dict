@@ -57,6 +57,8 @@ server:
   context_path: /${dict.system.name}
   tomcat:
     uri-encoding: UTF-8
+  session:
+    timeout: 43200
 
 ---
 spring:

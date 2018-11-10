@@ -10,7 +10,7 @@ import java.util.Base64;
 import java.util.Random;
 
 @AllArgsConstructor
-public class GroupQrCodeThread extends Thread {
+public class GroupQrCodeTask implements Runnable {
 
     private final ProcessImportVo processImportVo;
 

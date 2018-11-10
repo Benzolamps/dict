@@ -58,6 +58,8 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
     @SuppressWarnings("ConstantConditions")
     @Transactional
     public void scorePhrases(Group phraseGroup, Student student, Phrase... phrases) {
+        Assert.notNull(phraseGroup, "phrase group不能为null");
+        Assert.notNull(student, "student不能为null");
         Assert.notNull(phrases, "phrases不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
         this.assertGroupAndStudent(phraseGroup, student);

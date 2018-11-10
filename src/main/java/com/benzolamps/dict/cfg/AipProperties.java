@@ -39,7 +39,7 @@ public class AipProperties implements Serializable {
     @PostConstruct
     private void postConstruct() {
         client = new AipOcr(appId, apiKey, secretKey);
-        client.setConnectionTimeoutInMillis(30000);
+        client.setConnectionTimeoutInMillis(2000);
         client.setSocketTimeoutInMillis(60000);
     }
 }

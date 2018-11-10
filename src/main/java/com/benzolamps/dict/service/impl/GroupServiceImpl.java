@@ -2,7 +2,6 @@ package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.bean.*;
 import com.benzolamps.dict.bean.Group.Type;
-import com.benzolamps.dict.cfg.AipProperties;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.service.base.GroupService;
@@ -41,9 +40,6 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     @Resource
     protected StudentService studentService;
-
-    @Resource
-    protected AipProperties aipProperties;
 
     protected GroupServiceImpl(Type type) {
         Assert.notNull(type, "type不能为null");
@@ -135,7 +131,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     @Transactional
     @Override
     public void addStudents(Group group, Student... students) {
-        Assert.notNull(group, "group不能为null");
+        Assert.notNull(group, (WORD.equals(type) ? "word" : "phrase") + " group不能为null");
         Assert.isTrue(group.getType() == type, "group类型错误");
         group.getStudentsOriented().addAll(Arrays.asList(students));
     }
@@ -156,7 +152,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     @Transactional
     @Override
     public void removeStudents(Group group, Student... students) {
-        Assert.notNull(group, "group不能为null");
+        Assert.notNull(group, (WORD.equals(type) ? "word" : "phrase") + " group不能为null");
         Assert.isTrue(group.getType() == type, "group类型错误");
         List<Student> studentList = Arrays.asList(students);
         group.getStudentsOriented().removeAll(studentList);
@@ -175,6 +171,8 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     }
 
     protected void internalJump(Group group, Student student, Integer wordsCount, Integer phrasesCount) {
+        Assert.notNull(group, (WORD.equals(type) ? "word" : "phrase") + " group不能为null");
+        Assert.notNull(student, "student不能为null");
         if (group.getStudentsOriented().size() - group.getStudentsScored().size() == 1) {
             group.setStatus(COMPLETED);
             group.setScoreCount(group.getScoreCount() + 1);
@@ -258,10 +256,12 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     }
 
     protected void assertGroupAndStudent(Group group, Student student) {
-        Assert.notNull(group, (WORD.equals(type) ? "word" : "phrase") + " group不存在");
-        Assert.notNull(student, "student不存在");
-        Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
-        Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
-        Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
+        if (group != null) {
+            Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
+            if (student != null) {
+                Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
+                Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
+            }
+        }
     }
 }

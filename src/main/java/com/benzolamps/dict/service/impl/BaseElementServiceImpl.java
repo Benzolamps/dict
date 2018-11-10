@@ -31,8 +31,7 @@ import java.util.*;
  * @datetime 2018-9-5 21:06:39
  */
 @Transactional
-public abstract class BaseElementServiceImpl<T extends BaseElement, R extends BaseElementVo<T>>
-    extends BaseServiceImpl<T> implements BaseElementService<T> {
+public abstract class BaseElementServiceImpl<T extends BaseElement, R extends BaseElementVo<T>> extends BaseServiceImpl<T> implements BaseElementService<T> {
 
     @javax.annotation.Resource
     private LibraryService libraryService;
@@ -63,6 +62,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         element.setLibrary(current);
         if (!prototypeExists(element.getPrototype())) {
             if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
+            element.setFrequency(0);
             return super.persist(element);
         } else {
             BaseElement ref = findByPrototype(element.getPrototype());
@@ -89,6 +89,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         this.update(elements);
         for (T element : elementList) {
             if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
+            element.setFrequency(0);
         }
         super.persist(elementList);
     }
@@ -100,7 +101,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         for (T element : elements) {
             if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
         }
-        super.update(elements, ignoreProperties);
+        super.update(elements, DictArray.concat(ignoreProperties, new String[] {"library", "frequency"}));
     }
 
     @Override
@@ -108,7 +109,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         Library current = libraryService.getCurrent();
         Assert.notNull(current, "未选择词库");
         if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
-        return super.update(element, DictArray.add(ignoreProperties, "library"));
+        return super.update(element, DictArray.concat(ignoreProperties, new String[] {"library", "frequency"}));
     }
 
     @Override

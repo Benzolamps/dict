@@ -22,7 +22,8 @@
     <#--{'field': 'britishPronunciation', 'title': '英式发音', 'sort': true, 'minWidth': 120},-->
     <#--{'field': 'americanPronunciation', 'title': '美式发音', 'sort': true, 'minWidth': 120},-->
     {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150},
-    {'field': 'clazzes', 'title': '词性', 'minWidth': 150}
+    {'field': 'clazzes', 'title': '词性', 'minWidth': 150},
+    {'field': 'frequency', 'title': '词频', 'sort': true, 'minWidth': 150}
     <#if !student_id??>
       , {'field': 'masteredStudents', 'title': '已掌握', 'sort': true}
       , {'field': 'failedStudents', 'title': '未掌握', 'sort': true}

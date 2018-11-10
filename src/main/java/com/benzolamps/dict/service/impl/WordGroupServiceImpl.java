@@ -9,13 +9,17 @@ import com.benzolamps.dict.service.base.WordGroupService;
 import com.benzolamps.dict.service.base.WordService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.concurrent.ListenableFuture;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -33,8 +37,21 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
     @Resource
     private WordService wordService;
 
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
     protected WordGroupServiceImpl() {
         super(Group.Type.WORD);
+    }
+
+    @PostConstruct
+    private void postConstruct() {
+        threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setMaxPoolSize(5);
+        threadPoolTaskExecutor.setCorePoolSize(5);
+        threadPoolTaskExecutor.setQueueCapacity(9999);
+        threadPoolTaskExecutor.setThreadNamePrefix("process-import-");
+        threadPoolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
+        threadPoolTaskExecutor.initialize();
     }
 
     @Override
@@ -55,13 +72,14 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         if (wordGroup.getGroupLog() != null) {
             wordGroup.getGroupLog().getWords().removeAll(wordList);
         }
-
     }
 
     @Override
     @SuppressWarnings("ConstantConditions")
     @Transactional
     public void scoreWords(Group wordGroup, Student student, Word... words) {
+        Assert.notNull(wordGroup, "word group不能为null");
+        Assert.notNull(student, "student不能为null");
         Assert.notNull(words, "words不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
         this.assertGroupAndStudent(wordGroup, student);
@@ -74,43 +92,44 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         }
     }
 
-    @SuppressWarnings({"unchecked", "StatementWithEmptyBody"})
+    @SuppressWarnings({"unchecked", "StatementWithEmptyBody", "ConstantConditions"})
     @Override
     @Transactional
     @SneakyThrows
     public void importWords(ProcessImportVo... processImportVos) {
         Assert.notEmpty(processImportVos, "process import vos不能为null或空");
         AtomicReference<Throwable> throwable = new AtomicReference<>();
-        Collection<Thread> threads = Arrays.stream(processImportVos)
-            .map(GroupQrCodeThread::new)
-            .collect(Collectors.toList());
-        while (throwable.get() == null && threads.stream().noneMatch(Thread::isInterrupted)) {
-            long count = threads.stream().filter(Thread::isAlive).count();
-            if (count < 5) {
-                threads.stream().filter(thread -> !thread.isInterrupted()).limit(5 - count).forEach(Thread::start);
-            }
-        }
+        Arrays.stream(processImportVos)
+            .map(GroupQrCodeTask::new)
+            .forEach(task -> {
+                ListenableFuture<?> listenableFuture = threadPoolTaskExecutor.submitListenable(task);
+                listenableFuture.addCallback(result -> {}, e -> {
+                    throwable.set(e);
+                    threadPoolTaskExecutor.shutdown();
+                    threadPoolTaskExecutor.initialize();
+                });
+            });
+        while (throwable.get() == null && threadPoolTaskExecutor.getActiveCount() > 0);
         if (throwable.get() != null) {
-            threads.forEach(Thread::interrupt);
             throw throwable.get();
         }
         internalImportWords(processImportVos);
     }
 
     private void handle(ProcessImportVo... processImportVos) {
-        Arrays.sort(processImportVos, (processImportVo1, processImportVo2) -> {
+        Arrays.sort(processImportVos, (piv1, piv2) -> {
             int result = 0;
-            if (processImportVo1.getGroupId() != null && processImportVo2.getGroupId() != null) {
-                result = processImportVo1.getGroupId().compareTo(processImportVo2.getGroupId());
+            if (piv1.getGroupId() != null && piv2.getGroupId() != null) {
+                result = piv1.getGroupId().compareTo(piv2.getGroupId());
             }
-            if (processImportVo1.getGroupId() == null && processImportVo2.getGroupId() != null) {
+            if (piv1.getGroupId() == null && piv2.getGroupId() != null) {
                 result = -1;
             }
-            if (processImportVo1.getGroupId() != null && processImportVo2.getGroupId() == null) {
+            if (piv1.getGroupId() != null && piv2.getGroupId() == null) {
                 result = 1;
             }
             if (result == 0) {
-                result = processImportVo1.getStudentId().compareTo(processImportVo2.getStudentId());
+                result = piv1.getStudentId().compareTo(piv2.getStudentId());
             }
             return result;
         });
@@ -118,9 +137,11 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             try {
                 if (processImportVo.getStudentId() != null) {
                     processImportVo.setStudent(studentService.find(processImportVo.getStudentId()));
+                    Assert.notNull(processImportVo.getStudent(), "student不存在");
                 }
                 if (processImportVo.getGroupId() != null) {
                     processImportVo.setGroup(this.find(processImportVo.getGroupId()));
+                    Assert.notNull(processImportVo.getGroup(), "word group不存在");
                     this.assertGroupAndStudent(processImportVo.getGroup(), processImportVo.getStudent());
                 }
             } catch (Throwable e) {
@@ -149,17 +170,18 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
     private void internalImportWords(ProcessImportVo... processImportVos) {
         handle(processImportVos);
         AtomicReference<Throwable> throwable = new AtomicReference<>();
-        Collection<Thread> threads = Arrays.stream(processImportVos)
-            .map(GroupQrCodeThread::new)
-            .collect(Collectors.toList());
-        while (throwable.get() == null && threads.stream().noneMatch(Thread::isInterrupted)) {
-            long count = threads.stream().filter(Thread::isAlive).count();
-            if (count < 5) {
-                threads.stream().filter(thread -> !thread.isInterrupted()).limit(5 - count).forEach(Thread::start);
-            }
-        }
+        Arrays.stream(processImportVos)
+            .map(GroupBaseElementTask::new)
+            .forEach(task -> {
+                ListenableFuture<?> listenableFuture = threadPoolTaskExecutor.submitListenable(task);
+                listenableFuture.addCallback(result -> {}, e -> {
+                    throwable.set(e);
+                    threadPoolTaskExecutor.shutdown();
+                    threadPoolTaskExecutor.initialize();
+                });
+            });
+        while (throwable.get() == null && threadPoolTaskExecutor.getActiveCount() > 0);
         if (throwable.get() != null) {
-            threads.forEach(Thread::interrupt);
             throw throwable.get();
         }
         Set<Word> words = new HashSet<>();

@@ -20,7 +20,8 @@
 <#assign fields>
   [
     {'field': 'prototype', 'title': '短语', 'sort': true},
-    {'field': 'definition', 'title': '词义', 'sort': true}
+    {'field': 'definition', 'title': '词义', 'sort': true},
+    {'field': 'frequency', 'title': '词频', 'sort': true, 'minWidth': 150}
     <#if !student_id??>
       ,{'field': 'masteredStudents', 'title': '已掌握', 'sort': true}
       ,{'field': 'failedStudents', 'title': '未掌握', 'sort': true}

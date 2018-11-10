@@ -3,10 +3,12 @@ package com.benzolamps.dict.bean;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 /**
  * 单词或短语类的基类
@@ -64,4 +66,10 @@ public abstract class BaseElement extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "library", nullable = false, updatable = false)
     private Library library;
+
+    /** 词频 */
+    @Column(nullable = false)
+    @Min(0)
+    @ColumnDefault("0")
+    private Integer frequency;
 }

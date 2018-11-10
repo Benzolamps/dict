@@ -45,6 +45,10 @@ public class PhraseVo implements Serializable {
     @DictPropertyInfo(display = "索引")
     private Integer index;
 
+    /** 词频 */
+    @DictIgnore
+    private Integer frequency;
+
     /** 已掌握该短语的学生数 */
     @DictIgnore
     @JsonProperty("masteredStudents")
@@ -82,6 +86,7 @@ public class PhraseVo implements Serializable {
         phraseVo.setIndex(phrase.getIndex());
         phraseVo.setDefinition(phrase.getDefinition());
         phraseVo.setPrototype(phrase.getPrototype());
+        phraseVo.setFrequency(phrase.getFrequency());
         phraseVo.setMasteredStudentsCount(phrase.getMasteredStudentsCount());
         phraseVo.setFailedStudentsCount(phrase.getFailedStudentsCount());
         return phraseVo;

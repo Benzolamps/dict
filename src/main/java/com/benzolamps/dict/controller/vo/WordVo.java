@@ -67,6 +67,10 @@ public class WordVo implements Serializable {
     @DictPropertyInfo(display = "索引")
     private Integer index;
 
+    /** 词频 */
+    @DictIgnore
+    private Integer frequency;
+
     /** 已掌握该单词的学生数 */
     @DictIgnore
     @JsonProperty("masteredStudents")
@@ -117,6 +121,7 @@ public class WordVo implements Serializable {
         wordVo.setBritishPronunciation(word.getBritishPronunciation());
         wordVo.setAmericanPronunciation(word.getAmericanPronunciation());
         wordVo.setPrototype(word.getPrototype());
+        wordVo.setFrequency(word.getFrequency());
         wordVo.setClazzes(word.getClazzes().stream().map(WordClazz::getId).toArray(Integer[]::new));
         wordVo.setMasteredStudentsCount(word.getMasteredStudentsCount());
         wordVo.setFailedStudentsCount(word.getFailedStudentsCount());

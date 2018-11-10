@@ -1,24 +1,21 @@
 package com.benzolamps.dict.service.impl;
 
-import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.cfg.AipProperties;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.util.DictSpring;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
-import org.springframework.scheduling.annotation.Async;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Slf4j
 @RequiredArgsConstructor
-public class GroupBaseElementThread<T extends BaseElement> extends Thread {
+public class GroupBaseElementTask implements Runnable {
 
     private final ProcessImportVo processImportVo;
 
@@ -38,7 +35,7 @@ public class GroupBaseElementThread<T extends BaseElement> extends Thread {
                 JSONObject res;
                 Object errorCode;
                 do {
-                    res = aipProperties.basicGeneral(data);
+                    res = aipProperties.basicGeneral(data, new HashMap<>());
                     errorCode = res.opt("error_code");
                 } while (errorCode != null && errorCode.equals(18));
                 if (errorCode != null && !errorCode.equals(18)) {
@@ -57,7 +54,7 @@ public class GroupBaseElementThread<T extends BaseElement> extends Thread {
             JSONObject res;
             Object errorCode;
             do {
-                res = aipProperties.basicAccurateGeneral(data);
+                res = aipProperties.basicAccurateGeneral(data, new HashMap<>());
                 errorCode = res.opt("error_code");
             } while (errorCode != null && errorCode.equals(18));
             if (errorCode != null && !errorCode.equals(18)) {
