@@ -52,7 +52,7 @@
         },
         error: function (result, status, request) {
           if ((function () {
-            ${submit_handler}
+            ${error_handler}
           })()) {
             parent.layer.alert(result.message, {
               icon: 2,

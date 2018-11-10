@@ -36,6 +36,7 @@ public class GroupLog implements Serializable {
     /** 短语统计 */
     private List<Phrase> phrases = new ArrayList<>();
 
+    /** 分组日志转换 */
     @Converter
     public static class GroupLogConverter implements AttributeConverter<GroupLog, String> {
 

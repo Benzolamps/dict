@@ -9,6 +9,12 @@ import lombok.AllArgsConstructor;
 import java.util.Base64;
 import java.util.Random;
 
+/**
+ * 识别二维码线程
+ * @author Benzolamps
+ * @version 2.2.9
+ * @datetime 2018-11-10 22:21:51
+ */
 @AllArgsConstructor
 public class GroupQrCodeTask implements Runnable {
 
@@ -18,8 +24,10 @@ public class GroupQrCodeTask implements Runnable {
     public final void run() {
         if (processImportVo.getStudentId() == null || processImportVo.getGroupId() == null) {
             try {
+                /* 裁剪右上角 */
                 String content = DictQrCode.readQrCode(processImportVo.getData(), 0.75F, 0.25F, 0F, 0.15F);
                 byte[] bytes = Base64.getDecoder().decode(content);
+                /* 解密 */
                 Random random = new Random(2018);
                 for (int i = 0; i < bytes.length; i++) {
                     bytes[i] ^= (random.nextInt(Byte.MAX_VALUE * 2) - Byte.MAX_VALUE);

@@ -1,8 +1,9 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.util.KeyValuePairs;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.benzolamps.dict.util.Constant.HALF_WIDTH_FULL_WIDTH_MAPPING;
 
@@ -16,15 +17,23 @@ import static com.benzolamps.dict.util.Constant.HALF_WIDTH_FULL_WIDTH_MAPPING;
 public class FullWidthToHalfWidthConverter implements AttributeConverter<String, String> {
     @Override
     public String convertToDatabaseColumn(String value) {
-        AtomicReference<String> aa = new AtomicReference<>(value);
-        HALF_WIDTH_FULL_WIDTH_MAPPING.forEach(p -> aa.set(aa.get().replace(p.getValue(), p.getKey())));
-        return aa.get();
+        if (value == null) {
+            return null;
+        }
+        for (KeyValuePairs<Character, Character> p : HALF_WIDTH_FULL_WIDTH_MAPPING) {
+            value = value.replace(p.getValue(), p.getKey());
+        }
+        return value;
     }
 
     @Override
     public String convertToEntityAttribute(String value) {
-        AtomicReference<String> aa = new AtomicReference<>(value);
-        HALF_WIDTH_FULL_WIDTH_MAPPING.forEach(p -> aa.set(aa.get().replace(p.getValue(), p.getKey())));
-        return aa.get();
+        if (value == null) {
+            return null;
+        }
+        for (KeyValuePairs<Character, Character> p : HALF_WIDTH_FULL_WIDTH_MAPPING) {
+            value = value.replace(p.getValue(), p.getKey());
+        }
+        return value;
     }
 }

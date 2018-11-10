@@ -5,7 +5,6 @@ import com.benzolamps.dict.service.base.LocalAreaNetworkService;
 import com.benzolamps.dict.util.lambda.Action2;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
@@ -13,6 +12,7 @@ import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -108,7 +108,7 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
         Runtime runtime = Runtime.getRuntime();
         Process addProcess = runtime.exec(cmd);
         Charset gbk = Charset.forName("GBK");
-        try (var is = addProcess.getInputStream(); var es = addProcess.getErrorStream()) {
+        try (InputStream is = addProcess.getInputStream(); InputStream es = addProcess.getErrorStream()) {
             String istr = StreamUtils.copyToString(is, gbk);
             String estr = StreamUtils.copyToString(es, gbk);
             istr = compress.apply(istr);

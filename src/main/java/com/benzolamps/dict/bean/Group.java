@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -134,7 +135,7 @@ public class Group extends BaseEntity {
     /** 分组日志 */
     @Convert(converter = GroupLog.GroupLogConverter.class)
     @Basic(fetch = FetchType.LAZY)
-    @Column(insertable = false, length = 1000, columnDefinition = "longtext")
+    @Column(insertable = false, columnDefinition = "longtext")
     @DictIgnore
     @JsonIgnore
     private GroupLog groupLog;
@@ -143,6 +144,12 @@ public class Group extends BaseEntity {
     @Column(nullable = false)
     @DictIgnore
     private Integer scoreCount;
+
+    /** 是否是词频分组 */
+    @DictIgnore
+    @Column(nullable = false)
+    @ColumnDefault("false")
+    private Boolean frequencyGenerated;
 
     /** 分组中的学生数 */
     @Formula("(select count(1) from dict_gs as gs where gs.groups = id)")

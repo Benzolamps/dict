@@ -39,6 +39,12 @@
   add='${base_url}/word_group/add.html'
   edit='${base_url}/word_group/edit.html'
   delete='${base_url}/word_group/delete.json'
+  head_toolbar=[
+    {
+      'html': '<i class="fa fa-plus" style="font-size: 20px;"></i> &nbsp; 添加词频分组',
+      'handler': 'parent.layer.open({type: 2, title: \'添加词频分组\', content: \'${base_url}/word_group/add_frequency_group.html\', area: [\'800px\', \'600px\']});'
+    }
+  ]
   toolbar=[
     {
       'html': '<i class="fa fa-map-o" style="font-size: 20px;"></i> &nbsp; 详情',

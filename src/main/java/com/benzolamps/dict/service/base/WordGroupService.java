@@ -39,6 +39,19 @@ public interface WordGroupService extends GroupService {
      * 导入学习进度
      * @param processImportVos ProcessImportVo
      */
-    @SuppressWarnings("unchecked")
     void importWords(ProcessImportVo... processImportVos);
+
+    /**
+     * 添加词频分组 (TXT)
+     * @param wordGroup 分组
+     * @param bytes byte[]
+     */
+    Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes);
+
+    /**
+     * 添加词频分组 (DOC)
+     * @param wordGroup 分组
+     * @param bytes byte[]
+     */
+    Group persistFrequencyGroupDoc(Group wordGroup, byte[] bytes);
 }

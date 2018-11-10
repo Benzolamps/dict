@@ -98,11 +98,10 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
         StringJoiner jpql = new StringJoiner(" ");
         filter.build(alias);
         applyOrder(Order.desc("id"));
-        orders.forEach(order -> order.build(alias));
         jpql.add("select").add(field).add("from").add(className).add("as").add(alias);
         jpql.add("where").add(filter.getSnippet());
         jpql.add("order by");
-        jpql.add(String.join(", ", orders.stream().map(Order::getSnippet).collect(Collectors.toList())));
+        jpql.add(String.join(", ", orders.stream().peek(order -> order.build(alias)).map(Order::getSnippet).collect(Collectors.toList())));
         return jpql.toString();
     }
 

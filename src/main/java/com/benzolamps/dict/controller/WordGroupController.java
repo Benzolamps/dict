@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -408,5 +409,29 @@ public class WordGroupController extends BaseController {
                 .toArray(ProcessImportVo[]::new)
         );
         return SUCCESS_VO;
+    }
+
+    /**
+     * 添加词频分组界面
+     * @return ModelAndView
+     */
+    @WindowView
+    @RequestMapping(value = "add_frequency_group.html", method = {GET, POST})
+    protected ModelAndView addFrequencyGroup() {
+        return new ModelAndView("view/word_group/add_frequency_group");
+    }
+
+    /**
+     * 保存词频分组
+     * @param wordGroup 分组
+     * @param file 文件
+     * @return 操作成功
+     */
+    @ResponseBody
+    @PostMapping(value = "add_frequency_group_save.json")
+    protected BaseVo addFrequencyGroupSave(Group wordGroup, MultipartFile file) throws IOException {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        wordGroup = wordGroupService.persistFrequencyGroupDoc(wordGroup, file.getBytes());
+        return wrapperData(wordGroup);
     }
 }

@@ -1,5 +1,6 @@
 package com.benzolamps.dict.service.impl;
 
+import com.benzolamps.dict.bean.FrequencyInfo;
 import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.Word;
@@ -9,6 +10,11 @@ import com.benzolamps.dict.service.base.WordGroupService;
 import com.benzolamps.dict.service.base.WordService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.POITextExtractor;
+import org.apache.poi.hwpf.extractor.WordExtractor;
+import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
+import org.apache.poi.xwpf.extractor.XWPFWordExtractor;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,9 +24,13 @@ import org.springframework.util.concurrent.ListenableFuture;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -92,7 +102,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         }
     }
 
-    @SuppressWarnings({"unchecked", "StatementWithEmptyBody", "ConstantConditions"})
+    @SuppressWarnings({"StatementWithEmptyBody", "ConstantConditions"})
     @Override
     @Transactional
     @SneakyThrows
@@ -209,5 +219,38 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                 studentService.addMasteredWords(curr.getStudent(), words.toArray(new Word[0]));
             }
         }
+    }
+
+    @Override
+    public Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes) {
+         return wordGroup;
+    }
+
+    @Override
+    @SneakyThrows(IOException.class)
+    public Group persistFrequencyGroupDoc(Group wordGroup, byte[] bytes) {
+        POITextExtractor extractor;
+        try {
+            extractor = new WordExtractor(new ByteArrayInputStream(bytes));
+        } catch (OfficeXmlFileException e) {
+            extractor = new XWPFWordExtractor(new XWPFDocument(new ByteArrayInputStream(bytes)));
+        }
+        String content = extractor.getText();
+        String regex = "[A-Za-z]+";
+        Matcher matcher = Pattern.compile(regex).matcher(content);
+        Map<String, Integer> frequencies = new Hashtable<>();
+        while (matcher.find()) {
+            String word = matcher.group().toLowerCase();
+            frequencies.put(word, frequencies.containsKey(word) ? frequencies.get(word) + 1 : 1);
+        }
+        wordGroup.setFrequencyGenerated(true);
+        wordGroup = persist(wordGroup);
+        Collection<Word> words = wordService.findByPrototypes(frequencies.keySet());
+        for (Word word : words) {
+            word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId().toString(), frequencies.get(word.getPrototype().toLowerCase())));
+            word.setFrequency(word.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
+        }
+        wordGroup.setWords(new HashSet<>(words));
+        return wordGroup;
     }
 }

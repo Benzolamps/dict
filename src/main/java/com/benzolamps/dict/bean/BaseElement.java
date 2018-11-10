@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import java.util.List;
 
 /**
  * 单词或短语类的基类
@@ -68,8 +69,15 @@ public abstract class BaseElement extends BaseEntity {
     private Library library;
 
     /** 词频 */
-    @Column(nullable = false)
+    @Column(nullable = false, insertable = false)
     @Min(0)
     @ColumnDefault("0")
     private Integer frequency;
+
+    /** 词频信息 */
+    @SuppressWarnings("JpaAttributeTypeInspection")
+    @Convert(converter = FrequencyInfo.FrequencyInfoConverter.class)
+    @Basic(fetch = FetchType.LAZY)
+    @Column(insertable = false, columnDefinition = "longtext")
+    private List<FrequencyInfo> frequencyInfo;
 }
