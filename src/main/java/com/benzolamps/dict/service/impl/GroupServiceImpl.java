@@ -5,7 +5,6 @@ import com.benzolamps.dict.bean.Group.Type;
 import com.benzolamps.dict.cfg.AipProperties;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.core.Filter;
-import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.service.base.GroupService;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.StudentService;
@@ -18,6 +17,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 import static com.benzolamps.dict.bean.Group.Status.*;
+import static com.benzolamps.dict.bean.Group.Type.WORD;
 
 /**
  * 单词短语分组Service接口实现类
@@ -255,5 +255,13 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     @Override
     public Set<Student> getStudentsOriented(Group group) {
         return new HashSet<>(group.getStudentsOriented());
+    }
+
+    protected void assertGroupAndStudent(Group group, Student student) {
+        Assert.notNull(group, (WORD.equals(type) ? "word" : "phrase") + " group不存在");
+        Assert.notNull(student, "student不存在");
+        Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
+        Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
+        Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
     }
 }
