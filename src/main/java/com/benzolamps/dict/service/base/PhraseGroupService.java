@@ -40,4 +40,18 @@ public interface PhraseGroupService extends GroupService {
      * @param processImportVos ProcessImportVo
      */
     void importPhrases(ProcessImportVo... processImportVos);
+
+    /**
+     * 添加词频分组 (TXT)
+     * @param phraseGroup 分组
+     * @param bytes byte[]
+     */
+    Group persistFrequencyGroupTxt(Group phraseGroup, byte[] bytes);
+
+    /**
+     * 添加词频分组 (DOC)
+     * @param phraseGroup 分组
+     * @param bytes byte[]
+     */
+    Group persistFrequencyGroupDoc(Group phraseGroup, byte[] bytes);
 }

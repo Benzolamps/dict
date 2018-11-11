@@ -307,10 +307,12 @@ public class WordGroupController extends BaseController {
         }
 
         /* 分离已掌握的单词和未掌握的单词 */
-        Set<Word> masteredWords = new LinkedHashSet<>(student.getMasteredWords());
-        Set<Word> failedWords = new LinkedHashSet<>(wordGroup.getWords());
+        Collection<Word> masteredWords = new LinkedHashSet<>(student.getMasteredWords());
+        Collection<Word> failedWords = new LinkedHashSet<>(wordGroup.getWords());
         masteredWords.retainAll(failedWords);
         failedWords.removeAll(masteredWords);
+        masteredWords = Group.getFrequencySortedWords(masteredWords, wordGroup);
+        failedWords = Group.getFrequencySortedWords(failedWords, wordGroup);
 
         mv.addObject("group", wordGroup);
         mv.addObject("student", student);
@@ -418,6 +420,7 @@ public class WordGroupController extends BaseController {
     @WindowView
     @RequestMapping(value = "add_frequency_group.html", method = {GET, POST})
     protected ModelAndView addFrequencyGroup() {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return new ModelAndView("view/word_group/add_frequency_group");
     }
 

@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.*;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -306,11 +307,12 @@ public class PhraseGroupController extends BaseController {
         }
 
         /* 分离已掌握的短语和未掌握的短语 */
-        Set<Phrase> masteredPhrases = new LinkedHashSet<>(student.getMasteredPhrases());
-        Set<Phrase> failedPhrases = new LinkedHashSet<>(phraseGroup.getPhrases());
+        Collection<Phrase> masteredPhrases = new LinkedHashSet<>(student.getMasteredPhrases());
+        Collection<Phrase> failedPhrases = new LinkedHashSet<>(phraseGroup.getPhrases());
         masteredPhrases.retainAll(failedPhrases);
         failedPhrases.removeAll(masteredPhrases);
-
+        masteredPhrases = Group.getFrequencySortedPhrases(masteredPhrases, phraseGroup);
+        failedPhrases = Group.getFrequencySortedPhrases(failedPhrases, phraseGroup);
         mv.addObject("group", phraseGroup);
         mv.addObject("student", student);
         mv.addObject("students", studentsOriented);
@@ -408,5 +410,31 @@ public class PhraseGroupController extends BaseController {
                 .toArray(ProcessImportVo[]::new)
         );
         return SUCCESS_VO;
+    }
+
+
+    /**
+     * 添加词频分组界面
+     * @return ModelAndView
+     */
+    @WindowView
+    @RequestMapping(value = "add_frequency_group.html", method = {GET, POST})
+    protected ModelAndView addFrequencyGroup() {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        return new ModelAndView("view/phrase_group/add_frequency_group");
+    }
+
+    /**
+     * 保存词频分组
+     * @param phraseGroup 分组
+     * @param file 文件
+     * @return 操作成功
+     */
+    @ResponseBody
+    @PostMapping(value = "add_frequency_group_save.json")
+    protected BaseVo addFrequencyGroupSave(Group phraseGroup, MultipartFile file) throws IOException {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        phraseGroup = phraseGroupService.persistFrequencyGroupDoc(phraseGroup, file.getBytes());
+        return wrapperData(phraseGroup);
     }
 }

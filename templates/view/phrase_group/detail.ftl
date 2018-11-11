@@ -145,7 +145,7 @@
         open: 'true',
         children: [
           <#if group.status != 'COMPLETED'>
-            <#list group.phrases as phrase>
+            <#list group.frequencySortedPhrases as phrase>
               {id: '${phrase.id}', name: '${phrase.prototype} (${phrase.definition})'},
             </#list>
           <#else>
@@ -189,53 +189,58 @@
     <@data_tree id='students-tree' setting='setting' value='studentsNode' variable='studentsTree'/>
 
     $('#export').click(function () {
-      <#if group.phrasesCount gt 0>
-        parent.layer.open({
-          type: 2,
-          title: '导出短语',
-          content: '${base_url}/phrase/export.html',
-          area: ['800px', '600px'],
-          cancel: function () {
-            delete parent.exportData;
-          },
-          end: function () {
-            if (!parent.exportData) return false;
-            var data = {};
-            data.groupId = ${group.id};
-            data.title = parent.exportData.title;
-            data.docSolutionId = parent.exportData.docSolution;
-            data.shuffleSolutionId = parent.exportData.shuffleSolution;
-            dict.loadText({
-              url: '${base_url}/phrase/export_save.json',
-              type: 'post',
-              data: data,
-              dataType: 'json',
-              requestBody: true,
-              success: function (result, status, request) {
-                parent.layer.alert('导出成功！', {
-                  icon: 1,
-                  end: function () {
-                    dict.postHref('${base_url}/doc/download', {
-                      fileName: data.title,
-                      token: result.data
-                    });
-                  }
-                });
-              },
-              error: function (result, status, request) {
-                parent.layer.alert(result.message, {
-                  icon: 2,
-                  title: result.status
-                });
-              }
-            });
-          }
-        });
-      <#else>
+      <#if group.phrasesCount lte 0>
         parent.layer.alert('还没有短语呢！导出个毛线啊！', {
           icon: 2,
           title: '提示'
         });
+      <#elseif group.studentsOrientedCount lte 0>
+        parent.layer.alert('还没有学生呢！无法导出专属文档！', {
+          icon: 2,
+          title: '提示'
+        });
+      <#else>
+       parent.layer.open({
+         type: 2,
+         title: '导出单词',
+         content: '${base_url}/phrase/export.html',
+         area: ['800px', '600px'],
+         cancel: function () {
+           delete parent.exportData;
+         },
+         end: function () {
+           if (!parent.exportData) return false;
+           var data = {};
+           data.groupId = ${group.id};
+           data.title = parent.exportData.title;
+           data.docSolutionId = parent.exportData.docSolution;
+           data.shuffleSolutionId = parent.exportData.shuffleSolution;
+           dict.loadText({
+             url: '${base_url}/phrase/export_save.json',
+             type: 'post',
+             data: data,
+             dataType: 'json',
+             requestBody: true,
+             success: function (result, status, request) {
+               parent.layer.alert('导出成功！', {
+                 icon: 1,
+                 end: function () {
+                   dict.postHref('${base_url}/doc/download', {
+                     fileName: data.title,
+                     token: result.data
+                   });
+                 }
+               });
+             },
+             error: function (result, status, request) {
+               parent.layer.alert(result.message, {
+                 icon: 2,
+                 title: result.status
+               });
+             }
+           });
+         }
+       });
       </#if>
     });
 

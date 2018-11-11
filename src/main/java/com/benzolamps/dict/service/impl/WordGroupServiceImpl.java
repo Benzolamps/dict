@@ -22,10 +22,10 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.concurrent.ListenableFuture;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,27 +47,27 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
     @Resource
     private WordService wordService;
 
-    private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     protected WordGroupServiceImpl() {
         super(Group.Type.WORD);
     }
 
-    @PostConstruct
-    private void postConstruct() {
-        threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+    private ThreadPoolTaskExecutor getThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
         threadPoolTaskExecutor.setMaxPoolSize(5);
         threadPoolTaskExecutor.setCorePoolSize(5);
         threadPoolTaskExecutor.setQueueCapacity(9999);
         threadPoolTaskExecutor.setThreadNamePrefix("process-import-");
         threadPoolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
         threadPoolTaskExecutor.initialize();
+        return threadPoolTaskExecutor;
     }
 
     @Override
     @Transactional
     public void addWords(Group wordGroup, Word... words) {
         Assert.notNull(wordGroup, "word group不能为null");
+        Assert.isTrue(!wordGroup.getFrequencyGenerated(), "词频分组不能添加单词");
         Assert.noNullElements(words, "words不能存在为null的元素");
         wordGroup.getWords().addAll(Arrays.asList(words));
     }
@@ -78,6 +78,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         Assert.notNull(wordGroup, "word group不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
         List<Word> wordList = Arrays.asList(words);
+        wordList.stream().map(Word::getFrequencyInfo).forEach(infos -> infos.removeIf(info -> info.getGroupId().equals(wordGroup.getId().toString())));
         wordGroup.getWords().removeAll(wordList);
         if (wordGroup.getGroupLog() != null) {
             wordGroup.getGroupLog().getWords().removeAll(wordList);
@@ -107,6 +108,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
     @Transactional
     @SneakyThrows
     public void importWords(ProcessImportVo... processImportVos) {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = this.getThreadPoolTaskExecutor();
         Assert.notEmpty(processImportVos, "process import vos不能为null或空");
         AtomicReference<Throwable> throwable = new AtomicReference<>();
         Arrays.stream(processImportVos)
@@ -119,7 +121,10 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                     threadPoolTaskExecutor.initialize();
                 });
             });
-        while (throwable.get() == null && threadPoolTaskExecutor.getActiveCount() > 0);
+        while (throwable.get() == null && threadPoolTaskExecutor.getThreadPoolExecutor().getCompletedTaskCount() < threadPoolTaskExecutor.getThreadPoolExecutor().getTaskCount()) {
+            Thread.sleep(100);
+        }
+        logger.info("识别二维码完成");
         if (throwable.get() != null) {
             throw throwable.get();
         }
@@ -179,6 +184,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
     @SuppressWarnings({"unchecked", "StatementWithEmptyBody"})
     private void internalImportWords(ProcessImportVo... processImportVos) {
         handle(processImportVos);
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = this.getThreadPoolTaskExecutor();
         AtomicReference<Throwable> throwable = new AtomicReference<>();
         Arrays.stream(processImportVos)
             .map(GroupBaseElementTask::new)
@@ -190,7 +196,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                     threadPoolTaskExecutor.initialize();
                 });
             });
-        while (throwable.get() == null && threadPoolTaskExecutor.getActiveCount() > 0);
+        while (throwable.get() == null && threadPoolTaskExecutor.getThreadPoolExecutor().getCompletedTaskCount() < threadPoolTaskExecutor.getThreadPoolExecutor().getTaskCount()) {
+            Thread.sleep(100);
+        }
         if (throwable.get() != null) {
             throw throwable.get();
         }
@@ -223,7 +231,23 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
 
     @Override
     public Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes) {
-         return wordGroup;
+        String content = new String(bytes, Charset.forName("UTF-8"));
+        String regex = "[A-Za-z]+";
+        Matcher matcher = Pattern.compile(regex).matcher(content);
+        Map<String, Integer> frequencies = new Hashtable<>();
+        while (matcher.find()) {
+            String word = matcher.group().toLowerCase();
+            frequencies.put(word, frequencies.containsKey(word) ? frequencies.get(word) + 1 : 1);
+        }
+        wordGroup = persist(wordGroup);
+        wordGroup.setFrequencyGenerated(true);
+        Collection<Word> words = wordService.findByPrototypes(frequencies.keySet());
+        for (Word word : words) {
+            word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId().toString(), frequencies.get(word.getPrototype().toLowerCase())));
+            word.setFrequency(word.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
+        }
+        wordGroup.setWords(new HashSet<>(words));
+        return wordGroup;
     }
 
     @Override
@@ -243,8 +267,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             String word = matcher.group().toLowerCase();
             frequencies.put(word, frequencies.containsKey(word) ? frequencies.get(word) + 1 : 1);
         }
-        wordGroup.setFrequencyGenerated(true);
         wordGroup = persist(wordGroup);
+        wordGroup.setFrequencyGenerated(true);
+        logger.info("导入词频完成：" + frequencies);
         Collection<Word> words = wordService.findByPrototypes(frequencies.keySet());
         for (Word word : words) {
             word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId().toString(), frequencies.get(word.getPrototype().toLowerCase())));

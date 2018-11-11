@@ -10,11 +10,11 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
-import org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.io.File;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
@@ -47,6 +47,12 @@ public class RuntimeBeanConfig {
         if (resolve("#{'${os.name}'.startsWith('Windows')}")) {
             Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost:2018/dict/index.html");
         }
+
+        File file = new File("C:\\upload");
+        if (file.isFile()) {
+            file.delete();
+        }
+        file.mkdirs();
 
     }
 

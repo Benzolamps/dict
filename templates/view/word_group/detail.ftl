@@ -145,7 +145,7 @@
         open: 'true',
         children: [
           <#if group.status != 'COMPLETED'>
-            <#list group.words as word>
+            <#list group.frequencySortedWords as word>
             {id: '${word.id}', name: '${word.prototype} (${word.definition})'},
             </#list>
           <#else>

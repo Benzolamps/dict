@@ -63,6 +63,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
             group.setStatus(NORMAL);
             group.setLibrary(library);
             group.setScoreCount(0);
+            group.setFrequencyGenerated(false);
         });
         super.persist(groups);
     }
@@ -75,6 +76,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         group.setStatus(NORMAL);
         group.setLibrary(library);
         group.setScoreCount(0);
+        group.setFrequencyGenerated(false);
         return super.persist(group);
     }
 
@@ -87,6 +89,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
             group.setStatus(NORMAL);
             group.setLibrary(library);
             group.setScoreCount(0);
+            group.setFrequencyGenerated(false);
         });
         super.persist(groups);
     }
@@ -112,6 +115,13 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void remove(Collection<Group> groups) {
         Assert.isTrue(groups.stream().allMatch(Objects::nonNull), "groups中不能存在为null的元素");
         Assert.isTrue(groups.stream().allMatch(group -> group.getStatus() != SCORING), "无法删除正在评分的分组！");
+        groups.stream().filter(Group::getFrequencyGenerated).forEach(
+            group -> (group.getType().equals(WORD) ? group.getWords() : group.getPhrases()).forEach(
+                ele -> ele.getFrequencyInfo().removeIf(
+                    info -> info.getGroupId().equals(group.getId().toString())
+                )
+            )
+        );
         super.remove(groups);
     }
 
@@ -260,7 +270,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
             Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
             if (student != null) {
                 Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
-                Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "！");
+                Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "分组！");
             }
         }
     }

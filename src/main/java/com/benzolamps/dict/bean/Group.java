@@ -1,6 +1,9 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.*;
+import com.benzolamps.dict.component.Alias;
+import com.benzolamps.dict.component.DictIgnore;
+import com.benzolamps.dict.component.DictPropertyInfo;
+import com.benzolamps.dict.component.DictRemote;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,8 +15,13 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Formula;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -174,4 +182,98 @@ public class Group extends BaseEntity {
     @DictIgnore
     @JsonProperty("phrases")
     private Integer phrasesCount;
+
+    /**
+     * 获取排序过的单词
+     * @return 排序过的单词
+     */
+    @Transient
+    @JsonIgnore
+    public Collection<Word> getFrequencySortedWords() {
+        return getFrequencySortedWords(this.getWords(), this);
+    }
+
+    /**
+     * 获取排序过的短语
+     * @return 排序过的短语
+     */
+    @Transient
+    @JsonIgnore
+    public Collection<Phrase> getFrequencySortedPhrases() {
+        return getFrequencySortedPhrases(this.getPhrases(), this);
+    }
+
+    /**
+     * 获取排序过的短语
+     * @return 排序过的短语
+     */
+    @Transient
+    @JsonIgnore
+    public static Collection<Phrase> getFrequencySortedPhrases(Collection<Phrase> phrases, Group phraseGroup) {
+        Assert.notNull(phraseGroup, "phrase group不能为空");
+        if (CollectionUtils.isEmpty(phrases)) {
+            return phrases;
+        }
+        if (phraseGroup.getFrequencyGenerated()) {
+            List<Phrase> results = new ArrayList<>(phrases);
+            results.sort((w1, w2) -> {
+                Integer frequency1, frequency2;
+                try {
+                    if (null == (frequency1 = w1.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(phraseGroup.getId().toString())).findFirst().get().getFrequency())) {
+                        frequency1 = 0;
+                    }
+                } catch (Throwable e) {
+                    frequency1 = 0;
+                }
+                try {
+                    if (null == (frequency2 = w2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(phraseGroup.getId().toString())).findFirst().get().getFrequency())) {
+                        frequency2 = 0;
+                    }
+                } catch (Throwable e) {
+                    frequency2 = 0;
+                }
+                return frequency2.compareTo(frequency1);
+            });
+            return results;
+        } else {
+            return phraseGroup.getPhrases();
+        }
+    }
+
+    /**
+     * 获取排序过的短语
+     * @return 排序过的短语
+     */
+    @Transient
+    @JsonIgnore
+    public static Collection<Word> getFrequencySortedWords(Collection<Word> words, Group wordGroup) {
+        Assert.notNull(wordGroup, "word group不能为空");
+        if (CollectionUtils.isEmpty(words)) {
+            return words;
+        }
+        if (wordGroup.getFrequencyGenerated()) {
+            List<Word> results = new ArrayList<>(words);
+            results.sort((w1, w2) -> {
+                Integer frequency1, frequency2;
+                try {
+                    if (null == (frequency1 = w1.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(wordGroup.getId().toString())).findFirst().get().getFrequency())) {
+                        frequency1 = 0;
+                    }
+                } catch (Throwable e) {
+                    frequency1 = 0;
+                }
+                try {
+                    if (null == (frequency2 = w2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(wordGroup.getId().toString())).findFirst().get().getFrequency())) {
+                        frequency2 = 0;
+                    }
+                } catch (Throwable e) {
+                    frequency2 = 0;
+                }
+                return frequency2.compareTo(frequency1);
+            });
+            return results;
+        } else {
+            return wordGroup.getWords();
+        }
+    }
 }

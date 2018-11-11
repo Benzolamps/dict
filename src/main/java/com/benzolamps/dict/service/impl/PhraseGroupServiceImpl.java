@@ -5,13 +5,11 @@ import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.service.base.PhraseGroupService;
-import com.benzolamps.dict.service.base.PhraseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,9 +24,6 @@ import java.util.List;
 @Transactional
 public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGroupService {
 
-    @Resource
-    private PhraseService phraseService;
-
     protected PhraseGroupServiceImpl() {
         super(Group.Type.PHRASE);
     }
@@ -37,6 +32,7 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
     @Transactional
     public void addPhrases(Group phraseGroup, Phrase... phrases) {
         Assert.notNull(phraseGroup, "phrase group不能为null");
+        Assert.isTrue(!phraseGroup.getFrequencyGenerated(), "词频分组不能添短语");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
         phraseGroup.getPhrases().addAll(Arrays.asList(phrases));
     }
@@ -48,6 +44,7 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
         phraseGroup.getPhrases().removeAll(Arrays.asList(phrases));
         List<Phrase> phraseList = Arrays.asList(phrases);
+        phraseList.stream().map(Phrase::getFrequencyInfo).forEach(infos -> infos.removeIf(info -> info.getGroupId().equals(phraseGroup.getId().toString())));
         phraseGroup.getPhrases().removeAll(phraseList);
         if (phraseGroup.getGroupLog() != null) {
             phraseGroup.getGroupLog().getPhrases().removeAll(phraseList);
@@ -75,6 +72,16 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
     @Override
     @Transactional
     public void importPhrases(ProcessImportVo... processImportVos) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("该功能尚未实现！");
+    }
+
+    @Override
+    public Group persistFrequencyGroupTxt(Group phraseGroup, byte[] bytes) {
+        throw new UnsupportedOperationException("该功能尚未实现！");
+    }
+
+    @Override
+    public Group persistFrequencyGroupDoc(Group phraseGroup, byte[] bytes) {
+        throw new UnsupportedOperationException("该功能尚未实现！");
     }
 }
