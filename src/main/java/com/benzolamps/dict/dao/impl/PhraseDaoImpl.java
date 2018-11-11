@@ -40,7 +40,27 @@ public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseD
             @Override
             public void applySearch(Search search) {
                 judge: {
-                    if ("isMastered".equals(search.getField())) {
+                  if ("frequency".equals(search.getField())) {
+                        int flag = DictObject.ofObject(search.getValue(), int.class);
+                        switch (flag) {
+                            case 0: getFilter().and(Filter.le("frequency", 0)); return;
+                            case 1: getFilter().and(Filter.betweenAnd("frequency", 1, 10)); return;
+                            case 2: getFilter().and(Filter.betweenAnd("frequency", 11, 20)); return;
+                            case 3: getFilter().and(Filter.betweenAnd("frequency", 21, 30)); return;
+                            case 4: getFilter().and(Filter.betweenAnd("frequency", 31, 40)); return;
+                            case 5: getFilter().and(Filter.betweenAnd("frequency", 41, 50)); return;
+                            case 6: getFilter().and(Filter.betweenAnd("frequency", 51, 60)); return;
+                            case 7: getFilter().and(Filter.betweenAnd("frequency", 61, 70)); return;
+                            case 8: getFilter().and(Filter.betweenAnd("frequency", 71, 80)); return;
+                            case 9: getFilter().and(Filter.betweenAnd("frequency", 81, 90)); return;
+                            case 10: getFilter().and(Filter.betweenAnd("frequency", 91, 100)); return;
+                            case 11: getFilter().and(Filter.betweenAnd("frequency", 101, 200)); return;
+                            case 12: getFilter().and(Filter.betweenAnd("frequency", 201, 500)); return;
+                            case 13: getFilter().and(Filter.betweenAnd("frequency", 501, 1000)); return;
+                            case 14: getFilter().and(Filter.gt("frequency", 1000)); return;
+                            case 15: getFilter().and(Filter.gt("frequency", 0)); return;
+                        }
+                    } else if ("isMastered".equals(search.getField())) {
                         isMastered = DictObject.ofObject(search.getValue(), boolean.class);
                         if (studentId != null) break judge;
                     } else if ("studentId".equals(search.getField())) {

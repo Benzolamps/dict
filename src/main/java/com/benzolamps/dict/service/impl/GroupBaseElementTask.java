@@ -5,6 +5,7 @@ import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.util.DictSpring;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.util.Assert;
 
@@ -22,6 +23,7 @@ import java.util.regex.Pattern;
  * @version 2.2.9
  * @datetime 2018-11-10 21:51:53
  */
+@Slf4j
 @RequiredArgsConstructor
 public class GroupBaseElementTask implements Runnable {
 
@@ -31,7 +33,10 @@ public class GroupBaseElementTask implements Runnable {
 
     @Override
     public void run() {
+        long start = System.currentTimeMillis();
         getBaseElements(processImportVo.getData());
+        long end = System.currentTimeMillis();
+        logger.info(processImportVo.getName() + " 导入用时：" + (end - start) / (double) 1000 + " 秒");
     }
 
     @SuppressWarnings("ConstantConditions")

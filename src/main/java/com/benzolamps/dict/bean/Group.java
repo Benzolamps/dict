@@ -213,22 +213,24 @@ public class Group extends BaseEntity {
         }
         if (phraseGroup.getFrequencyGenerated()) {
             List<Phrase> results = new ArrayList<>(phrases);
-            results.sort((w1, w2) -> {
+            results.sort((p1, p2) -> {
                 Integer frequency1, frequency2;
                 try {
-                    if (null == (frequency1 = w1.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(phraseGroup.getId().toString())).findFirst().get().getFrequency())) {
+                    if (null == (frequency1 = p1.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(phraseGroup.getId().toString())).findFirst().get().getFrequency())) {
                         frequency1 = 0;
                     }
                 } catch (Throwable e) {
                     frequency1 = 0;
                 }
+                p1.setGroupFrequency(frequency1);
                 try {
-                    if (null == (frequency2 = w2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(phraseGroup.getId().toString())).findFirst().get().getFrequency())) {
+                    if (null == (frequency2 = p2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(phraseGroup.getId().toString())).findFirst().get().getFrequency())) {
                         frequency2 = 0;
                     }
                 } catch (Throwable e) {
                     frequency2 = 0;
                 }
+                p2.setGroupFrequency(frequency2);
                 return frequency2.compareTo(frequency1);
             });
             Collections.reverse(results);
@@ -260,6 +262,7 @@ public class Group extends BaseEntity {
                 } catch (Throwable e) {
                     frequency1 = 0;
                 }
+                w1.setGroupFrequency(frequency1);
                 try {
                     if (null == (frequency2 = w2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(wordGroup.getId().toString())).findFirst().get().getFrequency())) {
                         frequency2 = 0;
@@ -267,6 +270,7 @@ public class Group extends BaseEntity {
                 } catch (Throwable e) {
                     frequency2 = 0;
                 }
+                w2.setGroupFrequency(frequency2);
                 return frequency2.compareTo(frequency1);
             });
             Collections.reverse(results);

@@ -146,11 +146,13 @@
         children: [
           <#if group.status != 'COMPLETED'>
             <#list group.frequencySortedWords as word>
-            {id: '${word.id}', name: '${word.prototype} (${word.definition})'},
+            {
+              id: '${word.id}',
+              name: '${word.prototype}（${word.definition}）${group.frequencyGenerated?string('（词频：' + word.groupFrequency + '／' + word.frequency + '）', '')}'},
             </#list>
           <#else>
             <#list group.groupLog.words as word>
-            {id: '${word.id}', name: '${word.prototype} (${word.definition}) (掌握人数：${word.masteredStudentsCount})'},
+            {id: '${word.id}', name: '${word.prototype}（${word.definition}）（掌握人数：${word.masteredStudentsCount}）'},
             </#list>
           </#if>
         ]
@@ -165,14 +167,14 @@
           <#list students as clazz>
             {
               id: '${clazz.id}',
-              name: '${clazz.name}<#if clazz.description??> (${clazz.description})</#if>',
+              name: '${clazz.name}<#if clazz.description??>（${clazz.description}）</#if>',
               children: [
                 <#list clazz.students as student>
                   {
                     id: '#{student.id}',
                     name: '${student.name} (${student.number})' +
-                      '<#if student.description??> (${student.description})</#if>' +
-                      '<#if group.status == 'COMPLETED'> (掌握单词数：${student.masteredWordsCount!'未参与评分'})</#if>'
+                      '<#if student.description??>（${student.description}）</#if>' +
+                      '<#if group.status == 'COMPLETED'>（掌握单词数：${student.masteredWordsCount!'未参与评分'}）</#if>'
                   },
                 </#list>
               ]

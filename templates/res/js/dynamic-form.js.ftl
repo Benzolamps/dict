@@ -385,7 +385,7 @@ dict.dynamicSearch = function (form, selector, fields, initValues, extendedRules
     fields[i].value = initValues[fields[i].name] != null ? initValues[fields[i].name] : fields[i].defaultValue;
     fields[i].name = 'search.' + fields[i].name;
     var $subDiv = $(document.createElement('div'))
-      .addClass('layui-col-md2')
+      .addClass(fields.length > 5 ? 'layui-col-md1' : 'layui-col-md2')
       .append(dict.produceFormItem(fields[i]));
     $div.append($subDiv);
   }

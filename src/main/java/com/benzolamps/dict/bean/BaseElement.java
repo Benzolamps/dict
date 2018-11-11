@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.component.DictIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -80,6 +81,10 @@ public abstract class BaseElement extends BaseEntity {
     @Basic(fetch = FetchType.LAZY)
     @Column(insertable = false, columnDefinition = "longtext")
     private List<FrequencyInfo> frequencyInfo;
+
+    @Transient
+    @DictIgnore
+    private Integer groupFrequency = 0;
 
     @PrePersist
     @PreUpdate

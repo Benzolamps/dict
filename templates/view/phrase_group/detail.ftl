@@ -146,11 +146,11 @@
         children: [
           <#if group.status != 'COMPLETED'>
             <#list group.frequencySortedPhrases as phrase>
-              {id: '${phrase.id}', name: '${phrase.prototype} (${phrase.definition})'},
+              {id: '${phrase.id}', name: '${phrase.prototype}（${phrase.definition}）${group.frequencyGenerated?string('（词频：' + phrase.groupFrequency + '／' + phrase.frequency + '）', '')}'},
             </#list>
           <#else>
             <#list group.groupLog.phrases as phrase>
-              {id: '${phrase.id}', name: '${phrase.prototype} (${phrase.definition}) (掌握人数：${phrase.masteredStudentsCount})'},
+              {id: '${phrase.id}', name: '${phrase.prototype}（${phrase.definition}）（掌握人数：${phrase.masteredStudentsCount}）'},
             </#list>
           </#if>
         ]
@@ -165,14 +165,14 @@
           <#list students as clazz>
             {
               id: '${clazz.id}',
-              name: '${clazz.name}<#if clazz.description??> (${clazz.description})</#if>',
+              name: '${clazz.name}<#if clazz.description??>（${clazz.description}）</#if>',
               children: [
                 <#list clazz.students as student>
                   {
                     id: '#{student.id}',
-                    name: '${student.name} (${student.number})' +
-                      '<#if student.description??> (${student.description})</#if>' +
-                      '<#if group.status == 'COMPLETED'> (掌握短语数：${student.masteredPhrasesCount!'未参与评分'})</#if>'
+                    name: '${student.name}（${student.number}）' +
+                      '<#if student.description??>（${student.description}）</#if>' +
+                      '<#if group.status == 'COMPLETED'>（掌握短语数：${student.masteredPhrasesCount!'未参与评分'}）</#if>'
                   },
                 </#list>
               ]
