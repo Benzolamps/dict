@@ -80,4 +80,10 @@ public abstract class BaseElement extends BaseEntity {
     @Basic(fetch = FetchType.LAZY)
     @Column(insertable = false, columnDefinition = "longtext")
     private List<FrequencyInfo> frequencyInfo;
+
+    @PrePersist
+    @PreUpdate
+    private void updateFrequency() {
+        this.setFrequency(this.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
+    }
 }

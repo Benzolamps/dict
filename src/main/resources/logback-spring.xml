@@ -62,6 +62,7 @@
   <logger name="org.springframework.beans" level="INFO" additivity="true"/>
   <logger name="org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainer" level="DEBUG" additivity="true"/>
   <logger name="org.hibernate.orm.deprecation" level="OFF"/>
+  <logger name="org.hibernate.type.descriptor.java.JavaTypeDescriptorRegistry" level="OFF"/>
   <logger name="org.apache.catalina.core.ContainerBase" level="OFF"/>
   
   <springProfile name="release">

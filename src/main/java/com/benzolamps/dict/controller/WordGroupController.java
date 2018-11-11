@@ -434,7 +434,11 @@ public class WordGroupController extends BaseController {
     @PostMapping(value = "add_frequency_group_save.json")
     protected BaseVo addFrequencyGroupSave(Group wordGroup, MultipartFile file) throws IOException {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
-        wordGroup = wordGroupService.persistFrequencyGroupDoc(wordGroup, file.getBytes());
+        if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
+            wordGroup = wordGroupService.persistFrequencyGroupDoc(wordGroup, file.getBytes());
+        } else {
+            wordGroup = wordGroupService.persistFrequencyGroupTxt(wordGroup, file.getBytes());
+        }
         return wrapperData(wordGroup);
     }
 }

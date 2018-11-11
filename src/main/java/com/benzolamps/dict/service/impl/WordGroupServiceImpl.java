@@ -273,7 +273,6 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         Collection<Word> words = wordService.findByPrototypes(frequencies.keySet());
         for (Word word : words) {
             word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId().toString(), frequencies.get(word.getPrototype().toLowerCase())));
-            word.setFrequency(word.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
         }
         wordGroup.setWords(new HashSet<>(words));
         return wordGroup;

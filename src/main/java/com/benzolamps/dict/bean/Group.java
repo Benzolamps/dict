@@ -19,10 +19,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 单词短语分组
@@ -234,9 +231,10 @@ public class Group extends BaseEntity {
                 }
                 return frequency2.compareTo(frequency1);
             });
+            Collections.reverse(results);
             return results;
         } else {
-            return phraseGroup.getPhrases();
+            return phrases;
         }
     }
 
@@ -271,9 +269,10 @@ public class Group extends BaseEntity {
                 }
                 return frequency2.compareTo(frequency1);
             });
+            Collections.reverse(results);
             return results;
         } else {
-            return wordGroup.getWords();
+            return words;
         }
     }
 }
