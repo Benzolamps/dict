@@ -358,15 +358,15 @@
 
     $('#mastered-words').click(function () {
       var baseUrl = '${base_url}/word/list.html?' +
-        <#--encodeURIComponent('searches.field[0]') + '=' + encodeURIComponent('studentId') + '&' +-->
-        <#--encodeURIComponent('searches.value[0]') + '=' + encodeURIComponent('${student.id}') + '&' +-->
+        <#--encodeURIComponent('searches.field[0]') + '=' + encodeURIComponent('studentNumber') + '&' +-->
+        <#--encodeURIComponent('searches.value[0]') + '=' + encodeURIComponent('${student.number}') + '&' +-->
         <#--encodeURIComponent('searches.field[1]') + '=' + encodeURIComponent('studentName') + '&' +-->
         <#--encodeURIComponent('searches.value[1]') + '=' + encodeURIComponent('${student.name}') + '&' +-->
         <#--encodeURIComponent('searches.field[2]') + '=' + encodeURIComponent('mastered') + '&' +-->
         <#--encodeURIComponent('searches.value[2]') + '=true';-->
         encodeURIComponent(JSON.stringify({
           searches: [
-            {field: 'studentId', value: '${student.id}' },
+            {field: 'studentNumber', value: '${student.number}' },
             {field: 'studentName', value: '${student.name}'},
             {field: 'isMastered', value: 'true'}
           ]
@@ -379,8 +379,7 @@
       var baseUrl = '${base_url}/word/list.html?' +
       encodeURIComponent(JSON.stringify({
         searches: [
-          {field: 'studentId', value: '${student.id}' },
-          {field: 'studentName', value: '${student.name}'},
+          {field: 'studentNumber', value: '${student.number}' },
           {field: 'isMastered', value: 'false'}
         ]
       }));
@@ -392,8 +391,7 @@
       var baseUrl = '${base_url}/word_group/list.html?' +
         encodeURIComponent(JSON.stringify({
           searches: [
-            {field: 'studentId', value: '${student.id}' },
-            {field: 'studentName', value: '${student.name}'}
+            {field: 'studentNumber', value: '${student.number}' }
           ]
         }));
       console.log(baseUrl);
@@ -404,8 +402,7 @@
       var baseUrl = '${base_url}/phrase/list.html?' +
       encodeURIComponent(JSON.stringify({
         searches: [
-          {field: 'studentId', value: '${student.id}' },
-          {field: 'studentName', value: '${student.name}'},
+          {field: 'studentNumber', value: '${student.number}' },
           {field: 'isMastered', value: 'true'}
         ]
       }));
@@ -417,8 +414,7 @@
       var baseUrl = '${base_url}/phrase/list.html?' +
         encodeURIComponent(JSON.stringify({
           searches: [
-            {field: 'studentId', value: '${student.id}' },
-            {field: 'studentName', value: '${student.name}'},
+            {field: 'studentNumber', value: '${student.number}' },
             {field: 'isMastered', value: 'false'}
           ]
         }));
@@ -430,8 +426,7 @@
       var baseUrl = '${base_url}/phrase_group/list.html?' +
         encodeURIComponent(JSON.stringify({
           searches: [
-            {field: 'studentId', value: '${student.id}' },
-            {field: 'studentName', value: '${student.name}'}
+            {field: 'studentNumber', value: '${student.number}' }
           ]
         }));
       console.log(baseUrl);

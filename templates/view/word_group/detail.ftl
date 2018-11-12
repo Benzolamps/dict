@@ -206,7 +206,7 @@
          type: 2,
          title: '导出单词',
          content: '${base_url}/word/export.html',
-         area: ['800px', '600px'],
+         area: ['400px', '400px'],
          cancel: function () {
            delete parent.exportData;
          },

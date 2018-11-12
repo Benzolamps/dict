@@ -1,5 +1,4 @@
 <div class="layui-card">
-  <div class="layui-card-header">修改密码</div>
   <div class="layui-card-body">
     <form class="layui-form" id="password" method="post">
       <table class="layui-table">

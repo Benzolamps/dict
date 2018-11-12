@@ -14,7 +14,7 @@
 </#assign>
 
 <#list page.searches as search>
-  <#if search.field == 'studentId'><#assign student_id = search.value/></#if>
+  <#if search.field == 'student' && search.value??><#assign student = search.value/></#if>
 </#list>
 
 <#assign fields>
@@ -22,7 +22,7 @@
     {'field': 'prototype', 'title': '短语', 'sort': true},
     {'field': 'definition', 'title': '词义', 'sort': true},
     {'field': 'frequency', 'title': '词频', 'sort': true, 'minWidth': 150}
-    <#if !student_id??>
+    <#if !student??>
       ,{'field': 'masteredStudents', 'title': '已掌握', 'sort': true}
       ,{'field': 'failedStudents', 'title': '未掌握', 'sort': true}
     </#if>
@@ -54,21 +54,20 @@
         {'id': 14, 'value': '1000 以上'},
         {'id': 15, 'value': '非 0'}
       ]
-    }
-    <#if student_id??>
-      ,{'name': 'studentId', 'display': '学生学号', 'type': 'integer', 'readonly': true}
-      ,{'name': 'studentName', 'display': '学生姓名', 'type': 'string', 'readonly': true}
-      ,{
-        'name': 'isMastered',
-        'display': '是否掌握',
-        'type': 'string',
-        'readonly': true,
-        'options': [
-          {'id': 'true', 'value': '已掌握'},
-          {'id': 'false', 'value': '未掌握'}
-        ]
-      }
+    },
+    {'name': 'studentNumber', 'display': '学生学号', 'type': 'integer'},
+    <#if student??>
+      {'name': 'studentName', 'display': '学生姓名', 'type': 'string', 'readonly': true},
     </#if>
+    {
+      'name': 'isMastered',
+      'display': '是否掌握',
+      'type': 'string',
+      'options': [
+        {'id': 'true', 'value': '已掌握'},
+        {'id': 'false', 'value': '未掌握'}
+      ]
+    }
   ]
 </#assign>
 <@nothing>;</@nothing>
@@ -109,7 +108,7 @@
       type: 2,
       title: '导出短语',
       content: '${base_url}/phrase/export.html',
-      area: ['800px', '600px'],
+      area: ['400px', '400px'],
       cancel: function () {
         delete parent.exportData;
       },
@@ -185,10 +184,10 @@
         $.each(data, function (index, item) {
           baseUrl += 'phraseId=' + item.id + '&';
         });
-        baseUrl += 'studentId=${student_id!}';
+        baseUrl += 'studentId=${(student.id)!}';
         return baseUrl;
       })(),
-      area: ['800px', '600px']
+      area: ['400px', '400px'],
     });
   }
 </#assign>

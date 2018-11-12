@@ -1,9 +1,11 @@
 package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.util.Collection;
 
 /**
  * 自定义查询, 可以指定搜索和排序
@@ -25,6 +27,26 @@ public interface DictQuery<B extends BaseEntity> {
      * @param search 搜索
      */
     void applySearch(Search search);
+
+    /**
+     * 应用排序
+     * @param orders 排序
+     */
+    default void applyOrders(Collection<Order> orders) {
+        if (!CollectionUtils.isEmpty(orders)) {
+            orders.forEach(this::applyOrder);
+        }
+    }
+
+    /**
+     * 应用搜索
+     * @param searches 搜索
+     */
+    default void applySearches(Collection<Search> searches) {
+        if (!CollectionUtils.isEmpty(searches)) {
+            searches.forEach(this::applySearch);
+        }
+    }
 
     /**
      * 获取结果集查询

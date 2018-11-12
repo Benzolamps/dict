@@ -272,7 +272,8 @@
           layer.open({
             type: 2,
             content: '${base_url}/user/edit_password.html',
-            area: ['500px', '500px']
+            area: ['400px', '400px'],
+            title: '修改密码'
           });
         });
 
@@ -315,7 +316,8 @@
           layer.open({
             type: 2,
             content: '${base_url}/user/profile.html',
-            area: ['800px', '600px']
+            area: ['400px', '400px'],
+            title: '个人资料'
           });
         });
 

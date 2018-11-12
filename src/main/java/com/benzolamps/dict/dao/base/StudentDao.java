@@ -17,4 +17,6 @@ public interface StudentDao extends BaseDao<Student> {
      * @return 学习进度
      */
     StudyProcess[] getStudyProcess(Student student);
+
+    Student findByNumber(Integer studentNumber);
 }

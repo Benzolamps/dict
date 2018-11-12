@@ -1,7 +1,7 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Group>" -->
 
 <#list page.searches as search>
-  <#if search.field == 'studentId'><#assign student_id = search.value/></#if>
+  <#if search.field == 'student' && search.value??><#assign student = search.value/></#if>
 </#list>
 
 <#assign search>
@@ -18,10 +18,10 @@
         {'id': 2, 'value': '已完成'}
       ]
     }
-  <#if student_id??>
-      , {'name': 'studentId', 'display': '学生学号', 'type': 'integer', 'readonly': true}
+    {'name': 'studentNumber', 'display': '学生学号', 'type': 'integer'}
+    <#if student??>
       , {'name': 'studentName', 'display': '学生姓名', 'type': 'string', 'readonly': true}
-  </#if>
+    </#if>
   ]
 </#assign>
 

@@ -83,6 +83,6 @@
     var $content = $(this).parent().parent().find('input');
     $content[0].select();
     document.execCommand("Copy");
-    parent.layer.alert('操作成功！', {icon: 1});
+    layer.tips('已复制！', $(this).parent()[0]);
   });
 </script>

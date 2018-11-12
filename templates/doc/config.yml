@@ -23,14 +23,6 @@ solutions:
     needShuffle: false
     properties: {}
   - id: 1
-    name: 单词抄写表
-    path: doc/universe/copy_words.doc
-    remark: 单词抄写表
-    needHeader: true
-    exportFor: WORD
-    needShuffle: true
-    properties: {}
-  - id: 2
     name: 单词排查表
     path: doc/universe/check_words.doc
     remark: 单词排查表
@@ -39,28 +31,24 @@ solutions:
     needShuffle: false
     properties:
       separate_columns: 4
-      is_definition: false
       need_top_info: true
-  - id: 3
-    name: 单词词义排查表
-    path: doc/universe/check_words.doc
-    remark: 单词词义排查表
+  - id: 2
+    name: 单词抄写表
+    path: doc/universe/copy_words.doc
+    remark: 单词抄写表
     needHeader: true
     exportFor: WORD
-    needShuffle: false
-    properties:
-      separate_columns: 4
-      is_definition: true
-      need_top_info: true
-  - id: 4
-    name: 单词对照表
+    needShuffle: true
+    properties: {}
+  - id: 3
+    name: 单词词义对照表
     path: doc/universe/collation_words.doc
     remark: 单词对照表
     needHeader: true
     exportFor: WORD
     needShuffle: false
     properties: {}
-  - id: 5
+  - id: 4
     name: 短语生词表
     path: doc/universe/new_phrases.doc
     remark: 短语生词表
@@ -68,6 +56,16 @@ solutions:
     exportFor: PHRASE
     needShuffle: false
     properties: {}
+  - id: 5
+    name: 短语排查表
+    path: doc/universe/check_phrases.doc
+    remark: 短语排查表
+    needHeader: true
+    exportFor: PHRASE
+    needShuffle: false
+    properties:
+      separate_columns: 4
+      need_top_info: true
   - id: 6
     name: 短语抄写表
     path: doc/universe/copy_phrases.doc
@@ -77,29 +75,7 @@ solutions:
     needShuffle: true
     properties: {}
   - id: 7
-    name: 短语排查表
-    path: doc/universe/check_phrases.doc
-    remark: 短语排查表
-    needHeader: true
-    exportFor: PHRASE
-    needShuffle: false
-    properties:
-      separate_columns: 4
-      is_definition: false
-      need_top_info: true
-  - id: 8
-    name: 短语词义排查表
-    path: doc/universe/check_phrases.doc
-    remark: 短语词义排查表
-    needHeader: true
-    exportFor: PHRASE
-    needShuffle: false
-    properties:
-      separate_columns: 4
-      is_definition: true
-      need_top_info: true
-  - id: 9
-    name: 短语对照表
+    name: 短语词义对照表
     path: doc/universe/collation_phrases.doc
     remark: 短语对照表
     needHeader: true

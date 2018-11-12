@@ -136,8 +136,8 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
         dictQuery.setEntityManager(entityManager);
 
         if (pageable != null) {
-            pageable.getOrders().forEach(dictQuery::applyOrder);
-            pageable.getSearches().forEach(dictQuery::applySearch);
+            dictQuery.applyOrders(pageable.getOrders());
+            dictQuery.applySearches(pageable.getSearches());
             dictQuery.getFilter().and(pageable.getFilter());
         }
 

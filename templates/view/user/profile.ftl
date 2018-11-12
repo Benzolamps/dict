@@ -1,6 +1,6 @@
 <@data_edit
   id='shuffle_solution'
-  title='修改个人资料'
+  title='个人资料'
   fields=get_dict_property('com.benzolamps.dict.bean.User')
   values=current_user()
   messages={

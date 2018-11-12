@@ -27,12 +27,11 @@
 <script id="enter-password" type="text/html">
   <div>
     <div class="layui-card">
-      <div class="layui-card-header">设置解锁密码</div>
       <div class="layui-card-body">
         <form class="layui-form" id="lock" method="post">
           <table class="layui-table">
             <tr>
-              <td>请设置一个四位数解锁密码</td>
+              <td>解锁密码</td>
               <td>
                 <input type="text" name="password" autocomplete="off" required maxlength="4" placeholder="请设置一个四位数解锁密码" class="layui-input">
               </td>
@@ -69,6 +68,7 @@
       type: 1,
       content: $('#enter-password').html(),
       area: ['500px', '500px'],
+      title: '设置解锁密码',
       cancel: function (index) {
         parent.layer.closeAll();
       }

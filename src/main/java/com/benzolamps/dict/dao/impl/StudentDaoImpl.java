@@ -84,4 +84,10 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
         List list = query.list();
         return ((List<StudyProcess>) list).toArray(new StudyProcess[0]);
     }
+
+    @Override
+    public Student findByNumber(Integer studentNumber) {
+        Assert.notNull(studentNumber, "student number不能为null");
+        return findSingle(Filter.eq("number", studentNumber));
+    }
 }
