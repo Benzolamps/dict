@@ -28,7 +28,7 @@
         !function (parent) {
           var index = parent.layer.getFrameIndex(window.name);
           parent.layer.close(index);
-          parent.layer.alert('添加成功！', {
+          parent.layer.confirm('添加成功！是否要导出词库中没有的单词？', {
             icon: 1,
             end: function () {
               parent.$('iframe')[0].contentWindow.dict.reload(true);

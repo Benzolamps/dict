@@ -6,8 +6,8 @@
 
 <script type="text/javascript">
   $('#shutdown').click(function () {
-    parent.layer.confirm('确定要关闭系统服务？', {icon: 3, title: '提示'}, function () {
-      parent.layer.confirm('关闭系统服务后所有的功能将不可用，网页将无法访问，确定要继续吗？', {icon: 3, title: '提示'}, function () {
+    parent.layer.confirm('确定要关闭系统服务？', {icon: 3}, function () {
+      parent.layer.confirm('关闭系统服务后所有的功能将不可用，网页将无法访问，确定要继续吗？', {icon: 3}, function () {
         dict.loadText({
           url: 'shutdown.json',
           type: 'post',
