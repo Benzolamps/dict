@@ -11,15 +11,10 @@
  */
 window.dict = {};
 
-/* ajax请求设为同步 */
-$.ajaxSetup({async: false});
-
-/* 通过ajax加载一个js文件 */
-$.getScript('${base_url}/res/js/lang-utils.js');
-$.getScript('${base_url}/res/js/web-utils.js');
-$.getScript('${base_url}/res/js/dom-utils.js');
-$.getScript('${base_url}/res/js/dynamic-form.js');
-$.getScript('${base_url}/js/md5.js');
+<#include '/res/js/lang-utils.js.ftl'/>
+<#include '/res/js/web-utils.js.ftl'/>
+<#include '/res/js/dom-utils.js.ftl'/>
+<#include '/res/js/dynamic-form.js.ftl'/>
 
 Array.prototype.toString = function () {
   return this.join('，');

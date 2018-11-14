@@ -7,7 +7,6 @@
   <html lang="zh-CN">
     <head>
       <meta charset="utf-8"/>
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=0.8"/>
       <link rel="stylesheet" type="text/css" href="${base_url}/layui/css/layui.css"/>
       <link rel="stylesheet" type="text/css" href="${base_url}/font-awesome/css/font-awesome.min.css"/>
       <link rel="stylesheet" type="text/css" href="${base_url}/res/css/common.css"/>

@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 public class ContentTypeInterceptor extends BaseInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        response.setHeader("Cache-Control", "no-cache, must-revalidate");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         Method method = ((HandlerMethod) handler).getMethod();
         if (!method.getDeclaringClass().equals(ErrorController.class)) {
             String contentType;
@@ -36,8 +38,6 @@ public class ContentTypeInterceptor extends BaseInterceptor {
             }
             response.setContentType(contentType);
         }
-        response.setHeader("Cache-Control", "no-cache, must-revalidate");
-        response.setHeader("Access-Control-Allow-Origin", "*");
         return super.preHandle(request, response, handler);
     }
 }

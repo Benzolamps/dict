@@ -11,9 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
-
 /**
  * 主页Controller
  * @author Benzolamps
@@ -50,7 +47,7 @@ public class IndexController extends BaseController {
      * @param request request
      * @return ModelAndView
      */
-    @RequestMapping(value = "res/**", method = {GET, POST})
+    @GetMapping(value = "res/**")
     protected ModelAndView res(HttpServletRequest request) {
         String url = request.getRequestURL().toString();
         int index = url.indexOf("res");

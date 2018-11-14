@@ -477,4 +477,4 @@ dict.uploadFile = function (data) {
       });
     }, 500);
   });
-}
+};

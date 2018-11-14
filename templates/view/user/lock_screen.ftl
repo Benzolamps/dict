@@ -23,7 +23,7 @@
 <script src='${base_url}/flickity/js/flickity.pkgd.js'></script>
 <script src='${base_url}/flickity/js/howler.js'></script>
 <script src="${base_url}/res/js/lock-screen.js"></script>
-<script src="${base_url}/res/js/dynamic-form.js"></script>
+<script src="${base_url}/js/md5.js"></script>
 <script id="enter-password" type="text/html">
   <div>
     <div class="layui-card">

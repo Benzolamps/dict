@@ -65,7 +65,7 @@ public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseD
             @Override
             public void applySearches(Collection<Search> searches) {
                 super.applySearches(searches);
-                if (studentNumber != null && isMastered != null) {
+                if (studentNumber != null) {
                     Student student = studentDao.findByNumber(studentNumber);
                     if (isMastered != null) {
                         getFilter().and(Filter.memberOf(isMastered ? "masteredStudents" : "failedStudents", student));
