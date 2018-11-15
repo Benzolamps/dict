@@ -42,30 +42,50 @@
   </head>
   <body>
     <canvas id="canvas"></canvas>
-    <div class="login-panel">
+    <div class="login-panel" style="background-color: #FFF">
       <div class="animation">
         <div class="tou"></div>
         <div id="left-hand" class="initial-left-hand"></div>
         <div id="right-hand" class="initial-right-hand"></div>
       </div>
-      <div class="loading">
-        <div class="loader">
-          <div class="loader-bg">
-            <span>LOADING</span>
+      <div class="loading" style="cursor: pointer;">
+        <div class="container">
+          <div class="gearbox">
+            <div class="overlay"></div>
+            <div class="gear one">
+              <div class="gear-inner">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+            </div>
+            <div class="gear two">
+              <div class="gear-inner">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+            </div>
+            <div class="gear three">
+              <div class="gear-inner">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+            </div>
+            <div class="gear four large">
+              <div class="gear-inner">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+              </div>
+            </div>
           </div>
-          <div class="drops">
-            <div class="drop1"></div>
-            <div class="drop2"></div>
-          </div>
+          <h1 class="text">Loading...</h1>
         </div>
-        <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
-          <defs>
-            <filter id="liquid">
-              <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur"></feGaussianBlur>
-              <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -7" result="liquid"></feColorMatrix>
-            </filter>
-          </defs>
-        </svg>
       </div>
       <div class="login">
         <form class="layui-form login">
