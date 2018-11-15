@@ -434,10 +434,11 @@ public class PhraseGroupController extends BaseController {
     @PostMapping(value = "add_frequency_group_save.json")
     protected BaseVo addFrequencyGroupSave(Group phraseGroup, MultipartFile file) throws IOException {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        List<String> extraPhrases = new ArrayList<>();
         if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
-            phraseGroup = phraseGroupService.persistFrequencyGroupDoc(phraseGroup, file.getBytes());
+            phraseGroup = phraseGroupService.persistFrequencyGroupDoc(phraseGroup, file.getBytes(), extraPhrases);
         } else {
-            phraseGroup = phraseGroupService.persistFrequencyGroupTxt(phraseGroup, file.getBytes());
+            phraseGroup = phraseGroupService.persistFrequencyGroupTxt(phraseGroup, file.getBytes(), extraPhrases);
         }
         return wrapperData(phraseGroup);
     }

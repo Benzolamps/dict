@@ -230,7 +230,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
     }
 
     @Override
-    public Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes) {
+    public Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords) {
         String content = new String(bytes, Charset.forName("UTF-8"));
         String regex = "[A-Za-z]+";
         Matcher matcher = Pattern.compile(regex).matcher(content);
@@ -252,7 +252,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
 
     @Override
     @SneakyThrows(IOException.class)
-    public Group persistFrequencyGroupDoc(Group wordGroup, byte[] bytes) {
+    public Group persistFrequencyGroupDoc(Group wordGroup, byte[] bytes, List<String> extraWords) {
         POITextExtractor extractor;
         try {
             extractor = new WordExtractor(new ByteArrayInputStream(bytes));

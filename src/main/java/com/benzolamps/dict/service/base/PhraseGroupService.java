@@ -5,6 +5,8 @@ import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 
+import java.util.List;
+
 /**
  * 单词短语分组Service接口
  * @author Benzolamps
@@ -45,13 +47,15 @@ public interface PhraseGroupService extends GroupService {
      * 添加词频分组 (TXT)
      * @param phraseGroup 分组
      * @param bytes byte[]
+     * @param extraPhrases 词库中不存在的短语
      */
-    Group persistFrequencyGroupTxt(Group phraseGroup, byte[] bytes);
+    Group persistFrequencyGroupTxt(Group phraseGroup, byte[] bytes, List<String> extraPhrases);
 
     /**
      * 添加词频分组 (DOC)
      * @param phraseGroup 分组
      * @param bytes byte[]
+     * @param extraPhrases 词库中不存在的短语
      */
-    Group persistFrequencyGroupDoc(Group phraseGroup, byte[] bytes);
+    Group persistFrequencyGroupDoc(Group phraseGroup, byte[] bytes, List<String> extraPhrases);
 }

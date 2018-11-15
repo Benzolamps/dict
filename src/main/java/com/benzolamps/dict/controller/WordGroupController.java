@@ -15,13 +15,18 @@ import com.benzolamps.dict.service.base.*;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.lambda.Func1;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
+import java.util.function.Consumer;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -434,11 +439,26 @@ public class WordGroupController extends BaseController {
     @PostMapping(value = "add_frequency_group_save.json")
     protected BaseVo addFrequencyGroupSave(Group wordGroup, MultipartFile file) throws IOException {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        List<String> extraWords = new ArrayList<>();
         if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
-            wordGroup = wordGroupService.persistFrequencyGroupDoc(wordGroup, file.getBytes());
+            wordGroup = wordGroupService.persistFrequencyGroupDoc(wordGroup, file.getBytes(), extraWords);
         } else {
-            wordGroup = wordGroupService.persistFrequencyGroupTxt(wordGroup, file.getBytes());
+            wordGroup = wordGroupService.persistFrequencyGroupTxt(wordGroup, file.getBytes(), extraWords);
         }
-        return wrapperData(wordGroup);
+        Map<String, Object> data = new HashMap<>();
+        data.put("wordGroup", wordGroup);
+        if (CollectionUtils.isEmpty(extraWords)) {
+            data.put("hasExtraWords", false);
+        } else {
+            String token = UUID.randomUUID().toString().replace("-", "");
+            RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+            requestAttributes.setAttribute(token, (Consumer<OutputStream>) ops -> {
+
+            }, RequestAttributes.SCOPE_SESSION);
+            data.put("hasExtraWords", true);
+            data.put("token", token);
+        }
+
+        return wrapperData(data);
     }
 }

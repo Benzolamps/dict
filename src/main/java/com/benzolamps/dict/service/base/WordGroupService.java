@@ -5,6 +5,8 @@ import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 
+import java.util.List;
+
 /**
  * 单词短语分组Service接口
  * @author Benzolamps
@@ -45,13 +47,14 @@ public interface WordGroupService extends GroupService {
      * 添加词频分组 (TXT)
      * @param wordGroup 分组
      * @param bytes byte[]
+     * @param extraWords 词库中不存在的单词
      */
-    Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes);
+    Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords);
 
     /**
      * 添加词频分组 (DOC)
      * @param wordGroup 分组
      * @param bytes byte[]
      */
-    Group persistFrequencyGroupDoc(Group wordGroup, byte[] bytes);
+    Group persistFrequencyGroupDoc(Group wordGroup, byte[] bytes, List<String> extraWords);
 }
