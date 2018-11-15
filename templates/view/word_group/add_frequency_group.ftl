@@ -17,23 +17,39 @@
     }
   };
   dict.dynamicForm($table, <@json_dump obj=get_dict_property('com.benzolamps.dict.bean.Group')/>, '', {}, {}, messages, function () {
+    var name = $form.find('input[name=name]').val(), description = $form.find('input[name=description]').val();
     dict.uploadFile({
       action: 'add_frequency_group_save.json',
       data: {
-        name: $form.find('input[name=name]').val(),
-        description: $form.find('input[name=description]').val()
+        name: name,
+        description: description
       },
       accept: '.doc, .docx, .txt',
       success: function (data, delta) {
         !function (parent) {
           var index = parent.layer.getFrameIndex(window.name);
           parent.layer.close(index);
-          parent.layer.confirm('添加成功！是否要导出词库中没有的单词？', {
-            icon: 1,
-            end: function () {
-              parent.$('iframe')[0].contentWindow.dict.reload(true);
-            }
-          });
+          if (data.data.hasExtraWords) {
+            parent.layer.confirm('添加成功！是否要导出词库中没有的单词？', {
+              icon: 3,
+              end: function () {
+                parent.$('iframe')[0].contentWindow.dict.reload(true);
+              }
+            }, function (index) {
+              parent.layer.close(index);
+              parent.dict.postHref('${base_url}/doc/download', {
+                fileName: name,
+                token: data.data.token
+              });
+            });
+          } else {
+            parent.layer.alert('添加成功！', {
+              icon: 1,
+              end: function () {
+                parent.$('iframe')[0].contentWindow.dict.reload(true);
+              }
+            });
+          }
         }(parent);
       }
     });

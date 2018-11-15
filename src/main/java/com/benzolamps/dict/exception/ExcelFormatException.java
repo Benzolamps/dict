@@ -16,7 +16,7 @@ public class ExcelFormatException extends DictException {
      * @param columnNum 列号
      */
     public ExcelFormatException(String message, int rowNum, int columnNum) {
-        super("导入失败，在第 " + rowNum + " 行，第 " + columnNum + " 列发生错误，" + message);
+        super("导入失败，在第 " + (rowNum + 1) + " 行，第 " + (columnNum + 1) + " 列发生错误，" + message);
     }
 
     /**
@@ -25,6 +25,6 @@ public class ExcelFormatException extends DictException {
      * @param columnNum 列号
      */
     public ExcelFormatException(Throwable cause, int rowNum, int columnNum) {
-        super("导入失败，在第 " + rowNum + " 行，第 " + columnNum + " 列发生错误，" + cause.getClass().getName() + "：" + cause.getMessage(), cause);
+        super("导入失败，在第 " + (rowNum + 1) + " 行，第 " + (columnNum + 1) + " 列发生错误，" + cause.getClass().getName() + "：" + cause.getMessage(), cause);
     }
 }

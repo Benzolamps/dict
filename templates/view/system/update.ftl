@@ -30,7 +30,7 @@
 
 <script type="text/javascript">
   $('#update').click(function () {
-    parent.layer.confirm('是否开始更新？', {icon: 3, title: '提示'}, function (index) {
+    parent.layer.confirm('是否开始更新？', {icon: 3}, function (index) {
       parent.layer.close(index);
       dict.loadText({
         url: 'update.json',

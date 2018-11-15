@@ -13,6 +13,7 @@ import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
 import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.lambda.Action1;
 import com.benzolamps.dict.util.lambda.Func1;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -26,7 +27,7 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -451,10 +452,18 @@ public class WordGroupController extends BaseController {
             data.put("hasExtraWords", false);
         } else {
             String token = UUID.randomUUID().toString().replace("-", "");
+            Map<String, Object> exportAttribute = new HashMap<>();
+            exportAttribute.put("ext", "xlsx");
+            exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> {
+                List<Word> words = extraWords.stream().map(prototype -> {
+                    Word word = new Word();
+                    word.setPrototype(prototype);
+                    return word;
+                }).collect(Collectors.toList());
+                wordService.wordsToExcel(words, outputStream);
+            });
             RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-            requestAttributes.setAttribute(token, (Consumer<OutputStream>) ops -> {
-
-            }, RequestAttributes.SCOPE_SESSION);
+            requestAttributes.setAttribute(token, exportAttribute, RequestAttributes.SCOPE_SESSION);
             data.put("hasExtraWords", true);
             data.put("token", token);
         }

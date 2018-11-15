@@ -246,6 +246,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId().toString(), frequencies.get(word.getPrototype().toLowerCase())));
             word.setFrequency(word.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
         }
+        extraWords.clear();
+        extraWords.addAll(frequencies.keySet());
+        extraWords.removeAll(words.stream().map(Word::getPrototype).collect(Collectors.toList()));
         wordGroup.setWords(new HashSet<>(words));
         return wordGroup;
     }
@@ -274,6 +277,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         for (Word word : words) {
             word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId().toString(), frequencies.get(word.getPrototype().toLowerCase())));
         }
+        extraWords.clear();
+        extraWords.addAll(frequencies.keySet());
+        extraWords.removeAll(words.stream().map(Word::getPrototype).collect(Collectors.toList()));
         wordGroup.setWords(new HashSet<>(words));
         return wordGroup;
     }

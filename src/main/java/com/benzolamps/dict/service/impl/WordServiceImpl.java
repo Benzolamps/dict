@@ -5,10 +5,13 @@ import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.controller.vo.WordExcelVo;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.service.base.WordService;
+import com.benzolamps.dict.util.DictExcel;
 import lombok.SneakyThrows;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -21,6 +24,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * 单词Service接口实现类
@@ -34,6 +38,9 @@ public class WordServiceImpl extends BaseElementServiceImpl<Word, WordExcelVo> i
 
     @Resource
     private WordClazzService wordClazzService;
+
+    @Value("classpath:xlsx/sample.xlsx")
+    private org.springframework.core.io.Resource sample;
 
     @Override
     public void persist(Word... words) {
@@ -111,18 +118,17 @@ public class WordServiceImpl extends BaseElementServiceImpl<Word, WordExcelVo> i
     @Override
     @SneakyThrows(IOException.class)
     public void wordsToExcel(List<Word> words, OutputStream outputStream) {
-        HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
-        HSSFSheet sheet = hssfWorkbook.createSheet("Extra Words");
-        HSSFRow header = sheet.createRow(0);
-        header.createCell(0).setCellValue("索引");
-        header.createCell(1).setCellValue("单词原形");
-        header.createCell(1).setCellValue("英式发音");
-        header.createCell(1).setCellValue("美式发音");
-        header.createCell(1).setCellValue("词性");
-        header.createCell(1).setCellValue("词义");
+        Workbook workbook = DictExcel.inputStreamToWorkbook(sample.getInputStream());
+        Sheet sheet = workbook.getSheetAt(0);
+        List<CellStyle> cellStyles = IntStream.range(0, 6).mapToObj(i -> sheet.getRow(1).getCell(i).getCellStyle()).peek(cellStyle -> {
+            cellStyle.setBorderRight(CellStyle.BORDER_THIN);
+            cellStyle.setBorderLeft(cellStyle.BORDER_THIN);
+            cellStyle.setBorderBottom(cellStyle.BORDER_THIN);
+            cellStyle.setBorderTop(cellStyle.BORDER_THIN);
+        }).collect(Collectors.toList());
         for (int i = 0; i < words.size(); i++) {
             Word word = words.get(i);
-            HSSFRow row = sheet.createRow(i + 1);
+            Row row = sheet.createRow(i + 1);
             row.createCell(0).setCellValue(word.getIndex() == null ? i + 1 : word.getIndex());
             row.createCell(1).setCellValue(word.getPrototype());
             row.createCell(2).setCellValue(word.getBritishPronunciation());
@@ -133,9 +139,8 @@ public class WordServiceImpl extends BaseElementServiceImpl<Word, WordExcelVo> i
                     word.getClazzes().stream().map(WordClazz::getName).collect(Collectors.joining("，", "", ""))
             );
             row.createCell(5).setCellValue(word.getDefinition());
+            IntStream.range(0, 6).forEach(j -> row.getCell(j).setCellStyle(cellStyles.get(j)));
         }
-        try (OutputStream ops = outputStream) {
-            hssfWorkbook.write(ops);
-        }
+        workbook.write(outputStream);
     }
 }

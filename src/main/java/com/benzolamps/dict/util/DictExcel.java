@@ -5,13 +5,17 @@ import com.benzolamps.dict.component.DetectColumnNum;
 import com.benzolamps.dict.component.ExcelHeader;
 import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.exception.ExcelFormatException;
+import lombok.SneakyThrows;
+import org.apache.poi.POIXMLException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.OfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.util.StreamUtils;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
@@ -111,12 +115,14 @@ public interface DictExcel {
      * 将Excel输入流转换为工作簿
      * @return 工作簿
      */
+    @SneakyThrows(IOException.class)
     static Workbook inputStreamToWorkbook(InputStream stream) {
+        byte[] bytes = StreamUtils.copyToByteArray(stream);
         try {
-            return new XSSFWorkbook(stream);
-        } catch (OfficeXmlFileException | IOException ignored) {
+            return new XSSFWorkbook(new ByteArrayInputStream(bytes));
+        } catch (POIXMLException | OfficeXmlFileException | IOException ignored) {
             try {
-                return new HSSFWorkbook(stream);
+                return new HSSFWorkbook(new ByteArrayInputStream(bytes));
             } catch (Exception e) {
                 throw new DictException("文件格式有错误：" + e.getMessage(), e);
             }
