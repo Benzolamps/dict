@@ -99,7 +99,11 @@
             结束评分后可查看该分组单词的考核情况！
           </blockquote>
         <#else>
-          <div id="rate" style="width: 100%; height: 450px"></div>
+          <div style="text-align: center">
+            <button class="layui-btn layui-btn-warm layui-btn-sm extract-derive-group">创建派生分组</button>
+            <button class="layui-btn layui-btn-warm layui-btn-sm extract-personal-group">创建专属分组</button>
+          </div>
+          <div id="rate" style="width: 100%; height: 430px"></div>
         </#if>
       </div>
     </div>
@@ -112,6 +116,9 @@
           <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
           <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
           <button class="layui-btn layui-btn-danger layui-btn-xs delete">删除</button>
+          <#if group.status == 'COMPLETED'>
+            <button class="layui-btn layui-btn-warm layui-btn-xs view">查看</button>
+          </#if>
         </#if>
         <div class="ztree" id="students-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
@@ -417,7 +424,6 @@
         var nodes = studentsTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
-        console.log(nodes);
         if (nodes.length <= 0) {
           parent.layer.alert('请选中要删除的学生！', {
             icon: 2,
@@ -460,7 +466,6 @@
         var nodes = wordsTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
-        console.log(nodes);
         if (nodes.length <= 0) {
           parent.layer.alert('请选中要删除的单词！', {
             icon: 2,
@@ -495,6 +500,86 @@
                 });
               }
             });
+          });
+        }
+      });
+    </#if>
+
+    <#if group.status == 'COMPLETED'>
+      $studentsTree.parent().find('.view').click(function () {
+        var nodes = studentsTree.getCheckedNodes().filter(function (node) {
+          return !node.isParent;
+        });
+        if (nodes.length != 1) {
+          parent.layer.alert('请选中一个要查看信息的学生！', {
+            icon: 2,
+            title: '提示'
+          });
+        } else {
+          parent.layer.open({
+            type: 2,
+            title: '查看学生信息',
+            content: '${base_url}/word_group/score.html?id=${group.id}&studentId=' + nodes[0].id,
+            area: ['800px', '600px']
+          });
+        }
+      });
+
+      $('.extract-derive-group').click(function () {
+        var studentNodes = studentsTree.getCheckedNodes().filter(function (node) {
+          return !node.isParent;
+        });
+        var wordNodes = wordsTree.getCheckedNodes().filter(function (node) {
+          return !node.isParent;
+        });
+        if (studentNodes.length <= 0 && wordNodes.length <= 0) {
+          parent.layer.alert('没有单词，也没有学生，臣妾做不到啊！', {
+            icon: 2,
+            title: '提示'
+          });
+        } else {
+          parent.layer.open({
+            type: 2,
+            title: '创建派生单词分组',
+            content: (function () {
+              var baseUrl = '${base_url}/word_group/extract_derive_group.html?';
+              $.each(studentNodes, function (index, item) {
+                baseUrl += 'studentId=' + item.id + '&';
+              });
+              $.each(wordNodes, function (index, item) {
+                baseUrl += 'wordId=' + item.id + '&';
+              });
+              baseUrl += 'groupId=${(group.id)!}';
+              return baseUrl;
+            })(),
+            area: ['400px', '400px']
+          });
+        }
+      });
+
+      $('.extract-personal-group').click(function () {
+        var studentNodes = studentsTree.getCheckedNodes().filter(function (node) {
+          return !node.isParent;
+        });
+
+        if (studentNodes.length <= 0) {
+          parent.layer.alert('没有学生，不能创建专属分组！', {
+            icon: 2,
+            title: '提示'
+          });
+        } else {
+          parent.layer.open({
+            type: 2,
+            title: '创建专属单词分组',
+            content: (function () {
+              var baseUrl = '${base_url}/word_group/extract_personal_group.html?';
+              $.each(studentNodes, function (index, item) {
+                baseUrl += 'studentId=' + item.id + '&';
+              });
+              baseUrl += 'groupId=${(group.id)!}';
+              return baseUrl;
+            })(),
+            area: ['400px', '400px']
           });
         }
       });

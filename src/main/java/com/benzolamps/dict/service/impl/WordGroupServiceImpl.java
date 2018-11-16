@@ -131,6 +131,51 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         internalImportWords(processImportVos);
     }
 
+    @Override
+    public Group extractDeriveGroup(Group original, Collection<Word> words, Collection<Student> students, Group wordGroup) {
+        Assert.isTrue(!(CollectionUtils.isEmpty(words) && CollectionUtils.isEmpty(students)), "words和students不能同时为null或空");
+        /* lambda只能用final */
+        Collection<?> words1 = words, students1 = students;
+        /* 去除所有学生都会的单词 */
+        if (CollectionUtils.isEmpty(words)) {
+            Assert.notNull(original, "original不能为null");
+            words = new HashSet<>(original.getWords());
+            words.removeIf(word -> word.getMasteredStudents().containsAll(students1));
+        }
+        /* 去除所有单词都会的学生 */
+        if (CollectionUtils.isEmpty(students)) {
+            Assert.notNull(original, "original不能为null");
+            students = new HashSet<>(original.getStudentsOriented());
+            students.removeIf(student -> student.getMasteredWords().containsAll(words1));
+        }
+        wordGroup.setWords(new HashSet<>(words));
+        wordGroup.setStudentsOriented(new HashSet<>(students));
+        return persist(wordGroup);
+    }
+
+    @Override
+    public Collection<Group> extractPersonalGroup(Group original, Collection<Student> students, Group wordGroup) {
+        Assert.notNull(original, "original不能为null");
+        Assert.notEmpty(students, "students不能为空");
+        Collection<Group> groups = students.stream().map(student -> {
+           Group group = new Group();
+           String name = wordGroup.getName() + " - " + student.getName();
+           int i = 0;
+           while (nameExists(name)) {
+               name = wordGroup.getName() + " - " + student.getName() + " - " + i++;
+           }
+           group.setName(name);
+           group.setDescription(wordGroup.getDescription());
+           Set<Word> words = new HashSet<>(original.getWords());
+           words.removeIf(student.getMasteredWords()::contains);
+           group.setWords(words);
+           group.setStudentsOriented(Collections.singleton(student));
+           return group;
+        }).collect(Collectors.toList());
+        persist(groups);
+        return groups;
+    }
+
     private void handle(ProcessImportVo... processImportVos) {
         Arrays.sort(processImportVos, (piv1, piv2) -> {
             int result = 0;

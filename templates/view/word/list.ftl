@@ -90,7 +90,7 @@
       'handler': add_to,
       'needSelected': true
     }
-    <#if student_id??>
+    <#if student??>
       , {
         'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属分组',
         'handler': create_personal,

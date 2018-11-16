@@ -1,12 +1,20 @@
-<#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
+<#-- @ftlvariable name="wordGroup" type="com.benzolamps.dict.bean.Group" -->
 <#-- @ftlvariable name="words" type="java.util.Collection<com.benzolamps.dict.bean.Word>" -->
+<#-- @ftlvariable name="students" type="java.util.Collection<com.benzolamps.dict.bean.Student>" -->
 <div class="layui-card">
   <div class="layui-card-body">
-    <form id="personal-word-group" class="layui-form" method="post" action="${base_url}/student/personal_word_group_save.json">
-      <#list words as word>
-        <input multiple-select="1" type="hidden" name="wordId" value="${word.id}">
-      </#list>
-      <input type="hidden" name="studentId" value="${student.id}">
+    <form id="extract-derive-group" class="layui-form" method="post" action="${base_url}/word_group/extract_derive_group_save.json">
+      <#if words??>
+        <#list words as word>
+          <input multiple-select="1" type="hidden" name="wordId" value="${word.id}">
+        </#list>
+      </#if>
+      <#if students??>
+        <#list students as student>
+          <input multiple-select="1" type="hidden" name="studentId" value="${student.id}">
+        </#list>
+      </#if>
+      <input type="hidden" name="groupId" value="${wordGroup.id}">
       <table class="layui-table">
       </table>
       <input type="submit" value="确定" class="layui-btn layui-btn-normal" style="margin-top: 10px;">
@@ -14,8 +22,8 @@
   </div>
 
   <script>
-    var $form = $('#personal-word-group');
-    var $table = $('#personal-word-group table');
+    var $form = $('#extract-derive-group');
+    var $table = $('#extract-derive-group table');
     var value = <@json_dump obj=get_dict_property('com.benzolamps.dict.bean.Group')/>;
     dict.dynamicForm($table, value, '', {}, {}, {
       name: {

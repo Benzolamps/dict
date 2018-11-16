@@ -5,6 +5,7 @@ import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,6 +43,25 @@ public interface PhraseGroupService extends GroupService {
      * @param processImportVos ProcessImportVo
      */
     void importPhrases(ProcessImportVo... processImportVos);
+
+    /**
+     * 创建派生分组
+     * @param original 原分组
+     * @param phrases 短语集合
+     * @param students 学生集合
+     * @param phraseGroup 分组
+     * @return 派生分组
+     */
+    Group extractDeriveGroup(Group original, Collection<Phrase> phrases, Collection<Student> students, Group phraseGroup);
+
+    /**
+     * 创建派生分组
+     * @param original 原分组
+     * @param students 学生集合
+     * @param phraseGroup 分组
+     * @return 专属分组集合
+     */
+    Collection<Group> extractPersonalGroup(Group original, Collection<Student> students, Group phraseGroup);
 
     /**
      * 添加词频分组 (TXT)

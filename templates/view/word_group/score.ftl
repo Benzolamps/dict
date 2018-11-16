@@ -41,26 +41,32 @@
         ${student.number}<br>
         ${student.description!''}<br>
         ${student.clazz.name}<br>
-        <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 10px">
-          <tr>
-            <td>
-              <button id="move-right" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius" style="width: 50%; margin-bottom: 10px;">
-                <i class="fa fa-angle-double-right" style="font-size: 20px;"></i>
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <button id="move-left" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius" style="width: 50%; margin-bottom: 10px;">
-                <i class="fa fa-angle-double-left" style="font-size: 20px;"></i>
-              </button>
-            </td>
-          </tr>
-        </table>
-        <input id="submit" type="button" value="完成" class="layui-btn layui-btn-normal layui-btn-sm" style="margin-top: 100px; width: 100%">
         <#if !scored>
-          <br><input id="jump" type="button" value="跳过" class="layui-btn layui-btn-danger layui-btn-sm" style="margin-top: 10px; width: 100%">
-          <br><input id="import" type="button" value="导入学习进度" class="layui-btn layui-btn-primary layui-btn-sm" style="margin-top: 10px; width: 100%">
+          <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: 10px">
+            <tr>
+              <td>
+                <button id="move-right" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius" style="width: 50%; margin-bottom: 10px;">
+                  <i class="fa fa-angle-double-right" style="font-size: 20px;"></i>
+                </button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <button id="move-left" class="layui-btn layui-btn-primary layui-btn-sm layui-btn-radius" style="width: 50%; margin-bottom: 10px;">
+                  <i class="fa fa-angle-double-left" style="font-size: 20px;"></i>
+                </button>
+              </td>
+            </tr>
+          </table>
+        </#if>
+        <#if group.status != 'COMPLETED'>
+          <br><br><input id="submit" type="button" value="完成" class="layui-btn layui-btn-normal layui-btn-sm" style="width: 100%">
+        </#if>
+        <#if !scored>
+          <br><br><input id="jump" type="button" value="跳过" class="layui-btn layui-btn-danger layui-btn-sm" style="width: 100%">
+          <br><br><input id="import" type="button" value="导入学习进度" class="layui-btn layui-btn-primary layui-btn-sm" style="width: 100%">
+        <#else>
+          <br><br><input id="extract-personal-group" type="button" value="创建专属分组" class="layui-btn layui-btn-warm layui-btn-sm" style="width: 100%">
         </#if>
       </div>
     </div>

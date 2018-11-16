@@ -6,15 +6,13 @@ import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
-import com.benzolamps.dict.controller.vo.BaseVo;
-import com.benzolamps.dict.controller.vo.ClazzStudentTreeVo;
-import com.benzolamps.dict.controller.vo.DataVo;
-import com.benzolamps.dict.controller.vo.ProcessImportVo;
+import com.benzolamps.dict.controller.vo.*;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
 import com.benzolamps.dict.util.Constant;
 import com.benzolamps.dict.util.lambda.Func1;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -296,7 +294,7 @@ public class PhraseGroupController extends BaseController {
 
         boolean hasMore = studentsOriented.size() > 1;
 
-        ModelAndView mv = new ModelAndView("view/word_group/score");
+        ModelAndView mv = new ModelAndView("view/phrase_group/score");
         Student student;
         if (studentId != null) {
             student = phraseGroup.getStudentsOriented().stream().filter(stu -> studentId.equals(stu.getId())).findFirst().get();
@@ -441,5 +439,72 @@ public class PhraseGroupController extends BaseController {
             phraseGroup = phraseGroupService.persistFrequencyGroupTxt(phraseGroup, file.getBytes(), extraPhrases);
         }
         return wrapperData(phraseGroup);
+    }
+
+    /**
+     * 创建派生分组界面
+     * @param groupId 分组id
+     * @param phraseIds 短语id集合
+     * @param studentIds 学生id集合
+     * @return ModelAndView
+     */
+    @NavigationView
+    @RequestMapping(value = "extract_derive_group.html", method = {GET, POST})
+    protected ModelAndView extractDeriveGroup(Integer groupId, @RequestParam(value = "phraseId", required = false) Integer[] phraseIds, @RequestParam(value = "studentId", required = false) Integer[] studentIds) {
+        ModelAndView mv = new ModelAndView("view/word_group/extract_derive_group");
+        Assert.isTrue(!(ObjectUtils.isEmpty(phraseIds) && ObjectUtils.isEmpty(studentIds)), "phrase ids和student ids不能同时为null或空");
+        ExtractGroupVo<Phrase> extractGroupVo = new ExtractGroupVo<>(groupId, phraseIds, studentIds, phraseGroupService, phraseService, studentService);
+        mv.addObject("phraseGroup", extractGroupVo.getGroup());
+        mv.addObject("phrases", extractGroupVo.getPhrases());
+        mv.addObject("students", extractGroupVo.getStudents());
+        return mv;
+    }
+
+    /**
+     * 创建派生分组
+     * @param groupId 分组id
+     * @param phraseIds 短语id集合
+     * @param studentIds 学生id集合
+     * @param phraseGroup 分组
+     * @return 操作成功
+     */
+    @ResponseBody
+    @PostMapping(value = "extract_derive_group_save.json")
+    protected BaseVo extractDeriveGroupSave(Integer groupId, @RequestParam(value = "phraseId", required = false) Integer[] phraseIds, @RequestParam(value = "studentId", required = false) Integer[] studentIds, Group phraseGroup) {
+        Assert.isTrue(!(ObjectUtils.isEmpty(phraseIds) && ObjectUtils.isEmpty(studentIds)), "phrase ids和student ids不能同时为null或空");
+        ExtractGroupVo<Phrase> extractGroupVo = new ExtractGroupVo<>(groupId, phraseIds, studentIds, phraseGroupService, phraseService, studentService);
+        return wrapperData(phraseGroupService.extractDeriveGroup(extractGroupVo.getGroup(), extractGroupVo.getPhrases(), extractGroupVo.getStudents(), phraseGroup));
+    }
+
+    /**
+     * 创建专属分组界面
+     * @param groupId 分组id
+     * @param studentIds 学生id集合
+     * @return ModelAndView
+     */
+    @NavigationView
+    @RequestMapping(value = "extract_personal_group.html", method = {GET, POST})
+    protected ModelAndView extractPersonalGroup(Integer groupId, @RequestParam(value = "studentId", required = false) Integer[] studentIds) {
+        ModelAndView mv = new ModelAndView("view/phrase_group/extract_personal_group");
+        ExtractGroupVo<Phrase> extractGroupVo = new ExtractGroupVo<>(groupId, null, studentIds, phraseGroupService, phraseService, studentService);
+        mv.addObject("phraseGroup", extractGroupVo.getGroup());
+        mv.addObject("students", extractGroupVo.getStudents());
+        return mv;
+    }
+
+    /**
+     * 创建专属分组
+     * @param groupId 分组id
+     * @param studentIds 学生id集合
+     * @param phraseGroup 分组
+     * @return 操作成功
+     */
+    @ResponseBody
+    @PostMapping(value = "extract_personal_group_save.json")
+    protected BaseVo extractPersonalGroupSave(Integer groupId, @RequestParam(value = "studentId", required = false) Integer[] studentIds, Group phraseGroup) {
+        Assert.notEmpty(studentIds, "student ids不能为null或空");
+        Assert.notNull(groupId, "group id不能为null");
+        ExtractGroupVo<Phrase> extractGroupVo = new ExtractGroupVo<>(groupId, null, studentIds, phraseGroupService, phraseService, studentService);
+        return wrapperData(phraseGroupService.extractPersonalGroup(extractGroupVo.getGroup(), extractGroupVo.getStudents(), phraseGroup));
     }
 }

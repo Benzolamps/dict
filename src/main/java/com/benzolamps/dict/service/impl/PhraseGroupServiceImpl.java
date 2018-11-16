@@ -9,9 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 短语分组Service接口实现类
@@ -73,6 +74,51 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
     @Transactional
     public void importPhrases(ProcessImportVo... processImportVos) {
         throw new UnsupportedOperationException("该功能尚未实现！");
+    }
+
+    @Override
+    public Group extractDeriveGroup(Group original, Collection<Phrase> phrases, Collection<Student> students, Group phraseGroup) {
+        Assert.isTrue(!(CollectionUtils.isEmpty(phrases) && CollectionUtils.isEmpty(students)), "words和students不能同时为null或空");
+        /* lambda只能用final */
+        Collection<?> phrases1 = phrases, students1 = students;
+        /* 去除所有学生都会的单词 */
+        if (CollectionUtils.isEmpty(phrases)) {
+            Assert.notNull(original, "original不能为null");
+            phrases = new HashSet<>(original.getPhrases());
+            phrases.removeIf(phrase -> phrase.getMasteredStudents().containsAll(students1));
+        }
+        /* 去除所有单词都会的学生 */
+        if (CollectionUtils.isEmpty(students)) {
+            Assert.notNull(original, "original不能为null");
+            students = new HashSet<>(original.getStudentsOriented());
+            students.removeIf(student -> student.getMasteredPhrases().containsAll(phrases1));
+        }
+        phraseGroup.setPhrases(new HashSet<>(phrases));
+        phraseGroup.setStudentsOriented(new HashSet<>(students));
+        return persist(phraseGroup);
+    }
+
+    @Override
+    public Collection<Group> extractPersonalGroup(Group original, Collection<Student> students, Group phraseGroup) {
+        Assert.notNull(original, "original不能为null");
+        Assert.notEmpty(students, "students不能为空");
+        Collection<Group> groups = students.stream().map(student -> {
+            Group group = new Group();
+            String name = phraseGroup.getName() + " - " + student.getName();
+            int i = 0;
+            while (nameExists(name)) {
+                name = phraseGroup.getName() + " - " + student.getName() + " - " + i++;
+            }
+            group.setName(name);
+            group.setDescription(phraseGroup.getDescription());
+            Set<Phrase> phrases = new HashSet<>(original.getPhrases());
+            phrases.removeIf(student.getMasteredPhrases()::contains);
+            group.setPhrases(phrases);
+            group.setStudentsOriented(Collections.singleton(student));
+            return group;
+        }).collect(Collectors.toList());
+        persist(groups);
+        return groups;
     }
 
     @Override

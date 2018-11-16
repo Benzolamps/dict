@@ -22,6 +22,8 @@ import javax.persistence.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.benzolamps.dict.bean.Group.Type.WORD;
+
 /**
  * 单词短语分组
  * @author Benzolamps
@@ -197,6 +199,25 @@ public class Group extends BaseEntity {
     @JsonIgnore
     public Collection<Phrase> getFrequencySortedPhrases() {
         return getFrequencySortedPhrases(this.getPhrases(), this);
+    }
+
+    /**
+     * 获取元素
+     * @return 元素
+     */
+    @JsonIgnore
+    @SuppressWarnings("unchecked")
+    public <T extends BaseElement> Collection<T> getElements() {
+        return (Collection<T>) (WORD.equals(getType()) ? getWords() : getPhrases());
+    }
+
+    /**
+     * 获取排序过的元素
+     * @return 元素
+     */
+    @JsonIgnore
+    public Collection<? extends BaseElement> getFrequencySortedElements() {
+        return WORD.equals(getType()) ? getFrequencySortedWords() : getFrequencySortedPhrases();
     }
 
     /**

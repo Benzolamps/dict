@@ -1,24 +1,24 @@
 package com.benzolamps.dict.controller;
 
-import com.benzolamps.dict.bean.*;
+import com.benzolamps.dict.bean.Student;
+import com.benzolamps.dict.bean.StudyLog;
+import com.benzolamps.dict.bean.StudyProcess;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
 import com.benzolamps.dict.controller.vo.StudentVo;
-import com.benzolamps.dict.bean.StudyProcess;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
 
 import static com.benzolamps.dict.bean.Group.Status.NORMAL;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -201,89 +201,5 @@ public class StudentController extends BaseController {
         mv.addObject("averageWordStudyProcess", studyProcessVos[2]);
         mv.addObject("averagePhraseStudyProcess", studyProcessVos[3]);
         return mv;
-    }
-
-    /**
-     * 创建专属单词分组界面
-     * @param studentId 学生id
-     * @param wordIds 单词id
-     * @return ModelAndView
-     */
-    @NavigationView
-    @RequestMapping(value = "personal_word_group.html", method = {GET, POST})
-    protected ModelAndView personalWordGroup(@RequestParam Integer studentId, @RequestParam("wordId") Integer... wordIds) {
-        ModelAndView mv = new ModelAndView("view/student/personal_word_group");
-        Student student = studentService.find(studentId);
-        Assert.notNull(student, "student不存在");
-        mv.addObject("student", student);
-        mv.addObject("words", wordService.findList(Filter.in("id", Arrays.asList(wordIds))));
-        return mv;
-    }
-
-    /**
-     * 创建专属单词分组保存
-     * @param request HttpServletRequest
-     * @param studentId 学生id
-     * @param wordIds 单词id
-     * @return 保存成功
-     */
-    @ResponseBody
-    @RequestMapping(value = "personal_word_group_save.json", method = {GET, POST})
-    protected BaseVo personalWordGroupSave(HttpServletRequest request, @RequestParam Integer studentId, @RequestParam("wordId") Integer... wordIds) {
-        Student student = studentService.find(studentId);
-        Assert.notNull(student, "student不存在");
-        String groupName = request.getParameter("name");
-        String groupDescription = request.getParameter("description");
-        Assert.hasText(groupName, "name不能为null或空");
-        Group wordGroup = new Group();
-        wordGroup.setName(groupName);
-        if (StringUtils.hasText(groupDescription)) wordGroup.setDescription(groupDescription);
-        wordGroup.setStudentsOriented(Collections.singleton(student));
-        List<Word> words = wordService.findList(Filter.in("id", Arrays.asList(wordIds)));
-        wordGroup.setWords(new HashSet<>(words));
-        wordGroupService.persist(wordGroup);
-        return SUCCESS_VO;
-    }
-
-    /**
-     * 创建专属短语分组界面
-     * @param studentId 学生id
-     * @param phraseIds 短语id
-     * @return ModelAndView
-     */
-    @NavigationView
-    @RequestMapping(value = "personal_phrase_group.html", method = {GET, POST})
-    protected ModelAndView personalPhraseGroup(@RequestParam Integer studentId, @RequestParam("phraseId") Integer... phraseIds) {
-        ModelAndView mv = new ModelAndView("view/student/personal_phrase_group");
-        Student student = studentService.find(studentId);
-        Assert.notNull(student, "student不存在");
-        mv.addObject("student", student);
-        mv.addObject("phrases", wordService.findList(Filter.in("id", Arrays.asList(phraseIds))));
-        return mv;
-    }
-
-    /**
-     * 创建专属短语分组保存
-     * @param request HttpServletRequest
-     * @param studentId 学生id
-     * @param phraseIds 单词id
-     * @return 保存成功
-     */
-    @ResponseBody
-    @RequestMapping(value = "personal_phrase_group_save.json", method = {GET, POST})
-    protected BaseVo personalWordPhraseSave(HttpServletRequest request, @RequestParam Integer studentId, @RequestParam("phraseId") Integer... phraseIds) {
-        Student student = studentService.find(studentId);
-        Assert.notNull(student, "student不存在");
-        String groupName = request.getParameter("name");
-        String groupDescription = request.getParameter("description");
-        Assert.hasText(groupName, "name不能为null或空");
-        Group phraseGroup = new Group();
-        phraseGroup.setName(groupName);
-        if (StringUtils.hasText(groupDescription)) phraseGroup.setDescription(groupDescription);
-        phraseGroup.setStudentsOriented(Collections.singleton(student));
-        List<Phrase> phrases = phraseService.findList(Filter.in("id", Arrays.asList(phraseIds)));
-        phraseGroup.setPhrases(new HashSet<>(phrases));
-        phraseGroupService.persist(phraseGroup);
-        return SUCCESS_VO;
     }
 }

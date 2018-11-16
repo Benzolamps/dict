@@ -5,6 +5,7 @@ import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -42,6 +43,24 @@ public interface WordGroupService extends GroupService {
      * @param processImportVos ProcessImportVo
      */
     void importWords(ProcessImportVo... processImportVos);
+
+    /**
+     * 创建派生分组
+     * @param original 原分组
+     * @param words 单词集合
+     * @param wordGroup 分组
+     * @return 派生分组
+     */
+    Group extractDeriveGroup(Group original, Collection<Word> words, Collection<Student> students, Group wordGroup);
+
+    /**
+     * 创建派生分组
+     * @param original 原分组
+     * @param students 学生集合
+     * @param wordGroup 分组
+     * @return 专属分组集合
+     */
+    Collection<Group> extractPersonalGroup(Group original, Collection<Student> students, Group wordGroup);
 
     /**
      * 添加词频分组 (TXT)
