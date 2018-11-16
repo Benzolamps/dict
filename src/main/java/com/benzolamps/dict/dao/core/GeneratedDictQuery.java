@@ -94,7 +94,7 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     }
 
     private String select(String field) {
-        Assert.hasText(field, "field不能为空或null");
+        Assert.hasText(field, "field不能为null或空");
         StringJoiner jpql = new StringJoiner(" ");
         filter.build(alias);
         applyOrder(Order.desc("id"));

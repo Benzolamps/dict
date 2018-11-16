@@ -1,7 +1,7 @@
 package com.benzolamps.dict.controller.vo;
 
 import com.benzolamps.dict.bean.BaseElement;
-import com.benzolamps.dict.bean.Student;
+import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class DocExportVo implements Serializable {
     private static final long serialVersionUID = 852337843770551706L;
 
     /** 分组id */
-    private Integer groupId;
+    private List<Integer> groupIds;
 
     /** pageable */
     private Pageable pageable;
@@ -46,7 +46,7 @@ public class DocExportVo implements Serializable {
     @JsonIgnore
     private Collection<? extends BaseElement> content;
 
-    /** 学生 */
+    /** 分组 */
     @JsonIgnore
-    private Collection<Student> students;
+    private Collection<Group> groups;
 }

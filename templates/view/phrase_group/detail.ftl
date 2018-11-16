@@ -211,7 +211,7 @@
          end: function () {
            if (!parent.exportData) return false;
            var data = {};
-           data.groupId = ${group.id};
+           data.groupIds = [${group.id}];
            data.title = parent.exportData.title;
            data.docSolutionId = parent.exportData.docSolution;
            data.shuffleSolutionId = parent.exportData.shuffleSolution;

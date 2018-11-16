@@ -180,6 +180,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         this.internalJump(group, student, null, null);
     }
 
+    @SuppressWarnings("SameParameterValue")
     protected void internalJump(Group group, Student student, Integer wordsCount, Integer phrasesCount) {
         Assert.notNull(group, (WORD.equals(type) ? "word" : "phrase") + " group不能为null");
         Assert.notNull(student, "student不能为null");
@@ -257,12 +258,6 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         group.setStatus(NORMAL);
         group.setGroupLog(null);
         group.getStudentsScored().clear();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Set<Student> getStudentsOriented(Group group) {
-        return new HashSet<>(group.getStudentsOriented());
     }
 
     protected void assertGroupAndStudent(Group group, Student student) {

@@ -21,9 +21,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.benzolamps.dict.bean.Group.Status.NORMAL;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -91,26 +91,25 @@ public class PhraseController extends BaseController {
      * 导出短语
      * @return ModelAndView
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @PostMapping("export_save.json")
     protected ModelAndView exportSave(@RequestBody DocExportVo docExportVo, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView();
         Pageable pageable = docExportVo.getPageable();
-        List<Phrase> phrases;
         if (pageable == null) {
-            Assert.notNull(docExportVo.getGroupId(), "group id不能为null");
-            Group group = phraseGroupService.find(docExportVo.getGroupId());
-            Assert.notNull(group, "group不存在");
-            Assert.notEmpty(group.getPhrases(), "phrases不能为null或空");
-            phrases = new ArrayList<>(group.getPhrases());
-            docExportVo.setStudents(phraseGroupService.getStudentsOriented(group));
+            Assert.notEmpty(docExportVo.getGroupIds(), "group ids不能为null或空");
+            List<Group> groups = docExportVo.getGroupIds().stream().map(phraseGroupService::find)
+                .peek(group -> group.getStudentsOriented().toString())
+                .peek(group -> group.getPhrases().toString())
+                .collect(Collectors.toList());
+            docExportVo.setGroups(groups);
             mv.setViewName("redirect:/doc/export_personal.json");
         } else {
-            phrases = phraseService.findPage(pageable).getContent();
+            List<Phrase> phrases = phraseService.findPage(pageable).getContent();
             mv.setViewName("redirect:/doc/export_default.json");
+            docExportVo.setContent(phrases);
         }
-        docExportVo.setContent(phrases);
         redirectAttributes.addFlashAttribute("docExportVo", docExportVo);
-        mv.setViewName("redirect:/doc/export.json");
         return mv;
     }
 

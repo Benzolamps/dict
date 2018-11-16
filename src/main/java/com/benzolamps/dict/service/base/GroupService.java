@@ -4,10 +4,6 @@ import com.benzolamps.dict.bean.Clazz;
 import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.Set;
-
 /**
  * 单词短语分组Service接口
  * @author Benzolamps
@@ -63,11 +59,4 @@ public interface GroupService extends BaseService<Group> {
      * @param group 分组
      */
     void complete(Group group);
-
-    /**
-     * 获取所有学生
-     * @param group 分组
-     * @return 学生
-     */
-    Set<Student> getStudentsOriented(Group group);
 }

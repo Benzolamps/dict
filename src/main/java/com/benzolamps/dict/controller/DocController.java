@@ -1,7 +1,6 @@
 package com.benzolamps.dict.controller;
 
-import com.benzolamps.dict.bean.DocSolution;
-import com.benzolamps.dict.bean.Student;
+import com.benzolamps.dict.bean.*;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DocExportVo;
@@ -29,6 +28,7 @@ import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 import java.util.zip.ZipOutputStream;
 
+import static com.benzolamps.dict.bean.Group.Type.WORD;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -89,19 +89,25 @@ public class DocController extends BaseController {
     @RequestMapping(value = "export_personal.json")
     protected BaseVo exportPersonal(DocExportVo docExportVo, ModelMap modelMap) throws IOException, TemplateException {
         Assert.notNull(docExportVo, "doc export vo不能为null");
-        Collection<Student> students = docExportVo.getStudents();
-        Assert.notNull(students, "students不能为null");
-        Template template = this.getTemplate(docExportVo, modelMap);
         Set<DictFile.ZipItem> zipItems = new HashSet<>();
-        for (Student student : students) {
-            modelMap.addAttribute("student", studentService.find(student.getId()));
-            modelMap.addAttribute("groupId", docExportVo.getGroupId());
-            try (StringWriter stringWriter = new StringWriter()) {
-                template.process(modelMap, stringWriter);
-                String content = compress.apply(stringWriter.toString());
-                String name = (String) modelMap.get("title");
-                InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-                zipItems.add(new DictFile.ZipItem(name + " - " + student.getId() + " - " + student.getName() + ".doc", inputStream));
+        for (Group group : docExportVo.getGroups()) {
+            boolean isWord = WORD.equals(group.getType());
+            Set<Student> students = group.getStudentsOriented();
+            Set<? extends BaseElement> elements = isWord ? group.getWords() : group.getPhrases();
+            Assert.notEmpty(students, "分组" + group.getName() + "中没有学生");
+            Assert.notEmpty(elements, "分组" + group.getName() + "中没有" + (isWord ? "单词" : "短语"));
+            docExportVo.setContent(elements);
+            Template template = this.getTemplate(docExportVo, modelMap);
+            for (Student student : students) {
+                modelMap.addAttribute("student", studentService.find(student.getId()));
+                modelMap.addAttribute("groupId", group.getId());
+                try (StringWriter stringWriter = new StringWriter()) {
+                    template.process(modelMap, stringWriter);
+                    String content = compress.apply(stringWriter.toString());
+                    String name = (String) modelMap.get("title");
+                    InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
+                    zipItems.add(new DictFile.ZipItem(name + " - " + student.getId() + " - " + student.getName() + ".doc", inputStream));
+                }
             }
         }
         Map<String, Object> exportAttribute = new HashMap<>();

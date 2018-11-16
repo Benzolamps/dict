@@ -22,9 +22,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.benzolamps.dict.bean.Group.Status.NORMAL;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -100,24 +100,24 @@ public class WordController extends BaseController {
      * 导出单词
      * @return ModelAndView
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @PostMapping("export_save.json")
     protected ModelAndView exportSave(@RequestBody DocExportVo docExportVo, RedirectAttributes redirectAttributes) {
         ModelAndView mv = new ModelAndView();
         Pageable pageable = docExportVo.getPageable();
-        List<Word> words;
         if (pageable == null) {
-            Assert.notNull(docExportVo.getGroupId(), "group id不能为null");
-            Group group = wordGroupService.find(docExportVo.getGroupId());
-            Assert.notNull(group, "group不存在");
-            Assert.notEmpty(group.getWords(), "words不能为null或空");
-            words = new ArrayList<>(group.getWords());
-            docExportVo.setStudents(wordGroupService.getStudentsOriented(group));
+            Assert.notEmpty(docExportVo.getGroupIds(), "group ids不能为null或空");
+            List<Group> groups = docExportVo.getGroupIds().stream().map(wordGroupService::find)
+                .peek(group -> group.getStudentsOriented().toString())
+                .peek(group -> group.getWords().toString())
+                .collect(Collectors.toList());
+            docExportVo.setGroups(groups);
             mv.setViewName("redirect:/doc/export_personal.json");
         } else {
-            words = wordService.findPage(pageable).getContent();
+            List<Word> words = wordService.findPage(pageable).getContent();
             mv.setViewName("redirect:/doc/export_default.json");
+            docExportVo.setContent(words);
         }
-        docExportVo.setContent(words);
         redirectAttributes.addFlashAttribute("docExportVo", docExportVo);
         return mv;
     }
