@@ -6,7 +6,7 @@ import com.benzolamps.dict.dao.base.PhraseDao;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
-import com.benzolamps.dict.util.MiscellaneousDict;
+import com.benzolamps.dict.dao.core.SwitchOptions;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -35,7 +35,7 @@ public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseD
             @Override
             public void applySearch(Search search) {
                 if ("frequency".equals(search.getField())) {
-                    getFilter().and(MiscellaneousDict.switch1000("frequency", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    getFilter().and(SwitchOptions.switch1000("frequency", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
                 } else if ("isMastered".equals(search.getField())) {
                     isMastered = DictObject.ofObject(search.getValue(), boolean.class);
                 } else if ("studentNumber".equals(search.getField())) {

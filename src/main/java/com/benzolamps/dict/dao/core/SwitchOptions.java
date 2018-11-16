@@ -1,6 +1,5 @@
-package com.benzolamps.dict.util;
+package com.benzolamps.dict.dao.core;
 
-import com.benzolamps.dict.dao.core.Filter;
 import org.springframework.util.Assert;
 
 /**
@@ -9,8 +8,17 @@ import org.springframework.util.Assert;
  * @version 2.3.1
  * @datetime 2018-11-16 14:29:17
  */
-public interface MiscellaneousDict {
+public interface SwitchOptions {
 
+    /**
+     * 最大数是10
+     * @param field 字段名
+     * @param value 字段值
+     * @param gt0 是否有大于0选项
+     * @param gt1 是否有大于1选项
+     * @param gt10 是否有大于10选项
+     * @return Filter
+     */
     static Filter switch10(String field, int value, boolean gt0, boolean gt1, boolean gt10) {
         Assert.hasText(field, "field不能为null或空");
         int option = 10;
@@ -27,6 +35,16 @@ public interface MiscellaneousDict {
         }
     }
 
+    /**
+     * 最大数是100
+     * @param field 字段名
+     * @param value 字段值
+     * @param gt0 是否有大于0选项
+     * @param gt1 是否有大于1选项
+     * @param gt100 是否有大于100选项
+     * @param eq1 是否有等于1选项
+     * @return Filter
+     */
     static Filter switch100(String field, int value, boolean gt0, boolean gt1, boolean gt100, boolean eq1) {
         Assert.hasText(field, "field不能为null或空");
         int option = 10;
@@ -47,6 +65,16 @@ public interface MiscellaneousDict {
         }
     }
 
+    /**
+     * 最大数是1000
+     * @param field 字段名
+     * @param value 字段值
+     * @param gt0 是否有大于0选项
+     * @param gt1 是否有大于1选项
+     * @param gt1000 是否有大于1000选项
+     * @param eq1 是否有等于1选项
+     * @return Filter
+     */
     static Filter switch1000(String field, int value, boolean gt0, boolean gt1, boolean gt1000, boolean eq1) {
         Assert.hasText(field, "field不能为null或空");
         int option = 13;

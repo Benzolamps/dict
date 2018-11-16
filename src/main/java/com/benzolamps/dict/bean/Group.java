@@ -185,7 +185,6 @@ public class Group extends BaseEntity {
      * 获取排序过的单词
      * @return 排序过的单词
      */
-    @Transient
     @JsonIgnore
     public Collection<Word> getFrequencySortedWords() {
         return getFrequencySortedWords(this.getWords(), this);
@@ -195,7 +194,6 @@ public class Group extends BaseEntity {
      * 获取排序过的短语
      * @return 排序过的短语
      */
-    @Transient
     @JsonIgnore
     public Collection<Phrase> getFrequencySortedPhrases() {
         return getFrequencySortedPhrases(this.getPhrases(), this);
@@ -205,9 +203,6 @@ public class Group extends BaseEntity {
      * 获取排序过的短语
      * @return 排序过的短语
      */
-    @SuppressWarnings("ConstantConditions")
-    @Transient
-    @JsonIgnore
     public static Collection<Phrase> getFrequencySortedPhrases(Collection<Phrase> phrases, Group phraseGroup) {
         Assert.notNull(phraseGroup, "phrase group不能为空");
         if (!CollectionUtils.isEmpty(phrases) && phraseGroup.getFrequencyGenerated()) {
@@ -220,9 +215,6 @@ public class Group extends BaseEntity {
      * 获取排序过的短语
      * @return 排序过的短语
      */
-    @SuppressWarnings("ConstantConditions")
-    @Transient
-    @JsonIgnore
     public static Collection<Word> getFrequencySortedWords(Collection<Word> words, Group wordGroup) {
         Assert.notNull(wordGroup, "word group不能为空");
         if (!CollectionUtils.isEmpty(words) && wordGroup.getFrequencyGenerated()) {

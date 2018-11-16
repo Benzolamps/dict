@@ -57,7 +57,6 @@ public abstract class BaseEntity extends BaseBean {
     private String remark;
 
     /** @return 判断是否为新建对象 */
-    @Transient
     @JsonIgnore
     public boolean isNew() {
         return getId() == null;
