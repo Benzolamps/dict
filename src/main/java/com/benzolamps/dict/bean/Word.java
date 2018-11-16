@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
@@ -41,14 +42,17 @@ public class Word extends BaseElement {
     /** 词性 */
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "dict_wc", joinColumns = @JoinColumn(name = "word"), inverseJoinColumns = @JoinColumn(name = "clazz"))
+    @JsonIgnore
     private Set<WordClazz> clazzes;
 
     /** 已掌握该单词的学生 */
     @ManyToMany(mappedBy = "masteredWords")
+    @JsonIgnore
     private Set<Student> masteredStudents;
 
     /** 未掌握该单词的学生 */
     @ManyToMany(mappedBy = "failedWords")
+    @JsonIgnore
     private Set<Student> failedStudents;
 
     /** 已掌握该单词的学生数 */

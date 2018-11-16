@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,25 +54,30 @@ public class Student extends BaseEntity {
     /** 已掌握的单词 */
     @ManyToMany
     @JoinTable(name = "dict_sw", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
+    @JsonIgnore
     private Set<Word> masteredWords;
 
     /** 已掌握的短语 */
     @ManyToMany
     @JoinTable(name = "dict_sp", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
+    @JsonIgnore
     private Set<Phrase> masteredPhrases;
 
     /** 未掌握的单词 */
     @ManyToMany
     @JoinTable(name = "dict_swf", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
+    @JsonIgnore
     private Set<Word> failedWords;
 
     /** 未掌握的短语 */
     @ManyToMany
     @JoinTable(name = "dict_spf", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
+    @JsonIgnore
     private Set<Phrase> failedPhrases;
 
     /** 学习记录 */
     @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<StudyLog> studyLogs;
 
     /** 已掌握的单词数 */

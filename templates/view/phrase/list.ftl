@@ -36,24 +36,7 @@
       'name': 'frequency',
       'display': '词频',
       'type': 'string',
-      'options': [
-        {'id': 0, 'value': '0'},
-        {'id': 1, 'value': '1～10'},
-        {'id': 2, 'value': '11～20'},
-        {'id': 3, 'value': '21～30'},
-        {'id': 4, 'value': '31～40'},
-        {'id': 5, 'value': '41～50'},
-        {'id': 6, 'value': '51～60'},
-        {'id': 7, 'value': '61～70'},
-        {'id': 8, 'value': '71～80'},
-        {'id': 9, 'value': '81～90'},
-        {'id': 10, 'value': '91～100'},
-        {'id': 11, 'value': '101～200'},
-        {'id': 12, 'value': '201～500'},
-        {'id': 13, 'value': '501～1000'},
-        {'id': 14, 'value': '1000 以上'},
-        {'id': 15, 'value': '非 0'}
-      ]
+      'options': <@switch1000 gt1=false eq1=false/>
     },
     {'name': 'studentNumber', 'display': '学生学号', 'type': 'integer'},
     <#if student??>

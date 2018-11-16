@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,5 +38,6 @@ public class WordClazz extends BaseEntity {
 
     /** 单词 */
     @ManyToMany(mappedBy = "clazzes", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Word> words;
 }

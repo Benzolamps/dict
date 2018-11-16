@@ -120,12 +120,11 @@ dict.produceFormItem = function (property) {
           .attr('name', property.name)
           .attr('placeholder', property.display)
           .attr('autocomplete', 'off')
-          .attr('value', property.value)
           .attr('required', property.notEmpty)
           .addClass('layui-input');
         break;
       }
-      case 'date': {
+      case 'date': case 'time': case 'datetime': case 'year': case 'month': {
         $component = $(document.createElement('input'))
           .attr('type', 'text')
           .attr('name', property.name)
@@ -134,6 +133,29 @@ dict.produceFormItem = function (property) {
           .attr('value', property.value)
           .attr('required', property.notEmpty)
           .addClass('layui-input');
+        var laydateParam = {
+          elem: $component[0],
+          type: property.type,
+          range: property.range ? '~': false,
+          format: (function (type) {
+            switch (type) {
+              case 'date': return 'yyyy-MM-dd';
+              case 'time': return 'HH:mm:ss';
+              case 'datetime': return 'yyyy-MM-dd HH:mm:ss';
+              case 'year': return 'yyyy';
+              case 'month': return 'M';
+            }
+          })(property.type),
+          trigger: 'click',
+          value: property.value
+        };
+        if (property.hasOwnProperty('min')) {
+          laydateParam.min = property.min;
+        }
+        if (property.hasOwnProperty('max')) {
+          laydateParam.max = property.max;
+        }
+        laydate.render(laydateParam);
         break;
       }
     }

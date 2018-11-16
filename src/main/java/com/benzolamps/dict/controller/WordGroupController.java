@@ -460,7 +460,7 @@ public class WordGroupController extends BaseController {
                     word.setPrototype(prototype);
                     return word;
                 }).collect(Collectors.toList());
-                wordService.wordsToExcel(words, outputStream);
+                wordService.toExcel(words, outputStream);
             });
             RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
             requestAttributes.setAttribute(token, exportAttribute, RequestAttributes.SCOPE_SESSION);

@@ -6,11 +6,17 @@ import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
+import com.benzolamps.dict.util.MiscellaneousDict;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.text.ParseException;
 import java.util.Collection;
+import java.util.Date;
+
+import static com.benzolamps.dict.util.Constant.SIMPLE_DATE_FORMAT;
 
 /**
  * 单词短语分组Dao接口实现类
@@ -32,14 +38,39 @@ public class GroupDaoImpl extends BaseDaoImpl<Group> implements GroupDao {
             private Integer studentNumber;
 
             @Override
+            @SneakyThrows(ParseException.class)
             public void applySearch(Search search) {
                 if ("studentNumber".equals(search.getField())) {
                     studentNumber = DictObject.ofObject(search.getValue(), int.class);
-                    return;
-                } else if  ("studentName".equals(search.getField())) {
-                    return;
+                } else if ("createDate".equals(search.getField())) {
+                    String[] dates = search.getValue().toString().split(" ~ ");
+                    String begin = dates[0];
+                    String end = dates[1];
+                    Date beginDate = SIMPLE_DATE_FORMAT.parse(begin);
+                    Date endDate = SIMPLE_DATE_FORMAT.parse(end);
+                    getFilter().and(Filter.betweenAnd("createDate", beginDate, endDate));
+                } else if ("order".equals(search.getField())) {
+                    switch (search.getValue().toString()) {
+                        case "studentsCount asc": this.applyOrder(Order.asc("studentsOriented")); return;
+                        case "studentsCount desc": this.applyOrder(Order.desc("studentsOriented")); return;
+                        case "wordsCount asc": this.applyOrder(Order.asc("words")); return;
+                        case "wordsCount desc": this.applyOrder(Order.desc("words")); return;
+                        case "phrasesCount asc": this.applyOrder(Order.asc("phrases")); return;
+                        case "phrasesCount desc": this.applyOrder(Order.desc("phrases")); return;
+                        case "scoreCount asc": this.applyOrder(Order.asc("scoreCount")); return;
+                        case "scoreCount desc": this.applyOrder(Order.desc("scoreCount"));
+                    }
+                } else if ("frequencyGenerated".equals(search.getField())) {
+                    getFilter().and(Filter.eq("frequencyGenerated", DictObject.ofObject(search.getValue(), int.class) == 1));
+                } else if ("studentsCount".equals(search.getField())) {
+                    getFilter().and(MiscellaneousDict.switch100("studentsOrientedCount", DictObject.ofObject(search.getValue(), int.class), true, true, true, true));
+                } else if ("wordsCount".equals(search.getField())) {
+                    getFilter().and(MiscellaneousDict.switch1000("wordsCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                } else if ("scoreCount".equals(search.getField())) {
+                    getFilter().and(MiscellaneousDict.switch10("wordsCount", DictObject.ofObject(search.getValue(), int.class), true, true, true));
+                } else if (!"studentName".equals(search.getField())){
+                    super.applySearch(search);
                 }
-                super.applySearch(search);
             }
 
             @Override
@@ -48,8 +79,10 @@ public class GroupDaoImpl extends BaseDaoImpl<Group> implements GroupDao {
                 if (studentNumber != null) {
                     Student student = studentDao.findByNumber(studentNumber);
                     getFilter().and(Filter.memberOf("studentsOriented", student));
-                    searches.add(new Search("studentName", student.getName()));
-                    searches.add(new Search("student", student));
+                    if (student != null) {
+                        searches.add(new Search("studentName", student.getName()));
+                        searches.add(new Search("student", student));
+                    }
                 }
             }
 

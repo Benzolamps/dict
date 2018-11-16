@@ -8,11 +8,13 @@ import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
 import org.hibernate.Query;
+import org.intellij.lang.annotations.Language;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -89,5 +91,17 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     public Student findByNumber(Integer studentNumber) {
         Assert.notNull(studentNumber, "student number不能为null");
         return findSingle(Filter.eq("number", studentNumber));
+    }
+
+    @Override
+    public void remove(Collection<Student> students) {
+        for (Student student : students) {
+            @Language("MySQL") String sqlGs = "delete from dict_gs where student = :id;";
+            @Language("MySQL") String sqlGss = "delete from dict_gss where student = :id;";
+            Map<String, Object> parameters = singletonMap("id", student.getId());
+            executeNative(sqlGs, parameters);
+            executeNative(sqlGss, parameters);
+        }
+        super.remove(students);
     }
 }

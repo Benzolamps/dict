@@ -77,9 +77,6 @@ public class StudentVo implements Serializable {
     @JsonProperty("failedPhrases")
     private Integer failedPhrasesCount;
 
-    @DictIgnore
-    private String progress;
-
     /**
      * 将StudentVo转换为Student
      * @param studentVo studentVo
@@ -113,14 +110,10 @@ public class StudentVo implements Serializable {
         studentVo.setNumber(student.getNumber());
         studentVo.setName(student.getName());
         studentVo.setDescription(student.getDescription());
-        // studentVo.setMasteredWordsCount(student.getMasteredWordsCount());
-        // studentVo.setMasteredPhrasesCount(student.getMasteredPhrasesCount());
-        // studentVo.setFailedWordsCount(student.getFailedWordsCount());
-        // studentVo.setFailedPhrasesCount(student.getFailedPhrasesCount());
-        studentVo.setProgress(
-            "单词 " + student.getMasteredWordsCount() + "／" + student.getFailedWordsCount() + " " +
-            "短语 " + student.getMasteredPhrasesCount() + "／" + student.getFailedPhrasesCount()
-        );
+        studentVo.setMasteredWordsCount(student.getMasteredWordsCount());
+        studentVo.setMasteredPhrasesCount(student.getMasteredPhrasesCount());
+        studentVo.setFailedWordsCount(student.getFailedWordsCount());
+        studentVo.setFailedPhrasesCount(student.getFailedPhrasesCount());
         if (student.getClazz() != null) {
             studentVo.setClazz(student.getClazz().getId());
         }

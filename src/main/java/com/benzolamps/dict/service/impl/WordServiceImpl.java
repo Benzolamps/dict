@@ -40,7 +40,7 @@ public class WordServiceImpl extends BaseElementServiceImpl<Word, WordExcelVo> i
     private WordClazzService wordClazzService;
 
     @Value("classpath:xlsx/sample.xlsx")
-    private org.springframework.core.io.Resource sample;
+    private org.springframework.core.io.Resource sampleExcelResource;
 
     @Override
     public void persist(Word... words) {
@@ -117,8 +117,8 @@ public class WordServiceImpl extends BaseElementServiceImpl<Word, WordExcelVo> i
 
     @Override
     @SneakyThrows(IOException.class)
-    public void wordsToExcel(List<Word> words, OutputStream outputStream) {
-        Workbook workbook = DictExcel.inputStreamToWorkbook(sample.getInputStream());
+    public void toExcel(List<Word> words, OutputStream outputStream) {
+        Workbook workbook = DictExcel.inputStreamToWorkbook(sampleExcelResource.getInputStream());
         Sheet sheet = workbook.getSheetAt(0);
         List<CellStyle> cellStyles = IntStream.range(0, 6).mapToObj(i -> sheet.getRow(1).getCell(i).getCellStyle()).peek(cellStyle -> {
             cellStyle.setBorderRight(CellStyle.BORDER_THIN);

@@ -13,5 +13,10 @@ import java.util.List;
  */
 public interface WordService extends BaseElementService<Word> {
 
-    void wordsToExcel(List<Word> words, OutputStream outputStream);
+    /**
+     * 导出excel
+     * @param words 单词
+     * @param outputStream 输出流
+     */
+    void toExcel(List<Word> words, OutputStream outputStream);
 }

@@ -8,14 +8,45 @@
     {'name': 'name', 'display': '名称', 'type': 'string'},
     {'name': 'description', 'display': '描述', 'type': 'string'},
     {
-      'name': 'status',
-      'display': '状态',
+      'name': 'frequencyGenerated',
+      'display': '类型',
       'type': 'string',
       'options': [
-        {'id': 0, 'value': '正常'},
-        {'id': 1, 'value': '评分中'},
-        {'id': 2, 'value': '已完成'}
+        {'id': 0, 'value': '非词频分组'},
+        {'id': 1, 'value': '词频分组'}
       ]
+    },
+    {'name': 'createDate', 'display': '创建时间', 'type': 'datetime', 'range': true},
+    {
+      'name': 'order',
+      'display': '排序',
+      'type': 'string',
+      'options': [
+        {'id': 'studentsCount asc', 'value': '学生数 ↑'},
+        {'id': 'wordsCount asc', 'value': '单词数 ↑'},
+        {'id': 'scoreCount asc', 'value': '已考核次数 ↑'},
+        {'id': 'studentsCount desc', 'value': '学生数 ↓'},
+        {'id': 'wordsCount desc', 'value': '单词数 ↓'},
+        {'id': 'scoreCount desc', 'value': '已考核次数 ↓'}
+      ]
+    },
+    {
+      'name': 'studentsCount',
+      'display': '学生数',
+      'type': 'integer',
+      'options': <@switch100/>
+    },
+    {
+      'name': 'wordsCount',
+      'display': '单词数',
+      'type': 'integer',
+      'options': <@switch1000 gt1=false eq1=false/>
+    },
+    {
+      'name': 'scoreCount',
+      'display': '已考核次数',
+      'type': 'integer',
+      'options': <@switch10/>
     },
     {'name': 'studentNumber', 'display': '学生学号', 'type': 'integer'}
     <#if student??>
@@ -32,7 +63,7 @@
     {'field': 'description', 'title': '描述', 'sort': true, 'minWidth': 120},
     {'field': 'createDate', 'title': '创建时间', 'sort': true, 'minWidth': 120},
     {'field': 'status', 'title': '状态', 'sort': true, 'minWidth': 10},
-    {'field': 'scoreCount', 'title': '已考核次数', 'sort': true, 'minWidth': 120}
+    {'title': '学生数／单词数／已考核次数', 'format': '{{d.studentsOriented}}／{{d.words}}／{{d.scoreCount}}', 'minWidth': 120}
   ]
   page=page
   add='${base_url}/word_group/add.html'

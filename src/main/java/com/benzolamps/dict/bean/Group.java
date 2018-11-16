@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 单词短语分组
@@ -204,79 +205,51 @@ public class Group extends BaseEntity {
      * 获取排序过的短语
      * @return 排序过的短语
      */
+    @SuppressWarnings("ConstantConditions")
     @Transient
     @JsonIgnore
     public static Collection<Phrase> getFrequencySortedPhrases(Collection<Phrase> phrases, Group phraseGroup) {
         Assert.notNull(phraseGroup, "phrase group不能为空");
-        if (CollectionUtils.isEmpty(phrases)) {
-            return phrases;
+        if (!CollectionUtils.isEmpty(phrases) && phraseGroup.getFrequencyGenerated()) {
+            phrases = phrases.stream().sorted((p1, p2) -> compare(p2, p1, phraseGroup)).collect(Collectors.toList());
         }
-        if (phraseGroup.getFrequencyGenerated()) {
-            List<Phrase> results = new ArrayList<>(phrases);
-            results.sort((p1, p2) -> {
-                Integer frequency1, frequency2;
-                try {
-                    if (null == (frequency1 = p1.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(phraseGroup.getId().toString())).findFirst().get().getFrequency())) {
-                        frequency1 = 0;
-                    }
-                } catch (Throwable e) {
-                    frequency1 = 0;
-                }
-                p1.setGroupFrequency(frequency1);
-                try {
-                    if (null == (frequency2 = p2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(phraseGroup.getId().toString())).findFirst().get().getFrequency())) {
-                        frequency2 = 0;
-                    }
-                } catch (Throwable e) {
-                    frequency2 = 0;
-                }
-                p2.setGroupFrequency(frequency2);
-                return frequency2.compareTo(frequency1);
-            });
-            Collections.reverse(results);
-            return results;
-        } else {
-            return phrases;
-        }
+        return phrases;
     }
 
     /**
      * 获取排序过的短语
      * @return 排序过的短语
      */
+    @SuppressWarnings("ConstantConditions")
     @Transient
     @JsonIgnore
     public static Collection<Word> getFrequencySortedWords(Collection<Word> words, Group wordGroup) {
         Assert.notNull(wordGroup, "word group不能为空");
-        if (CollectionUtils.isEmpty(words)) {
-            return words;
+        if (!CollectionUtils.isEmpty(words) && wordGroup.getFrequencyGenerated()) {
+            words = words.stream().sorted((w1, w2) -> compare(w2, w1, wordGroup)).collect(Collectors.toList());
         }
-        if (wordGroup.getFrequencyGenerated()) {
-            List<Word> results = new ArrayList<>(words);
-            results.sort((w1, w2) -> {
-                Integer frequency1, frequency2;
-                try {
-                    if (null == (frequency1 = w1.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(wordGroup.getId().toString())).findFirst().get().getFrequency())) {
-                        frequency1 = 0;
-                    }
-                } catch (Throwable e) {
-                    frequency1 = 0;
-                }
-                w1.setGroupFrequency(frequency1);
-                try {
-                    if (null == (frequency2 = w2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(wordGroup.getId().toString())).findFirst().get().getFrequency())) {
-                        frequency2 = 0;
-                    }
-                } catch (Throwable e) {
-                    frequency2 = 0;
-                }
-                w2.setGroupFrequency(frequency2);
-                return frequency2.compareTo(frequency1);
-            });
-            Collections.reverse(results);
-            return results;
-        } else {
-            return words;
+        return words;
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    private static <E extends BaseElement> int compare(E e1, E e2, Group g) {
+        Integer frequency1, frequency2;
+        try {
+            if (null == (frequency1 = e1.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(g.getId().toString())).findFirst().get().getFrequency())) {
+                frequency1 = 0;
+            }
+        } catch (Throwable e) {
+            frequency1 = 0;
         }
+        e1.setGroupFrequency(frequency1);
+        try {
+            if (null == (frequency2 = e2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(g.getId().toString())).findFirst().get().getFrequency())) {
+                frequency2 = 0;
+            }
+        } catch (Throwable e) {
+            frequency2 = 0;
+        }
+        e2.setGroupFrequency(frequency2);
+        return frequency1.compareTo(frequency2);
     }
 }

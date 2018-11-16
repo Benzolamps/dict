@@ -3,6 +3,7 @@
   <#include 'data-add.ftl'/>
   <#include 'data-edit.ftl'/>
   <#include 'data-tree.ftl'/>
+  <#include 'swicth-options.ftl'/>
 
   <#-- 不做任何事情 -->
   <#macro nothing></#macro>

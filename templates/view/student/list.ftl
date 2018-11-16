@@ -96,7 +96,7 @@
     {'field': 'number', 'title': '学号', 'sort': true},
     {'field': 'name', 'title': '姓名', 'sort': true},
     {'field': 'clazz', 'title': '班级', 'sort': true},
-    {'field': 'progress', 'title': '学习进度 （已掌握／未掌握）', 'sort': true, 'width': 250}
+    {'title': '学习进度 （已掌握／未掌握）', 'width': 250, 'format': '单词 {{d.masteredWords}}／{{d.failedWords}} 短语 {{d.masteredPhrases}}／{{d.failedPhrases}}'}
   ]
   page=page
   add='${base_url}/student/add.html'

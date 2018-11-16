@@ -105,6 +105,16 @@
     $.each(fields, function (index, item) {
       delete fields[index].sort;
       fields[index].unresize = true;
+      if (fields[index].hasOwnProperty('format')) {
+        fields[index].templet = '<div><span title="' + fields[index].format + '">' + fields[index].format + '</span></div>';
+        delete fields[index].format;
+      } else {
+        fields[index].templet =
+          '<div>' +
+          '{{# var value = d.hasOwnProperty(\'' + fields[index].field + '\') ? d.' + fields[index].field + ' : \'\'; }}' +
+          '<span title="{{value}}">{{value}}</span>'
+          '</div>';
+      }
     });
 
     <#assign width = 110/>
@@ -344,9 +354,9 @@
     );
 
     $('#${id}-search').append($(
-      '<div class="layui-col-md2" style="height: 100%" >\n' +
-      '<button class="layui-btn layui-btn-normal" lay-event="search" type="button">\n' +
-      '<i class="layui-icon" style="font-size: 20px;">&#xe615;</i> 搜索\n' +
+      '<div class="layui-col-md2" style="height: 100%" >' +
+      '<button class="layui-btn layui-btn-normal" lay-event="search" type="button">' +
+      '<i class="layui-icon" style="font-size: 20px;">&#xe615;</i> 搜索' +
       '</button>' +
       '</div>'
     ).click(function () {
