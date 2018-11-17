@@ -23,21 +23,21 @@ dict.updateSocket = new function () {
         });
         stompClient.subscribe('/version/downloaded', function (data) {
           'onDownloaded' in that && that.onDownloaded(data.body);
-          dict.loadText({url: '${base_url}/system/die.json'});
+          dict.loadText({url: '${base_url}/system/die.json', loading: false});
         });
         stompClient.subscribe('/version/installed', function (data) {
           'onInstalled' in that && that.onInstalled(data.body);
-          dict.loadText({url: '${base_url}/system/die.json'});
+          dict.loadText({url: '${base_url}/system/die.json', loading: false});
         });
         stompClient.subscribe('/version/failed', function (data) {
           'onFailed' in that && that.onFailed(data.body);
-          dict.loadText({url: '${base_url}/system/die.json'});
+          dict.loadText({url: '${base_url}/system/die.json', loading: false});
         });
 
-        dict.loadText({url: '${base_url}/system/check_new_version.json'});
-        dict.loadText({url: '${base_url}/system/check_downloaded.json'});
-        dict.loadText({url: '${base_url}/system/check_installed.json'});
-        dict.loadText({url: '${base_url}/system/check_failed.json'});
+        dict.loadText({url: '${base_url}/system/check_new_version.json', loading: false});
+        dict.loadText({url: '${base_url}/system/check_downloaded.json', loading: false});
+        dict.loadText({url: '${base_url}/system/check_installed.json', loading: false});
+        dict.loadText({url: '${base_url}/system/check_failed.json', loading: false});
       }, 2000);
     });
   };

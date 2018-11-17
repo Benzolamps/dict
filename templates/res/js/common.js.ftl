@@ -49,7 +49,6 @@ $.validator.methods.remote = function (value, element, param) {
   if ('string' == typeof param) {
     param = {url: param};
   }
-  console.log(param);
   return $.validator.methods.constant.call(this, value, element, param.ignore) ||
     dict.loadText({
       url: param.url,

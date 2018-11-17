@@ -163,7 +163,6 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
      * 处理排序
      * @param orders 排序
      */
-    @SuppressWarnings("unused")
     protected void handleOrder(List<Order> orders) {
     }
 }

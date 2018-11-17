@@ -45,6 +45,7 @@
           url: 'property_info.json',
           data: {className: start ? shuffleSolutionValues.strategyClass : className},
           dataType: 'json',
+          loading: false,
           success: function (data) {
             var initValues = {
               id: shuffleSolutionValues.id,

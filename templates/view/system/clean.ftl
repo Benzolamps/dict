@@ -10,13 +10,11 @@
   $('#clean').click(function () {
     parent.layer.confirm('是否要清理缓存？', {icon: 3, title: '提示'}, function (index) {
       parent.layer.close(index);
-      var loader = parent.layer.load();
       dict.loadText({
         url: 'clean.json',
         type: 'get',
         async: 'true',
         success: function (result, status, request) {
-          parent.layer.close(loader);
           parent.layer.alert('操作成功！', {
             icon: 1,
             end: function () {
@@ -25,7 +23,6 @@
           });
         },
         error: function (result, status, request) {
-          parent.layer.close(loader);
           parent.layer.alert(result.message, {
             icon: 2,
             title: result.status

@@ -469,7 +469,7 @@ dict.uploadFile = function (data) {
   $('body').append($form);
   $file.trigger('click');
   $file.change(function () {
-    var loader = parent.layer.load();
+    var loader = parent.layer.load(2);
     var startTime = new Date().getTime();
     setTimeout(function () {
       $form.ajaxSubmit({

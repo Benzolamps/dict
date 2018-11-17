@@ -67,8 +67,13 @@ dict.postHref = function (url, data) {
       return options[key] ? options[key] : defaultOptions[key];
     };
 
-    console.log(options.data);
+    var needLoader = !(options.hasOwnProperty('loading') && options.loading == false);
+    var loader;
+    if (needLoader) {
+      loader = parent.layer.load(2);
+    }
 
+    var start = new Date().getTime();
     $.ajax({
       url: options.url,
       async: choose('async'),
@@ -85,14 +90,38 @@ dict.postHref = function (url, data) {
 
       error: function (request, status) {
         var result = JSON.parse(request.responseText);
-        defaultOptions.error(result, status, request);
-        options.error && options.error(result, status, request);
+        var end = new Date().getTime();
+        !function (action) {
+          if (end - start < 500 && needLoader) {
+            setTimeout(action, 500 - end + start)
+          } else {
+            action();
+          }
+        }(function () {
+          if (needLoader) {
+            parent.layer.close(loader);
+          }
+          defaultOptions.error(result, status, request);
+          options.error && options.error(result, status, request);
+        });
       },
 
       success: function (result, status, request) {
         responseData = result;
-        defaultOptions.success(result, status, request);
-        options.success && options.success(result, status, request);
+        var end = new Date().getTime();
+        !function (action) {
+          if (end - start < 1000 && needLoader) {
+            setTimeout(action, 1000 - end + start)
+          } else {
+            action();
+          }
+        }(function () {
+          if (needLoader) {
+            parent.layer.close(loader);
+          }
+          defaultOptions.success(result, status, request);
+          options.success && options.success(result, status, request);
+        });
       }
     });
     if (options.async) {

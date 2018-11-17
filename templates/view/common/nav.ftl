@@ -24,17 +24,13 @@
       <#include '/${content_path}.ftl'/>
       <script type="text/javascript">
         $(function () {
-          var columns = null;
-
           /* 请求栏目JSON */
-          dict.loadText({
+          var columns = dict.loadText({
             type: "get",
+            loading: false,
             url: '${base_url}/res/json/columns.json',
             cache: true,
-            dataType: 'json',
-            success: function(data) {
-              columns = data;
-            }
+            dataType: 'json'
           });
 
           /* 将当前页面地址与JSON中逐个比对 */

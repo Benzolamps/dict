@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="students" type="java.util.Collection<com.benzolamps.dict.bean.Student>" -->
 <div class="layui-card">
   <div class="layui-card-body">
-    <form id="extract-derive-group" class="layui-form" method="post" action="${base_url}/word_group/extract_derive_group_save.json">
+    <form id="extract-derive-group" class="layui-form" method="post" onsubmit="return false;" action="${base_url}/word_group/extract_derive_group_save.json">
       <#if words??>
         <#list words as word>
           <input multiple-select="1" type="hidden" name="wordId" value="${word.id}">
@@ -34,6 +34,7 @@
         url: $form.attr('action'),
         type: $form.attr('method'),
         data: dict.generateObject(dict.serializeObject($form)),
+        async: true,
         success: function (result, status, request) {
           !function (parent) {
             var index = parent.layer.getFrameIndex(window.name);
