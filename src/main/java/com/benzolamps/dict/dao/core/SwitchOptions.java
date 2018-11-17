@@ -5,7 +5,7 @@ import org.springframework.util.Assert;
 /**
  * 杂项工具类
  * @author Benzolamps
- * @version 2.3.1
+ * @version 2.3.2
  * @datetime 2018-11-16 14:29:17
  */
 public interface SwitchOptions {

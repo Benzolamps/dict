@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 /**
  * 创建分组Vo
  * @author Benzolamps
- * @version 2.3.1
+ * @version 2.3.2
  * @datetime 2018-11-16 20:59:56
  */
 @SuppressWarnings("unchecked")
