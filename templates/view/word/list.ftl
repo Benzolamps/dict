@@ -1,5 +1,6 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Word>" -->
 <#-- @ftlvariable name="wordClazzes" type="java.util.Collection<com.benzolamps.dict.bean.WordClazz>" -->
+<#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
 <#list page.searches as search>
   <#if search.field == 'student' && search.value??><#assign student = search.value/></#if>
 </#list>
@@ -19,14 +20,10 @@
 <#assign fields>
   [
     {'field': 'prototype', 'title': '单词', 'sort': true, 'minWidth': 120},
-    <#--{'field': 'britishPronunciation', 'title': '英式发音', 'sort': true, 'minWidth': 120},-->
-    <#--{'field': 'americanPronunciation', 'title': '美式发音', 'sort': true, 'minWidth': 120},-->
     {'field': 'definition', 'title': '词义', 'sort': true, 'minWidth': 150},
     {'field': 'clazzes', 'title': '词性', 'minWidth': 150},
-    {'field': 'frequency', 'title': '词频', 'sort': true, 'minWidth': 150}
-    <#if !student??>
-      , {'title': '已掌握人数／未掌握人数', 'format': '{{d.masteredStudents}}／{{d.failedStudents}}'}
-    </#if>
+    {'field': 'frequency', 'title': '词频', 'sort': true, 'minWidth': 150},
+    {'title': '已掌握人数／未掌握人数', 'format': '{{d.masteredStudents}}／{{d.failedStudents}}'}
   ]
 </#assign>
 
@@ -57,22 +54,20 @@
         {'id': 'false', 'value': '未掌握'}
       ]
     },
-    <#if !student??>
-      {
-        'name': 'order',
-        'display': '排序',
-        'type': 'string',
-        'options': [
-          {'id': 'masteredStudents asc', 'value': '已掌握人数 ↑'},
-          {'id': 'failedStudents asc', 'value': '未掌握人数 ↑'},
-          {'id': 'masteredStudents desc', 'value': '已掌握人数 ↓'},
-          {'id': 'failedStudents desc', 'value': '未掌握人数 ↓'}
-        ]
-      },
-      {'name': 'masteredStudents', 'display': '已掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
-      {'name': 'failedStudents', 'display': '未掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
-    </#if>
-    {'name': 'frequency', 'display': '词频', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>}
+    {'name': 'frequency', 'display': '词频', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
+    {
+      'name': 'order',
+      'display': '排序',
+      'type': 'string',
+      'options': [
+        {'id': 'masteredStudents asc', 'value': '已掌握人数 ↑'},
+        {'id': 'failedStudents asc', 'value': '未掌握人数 ↑'},
+        {'id': 'masteredStudents desc', 'value': '已掌握人数 ↓'},
+        {'id': 'failedStudents desc', 'value': '未掌握人数 ↓'}
+      ]
+    },
+    {'name': 'masteredStudents', 'display': '已掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
+    {'name': 'failedStudents', 'display': '未掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>}
   ]
 </#assign>
 <@nothing>;</@nothing>

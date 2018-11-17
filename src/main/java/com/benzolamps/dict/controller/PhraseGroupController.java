@@ -142,7 +142,7 @@ public class PhraseGroupController extends BaseController {
      */
     @RequestMapping(value = "name_not_exists.json", method = {GET, POST})
     @ResponseBody
-    protected boolean nameNotExists(@RequestParam String name) {
+    protected boolean nameNotExists(String name) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return !phraseGroupService.nameExists(name);
     }
@@ -335,7 +335,7 @@ public class PhraseGroupController extends BaseController {
      * @return 保存成功
      */
     @PostMapping("score_save.json")
-    protected BaseVo scoreSave(@RequestParam Integer groupId, @RequestParam Integer studentId, @RequestParam(value = "phraseId", required = false) Integer... masteredPhraseIds) {
+    protected BaseVo scoreSave(Integer groupId, @RequestParam Integer studentId, @RequestParam(value = "phraseId", required = false) Integer... masteredPhraseIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         Assert.notNull(groupId, "phrase group id不能为null");
         Group phraseGroup = phraseGroupService.find(groupId);

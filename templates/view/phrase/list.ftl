@@ -1,5 +1,6 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Word>" -->
 <#-- @ftlvariable name="wordClazzes" type="java.util.Collection<com.benzolamps.dict.bean.WordClazz>" -->
+<#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
 <@nothing><script type="text/javascript"></@nothing>
 
 <#assign file_upload>
@@ -21,11 +22,9 @@
   [
     {'field': 'prototype', 'title': '短语', 'sort': true},
     {'field': 'definition', 'title': '词义', 'sort': true},
-    {'field': 'frequency', 'title': '词频', 'sort': true, 'minWidth': 150}
-    <#if !student??>
-      , {'field': 'masteredStudents', 'title': '已掌握人数', 'sort': true}
-      , {'field': 'failedStudents', 'title': '未掌握人数', 'sort': true}
-    </#if>
+    {'field': 'frequency', 'title': '词频', 'sort': true, 'minWidth': 150},
+    {'field': 'masteredStudents', 'title': '已掌握人数', 'sort': true},
+    {'field': 'failedStudents', 'title': '未掌握人数', 'sort': true}
   ]
 </#assign>
 <@nothing>;</@nothing>
@@ -46,11 +45,9 @@
         {'id': 'false', 'value': '未掌握'}
       ]
     },
-    <#if !student??>
-      {'name': 'masteredStudents', 'display': '已掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
-      {'name': 'failedStudents', 'display': '未掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
-    </#if>
-    {'name': 'frequency', 'display': '词频', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>}
+    {'name': 'frequency', 'display': '词频', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
+    {'name': 'masteredStudents', 'display': '已掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
+    {'name': 'failedStudents', 'display': '未掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>}
   ]
 </#assign>
 <@nothing>;</@nothing>

@@ -11,7 +11,6 @@ import com.benzolamps.dict.util.DictObject;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.Collection;
 
 /**
@@ -67,9 +66,6 @@ public class WordDaoImpl extends BaseElementDaoImpl<Word> implements WordDao {
 
             @Override
             public void applySearches(Collection<Search> searches) {
-                if (searches.stream().anyMatch(search -> search.getField().equals("studentNumber"))) {
-                    searches.removeIf(search -> Arrays.asList("masteredStudents", "failedStudents", "order").contains(search.getField()));
-                }
                 searches.removeIf(search -> search.getField().equals("studentName"));
                 super.applySearches(searches);
                 if (studentNumber != null) {
@@ -89,12 +85,6 @@ public class WordDaoImpl extends BaseElementDaoImpl<Word> implements WordDao {
                 order = order.convertIf(Order.IgnoreCaseOrder.class, "prototype", "americanPronunciation", "britishPronunciation");
                 order = order.convertIf(Order.SizeOrder.class, "masteredStudents", "failedStudents");
                 super.applyOrder(order);
-            }
-
-            @Override
-            public void applyOrders(Collection<Order> orders) {
-                orders.removeIf(order -> order.getField().equals("masteredStudentsCount") || order.getField().equals("failedStudentsCount"));
-                super.applyOrders(orders);
             }
         };
         return super.findPage(dictQuery, pageable);

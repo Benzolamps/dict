@@ -33,7 +33,6 @@ spring:
     time_zone: GMT+8
     date_format: yyyy-MM-dd HH:mm:ss
     serialization:
-      indent_output: true
       fail_on_empty_beans: false
     defaultPropertyInclusion: NON_EMPTY
     deserialization:
