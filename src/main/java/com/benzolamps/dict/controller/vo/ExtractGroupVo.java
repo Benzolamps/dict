@@ -54,7 +54,7 @@ public class ExtractGroupVo<T extends BaseElement> implements Serializable {
             return null;
         }
         Group group = getGroup();
-        if (group != null) {
+        if (group == null) {
             return Stream.of(elementIds).map(elementService::find).collect(Collectors.toList());
         } else {
             return (Collection<T>) group.getElements().stream().filter(element -> DictArray.contains(elementIds, element.getId())).collect(Collectors.toList());
@@ -89,7 +89,7 @@ public class ExtractGroupVo<T extends BaseElement> implements Serializable {
             return null;
         }
         Group group = getGroup();
-        if (group != null) {
+        if (group == null) {
             return Stream.of(studentIds).map(studentService::find).collect(Collectors.toList());
         } else {
             return group.getStudentsOriented().stream().filter(student -> DictArray.contains(studentIds, student.getId())).collect(Collectors.toList());

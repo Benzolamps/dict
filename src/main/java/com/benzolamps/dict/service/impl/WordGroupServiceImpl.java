@@ -78,7 +78,9 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         Assert.notNull(wordGroup, "word group不能为null");
         Assert.noNullElements(words, "words不能存在为null的元素");
         List<Word> wordList = Arrays.asList(words);
-        wordList.stream().map(Word::getFrequencyInfo).forEach(infos -> infos.removeIf(info -> info.getGroupId().equals(wordGroup.getId().toString())));
+        if (wordGroup.getFrequencyGenerated()) {
+            wordList.stream().map(Word::getFrequencyInfo).forEach(infos -> infos.removeIf(info -> info.getGroupId().equals(wordGroup.getId())));
+        }
         wordGroup.getWords().removeAll(wordList);
         if (wordGroup.getGroupLog() != null) {
             wordGroup.getGroupLog().getWords().removeAll(wordList);
@@ -155,7 +157,6 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
 
     @Override
     public Collection<Group> extractPersonalGroup(Group original, Collection<Student> students, Group wordGroup) {
-        Assert.notNull(original, "original不能为null");
         Assert.notEmpty(students, "students不能为空");
         Collection<Group> groups = students.stream().map(student -> {
            Group group = new Group();
@@ -166,7 +167,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
            }
            group.setName(name);
            group.setDescription(wordGroup.getDescription());
-           Set<Word> words = new HashSet<>(original.getWords());
+           Set<Word> words = new HashSet<>(original != null ? original.getWords() : student.getFailedWords());
            words.removeIf(student.getMasteredWords()::contains);
            group.setWords(words);
            group.setStudentsOriented(Collections.singleton(student));
@@ -274,9 +275,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         }
     }
 
-    @Override
-    public Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords) {
-        String content = new String(bytes, Charset.forName("UTF-8"));
+    private void handleFrequencyGroup(Group wordGroup,String content, List<String> extraWords) {
         String regex = "[A-Za-z]+";
         Matcher matcher = Pattern.compile(regex).matcher(content);
         Map<String, Integer> frequencies = new Hashtable<>();
@@ -284,20 +283,28 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             String word = matcher.group().toLowerCase();
             frequencies.put(word, frequencies.containsKey(word) ? frequencies.get(word) + 1 : 1);
         }
-        wordGroup = persist(wordGroup);
         wordGroup.setFrequencyGenerated(true);
         Collection<Word> words = wordService.findByPrototypes(frequencies.keySet());
         for (Word word : words) {
-            word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId().toString(), frequencies.get(word.getPrototype().toLowerCase())));
+            word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId(), frequencies.get(word.getPrototype().toLowerCase())));
             word.setFrequency(word.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
         }
         extraWords.clear();
         extraWords.addAll(frequencies.keySet());
         extraWords.removeAll(words.stream().map(Word::getPrototype).collect(Collectors.toList()));
         wordGroup.setWords(new HashSet<>(words));
+    }
+
+    @Transactional
+    @Override
+    public Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords) {
+        String content = new String(bytes, Charset.forName("UTF-8"));
+        wordGroup = persist(wordGroup);
+        handleFrequencyGroup(wordGroup, content, extraWords);
         return wordGroup;
     }
 
+    @Transactional
     @Override
     @SneakyThrows(IOException.class)
     public Group persistFrequencyGroupDoc(Group wordGroup, byte[] bytes, List<String> extraWords) {
@@ -308,24 +315,37 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             extractor = new XWPFWordExtractor(new XWPFDocument(new ByteArrayInputStream(bytes)));
         }
         String content = extractor.getText();
-        String regex = "[A-Za-z]+";
-        Matcher matcher = Pattern.compile(regex).matcher(content);
-        Map<String, Integer> frequencies = new Hashtable<>();
-        while (matcher.find()) {
-            String word = matcher.group().toLowerCase();
-            frequencies.put(word, frequencies.containsKey(word) ? frequencies.get(word) + 1 : 1);
-        }
         wordGroup = persist(wordGroup);
-        wordGroup.setFrequencyGenerated(true);
-        logger.info("导入词频完成：" + frequencies);
-        Collection<Word> words = wordService.findByPrototypes(frequencies.keySet());
-        for (Word word : words) {
-            word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId().toString(), frequencies.get(word.getPrototype().toLowerCase())));
+        handleFrequencyGroup(wordGroup, content, extraWords);
+        return wordGroup;
+    }
+
+    @Transactional
+    @Override
+    public Group updateFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords) {
+        wordGroup = find(wordGroup.getId());
+        Assert.isTrue(wordGroup.getFrequencyGenerated(), "word group不是词频分组");
+        String content = new String(bytes, Charset.forName("UTF-8"));
+        clearFrequencyInfo(wordGroup);
+        handleFrequencyGroup(wordGroup, content, extraWords);
+        return wordGroup;
+    }
+
+    @Transactional
+    @Override
+    @SneakyThrows(IOException.class)
+    public Group updateFrequencyGroupDoc(Group wordGroup, byte[] bytes, List<String> extraWords) {
+        wordGroup = find(wordGroup.getId());
+        Assert.isTrue(wordGroup.getFrequencyGenerated(), "word group不是词频分组");
+        POITextExtractor extractor;
+        try {
+            extractor = new WordExtractor(new ByteArrayInputStream(bytes));
+        } catch (OfficeXmlFileException e) {
+            extractor = new XWPFWordExtractor(new XWPFDocument(new ByteArrayInputStream(bytes)));
         }
-        extraWords.clear();
-        extraWords.addAll(frequencies.keySet());
-        extraWords.removeAll(words.stream().map(Word::getPrototype).collect(Collectors.toList()));
-        wordGroup.setWords(new HashSet<>(words));
+        String content = extractor.getText();
+        clearFrequencyInfo(wordGroup);
+        handleFrequencyGroup(wordGroup, content, extraWords);
         return wordGroup;
     }
 }

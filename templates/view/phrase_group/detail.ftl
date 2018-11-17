@@ -99,7 +99,11 @@
             结束评分后可查看该分组短语的考核情况！
           </blockquote>
         <#else>
-          <div id="rate" style="width: 100%; height: 450px"></div>
+          <div style="text-align: center">
+            <button class="layui-btn layui-btn-warm layui-btn-sm extract-derive-group">创建派生分组</button>
+            <button class="layui-btn layui-btn-warm layui-btn-sm extract-personal-group">创建专属分组</button>
+          </div>
+          <div id="rate" style="width: 100%; height: 430px"></div>
         </#if>
       </div>
     </div>
@@ -112,6 +116,9 @@
           <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
           <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
           <button class="layui-btn layui-btn-danger layui-btn-xs delete">删除</button>
+          <#if group.status == 'COMPLETED'>
+            <button class="layui-btn layui-btn-warm layui-btn-xs view">查看</button>
+          </#if>
         </#if>
         <div class="ztree" id="students-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
@@ -202,7 +209,7 @@
       <#else>
        parent.layer.open({
          type: 2,
-         title: '导出单词',
+         title: '导出短语',
          content: '${base_url}/phrase/export.html',
          area: ['400px', '400px'],
          cancel: function () {
@@ -297,6 +304,7 @@
     <#if group.status == 'SCORING'>
       $('#finish').click(function () {
       parent.layer.confirm('确定要结束当前评分吗？', {icon: 3, title: '提示'}, function (index) {
+        parent.layer.close(index);
         dict.loadText({
           url: 'finish.json',
           type: 'post',
@@ -382,6 +390,7 @@
     <#if group.status == 'COMPLETED'>
       $('#complete').click(function () {
         parent.layer.confirm('确定要开始新一轮的评分吗？', {icon: 3, title: '提示'}, function (index) {
+          parent.layer.close(index);
           dict.loadText({
             url: 'complete.json',
             type: 'post',
@@ -415,7 +424,6 @@
         var nodes = studentsTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
-        console.log(nodes);
         if (nodes.length <= 0) {
           parent.layer.alert('请选中要删除的学生！', {
             icon: 2,
@@ -423,6 +431,7 @@
           });
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+            parent.layer.close(index);
             dict.loadText({
               url: 'remove_students.json',
               type: 'post',
@@ -458,7 +467,6 @@
         var nodes = phrasesTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
-        console.log(nodes);
         if (nodes.length <= 0) {
           parent.layer.alert('请选中要删除的短语！', {
             icon: 2,
@@ -466,6 +474,7 @@
           });
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+            parent.layer.close(index);
             dict.loadText({
               url: 'remove_phrases.json',
               type: 'post',
@@ -493,6 +502,86 @@
                 });
               }
             });
+          });
+        }
+      });
+    </#if>
+
+    <#if group.status == 'COMPLETED'>
+      $studentsTree.parent().find('.view').click(function () {
+        var nodes = studentsTree.getCheckedNodes().filter(function (node) {
+          return !node.isParent;
+        });
+        if (nodes.length != 1) {
+          parent.layer.alert('请选中一个要查看信息的学生！', {
+            icon: 2,
+            title: '提示'
+          });
+        } else {
+          parent.layer.open({
+            type: 2,
+            title: '查看学生信息',
+            content: '${base_url}/phrase_group/score.html?id=${group.id}&studentId=' + nodes[0].id,
+            area: ['800px', '600px']
+          });
+        }
+      });
+
+      $('.extract-derive-group').click(function () {
+        var studentNodes = studentsTree.getCheckedNodes().filter(function (node) {
+          return !node.isParent;
+        });
+        var phraseNodes = phrasesTree.getCheckedNodes().filter(function (node) {
+          return !node.isParent;
+        });
+        if (studentNodes.length <= 0 && phraseNodes.length <= 0) {
+          parent.layer.alert('没有短语，也没有学生，臣妾做不到啊！', {
+            icon: 2,
+            title: '提示'
+          });
+        } else {
+          parent.layer.open({
+            type: 2,
+            title: '创建派生短语分组',
+            content: (function () {
+              var baseUrl = '${base_url}/phrase_group/extract_derive_group.html?';
+              $.each(studentNodes, function (index, item) {
+                baseUrl += 'studentId=' + item.id + '&';
+              });
+              $.each(phraseNodes, function (index, item) {
+                baseUrl += 'phraseId=' + item.id + '&';
+              });
+              baseUrl += 'groupId=${group.id}';
+              return baseUrl;
+            })(),
+            area: ['400px', '400px']
+          });
+        }
+      });
+
+      $('.extract-personal-group').click(function () {
+        var studentNodes = studentsTree.getCheckedNodes().filter(function (node) {
+          return !node.isParent;
+        });
+
+        if (studentNodes.length <= 0) {
+          parent.layer.alert('没有学生，不能创建专属分组！', {
+            icon: 2,
+            title: '提示'
+          });
+        } else {
+          parent.layer.open({
+            type: 2,
+            title: '创建专属短语分组',
+            content: (function () {
+              var baseUrl = '${base_url}/phrase_group/extract_personal_group.html?';
+              $.each(studentNodes, function (index, item) {
+                baseUrl += 'studentId=' + item.id + '&';
+              });
+              baseUrl += 'groupId=${group.id}';
+              return baseUrl;
+            })(),
+            area: ['400px', '400px']
           });
         }
       });

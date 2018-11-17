@@ -28,6 +28,7 @@
           var columns = dict.loadText({
             type: "get",
             loading: false,
+            async: false,
             url: '${base_url}/res/json/columns.json',
             cache: true,
             dataType: 'json'

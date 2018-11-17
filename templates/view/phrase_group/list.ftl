@@ -1,5 +1,4 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Group>" -->
-
 <#list page.searches as search>
   <#if search.field == 'student' && search.value??><#assign student = search.value/></#if>
 </#list>
@@ -73,7 +72,7 @@
   head_toolbar=[
     {
       'html': '<i class="fa fa-plus" style="font-size: 20px;"></i> &nbsp; 添加短语词频分组',
-      'handler': 'parent.layer.open({type: 2, title: \'添加短语词频分组\', content: \'${base_url}/phrase_group/add_frequency_group.html\', area: [\'800px\', \'600px\']});'
+      'handler': 'parent.layer.open({type: 2, title: \'添加短语词频分组\', content: \'${base_url}/phrase_group/add_frequency_group.html\', area: [\'400px\', \'400px\']});'
     }
   ]
   toolbar=[

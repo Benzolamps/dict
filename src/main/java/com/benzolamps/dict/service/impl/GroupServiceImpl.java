@@ -115,14 +115,16 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
     public void remove(Collection<Group> groups) {
         Assert.isTrue(groups.stream().allMatch(Objects::nonNull), "groups中不能存在为null的元素");
         Assert.isTrue(groups.stream().allMatch(group -> group.getStatus() != SCORING), "无法删除正在评分的分组！");
-        groups.stream().filter(Group::getFrequencyGenerated).forEach(
-            group -> (group.getType().equals(WORD) ? group.getWords() : group.getPhrases()).forEach(
-                ele -> ele.getFrequencyInfo().removeIf(
-                    info -> info.getGroupId().equals(group.getId().toString())
-                )
-            )
-        );
+        groups.stream().filter(Group::getFrequencyGenerated).forEach(this::clearFrequencyInfo);
         super.remove(groups);
+    }
+
+    /**
+     * 清空词频信息
+     * @param group 分组
+     */
+    protected void clearFrequencyInfo(Group group) {
+        group.getElements().forEach(ele -> ele.getFrequencyInfo().removeIf(info -> info.getGroupId().equals(group.getId())));
     }
 
     @Override

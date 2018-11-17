@@ -29,7 +29,7 @@ dict.postHref = function (url, data) {
 
 !function ($, dict) {
   var defaultOptions = {
-    async: false,
+    async: true,
     cache: false,
     dataType: 'text',
     data: {},
@@ -64,10 +64,10 @@ dict.postHref = function (url, data) {
     var responseData = null;
 
     var choose = function (key) {
-      return options[key] ? options[key] : defaultOptions[key];
+      return key in options ? options[key] : defaultOptions[key];
     };
 
-    var needLoader = !(options.hasOwnProperty('loading') && options.loading == false);
+    var needLoader = !('loading' in options && options.loading == false);
     var loader;
     if (needLoader) {
       loader = parent.layer.load(2);

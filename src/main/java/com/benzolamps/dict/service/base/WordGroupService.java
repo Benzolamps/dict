@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 单词短语分组Service接口
+ * 单词分组Service接口
  * @author Benzolamps
  * @version 2.1.4
  * @datetime 2018-9-21 22:09:20
@@ -74,6 +74,23 @@ public interface WordGroupService extends GroupService {
      * 添加词频分组 (DOC)
      * @param wordGroup 分组
      * @param bytes byte[]
+     * @param extraWords 词库中不存在的单词
      */
     Group persistFrequencyGroupDoc(Group wordGroup, byte[] bytes, List<String> extraWords);
+
+    /**
+     * 更新词频分组 (TXT)
+     * @param wordGroup 分组
+     * @param bytes byte[]
+     * @param extraWords 词库中不存在的单词
+     */
+    Group updateFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords);
+
+    /**
+     * 更新词频分组 (DOC)
+     * @param wordGroup 分组
+     * @param bytes byte[]
+     * @param extraWords 词库中不存在的单词
+     */
+    Group updateFrequencyGroupDoc(Group wordGroup, byte[] bytes, List<String> extraWords);
 }

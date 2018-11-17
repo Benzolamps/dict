@@ -13,7 +13,6 @@
       dict.loadText({
         url: 'clean.json',
         type: 'get',
-        async: 'true',
         success: function (result, status, request) {
           parent.layer.alert('操作成功！', {
             icon: 1,

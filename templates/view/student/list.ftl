@@ -87,6 +87,36 @@
   });
 </#assign>
 
+<#assign create_personal_word_groups>
+  parent.layer.open({
+    type: 2,
+    title: '创建专属单词分组',
+    content: (function () {
+      var baseUrl = '${base_url}/word_group/extract_personal_group.html?';
+      $.each(data, function (index, item) {
+        baseUrl += 'studentId=' + item.id + '&';
+      });
+      return baseUrl;
+    })(),
+    area: ['400px', '400px']
+  });
+</#assign>
+
+<#assign create_personal_phrase_groups>
+  parent.layer.open({
+    type: 2,
+    title: '创建专属短语分组',
+    content: (function () {
+      var baseUrl = '${base_url}/phrase_group/extract_personal_group.html?';
+      $.each(data, function (index, item) {
+        baseUrl += 'studentId=' + item.id + '&';
+      });
+      return baseUrl;
+    })(),
+    area: ['400px', '400px']
+  });
+</#assign>
+
 <@nothing></script></@nothing>
 
 <@data_list
@@ -120,6 +150,16 @@
     {
       'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入短语学习进度',
       'handler': import_phrase_process
+    },
+    {
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属单词分组',
+      'handler': create_personal_word_groups,
+      'needSelected': true
+    },
+    {
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属短语分组',
+      'handler': create_personal_phrase_groups,
+      'needSelected': true
     }
   ]
   toolbar=[

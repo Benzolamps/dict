@@ -473,7 +473,6 @@ dict.uploadFile = function (data) {
     var startTime = new Date().getTime();
     setTimeout(function () {
       $form.ajaxSubmit({
-        async: true,
         data: data.data,
         success: function (result, status, request) {
           var endTime = new Date().getTime();

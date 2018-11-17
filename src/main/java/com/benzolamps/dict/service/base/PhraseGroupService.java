@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 单词短语分组Service接口
+ * 短语分组Service接口
  * @author Benzolamps
  * @version 2.1.4
  * @datetime 2018-9-21 22:50:01
@@ -25,16 +25,16 @@ public interface PhraseGroupService extends GroupService {
 
     /**
      *
-     * @param phraseGroup 单词分组
-     * @param phrases 单词
+     * @param phraseGroup 短语分组
+     * @param phrases 短语
      */
     void removePhrases(Group phraseGroup, Phrase... phrases);
 
     /**
      * 评分
-     * @param phraseGroup 单词分组
+     * @param phraseGroup 短语分组
      * @param student 学生
-     * @param phrases 已掌握的单词
+     * @param phrases 已掌握的短语
      */
     void scorePhrases(Group phraseGroup, Student student, Phrase... phrases);
 
@@ -78,4 +78,20 @@ public interface PhraseGroupService extends GroupService {
      * @param extraPhrases 词库中不存在的短语
      */
     Group persistFrequencyGroupDoc(Group phraseGroup, byte[] bytes, List<String> extraPhrases);
+
+    /**
+     * 更新词频分组 (TXT)
+     * @param phraseGroup 分组
+     * @param bytes byte[]
+     * @param extraPhrases 词库中不存在的短语
+     */
+    Group updateFrequencyGroupTxt(Group phraseGroup, byte[] bytes, List<String> extraPhrases);
+
+    /**
+     * 更新词频分组 (DOC)
+     * @param phraseGroup 分组
+     * @param bytes byte[]
+     * @param extraPhrases 词库中不存在的短语
+     */
+    Group updateFrequencyGroupDoc(Group phraseGroup, byte[] bytes, List<String> extraPhrases);
 }

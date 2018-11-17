@@ -444,6 +444,47 @@ public class WordGroupController extends BaseController {
         } else {
             wordGroup = wordGroupService.persistFrequencyGroupTxt(wordGroup, file.getBytes(), extraWords);
         }
+        return makeupVo(wordGroup, extraWords);
+    }
+
+    /**
+     * 修改词频分组界面
+     * @param id id
+     * @return ModelAndView
+     */
+    @WindowView
+    @RequestMapping(value = "edit_frequency_group.html", method = {GET, POST})
+    protected ModelAndView editFrequencyGroup(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(id, "id不能为null");
+        ModelAndView mv = new ModelAndView("view/word_group/edit_frequency_group");
+        Group wordGroup = wordGroupService.find(id);
+        Assert.notNull(wordGroup, "word group不存在");
+        Assert.isTrue(wordGroup.getFrequencyGenerated(), "word group不是词频分组");
+        mv.addObject("wordGroup", wordGroup);
+        return mv;
+    }
+
+    /**
+     * 更新词频分组
+     * @param wordGroup 分组
+     * @param file 文件
+     * @return 操作成功
+     */
+    @ResponseBody
+    @PostMapping(value = "edit_frequency_group_save.json")
+    protected BaseVo updateFrequencyGroupSave(Group wordGroup, MultipartFile file) throws IOException {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        List<String> extraWords = new ArrayList<>();
+        if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
+            wordGroup = wordGroupService.updateFrequencyGroupDoc(wordGroup, file.getBytes(), extraWords);
+        } else {
+            wordGroup = wordGroupService.updateFrequencyGroupTxt(wordGroup, file.getBytes(), extraWords);
+        }
+        return makeupVo(wordGroup, extraWords);
+    }
+
+    private BaseVo makeupVo(Group wordGroup, List<String> extraWords) {
         Map<String, Object> data = new HashMap<>();
         data.put("wordGroup", wordGroup);
         if (CollectionUtils.isEmpty(extraWords)) {
@@ -465,7 +506,6 @@ public class WordGroupController extends BaseController {
             data.put("hasExtraWords", true);
             data.put("token", token);
         }
-
         return wrapperData(data);
     }
 
@@ -476,7 +516,7 @@ public class WordGroupController extends BaseController {
      * @param studentIds 学生id集合
      * @return ModelAndView
      */
-    @NavigationView
+    @WindowView
     @RequestMapping(value = "extract_derive_group.html", method = {GET, POST})
     protected ModelAndView extractDeriveGroup(Integer groupId, @RequestParam(value = "wordId", required = false) Integer[] wordIds, @RequestParam(value = "studentId", required = false) Integer[] studentIds) {
         ModelAndView mv = new ModelAndView("view/word_group/extract_derive_group");
@@ -510,9 +550,10 @@ public class WordGroupController extends BaseController {
      * @param studentIds 学生id集合
      * @return ModelAndView
      */
-    @NavigationView
+    @WindowView
     @RequestMapping(value = "extract_personal_group.html", method = {GET, POST})
     protected ModelAndView extractPersonalGroup(Integer groupId, @RequestParam(value = "studentId", required = false) Integer[] studentIds) {
+        Assert.notEmpty(studentIds, "student ids不能为null或空");
         ModelAndView mv = new ModelAndView("view/word_group/extract_personal_group");
         ExtractGroupVo<Word> extractGroupVo = new ExtractGroupVo<>(groupId, null, studentIds, wordGroupService, wordService, studentService);
         mv.addObject("wordGroup", extractGroupVo.getGroup());
@@ -531,7 +572,6 @@ public class WordGroupController extends BaseController {
     @PostMapping(value = "extract_personal_group_save.json")
     protected BaseVo extractPersonalGroupSave(Integer groupId, @RequestParam(value = "studentId", required = false) Integer[] studentIds, Group wordGroup) {
         Assert.notEmpty(studentIds, "student ids不能为null或空");
-        Assert.notNull(groupId, "group id不能为null");
         ExtractGroupVo<Word> extractGroupVo = new ExtractGroupVo<>(groupId, null, studentIds, wordGroupService, wordService, studentService);
         return wrapperData(wordGroupService.extractPersonalGroup(extractGroupVo.getGroup(), extractGroupVo.getStudents(), wordGroup));
     }

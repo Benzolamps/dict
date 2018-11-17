@@ -164,6 +164,7 @@
     $('#submit').click(function () {
       <#if !scored>
         parent.layer.confirm('确定当前学生已评分完毕？', {icon: 3, title: '提示'}, function (index) {
+          parent.layer.close(index);
           var nodes = masteredTree.getNodes();
           dict.loadText({
             url: 'score_save.json',
@@ -212,6 +213,7 @@
     <#if !scored>
       $('#jump').click(function () {
         parent.layer.confirm('确定要跳过当前学生的评分？', {icon: 3, title: '提示'}, function (index) {
+          parent.layer.close(index);
           var nodes = masteredTree.getNodes();
           dict.loadText({
             url: 'jump.json',
@@ -262,6 +264,15 @@
           }
         });
       });
+    <#else>
+       $('#extract-personal-group').click(function () {
+         parent.layer.open({
+           type: 2,
+           title: '创建专属单词分组',
+           content: '${base_url}/word_group/extract_personal_group.html?studentId=${student.id}&groupId=${group.id}',
+           area: ['400px', '400px']
+         });
+       });
     </#if>
   </#escape>
 </script>

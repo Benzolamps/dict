@@ -54,6 +54,8 @@ $.validator.methods.remote = function (value, element, param) {
       url: param.url,
       type: 'get',
       cache: true,
+      async: false,
+      loading: false,
       data: new (function () {
         this[element.name] = value;
       })

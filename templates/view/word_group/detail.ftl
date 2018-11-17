@@ -15,10 +15,13 @@
   <button id="import" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
     <i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入学习进度
   </button>
+  <button id="edit-frequency-group" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'SCORING' || !group.frequencyGenerated> style="display: none"</#if>>
+    更新词频分组
+  </button>
   <button id="score" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
     去评分
   </button>
-  <button id="finish"  class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status != 'SCORING'> style="display: none"</#if>>
+  <button id="finish" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status != 'SCORING'> style="display: none"</#if>>
     结束评分
   </button>
   <button id="complete" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status != 'COMPLETED'> style="display: none"</#if>>
@@ -153,9 +156,7 @@
         children: [
           <#if group.status != 'COMPLETED'>
             <#list group.frequencySortedWords as word>
-            {
-              id: '${word.id}',
-              name: '${word.prototype}（${word.definition}）${group.frequencyGenerated?string('（词频：' + word.groupFrequency + '／' + word.frequency + '）', '')}'},
+            {id: '${word.id}', name: '${word.prototype}（${word.definition}）${group.frequencyGenerated?string('（词频：' + word.groupFrequency + '／' + word.frequency + '）', '')}'},
             </#list>
           <#else>
             <#list group.groupLog.words as word>
@@ -306,6 +307,7 @@
     <#if group.status == 'SCORING'>
       $('#finish').click(function () {
       parent.layer.confirm('确定要结束当前评分吗？', {icon: 3, title: '提示'}, function (index) {
+        parent.layer.close(index);
         dict.loadText({
           url: 'finish.json',
           type: 'post',
@@ -391,6 +393,7 @@
     <#if group.status == 'COMPLETED'>
       $('#complete').click(function () {
         parent.layer.confirm('确定要开始新一轮的评分吗？', {icon: 3, title: '提示'}, function (index) {
+          parent.layer.close(index);
           dict.loadText({
             url: 'complete.json',
             type: 'post',
@@ -431,6 +434,7 @@
           });
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+            parent.layer.close(index);
             dict.loadText({
               url: 'remove_students.json',
               type: 'post',
@@ -473,6 +477,7 @@
           });
         } else {
           parent.layer.confirm('确定要删除选中的记录吗？', {icon: 3, title: '提示'}, function (index) {
+            parent.layer.close(index);
             dict.loadText({
               url: 'remove_words.json',
               type: 'post',
@@ -549,7 +554,7 @@
               $.each(wordNodes, function (index, item) {
                 baseUrl += 'wordId=' + item.id + '&';
               });
-              baseUrl += 'groupId=${(group.id)!}';
+              baseUrl += 'groupId=${group.id}';
               return baseUrl;
             })(),
             area: ['400px', '400px']
@@ -576,12 +581,18 @@
               $.each(studentNodes, function (index, item) {
                 baseUrl += 'studentId=' + item.id + '&';
               });
-              baseUrl += 'groupId=${(group.id)!}';
+              baseUrl += 'groupId=${group.id}';
               return baseUrl;
             })(),
             area: ['400px', '400px']
           });
         }
+      });
+    </#if>
+
+    <#if group.status != 'SCORING' && group.frequencyGenerated>
+      $('#edit-frequency-group').click(function () {
+        parent.layer.open({type: 2, title: '更新短语词频分组', content: '${base_url}/word_group/edit_frequency_group.html?id=${group.id}', area: ['400px', '400px']});
       });
     </#if>
   </#escape>

@@ -177,9 +177,9 @@
   } else {
     parent.layer.open({
       type: 2,
-      title: '创建专属分组',
+      title: '创建专属单词分组',
       content: (function () {
-        var baseUrl = '${base_url}/student/personal_word_group.html?';
+        var baseUrl = '${base_url}/word_group/extract_derive_group.html?';
         $.each(data, function (index, item) {
           baseUrl += 'wordId=' + item.id + '&';
         });

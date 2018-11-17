@@ -105,13 +105,13 @@
     $.each(fields, function (index, item) {
       delete fields[index].sort;
       fields[index].unresize = true;
-      if (fields[index].hasOwnProperty('format')) {
+      if ('format' in fields[index]) {
         fields[index].templet = '<div><span title="' + fields[index].format + '">' + fields[index].format + '</span></div>';
         delete fields[index].format;
       } else {
         fields[index].templet =
           '<div>' +
-          '{{# var value = d.hasOwnProperty(\'' + fields[index].field + '\') ? d.' + fields[index].field + ' : \'\'; }}' +
+          '{{# var value = \'' + fields[index].field + '\' in d ? d.' + fields[index].field + ' : \'\'; }}' +
           '<span title="{{value}}">{{value}}</span>'
           '</div>';
       }
@@ -188,7 +188,6 @@
         dict.loadText({
           url: '${delete}',
           data: {id: ids},
-          async: true,
           success: function () {
             parent.layer.alert('删除成功！', {
               icon: 1,
@@ -248,7 +247,6 @@
           dict.loadText({
             url: '${delete}',
             data: {id: obj.data.id},
-            async: true,
             success: function () {
               parent.layer.alert('删除成功！', {
                 icon: 1,

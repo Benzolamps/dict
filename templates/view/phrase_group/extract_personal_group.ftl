@@ -1,13 +1,13 @@
-<#-- @ftlvariable name="wordGroup" type="com.benzolamps.dict.bean.Group" -->
+<#-- @ftlvariable name="phraseGroup" type="com.benzolamps.dict.bean.Group" -->
 <#-- @ftlvariable name="students" type="java.util.Collection<com.benzolamps.dict.bean.Student>" -->
 <div class="layui-card">
   <div class="layui-card-body">
-    <form id="extract-personal-group" class="layui-form" method="post" action="${base_url}/word_group/extract_personal_group_save.json">
+    <form id="extract-personal-group" class="layui-form" method="post" action="${base_url}/phrase_group/extract_personal_group_save.json">
       <#list students as student>
         <input multiple-select="1" type="hidden" name="studentId" value="${student.id}">
       </#list>
-      <#if wordGroup??>
-        <input type="hidden" name="groupId" value="${wordGroup.id}">
+      <#if phraseGroup??>
+        <input type="hidden" name="groupId" value="${phraseGroup.id}">
       </#if>
       <table class="layui-table">
       </table>

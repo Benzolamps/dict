@@ -161,16 +161,16 @@
   } else {
     parent.layer.open({
       type: 2,
-      title: '创建专属分组',
+      title: '创建专属短语分组',
       content: (function () {
-        var baseUrl = '${base_url}/student/personal_phrase_group.html?';
+        var baseUrl = '${base_url}/phrase_group/extract_derive_group.html?';
         $.each(data, function (index, item) {
           baseUrl += 'phraseId=' + item.id + '&';
         });
         baseUrl += 'studentId=${(student.id)!}';
         return baseUrl;
       })(),
-      area: ['400px', '400px'],
+      area: ['400px', '400px']
     });
   }
 </#assign>

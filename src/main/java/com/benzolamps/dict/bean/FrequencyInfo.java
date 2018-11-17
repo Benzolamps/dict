@@ -1,5 +1,6 @@
 package com.benzolamps.dict.bean;
 
+import com.benzolamps.dict.util.DictObject;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 import org.springframework.util.CollectionUtils;
@@ -26,7 +27,7 @@ import static com.benzolamps.dict.util.DictSpring.getBean;
 public class FrequencyInfo {
 
     /** 分组id */
-    private String groupId;
+    private Integer groupId;
 
     /** 词频 */
     private Integer frequency;
@@ -50,7 +51,7 @@ public class FrequencyInfo {
             }
             List<Map> list = getBean(ObjectMapper.class).readValue(value, List.class);
             List<FrequencyInfo> frequencyInfoList = new ArrayList<>();
-            list.forEach(item -> frequencyInfoList.add(new FrequencyInfo((String) item.get("groupId"), (Integer) item.get("frequency"))));
+            list.forEach(item -> frequencyInfoList.add(new FrequencyInfo(DictObject.ofObject(item.get("groupId"), int.class), DictObject.ofObject(item.get("frequency"), int.class))));
             return frequencyInfoList;
         }
     }

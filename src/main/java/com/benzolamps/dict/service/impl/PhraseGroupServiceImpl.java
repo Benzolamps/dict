@@ -45,7 +45,7 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
         phraseGroup.getPhrases().removeAll(Arrays.asList(phrases));
         List<Phrase> phraseList = Arrays.asList(phrases);
-        phraseList.stream().map(Phrase::getFrequencyInfo).forEach(infos -> infos.removeIf(info -> info.getGroupId().equals(phraseGroup.getId().toString())));
+        phraseList.stream().map(Phrase::getFrequencyInfo).forEach(infos -> infos.removeIf(info -> info.getGroupId().equals(phraseGroup.getId())));
         phraseGroup.getPhrases().removeAll(phraseList);
         if (phraseGroup.getGroupLog() != null) {
             phraseGroup.getGroupLog().getPhrases().removeAll(phraseList);
@@ -128,6 +128,16 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
 
     @Override
     public Group persistFrequencyGroupDoc(Group phraseGroup, byte[] bytes, List<String> extraPhrases) {
+        throw new UnsupportedOperationException("该功能尚未实现！");
+    }
+
+    @Override
+    public Group updateFrequencyGroupTxt(Group phraseGroup, byte[] bytes, List<String> extraPhrases) {
+        throw new UnsupportedOperationException("该功能尚未实现！");
+    }
+
+    @Override
+    public Group updateFrequencyGroupDoc(Group phraseGroup, byte[] bytes, List<String> extraPhrases) {
         throw new UnsupportedOperationException("该功能尚未实现！");
     }
 }

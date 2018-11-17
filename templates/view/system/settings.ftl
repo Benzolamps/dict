@@ -10,32 +10,32 @@
   <div class="layui-tab-content">
     <div class="layui-tab-item" style="min-height: 400px;">
       <script type="text/javascript">
-        document.write(dict.loadText({url: '${base_url}/system/shutdown.html', loading: false}));
+        document.write(dict.loadText({url: '${base_url}/system/shutdown.html', async: false, loading: false}));
       </script>
     </div>
     <div class="layui-tab-item" style="min-height: 400px;">
       <script type="text/javascript">
-        document.write(dict.loadText({url: '${base_url}/system/clean.html', loading: false}));
+        document.write(dict.loadText({url: '${base_url}/system/clean.html', async: false, loading: false}));
       </script>
     </div>
     <div class="layui-tab-item" style="min-height: 400px;">
       <script type="text/javascript">
-        document.write(dict.loadText({url: '${base_url}/system/backup.html', loading: false}));
+        document.write(dict.loadText({url: '${base_url}/system/backup.html', async: false, loading: false}));
       </script>
     </div>
     <div class="layui-tab-item" style="min-height: 400px;">
       <script type="text/javascript">
-        document.write(dict.loadText({url: '${base_url}/system/sql.html', loading: false}));
+        document.write(dict.loadText({url: '${base_url}/system/sql.html', async: false, loading: false}));
       </script>
     </div>
     <div class="layui-tab-item" style="min-height: 400px;">
       <script type="text/javascript">
-        document.write(dict.loadText({url: '${base_url}/system/update.html', loading: false}));
+        document.write(dict.loadText({url: '${base_url}/system/update.html', async: false, loading: false}));
       </script>
     </div>
     <div class="layui-tab-item" style="min-height: 400px;">
       <script type="text/javascript">
-        document.write(dict.loadText({url: '${base_url}/system/lan.html', loading: false}));
+        document.write(dict.loadText({url: '${base_url}/system/lan.html', async: false, loading: false}));
       </script>
     </div>
   </div>
