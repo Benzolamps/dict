@@ -329,7 +329,7 @@ public class WordGroupController extends BaseController {
 
     /**
      * 评分保存
-     * @param groupId 分组id
+     * @param groupId 单词分组id
      * @param studentId 学生id
      * @param masteredWordIds 掌握的单词id
      * @return 保存成功
@@ -352,7 +352,7 @@ public class WordGroupController extends BaseController {
 
     /**
      * 跳过当前学生的评分
-     * @param groupId 分组id
+     * @param groupId 单词分组id
      * @param studentId 学生id
      * @return 操作成功
      */
@@ -371,7 +371,7 @@ public class WordGroupController extends BaseController {
 
     /**
      * 结束评分
-     * @param id 分组id
+     * @param id 单词分组id
      * @return 操作成功
      */
     @PostMapping("finish.json")
@@ -385,8 +385,8 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 完成
-     * @param id 分组id
+     * 完成评分
+     * @param id 单词分组id
      * @return 操作成功
      */
     @PostMapping("complete.json")
@@ -400,8 +400,8 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 导入学习进度
-     * @param groupId 分组id
+     * 导入单词学习进度
+     * @param groupId 单词分组id
      * @param studentId 学生id
      * @param files 文件
      * @return 操作成功
@@ -418,7 +418,7 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 添加词频分组界面
+     * 添加单词词频分组界面
      * @return ModelAndView
      */
     @WindowView
@@ -429,8 +429,8 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 保存词频分组
-     * @param wordGroup 分组
+     * 保存单词词频分组
+     * @param wordGroup 单词分组
      * @param file 文件
      * @return 操作成功
      */
@@ -448,7 +448,7 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 修改词频分组界面
+     * 修改单词词频分组界面
      * @param id id
      * @return ModelAndView
      */
@@ -466,8 +466,8 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 更新词频分组
-     * @param wordGroup 分组
+     * 更新单词词频分组
+     * @param wordGroup 单词分组
      * @param file 文件
      * @return 操作成功
      */
@@ -510,8 +510,8 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 创建派生分组界面
-     * @param groupId 分组id
+     * 创建派生单词分组界面
+     * @param groupId 单词分组id
      * @param wordIds 单词id集合
      * @param studentIds 学生id集合
      * @return ModelAndView
@@ -529,8 +529,8 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 创建派生分组
-     * @param groupId 分组id
+     * 创建派生单词分组
+     * @param groupId 单词分组id
      * @param wordIds 单词id集合
      * @param studentIds 学生id集合
      * @param wordGroup 分组
@@ -545,8 +545,8 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 创建专属分组界面
-     * @param groupId 分组id
+     * 创建专属单词分组界面
+     * @param groupId 单词分组id
      * @param studentIds 学生id集合
      * @return ModelAndView
      */
@@ -562,10 +562,10 @@ public class WordGroupController extends BaseController {
     }
 
     /**
-     * 创建专属分组
-     * @param groupId 分组id
+     * 创建专属单词分组
+     * @param groupId 单词分组id
      * @param studentIds 学生id集合
-     * @param wordGroup 分组
+     * @param wordGroup 单词分组
      * @return 操作成功
      */
     @ResponseBody

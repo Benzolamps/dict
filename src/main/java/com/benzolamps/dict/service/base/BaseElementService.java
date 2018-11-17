@@ -39,7 +39,7 @@ public interface BaseElementService<T extends BaseElement> extends BaseService<T
     /**
      * 通过原形查找单词或短语
      * @param prototypes 原形
-     * @return 单词或短语
+     * @return 单词或短语集合
      */
     Collection<T> findByPrototypes(Collection<String> prototypes);
 }

@@ -6,14 +6,14 @@
 <@nothing><script type="text/javascript"></@nothing>
 
 <#assign file_upload>
-   dict.uploadFile({
-     action: 'import.json',
-     accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-     success: function (data, delta) {
-       location.reload(true);
-       parent.layer.alert('导入单词成功！<br>共导入' + data.data + '个单词！<br>用时 ' + delta + ' 秒！', {icon: 1});
-     }
-   });
+  dict.uploadFile({
+    action: 'import.json',
+    accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    success: function (data, delta) {
+      location.reload(true);
+      parent.layer.alert('导入单词成功！<br>共导入' + data.data + '个单词！<br>用时 ' + delta + ' 秒！', {icon: 1});
+    }
+  });
 </#assign>
 
 <#assign fields>
@@ -25,19 +25,15 @@
     {'field': 'clazzes', 'title': '词性', 'minWidth': 150},
     {'field': 'frequency', 'title': '词频', 'sort': true, 'minWidth': 150}
     <#if !student??>
-      , {'field': 'masteredStudents', 'title': '已掌握', 'sort': true}
-      , {'field': 'failedStudents', 'title': '未掌握', 'sort': true}
+      , {'title': '已掌握人数／未掌握人数', 'format': '{{d.masteredStudents}}／{{d.failedStudents}}'}
     </#if>
   ]
 </#assign>
 
 <#assign search>
   [
-    {
-      'name': 'prototype',
-      'display': '单词',
-      'type': 'string'
-    },
+    {'name': 'prototype', 'display': '单词', 'type': 'string'},
+    {'name': 'definition', 'display': '词义', 'type': 'string'},
     {
       'name': 'clazzes',
       'display': '词性',
@@ -47,12 +43,6 @@
           {'id': ${wordClazz.id}, 'value': '${wordClazz.name}'}<#sep>,
         </#list>
       ]
-    },
-    {
-      'name': 'frequency',
-      'display': '词频',
-      'type': 'integer',
-      'options': <@switch1000 gt1=false eq1=false/>
     },
     {'name': 'studentNumber', 'display': '学生学号', 'type': 'integer'},
     <#if student??>
@@ -66,7 +56,23 @@
         {'id': 'true', 'value': '已掌握'},
         {'id': 'false', 'value': '未掌握'}
       ]
-    }
+    },
+    <#if !student??>
+      {
+        'name': 'order',
+        'display': '排序',
+        'type': 'string',
+        'options': [
+          {'id': 'masteredStudents asc', 'value': '已掌握人数 ↑'},
+          {'id': 'failedStudents asc', 'value': '未掌握人数 ↑'},
+          {'id': 'masteredStudents desc', 'value': '已掌握人数 ↓'},
+          {'id': 'failedStudents desc', 'value': '未掌握人数 ↓'}
+        ]
+      },
+      {'name': 'masteredStudents', 'display': '已掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
+      {'name': 'failedStudents', 'display': '未掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
+    </#if>
+    {'name': 'frequency', 'display': '词频', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>}
   ]
 </#assign>
 <@nothing>;</@nothing>
@@ -86,13 +92,13 @@
       'handler': file_export(true)
     },
     {
-      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到分组',
+      'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到单词分组',
       'handler': add_to,
       'needSelected': true
     }
     <#if student??>
       , {
-        'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属分组',
+        'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属单词分组',
         'handler': create_personal,
         'needSelected': true
       }

@@ -106,7 +106,7 @@ public class DocController extends BaseController {
                     String content = compress.apply(stringWriter.toString());
                     String name = (String) modelMap.get("title");
                     InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-                    zipItems.add(new DictFile.ZipItem(name + " - " + student.getId() + " - " + student.getName() + ".doc", inputStream));
+                    zipItems.add(new DictFile.ZipItem(name + " - " + group.getName() + " - " + student.getNumber() + " - " + student.getName() + ".doc", inputStream));
                 }
             }
         }

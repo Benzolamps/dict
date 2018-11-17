@@ -2,7 +2,7 @@
 <#-- @ftlvariable name="students" type="java.util.List<com.benzolamps.dict.controller.vo.ClazzStudentTreeVo>" -->
 <#assign title>短语分组详情</#assign>
 <blockquote class="layui-elem-quote" style="margin-top: 10px;">
-  ${group.name}&nbsp;&nbsp;&nbsp;&nbsp;
+${group.name}&nbsp;&nbsp;&nbsp;&nbsp;
   <button class="layui-btn layui-btn-normal layui-btn-sm" onclick="history.back();">
     <i class="fa fa-arrow-circle-left" style="font-size: 20px;"></i> &nbsp; 返回
   </button>
@@ -13,12 +13,15 @@
     <i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出短语
   </button>
   <button id="import" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
-    <i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入学习进度
+    <i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入短语学习进度
+  </button>
+  <button id="edit-frequency-group" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'SCORING' || !group.frequencyGenerated> style="display: none"</#if>>
+    更新短语词频分组
   </button>
   <button id="score" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
     去评分
   </button>
-  <button id="finish"  class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status != 'SCORING'> style="display: none"</#if>>
+  <button id="finish" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status != 'SCORING'> style="display: none"</#if>>
     结束评分
   </button>
   <button id="complete" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status != 'COMPLETED'> style="display: none"</#if>>
@@ -36,18 +39,18 @@
           </colgroup>
           <thead></thead>
           <tbody>
-            <tr>
-              <th title="状态">状态</th>
-              <td>${group.status.getName()}</td>
-            </tr>
-            <tr>
-              <th title="短语数">短语数</th>
-              <td>${group.phrasesCount}</td>
-            </tr>
-            <tr>
-              <th title="已考核次数">已考核次数</th>
-              <td>${group.scoreCount}</td>
-            </tr>
+          <tr>
+            <th title="状态">状态</th>
+            <td>${group.status.getName()}</td>
+          </tr>
+          <tr>
+            <th title="短语数">短语数</th>
+            <td>${group.phrasesCount}</td>
+          </tr>
+          <tr>
+            <th title="已考核次数">已考核次数</th>
+            <td>${group.scoreCount}</td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -59,18 +62,18 @@
         <table class="layui-table">
           <thead></thead>
           <tbody>
-            <tr>
-              <th title="描述">描述</th>
-              <td>${group.description!''}</td>
-            </tr>
-            <tr>
-              <th title="学生数">学生数</th>
-              <td>${group.studentsOrientedCount}</td>
-            </tr>
-            <tr>
-              <th title="已考核学生数">已评分学生数</th>
-              <td>${group.studentsScoredCount}</td>
-            </tr>
+          <tr>
+            <th title="描述">描述</th>
+            <td>${group.description!''}</td>
+          </tr>
+          <tr>
+            <th title="学生数">学生数</th>
+            <td>${group.studentsOrientedCount}</td>
+          </tr>
+          <tr>
+            <th title="已考核学生数">已评分学生数</th>
+            <td>${group.studentsScoredCount}</td>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -100,8 +103,8 @@
           </blockquote>
         <#else>
           <div style="text-align: center">
-            <button class="layui-btn layui-btn-warm layui-btn-sm extract-derive-group">创建派生分组</button>
-            <button class="layui-btn layui-btn-warm layui-btn-sm extract-personal-group">创建专属分组</button>
+            <button class="layui-btn layui-btn-warm layui-btn-sm extract-derive-group">创建派生短语分组</button>
+            <button class="layui-btn layui-btn-warm layui-btn-sm extract-personal-group">创建专属短语分组</button>
           </div>
           <div id="rate" style="width: 100%; height: 430px"></div>
         </#if>
@@ -116,9 +119,9 @@
           <button class="layui-btn layui-btn-primary layui-btn-xs select-none">全不选</button>
           <button class="layui-btn layui-btn-primary layui-btn-xs select-reverse">反选</button>
           <button class="layui-btn layui-btn-danger layui-btn-xs delete">删除</button>
-          <#if group.status == 'COMPLETED'>
+            <#if group.status == 'COMPLETED'>
             <button class="layui-btn layui-btn-warm layui-btn-xs view">查看</button>
-          </#if>
+            </#if>
         </#if>
         <div class="ztree" id="students-tree" style="height: 400px; overflow-x: hidden; overflow-y: auto; margin-top: 5px; background-color: #FFE6B0"></div>
       </div>
@@ -130,14 +133,14 @@
 <script type="text/javascript" src="${base_url}/zTree_v3/js/jquery.ztree.excheck.js"></script>
 <script type="text/javascript" src="${base_url}/js/echarts.min.js"></script>
 <script>
-  <#escape x as x?js_string>
-    var $phraseTree = $('#phrases-tree'), $studentsTree = $('#students-tree');
+    <#escape x as x?js_string>
+    var $phrasesTree = $('#phrases-tree'), $studentsTree = $('#students-tree');
 
     var setting = {
       <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
         check: {
           enable: true,
-          chkStyle: "checkbox"
+          chkStyle: 'checkbox'
         },
       </#if>
       callback: {
@@ -152,13 +155,13 @@
         open: 'true',
         children: [
           <#if group.status != 'COMPLETED'>
-            <#list group.frequencySortedPhrases as phrase>
-              {id: '${phrase.id}', name: '${phrase.prototype}（${phrase.definition}）${group.frequencyGenerated?string('（词频：' + phrase.groupFrequency + '／' + phrase.frequency + '）', '')}'},
-            </#list>
+              <#list group.frequencySortedPhrases as phrase>
+            {id: '${phrase.id}', name: '${phrase.prototype}（${phrase.definition}）${group.frequencyGenerated?string('（词频：' + phrase.groupFrequency + '／' + phrase.frequency + '）', '')}'},
+              </#list>
           <#else>
-            <#list group.groupLog.phrases as phrase>
-              {id: '${phrase.id}', name: '${phrase.prototype}（${phrase.definition}）（掌握人数：${phrase.masteredStudentsCount}）'},
-            </#list>
+              <#list group.groupLog.phrases as phrase>
+            {id: '${phrase.id}', name: '${phrase.prototype}（${phrase.definition}）（掌握人数：${phrase.masteredStudentsCount}）'},
+              </#list>
           </#if>
         ]
       }
@@ -177,9 +180,9 @@
                 <#list clazz.students as student>
                   {
                     id: '#{student.id}',
-                    name: '${student.name}（${student.number}）' +
-                      '<#if student.description??>（${student.description}）</#if>' +
-                      '<#if group.status == 'COMPLETED'>（掌握短语数：${student.masteredPhrasesCount!'未参与评分'}）</#if>'
+                    name: '${student.name} (${student.number})' +
+                    '<#if student.description??>（${student.description}）</#if>' +
+                    '<#if group.status == 'COMPLETED'>（掌握短语数：${student.masteredPhrasesCount!'未参与评分'}）</#if>'
                   },
                 </#list>
               ]
@@ -191,9 +194,9 @@
 
     var phrasesTree, studentsTree;
 
-    <@data_tree id='phrases-tree' setting='setting' value='phrasesNode' variable='phrasesTree'/>
+        <@data_tree id='phrases-tree' setting='setting' value='phrasesNode' variable='phrasesTree'/>
 
-    <@data_tree id='students-tree' setting='setting' value='studentsNode' variable='studentsTree'/>
+        <@data_tree id='students-tree' setting='setting' value='studentsNode' variable='studentsTree'/>
 
     $('#export').click(function () {
       <#if group.phrasesCount lte 0>
@@ -251,7 +254,7 @@
       </#if>
     });
 
-    <#if group.status != 'COMPLETED'>
+        <#if group.status != 'COMPLETED'>
       $('#score').click(function () {
         <#if group.phrasesCount lte 0>
           parent.layer.alert('还没有短语呢！怎么评分？', {
@@ -299,41 +302,41 @@
           });
         </#if>
       });
-    </#if>
+        </#if>
 
-    <#if group.status == 'SCORING'>
+        <#if group.status == 'SCORING'>
       $('#finish').click(function () {
-      parent.layer.confirm('确定要结束当前评分吗？', {icon: 3, title: '提示'}, function (index) {
-        parent.layer.close(index);
-        dict.loadText({
-          url: 'finish.json',
-          type: 'post',
-          data: {
-            id: ${group.id}
-          },
-          dataType: 'json',
-          success: function (result, status, request) {
-            parent.layer.alert('操作成功！', {
-              icon: 1,
-              end: function () {
-                parent.$('iframe')[0].contentWindow.dict.reload(true);
-                var layerIndex = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(layerIndex);
-              }
-            });
-          },
-          error: function (result, status, request) {
-            parent.layer.alert(result.message, {
-              icon: 2,
-              title: result.status
-            });
-          }
+        parent.layer.confirm('确定要结束当前评分吗？', {icon: 3, title: '提示'}, function (index) {
+          parent.layer.close(index);
+          dict.loadText({
+            url: 'finish.json',
+            type: 'post',
+            data: {
+              id: ${group.id}
+            },
+            dataType: 'json',
+            success: function (result, status, request) {
+              parent.layer.alert('操作成功！', {
+                icon: 1,
+                end: function () {
+                  parent.$('iframe')[0].contentWindow.dict.reload(true);
+                  var layerIndex = parent.layer.getFrameIndex(window.name);
+                  parent.layer.close(layerIndex);
+                }
+              });
+            },
+            error: function (result, status, request) {
+              parent.layer.alert(result.message, {
+                icon: 2,
+                title: result.status
+              });
+            }
+          });
         });
       });
-    });
-    </#if>
+        </#if>
 
-    <#if group.status == 'COMPLETED'>
+        <#if group.status == 'COMPLETED'>
       var data = <@json_dump obj=group.groupLog.students/>;
       data = data.filter(function (item) {
         return item.masteredPhrasesCount != null
@@ -385,9 +388,9 @@
           }
         ]
       });
-    </#if>
+        </#if>
 
-    <#if group.status == 'COMPLETED'>
+        <#if group.status == 'COMPLETED'>
       $('#complete').click(function () {
         parent.layer.confirm('确定要开始新一轮的评分吗？', {icon: 3, title: '提示'}, function (index) {
           parent.layer.close(index);
@@ -417,9 +420,9 @@
           });
         });
       });
-    </#if>
+        </#if>
 
-    <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
+        <#if group.status == 'NORMAL' || group.status == 'COMPLETED'>
       $studentsTree.parent().find('.delete').click(function () {
         var nodes = studentsTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
@@ -463,7 +466,7 @@
         }
       });
 
-      $phraseTree.parent().find('.delete').click(function () {
+      $phrasesTree.parent().find('.delete').click(function () {
         var nodes = phrasesTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
         });
@@ -505,9 +508,9 @@
           });
         }
       });
-    </#if>
+        </#if>
 
-    <#if group.status == 'COMPLETED'>
+        <#if group.status == 'COMPLETED'>
       $studentsTree.parent().find('.view').click(function () {
         var nodes = studentsTree.getCheckedNodes().filter(function (node) {
           return !node.isParent;
@@ -565,7 +568,7 @@
         });
 
         if (studentNodes.length <= 0) {
-          parent.layer.alert('没有学生，不能创建专属分组！', {
+          parent.layer.alert('没有学生，不能创建专属短语分组！', {
             icon: 2,
             title: '提示'
           });
@@ -585,6 +588,12 @@
           });
         }
       });
-    </#if>
-  </#escape>
+        </#if>
+
+        <#if group.status != 'SCORING' && group.frequencyGenerated>
+      $('#edit-frequency-group').click(function () {
+        parent.layer.open({type: 2, title: '更新短语词频分组', content: '${base_url}/phrase_group/edit_frequency_group.html?id=${group.id}', area: ['400px', '400px']});
+      });
+        </#if>
+    </#escape>
 </script>

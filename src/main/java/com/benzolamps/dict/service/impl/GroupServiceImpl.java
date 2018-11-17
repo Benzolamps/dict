@@ -264,10 +264,10 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     protected void assertGroupAndStudent(Group group, Student student) {
         if (group != null) {
-            Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + "分组当前处于已完成状态，无法进行评分！");
+            Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + " 分组当前处于已完成状态，无法进行评分！");
             if (student != null) {
-                Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + "不在" + group.getName() + "分组中！");
-                Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + "已评分" + group.getName() + "分组！");
+                Assert.isTrue(group.getStudentsOriented().contains(student), student.getName() + " 不在 " + group.getName() + " 分组中！");
+                Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + " 已评分 " + group.getName() + " 分组！");
             }
         }
     }

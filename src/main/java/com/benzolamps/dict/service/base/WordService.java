@@ -15,7 +15,7 @@ public interface WordService extends BaseElementService<Word> {
 
     /**
      * 导出excel
-     * @param words 单词
+     * @param words 单词集合
      * @param outputStream 输出流
      */
     void toExcel(List<Word> words, OutputStream outputStream);

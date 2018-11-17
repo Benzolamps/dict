@@ -13,10 +13,10 @@
     <i class="fa fa-upload" style="font-size: 20px;"></i> &nbsp; 导出单词
   </button>
   <button id="import" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
-    <i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入学习进度
+    <i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入单词学习进度
   </button>
   <button id="edit-frequency-group" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'SCORING' || !group.frequencyGenerated> style="display: none"</#if>>
-    更新词频分组
+    更新单词词频分组
   </button>
   <button id="score" class="layui-btn layui-btn-primary layui-btn-sm"<#if group.status == 'COMPLETED'> style="display: none"</#if>>
     去评分
@@ -103,8 +103,8 @@
           </blockquote>
         <#else>
           <div style="text-align: center">
-            <button class="layui-btn layui-btn-warm layui-btn-sm extract-derive-group">创建派生分组</button>
-            <button class="layui-btn layui-btn-warm layui-btn-sm extract-personal-group">创建专属分组</button>
+            <button class="layui-btn layui-btn-warm layui-btn-sm extract-derive-group">创建派生单词分组</button>
+            <button class="layui-btn layui-btn-warm layui-btn-sm extract-personal-group">创建专属单词分组</button>
           </div>
           <div id="rate" style="width: 100%; height: 430px"></div>
         </#if>
@@ -568,7 +568,7 @@
         });
 
         if (studentNodes.length <= 0) {
-          parent.layer.alert('没有学生，不能创建专属分组！', {
+          parent.layer.alert('没有学生，不能创建专属单词分组！', {
             icon: 2,
             title: '提示'
           });

@@ -8,7 +8,7 @@
     accept: 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     success: function (data, delta) {
       location.reload(true);
-      parent.layer.alert('导入单词成功！<br>共导入' + data.data + '个短语！<br>用时 ' + delta + ' 秒！', {icon: 1});
+      parent.layer.alert('导入短语成功！<br>共导入' + data.data + '个短语！<br>用时 ' + delta + ' 秒！', {icon: 1});
     }
   });
 </#assign>
@@ -23,8 +23,8 @@
     {'field': 'definition', 'title': '词义', 'sort': true},
     {'field': 'frequency', 'title': '词频', 'sort': true, 'minWidth': 150}
     <#if !student??>
-      ,{'field': 'masteredStudents', 'title': '已掌握', 'sort': true}
-      ,{'field': 'failedStudents', 'title': '未掌握', 'sort': true}
+      , {'field': 'masteredStudents', 'title': '已掌握人数', 'sort': true}
+      , {'field': 'failedStudents', 'title': '未掌握人数', 'sort': true}
     </#if>
   ]
 </#assign>
@@ -32,12 +32,7 @@
 <#assign search>
   [
     {'name': 'prototype', 'display': '短语', 'type': 'string'},
-    {
-      'name': 'frequency',
-      'display': '词频',
-      'type': 'string',
-      'options': <@switch1000 gt1=false eq1=false/>
-    },
+    {'name': 'definition', 'display': '词义', 'type': 'string'},
     {'name': 'studentNumber', 'display': '学生学号', 'type': 'integer'},
     <#if student??>
       {'name': 'studentName', 'display': '学生姓名', 'type': 'string', 'readonly': true},
@@ -50,7 +45,12 @@
         {'id': 'true', 'value': '已掌握'},
         {'id': 'false', 'value': '未掌握'}
       ]
-    }
+    },
+    <#if !student??>
+      {'name': 'masteredStudents', 'display': '已掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
+      {'name': 'failedStudents', 'display': '未掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
+    </#if>
+    {'name': 'frequency', 'display': '词频', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>}
   ]
 </#assign>
 <@nothing>;</@nothing>
@@ -76,7 +76,7 @@
     }
     <#if student??>
       , {
-        'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属分组',
+        'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属短语分组',
         'handler': create_personal,
         'needSelected': true
       }

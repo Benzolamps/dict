@@ -84,14 +84,14 @@
 
   <#-- 工具栏 -->
   <script type="text/html" id="${id}-tools">
-    <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit">
+    <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" type="button">
       <i class="fa fa-pencil-square-o" style="font-size: 20px;"></i> &nbsp; 修改
     </button>
-    <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del">
+    <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del" type="button">
       <i class="fa fa-trash-o" style="font-size: 20px;"></i> &nbsp; 删除
     </button>
     <#list toolbar as tool>
-      <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="toolbar-${tool_index}">
+      <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="toolbar-${tool_index}" type="button">
         ${tool.html}
       </button>
     </#list>
@@ -112,7 +112,7 @@
         fields[index].templet =
           '<div>' +
           '{{# var value = \'' + fields[index].field + '\' in d ? d.' + fields[index].field + ' : \'\'; }}' +
-          '<span title="{{value}}">{{value}}</span>'
+          '<span title="{{value}}">{{value}}</span>' +
           '</div>';
       }
     });
@@ -139,7 +139,7 @@
       cols: [fields],
       data: <@json_dump obj=values/>,
       id: '${id}',
-      height: 'full-205',
+      height: 'full-250',
       text: {
         none: emptyText[(Math.random() * emptyText.length) | 0]
       }
@@ -311,15 +311,24 @@
     var currSort = '${page.orders[0].field}';
     var currDirection = '${page.orders[0].direction}';
 
-    $('th[data-field=' + currSort + ']').addClass('field-th-active');
+    var $currSort = $('th[data-field=' + currSort + ']');
+    if ($currSort.length == 1) {
+      $currSort.addClass('field-th-active');
+      $currSort.find('span')[0].innerText += currDirection == 'DESC' ? ' ↓' : ' ↑';
+    }
     $('th[data-field=id]').removeClass('field-th-active');
 
     $.each([<#list fields as field><#if field.sort?? && field.sort>'${field.field}'</#if><#sep>, </#list>], function (index, value) {
       $('#${id} th[data-field=' + value + ']').css('cursor', 'pointer').click(function () {
-        $('#${id} .field-th-active').removeClass('field-th-active');
+        var $old = $('#${id} .field-th-active');
+        if ($old.length == 1) {
+          $old.removeClass('field-th-active');
+          $old.find('span')[0].innerText = $old.find('span')[0].innerText.slice(0, -2);
+        }
         $(this).addClass('field-th-active');
         $('#${id}-order-info [name=field]').val(value);
         $('#${id}-order-info [name=direction]').val((value == currSort && currDirection == 'ASC') ? 'DESC' : 'ASC');
+        $(this).find('span')[0].innerText += (value == currSort && currDirection == 'ASC') ? ' ↓' : ' ↑';
         execute();
       }).mouseenter(function () {
         $(this).addClass('field-th-hover');
@@ -348,19 +357,18 @@
       searchValueMap,
       <@json_dump obj=rules/>,
       <@json_dump obj=messages/>,
-      dict.nothing
+      function () {
+        $pageInfo.find('[name=pageNumber]').val(1);
+        execute();
+      }
     );
-
     $('#${id}-search').append($(
       '<div class="layui-col-md2" style="height: 100%" >' +
-      '<button class="layui-btn layui-btn-normal" lay-event="search" type="button">' +
+      '<button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="search" type="submit">' +
       '<i class="layui-icon" style="font-size: 20px;">&#xe615;</i> 搜索' +
       '</button>' +
       '</div>'
-    ).click(function () {
-      $pageInfo.find('[name=pageNumber]').val(1);
-      execute();
-    }));
+    ));
 
     <#if page_enabled>
       $pageInfo.find('[name=pageSize]').val(#{page.pageSize});

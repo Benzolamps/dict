@@ -1,8 +1,3 @@
-/*
- * Copyright 2005-2016 yunnonggongshe.com All rights reserved.
- * 
-
- */
 package com.benzolamps.dict.service.base;
 
 import com.benzolamps.dict.bean.BaseEntity;
@@ -148,5 +143,4 @@ public interface BaseService<T extends BaseEntity> {
      * @param filter 条件
      */
     void remove(Filter filter);
-
 }

@@ -64,9 +64,9 @@
         </#if>
         <#if !scored>
           <br><br><input id="jump" type="button" value="跳过" class="layui-btn layui-btn-danger layui-btn-sm" style="width: 100%">
-          <br><br><input id="import" type="button" value="导入学习进度" class="layui-btn layui-btn-primary layui-btn-sm" style="width: 100%">
+          <br><br><input id="import" type="button" value="导入短语学习进度" class="layui-btn layui-btn-primary layui-btn-sm" style="width: 100%">
         <#else>
-          <br><br><input id="extract-personal-group" type="button" value="创建专属分组" class="layui-btn layui-btn-warm layui-btn-sm" style="width: 100%">
+          <br><br><input id="extract-personal-group" type="button" value="创建专属单词分组" class="layui-btn layui-btn-warm layui-btn-sm" style="width: 100%">
         </#if>
       </div>
     </div>
@@ -260,7 +260,7 @@
           success: function (data, delta) {
             location.replace(location.pathname + "?id=${group.id}&studentId=${student.id}");
             parent.$('iframe')[0].contentWindow.dict.reload(true);
-            parent.layer.alert('导入学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
+            parent.layer.alert('导入短语学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
           }
         });
       });

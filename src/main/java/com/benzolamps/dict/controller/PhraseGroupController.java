@@ -10,16 +10,22 @@ import com.benzolamps.dict.controller.vo.*;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
 import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.lambda.Action1;
 import com.benzolamps.dict.util.lambda.Func1;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -33,7 +39,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RestController
 @RequestMapping("phrase_group")
 public class PhraseGroupController extends BaseController {
-    
+
     @Resource
     private PhraseGroupService phraseGroupService;
 
@@ -136,7 +142,7 @@ public class PhraseGroupController extends BaseController {
      */
     @RequestMapping(value = "name_not_exists.json", method = {GET, POST})
     @ResponseBody
-    protected boolean nameNotExists(String name) {
+    protected boolean nameNotExists(@RequestParam String name) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         return !phraseGroupService.nameExists(name);
     }
@@ -151,8 +157,8 @@ public class PhraseGroupController extends BaseController {
     @ResponseBody
     protected BaseVo addPhrases(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("phraseId") Integer... phraseIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
-        Assert.notEmpty(phraseGroupIds, "phrase group id不能为null或空");
-        Assert.noNullElements(phraseGroupIds, "phrase group id不能存在为null的元素");
+        Assert.notEmpty(phraseGroupIds, "phrase group ids不能为null或空");
+        Assert.noNullElements(phraseGroupIds, "phrase group ids不能存在为null的元素");
         for (Integer phraseGroupId : phraseGroupIds) {
             Group phraseGroup = phraseGroupService.find(phraseGroupId);
             Assert.notNull(phraseGroup, "phrase group不存在");
@@ -171,10 +177,10 @@ public class PhraseGroupController extends BaseController {
      */
     @PostMapping("add_students.json")
     @ResponseBody
-    protected BaseVo addStudents(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("studentId") Integer[] studentIds) {
+    protected BaseVo addStudents(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("studentId") Integer... studentIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
-        Assert.notEmpty(phraseGroupIds, "phrase group id不能为null或空");
-        Assert.noNullElements(phraseGroupIds, "phrase group id不能存在为null的元素");
+        Assert.notEmpty(phraseGroupIds, "phrase group ids不能为null或空");
+        Assert.noNullElements(phraseGroupIds, "phrase group ids不能存在为null的元素");
         for (Integer phraseGroupId : phraseGroupIds) {
             Group phraseGroup = phraseGroupService.find(phraseGroupId);
             Assert.notNull(phraseGroup, "phrase group不存在");
@@ -193,10 +199,10 @@ public class PhraseGroupController extends BaseController {
      */
     @PostMapping("add_clazzes.json")
     @ResponseBody
-    protected BaseVo addClazzes(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("clazzId") Integer[] clazzIds) {
+    protected BaseVo addClazzes(@RequestParam("groupId") Integer[] phraseGroupIds, @RequestParam("clazzId") Integer... clazzIds) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
-        Assert.notEmpty(phraseGroupIds, "phrase group id不能为null或空");
-        Assert.noNullElements(phraseGroupIds, "phrase group id不能存在为null的元素");
+        Assert.notEmpty(phraseGroupIds, "phrase group ids不能为null或空");
+        Assert.noNullElements(phraseGroupIds, "phrase group ids不能存在为null的元素");
         for (Integer phraseGroupId : phraseGroupIds) {
             Group phraseGroup = phraseGroupService.find(phraseGroupId);
             Assert.notNull(phraseGroup, "phrase group不存在");
@@ -311,6 +317,7 @@ public class PhraseGroupController extends BaseController {
         failedPhrases.removeAll(masteredPhrases);
         masteredPhrases = Group.getFrequencySortedPhrases(masteredPhrases, phraseGroup);
         failedPhrases = Group.getFrequencySortedPhrases(failedPhrases, phraseGroup);
+
         mv.addObject("group", phraseGroup);
         mv.addObject("student", student);
         mv.addObject("students", studentsOriented);
@@ -322,7 +329,7 @@ public class PhraseGroupController extends BaseController {
 
     /**
      * 评分保存
-     * @param groupId 分组id
+     * @param groupId 短语分组id
      * @param studentId 学生id
      * @param masteredPhraseIds 掌握的短语id
      * @return 保存成功
@@ -345,7 +352,7 @@ public class PhraseGroupController extends BaseController {
 
     /**
      * 跳过当前学生的评分
-     * @param groupId 分组id
+     * @param groupId 短语分组id
      * @param studentId 学生id
      * @return 操作成功
      */
@@ -364,7 +371,7 @@ public class PhraseGroupController extends BaseController {
 
     /**
      * 结束评分
-     * @param id 分组id
+     * @param id 短语分组id
      * @return 操作成功
      */
     @PostMapping("finish.json")
@@ -378,8 +385,8 @@ public class PhraseGroupController extends BaseController {
     }
 
     /**
-     * 完成
-     * @param id 分组id
+     * 完成评分
+     * @param id 短语分组id
      * @return 操作成功
      */
     @PostMapping("complete.json")
@@ -393,8 +400,8 @@ public class PhraseGroupController extends BaseController {
     }
 
     /**
-     * 导入学习进度
-     * @param groupId 分组id
+     * 导入短语学习进度
+     * @param groupId 短语分组id
      * @param studentId 学生id
      * @param files 文件
      * @return 操作成功
@@ -403,16 +410,15 @@ public class PhraseGroupController extends BaseController {
     protected BaseVo imports(Integer groupId, Integer studentId, @RequestParam("file") MultipartFile... files) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         phraseGroupService.importPhrases(
-            Arrays.stream(files)
-                .map((Func1<MultipartFile, ProcessImportVo>) file -> new ProcessImportVo(groupId, studentId, file.getOriginalFilename(), file.getBytes()))
-                .toArray(ProcessImportVo[]::new)
+                Arrays.stream(files)
+                        .map((Func1<MultipartFile, ProcessImportVo>) file -> new ProcessImportVo(groupId, studentId, file.getOriginalFilename(), file.getBytes()))
+                        .toArray(ProcessImportVo[]::new)
         );
         return SUCCESS_VO;
     }
 
-
     /**
-     * 添加词频分组界面
+     * 添加短语词频分组界面
      * @return ModelAndView
      */
     @WindowView
@@ -423,8 +429,8 @@ public class PhraseGroupController extends BaseController {
     }
 
     /**
-     * 保存词频分组
-     * @param phraseGroup 分组
+     * 保存短语词频分组
+     * @param phraseGroup 短语分组
      * @param file 文件
      * @return 操作成功
      */
@@ -438,20 +444,82 @@ public class PhraseGroupController extends BaseController {
         } else {
             phraseGroup = phraseGroupService.persistFrequencyGroupTxt(phraseGroup, file.getBytes(), extraPhrases);
         }
-        return wrapperData(phraseGroup);
+        return makeupVo(phraseGroup, extraPhrases);
     }
 
     /**
-     * 创建派生分组界面
-     * @param groupId 分组id
+     * 修改短语词频分组界面
+     * @param id id
+     * @return ModelAndView
+     */
+    @WindowView
+    @RequestMapping(value = "edit_frequency_group.html", method = {GET, POST})
+    protected ModelAndView editFrequencyGroup(Integer id) {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.notNull(id, "id不能为null");
+        ModelAndView mv = new ModelAndView("view/phrase_group/edit_frequency_group");
+        Group phraseGroup = phraseGroupService.find(id);
+        Assert.notNull(phraseGroup, "phrase group不存在");
+        Assert.isTrue(phraseGroup.getFrequencyGenerated(), "phrase group不是词频分组");
+        mv.addObject("phraseGroup", phraseGroup);
+        return mv;
+    }
+
+    /**
+     * 更新短语词频分组
+     * @param phraseGroup 短语分组
+     * @param file 文件
+     * @return 操作成功
+     */
+    @ResponseBody
+    @PostMapping(value = "edit_frequency_group_save.json")
+    protected BaseVo updateFrequencyGroupSave(Group phraseGroup, MultipartFile file) throws IOException {
+        Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        List<String> extraPhrases = new ArrayList<>();
+        if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
+            phraseGroup = phraseGroupService.updateFrequencyGroupDoc(phraseGroup, file.getBytes(), extraPhrases);
+        } else {
+            phraseGroup = phraseGroupService.updateFrequencyGroupTxt(phraseGroup, file.getBytes(), extraPhrases);
+        }
+        return makeupVo(phraseGroup, extraPhrases);
+    }
+
+    private BaseVo makeupVo(Group phraseGroup, List<String> extraPhrases) {
+        Map<String, Object> data = new HashMap<>();
+        data.put("phraseGroup", phraseGroup);
+        if (CollectionUtils.isEmpty(extraPhrases)) {
+            data.put("hasExtraPhrases", false);
+        } else {
+            String token = UUID.randomUUID().toString().replace("-", "");
+            Map<String, Object> exportAttribute = new HashMap<>();
+            exportAttribute.put("ext", "xlsx");
+            exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> {
+                List<Phrase> phrases = extraPhrases.stream().map(prototype -> {
+                    Phrase phrase = new Phrase();
+                    phrase.setPrototype(prototype);
+                    return phrase;
+                }).collect(Collectors.toList());
+                phraseService.toExcel(phrases, outputStream);
+            });
+            RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+            requestAttributes.setAttribute(token, exportAttribute, RequestAttributes.SCOPE_SESSION);
+            data.put("hasExtraPhrases", true);
+            data.put("token", token);
+        }
+        return wrapperData(data);
+    }
+
+    /**
+     * 创建派生短语分组界面
+     * @param groupId 短语分组id
      * @param phraseIds 短语id集合
      * @param studentIds 学生id集合
      * @return ModelAndView
      */
-    @NavigationView
+    @WindowView
     @RequestMapping(value = "extract_derive_group.html", method = {GET, POST})
     protected ModelAndView extractDeriveGroup(Integer groupId, @RequestParam(value = "phraseId", required = false) Integer[] phraseIds, @RequestParam(value = "studentId", required = false) Integer[] studentIds) {
-        ModelAndView mv = new ModelAndView("view/word_group/extract_derive_group");
+        ModelAndView mv = new ModelAndView("view/phrase_group/extract_derive_group");
         Assert.isTrue(!(ObjectUtils.isEmpty(phraseIds) && ObjectUtils.isEmpty(studentIds)), "phrase ids和student ids不能同时为null或空");
         ExtractGroupVo<Phrase> extractGroupVo = new ExtractGroupVo<>(groupId, phraseIds, studentIds, phraseGroupService, phraseService, studentService);
         mv.addObject("phraseGroup", extractGroupVo.getGroup());
@@ -461,8 +529,8 @@ public class PhraseGroupController extends BaseController {
     }
 
     /**
-     * 创建派生分组
-     * @param groupId 分组id
+     * 创建派生短语分组
+     * @param groupId 短语分组id
      * @param phraseIds 短语id集合
      * @param studentIds 学生id集合
      * @param phraseGroup 分组
@@ -477,14 +545,15 @@ public class PhraseGroupController extends BaseController {
     }
 
     /**
-     * 创建专属分组界面
-     * @param groupId 分组id
+     * 创建专属短语分组界面
+     * @param groupId 短语分组id
      * @param studentIds 学生id集合
      * @return ModelAndView
      */
-    @NavigationView
+    @WindowView
     @RequestMapping(value = "extract_personal_group.html", method = {GET, POST})
     protected ModelAndView extractPersonalGroup(Integer groupId, @RequestParam(value = "studentId", required = false) Integer[] studentIds) {
+        Assert.notEmpty(studentIds, "student ids不能为null或空");
         ModelAndView mv = new ModelAndView("view/phrase_group/extract_personal_group");
         ExtractGroupVo<Phrase> extractGroupVo = new ExtractGroupVo<>(groupId, null, studentIds, phraseGroupService, phraseService, studentService);
         mv.addObject("phraseGroup", extractGroupVo.getGroup());
@@ -493,17 +562,16 @@ public class PhraseGroupController extends BaseController {
     }
 
     /**
-     * 创建专属分组
-     * @param groupId 分组id
+     * 创建专属短语分组
+     * @param groupId 短语分组id
      * @param studentIds 学生id集合
-     * @param phraseGroup 分组
+     * @param phraseGroup 短语分组
      * @return 操作成功
      */
     @ResponseBody
     @PostMapping(value = "extract_personal_group_save.json")
     protected BaseVo extractPersonalGroupSave(Integer groupId, @RequestParam(value = "studentId", required = false) Integer[] studentIds, Group phraseGroup) {
         Assert.notEmpty(studentIds, "student ids不能为null或空");
-        Assert.notNull(groupId, "group id不能为null");
         ExtractGroupVo<Phrase> extractGroupVo = new ExtractGroupVo<>(groupId, null, studentIds, phraseGroupService, phraseService, studentService);
         return wrapperData(phraseGroupService.extractPersonalGroup(extractGroupVo.getGroup(), extractGroupVo.getStudents(), phraseGroup));
     }

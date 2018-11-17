@@ -1,17 +1,18 @@
 package com.benzolamps.dict.service.impl;
 
-import com.benzolamps.dict.bean.*;
+import com.benzolamps.dict.bean.Phrase;
+import com.benzolamps.dict.bean.Student;
+import com.benzolamps.dict.bean.StudyProcess;
+import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.Filter;
-import com.benzolamps.dict.service.base.PhraseGroupService;
 import com.benzolamps.dict.service.base.StudentService;
-import com.benzolamps.dict.service.base.WordGroupService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.Arrays;
 
 /**
  * 学生Service接口实现类
@@ -25,12 +26,6 @@ public class StudentServiceImpl extends BaseServiceImpl<Student> implements Stud
 
     @Resource
     private StudentDao studentDao;
-
-    @Resource
-    private WordGroupService wordGroupService;
-
-    @Resource
-    private PhraseGroupService phraseGroupService;
 
     @Override
     @Transactional(readOnly = true)

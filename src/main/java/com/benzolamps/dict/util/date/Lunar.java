@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 
 import static com.benzolamps.dict.util.Constant.DATE_FORMAT;
@@ -15,7 +14,7 @@ import static com.benzolamps.dict.util.Constant.DATE_FORMAT;
  * @version 2.2.3
  * @datetime 2018-11-8 10:07:37
  */
-@SuppressWarnings("SpellCheckingInspection")
+@SuppressWarnings({"SpellCheckingInspection", "unused"})
 @Getter
 public class Lunar {
     private final int year;
@@ -55,7 +54,6 @@ public class Lunar {
     public Lunar(Date date) {
         int leapMonth;
         Date baseDate = DATE_FORMAT.parse("1900-1-31");
-        Calendar calendar = Calendar.getInstance();
         int offset = (int) ((date.getTime() - baseDate.getTime()) / (1000 * 60 * 60 * 24));
         /*
          * 用offset减去每农历年的天数

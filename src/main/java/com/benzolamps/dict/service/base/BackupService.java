@@ -19,6 +19,10 @@ public interface BackupService {
      */
     void backup(OutputStream outputStream) throws IOException;
 
-    @SuppressWarnings("SpellCheckingInspection")
+    /**
+     * 恢复数据库
+     * @param inputStream 输入流
+     * @throws IOException IOException
+     */
     void restore(InputStream inputStream) throws IOException;
 }

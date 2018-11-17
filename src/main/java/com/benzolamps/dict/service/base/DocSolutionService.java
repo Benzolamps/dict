@@ -12,7 +12,10 @@ import java.util.Map;
  */
 public interface DocSolutionService {
 
-    /** @return 获取全部乱序方案 */
+    /**
+     * 获取全部乱序方案
+     * @return 乱序方案列表
+     */
     List<DocSolution> findAll();
 
     /**
@@ -22,6 +25,9 @@ public interface DocSolutionService {
      */
     DocSolution find(Integer id);
 
-    /** 获取基础属性 */
+    /**
+     * 获取基础属性
+     * @return 基础属性
+     */
     Map<String, Object> getBaseProperties();
 }

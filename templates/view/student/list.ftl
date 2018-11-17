@@ -5,6 +5,25 @@
   [
     {'name': 'number', 'display': '学号', 'type': 'integer'},
     {'name': 'name', 'display': '姓名', 'type': 'string'},
+    {'name': 'masteredWords', 'display': '已掌握单词数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
+    {'name': 'failedWords', 'display': '未掌握单词数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
+    {'name': 'masteredPhrases', 'display': '已掌握短语数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
+    {'name': 'failedPhrases', 'display': '未掌握短语数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
+    {
+      'name': 'order',
+      'display': '排序',
+      'type': 'string',
+      'options': [
+        {'id': 'masteredWords asc', 'value': '已掌握单词数 ↑'},
+        {'id': 'failedWords asc', 'value': '未掌握单词数 ↑'},
+        {'id': 'masteredPhrases asc', 'value': '已掌握短语数 ↑'},
+        {'id': 'failedPhrases asc', 'value': '未掌握短语数 ↑'},
+        {'id': 'masteredWords desc', 'value': '已掌握单词数 ↓'},
+        {'id': 'failedWords desc', 'value': '未掌握单词数 ↓'},
+        {'id': 'masteredPhrases desc', 'value': '已掌握短语数 ↓'},
+        {'id': 'failedPhrases desc', 'value': '未掌握短语数 ↓'}
+      ]
+    },
     {
       'name': 'clazz',
       'display': '班级',
@@ -63,30 +82,6 @@
   }
 </#assign>
 
-<#assign import_word_process>
-  dict.uploadFile({
-    action: '${base_url}/word_group/import.json',
-    multiple: true,
-    accept: 'image/*',
-    success: function (data, delta) {
-      location.reload(true);
-      parent.layer.alert('导入单词学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
-    }
-  });
-</#assign>
-
-<#assign import_phrase_process>
-  dict.uploadFile({
-    action: '${base_url}/phrase_group/import.json',
-    multiple: true,
-    accept: 'image/*',
-    success: function (data, delta) {
-      location.reload(true);
-      parent.layer.alert('导入短语学习进度成功！<br>用时 ' + delta + ' 秒！', {icon: 1});
-    }
-  });
-</#assign>
-
 <#assign create_personal_word_groups>
   parent.layer.open({
     type: 2,
@@ -142,14 +137,6 @@
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到短语分组',
       'handler': add_to_phrase_group,
       'needSelected': true
-    },
-    {
-      'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入单词学习进度',
-      'handler': import_word_process
-    },
-    {
-      'html': '<i class="fa fa-download" style="font-size: 20px;"></i> &nbsp; 导入短语学习进度',
-      'handler': import_phrase_process
     },
     {
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 创建专属单词分组',

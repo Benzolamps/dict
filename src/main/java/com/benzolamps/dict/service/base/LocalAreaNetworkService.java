@@ -24,5 +24,6 @@ public interface LocalAreaNetworkService {
      * 获取ipv4
      * @return ipv4
      */
+    @SuppressWarnings("unused")
     List<String> getIpv4();
 }

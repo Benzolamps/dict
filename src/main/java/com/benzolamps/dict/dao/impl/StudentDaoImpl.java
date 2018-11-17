@@ -42,6 +42,7 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     private String studyProcessSql;
 
     @Override
+    @SuppressWarnings({"IfCanBeSwitch", "serial"})
     public Page<Student> findPage(Pageable pageable) {
         DictQuery<Student> dictQuery = new GeneratedDictQuery<Student>() {
             @Override
@@ -49,12 +50,30 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
                 if (search.getField().equals("clazz")) {
                     Clazz clazz = clazzDao.find(DictObject.ofObject(search.getValue(), int.class));
                     getFilter().and(Filter.eq("clazz", clazz));
+                } else if ("order".equals(search.getField())) {
+                    switch (search.getValue().toString()) {
+                        case "masteredWords asc": this.applyOrder(Order.asc("masteredWords")); return;
+                        case "masteredWords desc": this.applyOrder(Order.desc("masteredWords")); return;
+                        case "failedWords asc": this.applyOrder(Order.asc("failedWords")); return;
+                        case "failedWords desc": this.applyOrder(Order.desc("failedWords")); return;
+                        case "masteredPhrases asc": this.applyOrder(Order.asc("masteredPhrases")); return;
+                        case "masteredPhrases desc": this.applyOrder(Order.desc("masteredPhrases")); return;
+                        case "failedPhrases asc": this.applyOrder(Order.asc("failedPhrases")); return;
+                        case "failedPhrases desc": this.applyOrder(Order.desc("failedPhrases"));
+                    }
+                } else if ("masteredWords".equals(search.getField())) {
+                    getFilter().and(SwitchOptions.switch1000("masteredWordsCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                } else if ("failedWords".equals(search.getField())) {
+                    getFilter().and(SwitchOptions.switch1000("failedWordsCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                } else if ("masteredPhrases".equals(search.getField())) {
+                    getFilter().and(SwitchOptions.switch1000("masteredPhrasesCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                } else if ("failedPhrases".equals(search.getField())) {
+                    getFilter().and(SwitchOptions.switch1000("failedPhrasesCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
                 } else {
                     super.applySearch(search);
                 }
             }
 
-            @SuppressWarnings({"IfCanBeSwitch", "serial"})
             @Override
             public void applyOrder(Order order) {
                 if (order.getField().equals("clazz")) {

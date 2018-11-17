@@ -6,6 +6,9 @@ import com.benzolamps.dict.service.base.PhraseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.OutputStream;
+import java.util.List;
+
 /**
  * 短语Service接口实现类
  * @author Benzolamps
@@ -15,4 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service("phraseService")
 @Transactional
 public class PhraseServiceImpl extends BaseElementServiceImpl<Phrase, PhraseExcelVo> implements PhraseService {
+    @Override
+    public void toExcel(List<Phrase> phrases, OutputStream outputStream) {
+        throw new UnsupportedOperationException("该功能尚未实现！");
+    }
 }
