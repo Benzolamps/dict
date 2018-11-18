@@ -1,9 +1,6 @@
 package com.benzolamps.dict.util;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
@@ -112,43 +109,41 @@ public interface DictFile {
      * @param file 文件
      * @param outputStream 输出流
      * @param rootName 根名称
-     * @return ZipOutputStream
      * @throws IOException IOException
      */
     @SuppressWarnings("ConstantConditions")
-    static ZipOutputStream zip(File file, OutputStream outputStream, String rootName) throws IOException {
+    static void zip(File file, OutputStream outputStream, String rootName) throws IOException {
         Assert.isTrue(file != null && file.exists(), "file不能为null或不存在");
         Path basePath = file.getParentFile().getAbsoluteFile().toPath();
-        ZipOutputStream zos = new ZipOutputStream(outputStream);
+        @Cleanup ZipOutputStream zos = new ZipOutputStream(outputStream);
         if (file.isFile()) {
             zos.putNextEntry(new ZipEntry(rootName + '/' + file.getName()));
             try (InputStream is = new FileInputStream(file)) {
                 StreamUtils.copy(is, zos);
             }
             zos.closeEntry();
-            return zos;
-        }
-        Stack<File> stack = new Stack<>();
-        stack.push(file);
-        while (!stack.isEmpty()) {
-            File path = stack.pop();
-            for (File subFile : path.listFiles()) {
-                if (subFile.isDirectory()) {
-                    stack.push(subFile);
-                } else {
-                    Path entryPath = subFile.getAbsoluteFile().toPath();
-                    if (StringUtils.isEmpty(rootName)) {
-                        zos.putNextEntry(new ZipEntry(entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString()));
+        } else {
+            Stack<File> stack = new Stack<>();
+            stack.push(file);
+            while (!stack.isEmpty()) {
+                File path = stack.pop();
+                for (File subFile : path.listFiles()) {
+                    if (subFile.isDirectory()) {
+                        stack.push(subFile);
                     } else {
-                        zos.putNextEntry(new ZipEntry((rootName + '/' + entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString())));
-                    }
-                    try (InputStream is = new FileInputStream(subFile)) {
-                        StreamUtils.copy(is, zos);
+                        Path entryPath = subFile.getAbsoluteFile().toPath();
+                        if (StringUtils.isEmpty(rootName)) {
+                            zos.putNextEntry(new ZipEntry(entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString()));
+                        } else {
+                            zos.putNextEntry(new ZipEntry((rootName + '/' + entryPath.subpath(basePath.getNameCount(), entryPath.getNameCount()).toString())));
+                        }
+                        try (InputStream is = new FileInputStream(subFile)) {
+                            StreamUtils.copy(is, zos);
+                        }
                     }
                 }
             }
         }
-        return zos;
     }
 
     /**
