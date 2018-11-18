@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -89,6 +90,10 @@ public abstract class BaseElement extends BaseEntity {
     @PrePersist
     @PreUpdate
     private void updateFrequency() {
-        this.setFrequency(this.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
+        if (CollectionUtils.isEmpty(this.getFrequencyInfo())) {
+            this.setFrequency(0);
+        } else {
+            this.setFrequency(this.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
+        }
     }
 }

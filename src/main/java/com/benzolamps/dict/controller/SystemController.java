@@ -102,10 +102,10 @@ public class SystemController extends BaseController {
      * 备份数据库过程
      */
     @SuppressWarnings("SpellCheckingInspection")
-    @RequestMapping(value = "backup.zip", method = {GET, POST})
+    @RequestMapping("backup.sql")
     protected void backupProcess(HttpServletResponse response) throws IOException {
         response.setHeader("Content-disposition", "attachment;filename*=utf-8'zh_cn'backup" +
-            new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".zip");
+            new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".sql");
         backupService.backup(response.getOutputStream());
     }
 

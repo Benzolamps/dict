@@ -115,9 +115,9 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     @Override
     public void remove(Collection<Student> students) {
         for (Student student : students) {
-            @Language("MySQL") String sqlGs = "delete from dict_gs where student = :id;";
-            @Language("MySQL") String sqlGss = "delete from dict_gss where student = :id;";
-            Map<String, Object> parameters = singletonMap("id", student.getId());
+            @Language("MySQL") String sqlGs = "delete from dict_gs where student = :student_id ;";
+            @Language("MySQL") String sqlGss = "delete from dict_gss where student = :student_id ;";
+            Map<String, Object> parameters = singletonMap("student_id", student.getId());
             executeNative(sqlGs, parameters);
             executeNative(sqlGss, parameters);
         }

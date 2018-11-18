@@ -1,18 +1,19 @@
 package com.benzolamps.dict.service.impl;
 
+import com.benzolamps.dict.dao.core.DictJpa;
+import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.service.base.BackupService;
-import com.benzolamps.dict.util.DictFile;
+import com.benzolamps.dict.util.DictCommand;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 
-import java.io.*;
-import java.nio.file.Path;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import javax.annotation.Resource;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.function.UnaryOperator;
 
 /**
  * 数据库备份恢复Service接口实现类
@@ -21,41 +22,39 @@ import java.util.zip.ZipOutputStream;
  * @datetime 2018-10-9 18:49:09
  */
 @Service("backupService")
+@Slf4j
 public class BackupServiceImpl implements BackupService {
 
-    @Value("mysql\\data")
-    private File path;
+    @SuppressWarnings("SpringElInspection")
+    @Value("#{dictProperties.mysqlRoot}\\bin\\mysqldump -u${spring.datasource.username} -p${spring.datasource.password} ${spring.datasource.name} --default-character-set gbk")
+    private String mysqlDumpCmd;
+
+    @Resource
+    private UnaryOperator<String> compress;
 
     @Override
-    public void backup(OutputStream outputStream) throws IOException {
-        try (ZipOutputStream zos = DictFile.zip(path, outputStream, "mysql")) {
-            zos.putNextEntry(new ZipEntry("start.txt"));
-            try (PrintWriter pw = new PrintWriter(zos)) {
-                pw.println("delete mysql");
-                Path root = new File("").getAbsoluteFile().toPath();
-                DictFile.deepListFiles(path, null).forEach(file -> {
-                    Path subPath = file.getAbsoluteFile().toPath();
-                    pw.println("save " + subPath.subpath(root.getNameCount(), subPath.getNameCount()));
-                });
-                pw.flush();
+    public void backup(OutputStream outputStream) {
+        DictCommand.exec(mysqlDumpCmd, (istr, estr) -> {
+            if (StringUtils.hasText(istr)) {
+                istr = compress.apply(istr);
+                outputStream.write(istr.getBytes("UTF-8"));
             }
-        }
+            if (StringUtils.hasText(estr)) {
+                estr = compress.apply(estr);
+                if (estr.toLowerCase().contains("error")) {
+                    throw new DictException(estr);
+                } else {
+                    logger.error(estr);
+                }
+            }
+        });
     }
 
     @Override
     @SuppressWarnings("SpellCheckingInspection")
-    public void restore(InputStream inputStream) throws IOException {
-        File file = new File("tmp/dict/restore" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + ".zip");
-
-        /* 创建父路径 */
-        if (file.getParentFile() != null && !file.getParentFile().exists()) Assert.isTrue(file.getParentFile().mkdirs(), "创建父路径失败");
-
-        /* 创建新文件 */
-        Assert.isTrue(file.createNewFile(), "创建新文件失败");
-
-        /* 流复制 */
-        try (InputStream is = inputStream; OutputStream os = new FileOutputStream(file)) {
-            StreamUtils.copy(is, os);
-        }
+    public void restore(InputStream inputStream) {
+        DictJpa.executeSqlScript("set foreign_key_checks = 0;");
+        DictJpa.executeSqlScript(new InputStreamResource(inputStream));
+        DictJpa.executeSqlScript("set foreign_key_checks = 1;");
     }
 }

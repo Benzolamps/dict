@@ -12,9 +12,10 @@ dict:
 spring:
   datasource:
     driver_class_name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/dict?useUnicode=true&characterEncoding=UTF-8&&useSSL=false
     username: root
     password: 123456
+    name: dict
+    url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.name}?useUnicode=true&characterEncoding=UTF-8&&useSSL=false
   jpa:
     show_sql: false
     generate_ddl: true
@@ -79,3 +80,20 @@ logging:
     console: '**${dict.system.title} - ${dict.system.version} [%d{yyyy-MM-dd HH:mm:ss.SSS}] <%p> %logger [%F:%L] %n%m%n%n'
     file: ${logging.pattern.console}
 
+---
+spring:
+  profiles:
+    - default
+    - test
+    - eclipse
+dict:
+  system:
+    mysql_root: C:\dev-tools\Java\mysql-5.7.21-winx64
+
+---
+spring:
+  profiles:
+    - release
+dict:
+  system:
+    mysql_root: .\mysql
