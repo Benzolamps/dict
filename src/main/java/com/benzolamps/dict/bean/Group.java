@@ -248,7 +248,7 @@ public class Group extends BaseEntity {
     private static <E extends BaseElement> int compare(E e1, E e2, Group g) {
         Integer frequency1, frequency2;
         try {
-            if (null == (frequency1 = e1.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(g.getId().toString())).findFirst().get().getFrequency())) {
+            if (null == (frequency1 = e1.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(g.getId())).findFirst().get().getFrequency())) {
                 frequency1 = 0;
             }
         } catch (Throwable e) {
@@ -256,7 +256,7 @@ public class Group extends BaseEntity {
         }
         e1.setGroupFrequency(frequency1);
         try {
-            if (null == (frequency2 = e2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(g.getId().toString())).findFirst().get().getFrequency())) {
+            if (null == (frequency2 = e2.getFrequencyInfo().stream().filter(info -> info.getGroupId().equals(g.getId())).findFirst().get().getFrequency())) {
                 frequency2 = 0;
             }
         } catch (Throwable e) {
