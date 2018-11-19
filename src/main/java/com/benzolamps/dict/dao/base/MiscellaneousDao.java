@@ -28,9 +28,10 @@ public interface MiscellaneousDao {
      */
     void clear();
 
-    /** 获取数据库总大小 */
+    /**
+     * 获取数据库总大小
+     */
     long dataSize();
-
 
     /**
      * 执行SQL脚本

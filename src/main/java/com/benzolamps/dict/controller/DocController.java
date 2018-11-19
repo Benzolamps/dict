@@ -162,7 +162,7 @@ public class DocController extends BaseController {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         Map<String, Object> exportAttribute = (Map<String, Object>) requestAttributes.getAttribute(token, RequestAttributes.SCOPE_SESSION);
         Assert.notNull(exportAttribute, "导出失败！");
-        super.download("." + exportAttribute.get("ext"));
+        super.download(fileName + "." + exportAttribute.get("ext"));
         try (OutputStream outputStream = response.getOutputStream()) {
             ((Consumer<OutputStream>) exportAttribute.get("consumer")).accept(outputStream);
         }
