@@ -1,6 +1,9 @@
 package com.benzolamps.dict.controller;
 
-import com.benzolamps.dict.bean.*;
+import com.benzolamps.dict.bean.BaseElement;
+import com.benzolamps.dict.bean.DocSolution;
+import com.benzolamps.dict.bean.Group;
+import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DocExportVo;
@@ -12,9 +15,7 @@ import com.benzolamps.dict.util.lambda.Action1;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -22,7 +23,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -58,36 +58,13 @@ public class DocController extends BaseController {
     @Resource
     private UnaryOperator<String> compress;
 
-    private Template getTemplate(DocExportVo docExportVo, ModelMap modelMap) throws IOException {
-        Assert.notNull(docExportVo, "doc export vo不能为null");
-        Assert.notEmpty(docExportVo.getContent(), "content不能为null或空");
-        modelMap.addAttribute("content", docExportVo.getContent());
-        DocSolution docSolution = docSolutionService.find(docExportVo.getDocSolutionId());
-        Assert.notNull(docSolution, "doc solution不能为null");
-        if (StringUtils.isEmpty(docExportVo.getTitle())) {
-            modelMap.addAttribute("title", docSolution.getName());
-        } else {
-            modelMap.addAttribute("title", docExportVo.getTitle());
-        }
-        if (docSolution.getNeedShuffle()) {
-            IShuffleStrategySetup setup = shuffleSolutionService.getSolutionInstanceAt(docExportVo.getShuffleSolutionId());
-            Assert.notNull(setup, "shuffle solution不能为null");
-            modelMap.addAttribute("shuffleStrategySetup", setup);
-        }
-        docSolution.getProperties().forEach(modelMap::putIfAbsent);
-        docSolutionService.getBaseProperties().forEach(modelMap::putIfAbsent);
-        Template template;
-        if (docSolution.getNeedHeader()) {
-            template = configuration.getTemplate("doc/common/header.ftl");
-            modelMap.addAttribute("content_path", docSolution.getPath());
-        } else {
-            template = configuration.getTemplate(docSolution.getPath());
-        }
-        return template;
-    }
-
+    /**
+     * 导出专属文档
+     * @param docExportVo DocExportVo
+     * @return 操作成功
+     */
     @RequestMapping(value = "export_personal.json")
-    protected BaseVo exportPersonal(DocExportVo docExportVo, ModelMap modelMap) throws IOException, TemplateException {
+    protected BaseVo exportPersonal(DocExportVo docExportVo) throws IOException, TemplateException {
         Assert.notNull(docExportVo, "doc export vo不能为null");
         Set<DictFile.ZipItem> zipItems = new HashSet<>();
         for (Group group : docExportVo.getGroups()) {
@@ -97,14 +74,15 @@ public class DocController extends BaseController {
             Assert.notEmpty(students, "分组" + group.getName() + "中没有学生");
             Assert.notEmpty(elements, "分组" + group.getName() + "中没有" + (isWord ? "单词" : "短语"));
             docExportVo.setContent(elements);
-            Template template = this.getTemplate(docExportVo, modelMap);
+            Map<String, Object> attributes = new HashMap<>();
+            Template template = this.getTemplate(docExportVo, attributes);
             for (Student student : students) {
-                modelMap.addAttribute("student", studentService.find(student.getId()));
-                modelMap.addAttribute("groupId", group.getId());
+                attributes.put("student", studentService.find(student.getId()));
+                attributes.put("groupId", group.getId());
                 try (StringWriter stringWriter = new StringWriter()) {
-                    template.process(modelMap, stringWriter);
+                    template.process(attributes, stringWriter);
                     String content = compress.apply(stringWriter.toString());
-                    String name = (String) modelMap.get("title");
+                    String name = (String) attributes.get("title");
                     InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
                     zipItems.add(new DictFile.ZipItem(name + " - " + group.getName() + " - " + student.getNumber() + " - " + student.getName() + ".doc", inputStream));
                 }
@@ -123,13 +101,19 @@ public class DocController extends BaseController {
         return wrapperData(token);
     }
 
+    /**
+     * 导出默认文档
+     * @param docExportVo DocExportVo
+     * @return 操作成功
+     */
     @RequestMapping(value = "export_default.json", method = {GET, POST})
     @ResponseBody
-    protected BaseVo exportDefault(@ModelAttribute DocExportVo docExportVo, ModelMap modelMap) throws IOException, TemplateException {
+    protected BaseVo exportDefault(@ModelAttribute DocExportVo docExportVo) throws IOException, TemplateException {
         Assert.notNull(docExportVo, "doc export vo不能为null");
-        Template template = this.getTemplate(docExportVo, modelMap);
+        Map<String, Object> attributes = new HashMap<>();
+        Template template = this.getTemplate(docExportVo, attributes);
         try (StringWriter stringWriter = new StringWriter()) {
-            template.process(modelMap, stringWriter);
+            template.process(attributes, stringWriter);
             String content = compress.apply(stringWriter.toString());
             Map<String, Object> exportAttribute = new HashMap<>();
             exportAttribute.put("ext", "doc");
@@ -141,6 +125,36 @@ public class DocController extends BaseController {
         }
     }
 
+    private Template getTemplate(DocExportVo docExportVo, Map<String, Object> attributes) throws IOException {
+        Assert.notEmpty(docExportVo.getContent(), "content不能为null或空");
+        attributes.put("content", docExportVo.getContent());
+        DocSolution docSolution = docSolutionService.find(docExportVo.getDocSolutionId());
+        Assert.notNull(docSolution, "doc solution不能为null");
+        attributes.put("title", docExportVo.getTitle());
+        if (docSolution.getNeedShuffle()) {
+            IShuffleStrategySetup setup = shuffleSolutionService.getSolutionInstanceAt(docExportVo.getShuffleSolutionId());
+            Assert.notNull(setup, "shuffle solution不能为null");
+            attributes.put("shuffleStrategySetup", setup);
+        }
+        docSolution.getProperties().forEach(attributes::putIfAbsent);
+        docSolutionService.getBaseProperties().forEach(attributes::putIfAbsent);
+        Template template;
+        if (docSolution.getNeedHeader()) {
+            attributes.put("content_path", docSolution.getPath());
+            template = configuration.getTemplate("doc/common/header.ftl");
+
+        } else {
+            template = configuration.getTemplate(docSolution.getPath());
+        }
+        return template;
+    }
+
+    /**
+     * 下载
+     * @param fileName 文件名
+     * @param token token
+     * @param response HttpServletResponse
+     */
     @SuppressWarnings("unchecked")
     @PostMapping("download")
     @ResponseBody
@@ -148,7 +162,7 @@ public class DocController extends BaseController {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         Map<String, Object> exportAttribute = (Map<String, Object>) requestAttributes.getAttribute(token, RequestAttributes.SCOPE_SESSION);
         Assert.notNull(exportAttribute, "导出失败！");
-        response.setHeader("Content-disposition", "attachment;filename*=utf-8'zh_cn'" + URLEncoder.encode(fileName, "UTF-8") + "." + exportAttribute.get("ext"));
+        super.download("." + exportAttribute.get("ext"));
         try (OutputStream outputStream = response.getOutputStream()) {
             ((Consumer<OutputStream>) exportAttribute.get("consumer")).accept(outputStream);
         }

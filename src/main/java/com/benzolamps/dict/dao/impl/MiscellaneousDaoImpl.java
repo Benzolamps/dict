@@ -2,12 +2,15 @@ package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.dao.base.MiscellaneousDao;
 import com.benzolamps.dict.dao.core.DictJpa;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -28,8 +31,15 @@ public class MiscellaneousDaoImpl implements MiscellaneousDao {
     @Transactional(readOnly = true)
     public String getMysqlVersion() {
         String sql = "select version();";
-        List<String> results = DictJpa.createNativeQuery(entityManager, sql, String.class, null).list();
-        return results.size() != 1 ? null : results.iterator().next();
+        return DictJpa.createNativeQuery(entityManager, sql, String.class, null).uniqueResult().toString();
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public String getMysqlBaseDir() {
+        String sql = "show variables where variable_name = 'basedir';";
+        Map<String, String> variable = (Map<String, String>) DictJpa.createNativeQuery(entityManager, sql, Map.class, null).uniqueResult();
+        return variable.get("Value").replaceAll("[\\\\/]+$", "");
     }
 
     @SuppressWarnings("unchecked")
@@ -50,7 +60,17 @@ public class MiscellaneousDaoImpl implements MiscellaneousDao {
     @Transactional(readOnly = true)
     public long dataSize() {
         String sql = "select sum(t.data_length + t.index_length) from information_schema.tables as t;";
-        List<Number> results = DictJpa.createNativeQuery(entityManager, sql, Number.class, null).list();
-        return results.get(0).longValue();
+        Number result = (Number) DictJpa.createNativeQuery(entityManager, sql, Number.class, null).uniqueResult();
+        return result.longValue();
+    }
+
+    @Override
+    public void executeSqlScript(String sql) {
+        DictJpa.executeSqlScript(sql);
+    }
+
+    @Override
+    public void executeSqlScript(InputStream sqlStream) {
+        DictJpa.executeSqlScript(new InputStreamResource(sqlStream));
     }
 }

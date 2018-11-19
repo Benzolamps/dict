@@ -1,11 +1,9 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.dao.base.MiscellaneousDao;
-import com.benzolamps.dict.dao.core.DictJpa;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictFile;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,6 +30,11 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     }
 
     @Override
+    public String getMysqlBaseDir() {
+        return miscellaneousDao.getMysqlBaseDir();
+    }
+
+    @Override
     public String databaseFileSize() {
        return DictFile.fileSizeStr(miscellaneousDao.dataSize());
     }
@@ -44,11 +47,11 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
 
     @Override
     public void executeSqlScript(String sql) {
-        DictJpa.executeSqlScript(sql);
+        miscellaneousDao.executeSqlScript(sql);
     }
 
     @Override
     public void executeSqlScript(InputStream sqlStream) {
-        DictJpa.executeSqlScript(new InputStreamResource(sqlStream));
+        miscellaneousDao.executeSqlScript(sqlStream);
     }
 }

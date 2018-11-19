@@ -10,14 +10,20 @@ import java.io.InputStream;
  * @version 2.1.1
  * @datetime 2018-9-1 11:24:31
  */
+@SuppressWarnings("unused")
 public interface MiscellaneousService {
 
     /**
      * 获取MySQL版本
      * @return MySQL版本
      */
-    @SuppressWarnings("unused")
     String getMysqlVersion();
+
+    /**
+     * 获取MySQL所在路径
+     * @return MySQL所在路径
+     */
+    String getMysqlBaseDir();
 
     /**
      * 获取数据库文件的大小

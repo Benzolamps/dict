@@ -37,7 +37,4 @@ public class DictProperties implements Serializable {
 
     /** Universe路径 */
     private String universePath;
-
-    /** MySQL安装路径 */
-    private String mysqlRoot;
 }

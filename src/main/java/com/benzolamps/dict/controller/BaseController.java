@@ -2,7 +2,11 @@ package com.benzolamps.dict.controller;
 
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DataVo;
+import com.benzolamps.dict.util.DictWeb;
 import org.springframework.beans.factory.annotation.Value;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller基类
@@ -34,5 +38,29 @@ public class BaseController {
     @SuppressWarnings("SameParameterValue")
     protected BaseVo wrapperMsg(String message) {
         return new BaseVo(200, message);
+    }
+
+    /**
+     * 获取request
+     * @return HttpServletRequest
+     */
+    protected HttpServletRequest getRequest() {
+        return DictWeb.getRequest();
+    }
+
+    /**
+     * 获取response
+     * @return HttpServletResponse
+     */
+    protected HttpServletResponse getResponse() {
+        return DictWeb.getResponse();
+    }
+
+    /**
+     * 下载文件
+     * @param fileName 文件名
+     */
+    protected void download(String fileName) {
+        DictWeb.download(fileName);
     }
 }

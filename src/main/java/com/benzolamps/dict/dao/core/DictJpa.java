@@ -11,6 +11,7 @@ import org.hibernate.transform.Transformers;
 import org.intellij.lang.annotations.Language;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.EncodedResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -21,6 +22,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
@@ -123,6 +125,8 @@ public class DictJpa {
         SQLQuery sqlQuery = query.unwrap(SQLQuery.class);
         if (tClass.getPackage().equals(BaseEntity.class.getPackage())) {
             return sqlQuery.setResultTransformer(Transformers.aliasToBean(tClass));
+        } else if (Map.class.isAssignableFrom(tClass) || Object.class.equals(tClass)) {
+            return sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         } else {
             return sqlQuery;
         }
@@ -174,7 +178,7 @@ public class DictJpa {
         Assert.notNull(sqlResource, "sql resource不能为null");
         DataSource dataSource = DictSpring.getBean(DataSource.class);
         try (Connection connection = dataSource.getConnection()) {
-            ScriptUtils.executeSqlScript(connection, sqlResource);
+            ScriptUtils.executeSqlScript(connection, new EncodedResource(sqlResource, Charset.forName("UTF-8")));
         }
     }
 

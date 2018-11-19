@@ -1,12 +1,11 @@
 package com.benzolamps.dict.service.impl;
 
-import com.benzolamps.dict.dao.core.DictJpa;
 import com.benzolamps.dict.exception.DictException;
 import com.benzolamps.dict.service.base.BackupService;
+import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.util.DictCommand;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -26,8 +25,11 @@ import java.util.function.UnaryOperator;
 public class BackupServiceImpl implements BackupService {
 
     @SuppressWarnings("SpringElInspection")
-    @Value("#{dictProperties.mysqlRoot}\\bin\\mysqldump -u${spring.datasource.username} -p${spring.datasource.password} ${spring.datasource.name} --default-character-set gbk")
+    @Value("#{miscellaneousService.mysqlBaseDir}\\bin\\mysqldump -u${spring.datasource.username} -p${spring.datasource.password} ${spring.datasource.name} --default-character-set gbk")
     private String mysqlDumpCmd;
+
+    @Resource
+    private MiscellaneousService miscellaneousService;
 
     @Resource
     private UnaryOperator<String> compress;
@@ -36,7 +38,6 @@ public class BackupServiceImpl implements BackupService {
     public void backup(OutputStream outputStream) {
         DictCommand.exec(mysqlDumpCmd, (istr, estr) -> {
             if (StringUtils.hasText(istr)) {
-                istr = compress.apply(istr);
                 outputStream.write(istr.getBytes("UTF-8"));
             }
             if (StringUtils.hasText(estr)) {
@@ -44,7 +45,7 @@ public class BackupServiceImpl implements BackupService {
                 if (estr.toLowerCase().contains("error")) {
                     throw new DictException(estr);
                 } else {
-                    logger.error(estr);
+                    logger.info(estr);
                 }
             }
         });
@@ -53,8 +54,8 @@ public class BackupServiceImpl implements BackupService {
     @Override
     @SuppressWarnings("SpellCheckingInspection")
     public void restore(InputStream inputStream) {
-        DictJpa.executeSqlScript("set foreign_key_checks = 0;");
-        DictJpa.executeSqlScript(new InputStreamResource(inputStream));
-        DictJpa.executeSqlScript("set foreign_key_checks = 1;");
+        miscellaneousService.executeSqlScript("set foreign_key_checks = 0;");
+        miscellaneousService.executeSqlScript(inputStream);
+        miscellaneousService.executeSqlScript("set foreign_key_checks = 1;");
     }
 }
