@@ -15930,8 +15930,8 @@ CREATE TABLE `dict_word`  (
   `definition` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   `indexes` int(11) NOT NULL,
   `prototype` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `american_pronunciation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
-  `british_pronunciation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `american_pronunciation` tinyblob NOT NULL,
+  `british_pronunciation` tinyblob NOT NULL,
   `library` int(11) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `FKj6wakxr19hgmadcna861vs4np`(`library`) USING BTREE,
@@ -20623,7 +20623,7 @@ INSERT INTO `dict_word` VALUES (4679, '2018-09-17 01:14:56', '2018-09-17 01:14:5
 INSERT INTO `dict_word` VALUES (4680, '2018-09-17 01:14:56', '2018-09-17 01:14:56', NULL, 0, '回去；背；后面的，向后', 82, 'back', '[bæk]', '[bæk]', 3);
 INSERT INTO `dict_word` VALUES (4681, '2018-09-17 01:14:56', '2018-09-17 01:14:56', NULL, 0, '她', 83, 'she', '[ʃi:]', '[ʃi:]', 3);
 INSERT INTO `dict_word` VALUES (4682, '2018-09-17 01:14:56', '2018-09-17 01:14:56', NULL, 0, '帮助，援助，帮忙', 84, 'help', '[help]', '[help]', 3);
-INSERT INTO `dict_word` VALUES (4683, '2018-09-17 01:14:56', '2018-09-17 01:14:56', NULL, 0, '第一，首次，最初', 85, 'fiest', '[fʒ:st]', '[fʒ:st]', 3);
+INSERT INTO `dict_word` VALUES (4683, '2018-09-17 01:14:56', '2018-09-17 01:14:56', NULL, 0, '第一，首次，最初', 85, 'first', '[fʒ:st]', '[fʒ:st]', 3);
 INSERT INTO `dict_word` VALUES (4684, '2018-09-17 01:14:56', '2018-09-17 01:14:56', NULL, 0, '做(do的过去式)', 86, 'did', '[did]', '[did]', 3);
 INSERT INTO `dict_word` VALUES (4685, '2018-09-17 01:14:56', '2018-09-17 01:14:56', NULL, 0, '得到，达到，成为', 87, 'get', '[get]', '[get]', 3);
 INSERT INTO `dict_word` VALUES (4686, '2018-09-17 01:14:56', '2018-09-17 01:14:56', NULL, 0, '比', 88, 'than', '[ðæn；ð(ə)n]', '[ðæn；ð(ə)n]', 3);

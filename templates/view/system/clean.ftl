@@ -8,13 +8,15 @@
 
 <script type="text/javascript">
   $('#clean').click(function () {
+    var start = new Date().getTime();
     parent.layer.confirm('是否要清理缓存？', {icon: 3, title: '提示'}, function (index) {
       parent.layer.close(index);
       dict.loadText({
         url: 'clean.json',
         type: 'get',
         success: function (result, status, request) {
-          parent.layer.alert('操作成功！', {
+          var end = new Date().getTime();
+          parent.layer.alert('操作成功！<br>用时 ' + ((end - start) * 0.001).toFixed(3) + " 秒！", {
             icon: 1,
             end: function () {
               parent.$('iframe')[0].contentWindow.dict.reload(true);

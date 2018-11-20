@@ -25,7 +25,7 @@ import java.util.function.UnaryOperator;
 public class BackupServiceImpl implements BackupService {
 
     @SuppressWarnings("SpringElInspection")
-    @Value("#{miscellaneousService.mysqlBaseDir}\\bin\\mysqldump -u${spring.datasource.username} -p${spring.datasource.password} ${spring.datasource.name} --default-character-set gbk")
+    @Value("#{miscellaneousService.mysqlBaseDir}\\bin\\mysqldump -u${spring.datasource.username} -p${spring.datasource.password} ${spring.datasource.name} --hex-blob --default-character-set gbk")
     private String mysqlDumpCmd;
 
     @Resource

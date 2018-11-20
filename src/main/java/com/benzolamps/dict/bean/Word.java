@@ -27,14 +27,14 @@ public class Word extends BaseElement {
 
     /** 美式发音 */
     @Convert(converter = FullWidthToHalfWidthConverter.class)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "tinyblob not null")
     @NotEmpty
     @Length(max = 255)
     private String americanPronunciation;
 
     /** 英式发音 */
     @Convert(converter = FullWidthToHalfWidthConverter.class)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "tinyblob not null")
     @NotEmpty
     @Length(max = 255)
     private String britishPronunciation;

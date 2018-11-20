@@ -70,7 +70,7 @@ dict.postHref = function (url, data) {
     var needLoader = !('loading' in options && options.loading == false);
     var loader;
     if (needLoader) {
-      loader = parent.layer.load(2);
+      loader = parent.layer.load(2, {anim: 0});
     }
 
     var start = new Date().getTime();
