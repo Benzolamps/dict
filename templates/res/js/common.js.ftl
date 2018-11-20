@@ -31,7 +31,9 @@ Array.prototype.toString = function () {
       title: '提示',
       resize: false,
       move: false,
-      closeBtn: 2
+      anim: 3,
+      closeBtn: 2,
+      skin: 'layui-layer-molv'
     });
   };
   this.loadLayui();
