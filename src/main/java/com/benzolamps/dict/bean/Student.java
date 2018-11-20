@@ -41,15 +41,15 @@ public class Student extends BaseEntity {
     @Length(max = 20)
     private String name;
 
-    /** 描述 */
-    @Column
-    @Length(max = 50)
-    private String description;
-
     /** 班级 */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class", nullable = false)
     private Clazz clazz;
+
+    /** 描述 */
+    @Column
+    @Length(max = 50)
+    private String description;
 
     /** 已掌握的单词 */
     @ManyToMany

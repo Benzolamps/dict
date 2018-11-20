@@ -1,9 +1,6 @@
 package com.benzolamps.dict.bean;
 
-import com.benzolamps.dict.component.Alias;
-import com.benzolamps.dict.component.DictIgnore;
-import com.benzolamps.dict.component.DictPropertyInfo;
-import com.benzolamps.dict.component.DictRemote;
+import com.benzolamps.dict.component.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -53,6 +50,7 @@ public class Group extends BaseEntity {
     @Length(max = 50)
     @Column
     @DictPropertyInfo(display = "描述")
+    @DictTextArea
     private String description;
 
     /** 词库 */

@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.Clazz;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
+import com.benzolamps.dict.component.DictTextArea;
 import com.benzolamps.dict.service.base.ClazzService;
 import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.util.DictObject;
@@ -47,15 +48,16 @@ public class StudentVo implements Serializable {
     @DictPropertyInfo(display = "姓名")
     private String name;
 
-    /** 描述 */
-    @Length(max = 50)
-    @DictPropertyInfo(display = "描述")
-    private String description;
-
     /** 班级 */
     @NotNull
     @DictPropertyInfo(display = "班级")
     private Object clazz;
+
+    /** 描述 */
+    @Length(max = 50)
+    @DictPropertyInfo(display = "描述")
+    @DictTextArea
+    private String description;
 
     /** 已掌握的单词数 */
     @DictIgnore

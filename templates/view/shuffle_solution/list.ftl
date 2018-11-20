@@ -4,7 +4,7 @@
   name='乱序方案'
   fields=[
     {'field': 'name', 'title': '乱序方案名称', 'minWidth': 150},
-    {'field': 'strategyClass', 'title': '乱序策略名称', 'minWidth': 150},
+    {'field': 'strategyClass', 'title': '乱序策略', 'minWidth': 150},
     {'field': 'remark', 'title': '备注', 'minWidth': 150}
   ]
   page=page

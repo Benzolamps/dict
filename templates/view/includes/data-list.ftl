@@ -3,6 +3,8 @@
   name=id
   add='add.html' edit='edit.html' delete='delete.json'
   add_enabled=true edit_enabled=true delete_enabled=true
+  window_width=800
+  window_height=600
   delete_confirm=''
   toolbar=[]
   head_toolbar=[]
@@ -128,7 +130,8 @@
       '空空如也~',
       '这儿什么都没有~',
       'Empty List!',
-      '快加点数据吧！'
+      '快加点数据吧！',
+      '数据被怪兽吃掉惹~'
     ];
 
     <#-- TODO: 表格渲染 -->
@@ -146,7 +149,7 @@
     });
 
     <#-- TODO: 分页渲染 -->
-    <#if page_enabled>
+    <#if page_enabled && 1 lt page.totalPages>
       laypage.render({
         elem: '${id}-page',
         count: ${page.total},
@@ -163,6 +166,14 @@
         }
       });
     </#if>
+    <#if page.total gt 0 && page.total lte 5>
+      var littleText = [
+        '就剩这么点了！',
+        '就只能找到这些了！',
+        '其他数据都被怪兽吃掉惹！'
+      ];
+      $('#${id}-page').html('<blockquote class="layui-elem-quote">' + littleText[(Math.random() * littleText.length) | 0] + '</blockquote>');
+    </#if>
 
     var add = $('#${id} [lay-event=add]');
     var delMany = $('#${id} [lay-event=delMany]');
@@ -174,7 +185,7 @@
         type: 2,
         title: '添加${name}',
         content: '${add}',
-        area: ['800px', '600px']
+        area: ['${window_width}px', '${window_height}px']
       });
     });
 
@@ -238,7 +249,7 @@
           type: 2,
           title: '修改${name}',
           content: '${edit}?id=' + obj.data.id,
-          area: ['800px', '600px']
+          area: ['${window_width}px', '${window_height}px']
         });
       }
       <#-- 删除 -->

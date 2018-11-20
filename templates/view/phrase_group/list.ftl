@@ -111,40 +111,42 @@
 <@nothing></script></@nothing>
 
 <@data_list
-id='phrase-groups'
-name='短语分组'
-fields=[
-{'field': 'name', 'title': '名称', 'sort': true, 'minWidth': 120},
-{'field': 'description', 'title': '描述', 'sort': true, 'minWidth': 120},
-{'field': 'createDate', 'title': '创建时间', 'sort': true, 'minWidth': 120},
-{'field': 'status', 'title': '状态', 'sort': true, 'minWidth': 10},
-{'title': '学生数／短语数／已考核次数', 'format': '{{d.studentsOriented}}／{{d.phrases}}／{{d.scoreCount}}', 'minWidth': 120}
-]
-page=page
-add='${base_url}/phrase_group/add.html'
-edit='${base_url}/phrase_group/edit.html'
-delete='${base_url}/phrase_group/delete.json'
-head_toolbar=[
-{
-'html': '<i class="fa fa-plus" style="font-size: 20px;"></i> &nbsp; 添加短语词频分组',
-'handler': 'parent.layer.open({type: 2, title: \'添加短语词频分组\', content: \'${base_url}/phrase_group/add_frequency_group.html\', area: [\'400px\', \'400px\']});'
-},
-{
-'html': '导入短语学习进度',
-'handler': import_phrase_process
-},
-{
-'html': '导出短语',
-'handler': export,
-'needSelected': true
-}
-]
-toolbar=[
-{
-'html': '<i class="fa fa-map-o" style="font-size: 20px;"></i> &nbsp; 详情',
-'handler': 'location.href = "detail.html?id=" + data.id;'
-}
-]
-page_enabled=true
-search=search?eval
+  id='phrase-groups'
+  name='短语分组'
+  fields=[
+    {'field': 'name', 'title': '名称', 'sort': true, 'minWidth': 120},
+    {'field': 'description', 'title': '描述', 'sort': true, 'minWidth': 120},
+    {'field': 'createDate', 'title': '创建时间', 'sort': true, 'minWidth': 120},
+    {'field': 'status', 'title': '状态', 'sort': true, 'minWidth': 10},
+    {'title': '学生数／短语数／已考核次数', 'format': '{{d.studentsOriented}}／{{d.phrases}}／{{d.scoreCount}}', 'minWidth': 120}
+  ]
+  page=page
+  add='${base_url}/phrase_group/add.html'
+  edit='${base_url}/phrase_group/edit.html'
+  delete='${base_url}/phrase_group/delete.json'
+  window_width=400
+  window_height=400
+  head_toolbar=[
+    {
+      'html': '<i class="fa fa-plus" style="font-size: 20px;"></i> &nbsp; 添加短语词频分组',
+      'handler': 'parent.layer.open({type: 2, title: \'添加短语词频分组\', content: \'${base_url}/phrase_group/add_frequency_group.html\', area: [\'400px\', \'400px\']});'
+    },
+    {
+      'html': '导入短语学习进度',
+      'handler': import_phrase_process
+    },
+    {
+      'html': '导出短语',
+      'handler': export,
+      'needSelected': true
+    }
+  ]
+  toolbar=[
+    {
+      'html': '<i class="fa fa-map-o" style="font-size: 20px;"></i> &nbsp; 详情',
+      'handler': 'location.href = "detail.html?id=" + data.id;'
+    }
+  ]
+  page_enabled=true
+  search=search?eval
 />
