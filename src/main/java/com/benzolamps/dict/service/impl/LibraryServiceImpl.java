@@ -63,6 +63,12 @@ public class LibraryServiceImpl extends BaseServiceImpl<Library> implements Libr
         return count(Filter.eq("name", name)) > 0;
     }
 
+    @Transactional
+    @Override
+    public void normalizeIndex() {
+        libraryDao.normalizeIndex();
+    }
+
     @Override
     public void remove(Collection<Library> libraries) {
         Assert.isTrue(!libraries.contains(getCurrent()), "不能删除当前词库");

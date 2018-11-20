@@ -1,9 +1,6 @@
 package com.benzolamps.dict.service.impl;
 
-import com.benzolamps.dict.bean.FrequencyInfo;
-import com.benzolamps.dict.bean.Group;
-import com.benzolamps.dict.bean.Student;
-import com.benzolamps.dict.bean.Word;
+import com.benzolamps.dict.bean.*;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.WordGroupService;
@@ -32,6 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 单词分组Service接口实现类
@@ -50,17 +48,6 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
 
     protected WordGroupServiceImpl() {
         super(Group.Type.WORD);
-    }
-
-    private ThreadPoolTaskExecutor getThreadPoolTaskExecutor() {
-        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-        threadPoolTaskExecutor.setMaxPoolSize(5);
-        threadPoolTaskExecutor.setCorePoolSize(5);
-        threadPoolTaskExecutor.setQueueCapacity(9999);
-        threadPoolTaskExecutor.setThreadNamePrefix("process-import-");
-        threadPoolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
-        threadPoolTaskExecutor.initialize();
-        return threadPoolTaskExecutor;
     }
 
     @Override
@@ -105,6 +92,17 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         }
     }
 
+    private ThreadPoolTaskExecutor getThreadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
+        threadPoolTaskExecutor.setMaxPoolSize(5);
+        threadPoolTaskExecutor.setCorePoolSize(5);
+        threadPoolTaskExecutor.setQueueCapacity(9999);
+        threadPoolTaskExecutor.setThreadNamePrefix("process-import-");
+        threadPoolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
+        threadPoolTaskExecutor.initialize();
+        return threadPoolTaskExecutor;
+    }
+
     @SuppressWarnings({"StatementWithEmptyBody", "ConstantConditions"})
     @Override
     @Transactional
@@ -113,7 +111,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         ThreadPoolTaskExecutor threadPoolTaskExecutor = this.getThreadPoolTaskExecutor();
         Assert.notEmpty(processImportVos, "process import vos不能为null或空");
         AtomicReference<Throwable> throwable = new AtomicReference<>();
-        Arrays.stream(processImportVos)
+        Stream.of(processImportVos)
             .map(GroupQrCodeTask::new)
             .forEach(task -> {
                 ListenableFuture<?> listenableFuture = threadPoolTaskExecutor.submitListenable(task);
@@ -167,7 +165,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
            }
            group.setName(name);
            group.setDescription(wordGroup.getDescription());
-           Set<Word> words = new HashSet<>(original != null ? original.getWords() : student.getFailedWords());
+           Set<Word> words = original != null ? original.getWords() : student.getFailedWords().stream().filter(word -> word.getLibrary().equals(assertLibrary())).collect(Collectors.toSet());
            words.removeIf(student.getMasteredWords()::contains);
            group.setWords(words);
            group.setStudentsOriented(Collections.singleton(student));
@@ -194,7 +192,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             }
             return result;
         });
-        Arrays.stream(processImportVos).forEach(processImportVo -> {
+        Stream.of(processImportVos).forEach(processImportVo -> {
             try {
                 if (processImportVo.getStudentId() != null) {
                     processImportVo.setStudent(studentService.find(processImportVo.getStudentId()));
@@ -232,7 +230,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         handle(processImportVos);
         ThreadPoolTaskExecutor threadPoolTaskExecutor = this.getThreadPoolTaskExecutor();
         AtomicReference<Throwable> throwable = new AtomicReference<>();
-        Arrays.stream(processImportVos)
+        Stream.of(processImportVos)
             .map(GroupBaseElementTask::new)
             .forEach(task -> {
                 ListenableFuture<?> listenableFuture = threadPoolTaskExecutor.submitListenable(task);

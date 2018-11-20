@@ -1,6 +1,7 @@
 package com.benzolamps.dict.service.impl;
 
 import com.benzolamps.dict.dao.base.MiscellaneousDao;
+import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.service.base.MiscellaneousService;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictFile;
@@ -24,6 +25,9 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     @Resource
     private WordClazzService wordClazzService;
 
+    @Resource
+    private LibraryService libraryService;
+
     @Override
     public String getMysqlVersion() {
         return miscellaneousDao.getMysqlVersion();
@@ -42,6 +46,7 @@ public class MiscellaneousServiceImpl implements MiscellaneousService {
     @Override
     public void clean() {
         wordClazzService.clearUseless();
+        libraryService.normalizeIndex();
         miscellaneousDao.clear();
     }
 

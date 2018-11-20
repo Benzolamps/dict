@@ -7,12 +7,12 @@ import org.junit.Test;
 
 import java.io.*;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.benzolamps.dict.util.Constant.TEXT_FILES;
 import static com.benzolamps.dict.util.DictFile.deepListFiles;
@@ -119,7 +119,7 @@ public class FileComparator {
     private boolean compare(File file1, File file2) throws IOException {
         isTrue(file1.isFile(), "file1不是文件");
         isTrue(file2.isFile(), "file2不是文件");
-        if (Arrays.stream(TEXT_FILES).anyMatch(file1.getName()::endsWith)) {
+        if (Stream.of(TEXT_FILES).anyMatch(file1.getName()::endsWith)) {
             try (InputStream is1 = new FileInputStream(file1);
                  InputStreamReader isr1 = new InputStreamReader(is1);
                  BufferedReader br1 = new BufferedReader(isr1);
@@ -127,7 +127,7 @@ public class FileComparator {
                  InputStreamReader isr2 = new InputStreamReader(is2);
                  BufferedReader br2 = new BufferedReader(isr2)
             ) {
-                if (Arrays.stream(TEXT_FILES).anyMatch(file1.getName().toLowerCase()::endsWith)) {
+                if (Stream.of(TEXT_FILES).anyMatch(file1.getName().toLowerCase()::endsWith)) {
                     String line1, line2;
                     while ((line1 = br1.readLine()) != null) {
                         line2 = br2.readLine();

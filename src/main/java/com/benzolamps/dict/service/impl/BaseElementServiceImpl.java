@@ -4,7 +4,10 @@ import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.controller.vo.BaseElementVo;
 import com.benzolamps.dict.dao.base.BaseElementDao;
-import com.benzolamps.dict.dao.core.*;
+import com.benzolamps.dict.dao.core.Filter;
+import com.benzolamps.dict.dao.core.Order;
+import com.benzolamps.dict.dao.core.Page;
+import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.BaseElementService;
 import com.benzolamps.dict.service.base.LibraryService;
 import com.benzolamps.dict.util.DictArray;
@@ -20,7 +23,11 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 单词或短语类的基类Service接口实现类
@@ -61,7 +68,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         Assert.notNull(current, "未选择词库");
         element.setLibrary(current);
         if (!prototypeExists(element.getPrototype())) {
-            if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
+            if (element.getIndex() == null) element.setIndex(baseElementDao.findMaxIndex(current) + 1);
             return super.persist(element);
         } else {
             BaseElement ref = findByPrototype(element.getPrototype());
@@ -81,14 +88,19 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
         Library current = libraryService.getCurrent();
         Assert.notNull(current, "未选择词库");
         List<T> elementList = new LinkedList<>(elements);
-        elementList.removeIf(element -> baseElementDao.findPrototypes(current).contains(element.getPrototype()));
         elementList.removeIf(element -> elementList.stream().filter(e -> e.getPrototype().equals(element.getPrototype())).count() > 1);
+        int index = baseElementDao.findMaxIndex(current);
+        for (T element : elementList) {
+            if (element.getIndex() == null) element.setIndex(++index);
+        }
+        Collection<T> exists = findByPrototypes(elementList.stream().map(BaseElement::getPrototype).collect(Collectors.toSet()));
+        elementList.removeIf(element -> {
+            exists.stream().filter(ele -> element.getPrototype().equalsIgnoreCase(ele.getPrototype())).findAny().ifPresent(exist -> element.setId(exist.getId()));
+            return element.getId() != null;
+        });
         elementList.forEach(element -> element.setLibrary(current));
         elements.removeAll(elementList);
         this.update(elements);
-        for (T element : elementList) {
-            if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
-        }
         super.persist(elementList);
     }
 
@@ -96,8 +108,9 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     public void update(Collection<T> elements, String... ignoreProperties) {
         Library current = libraryService.getCurrent();
         Assert.notNull(current, "未选择词库");
+        int index = baseElementDao.findMaxIndex(current);
         for (T element : elements) {
-            if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
+            if (element.getIndex() == null) element.setIndex(++index);
         }
         super.update(elements, DictArray.concat(ignoreProperties, new String[] {"library", "frequency", "frequencyInfo"}));
     }
@@ -106,7 +119,7 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     public T update(T element, String... ignoreProperties) {
         Library current = libraryService.getCurrent();
         Assert.notNull(current, "未选择词库");
-        if (element.getIndex() == null) element.setIndex(baseElementDao.findMinIndex(current) - 1);
+        if (element.getIndex() == null) element.setIndex(baseElementDao.findMaxIndex(current) + 1);
         return super.update(element, DictArray.concat(ignoreProperties, new String[] {"library", "frequency", "frequencyInfo"}));
     }
 

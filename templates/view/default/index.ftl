@@ -241,7 +241,7 @@
           localStorage.setItem('column', column);
           localStorage.setItem('child', child);
         }).mouseenter(function () {
-          tipsId = layer.tips($(this).children('span').text(), this);
+          tipsId = layer.tips($(this).children('span').text(), this, {anim: 0});
         }).mouseleave(function () {
           if (tipsId != null) {
             layer.close(tipsId);

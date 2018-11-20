@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -163,7 +164,7 @@ public class WordGroupController extends BaseController {
             Group wordGroup = wordGroupService.find(wordGroupId);
             Assert.notNull(wordGroup, "word group不存在");
             Assert.noNullElements(wordIds, "word ids不能存在为null的元素");
-            Word[] words = Arrays.stream(wordIds).map(wordService::find).toArray(Word[]::new);
+            Word[] words = Stream.of(wordIds).map(wordService::find).toArray(Word[]::new);
             wordGroupService.addWords(wordGroup, words);
         }
         return SUCCESS_VO;
@@ -185,7 +186,7 @@ public class WordGroupController extends BaseController {
             Group wordGroup = wordGroupService.find(wordGroupId);
             Assert.notNull(wordGroup, "word group不存在");
             Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
-            Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
+            Student[] students = Stream.of(studentIds).map(studentService::find).toArray(Student[]::new);
             wordGroupService.addStudents(wordGroup, students);
         }
         return SUCCESS_VO;
@@ -207,7 +208,7 @@ public class WordGroupController extends BaseController {
             Group wordGroup = wordGroupService.find(wordGroupId);
             Assert.notNull(wordGroup, "word group不存在");
             Assert.noNullElements(clazzIds, "clazz ids不能存在为null的元素");
-            Clazz[] clazzes = Arrays.stream(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
+            Clazz[] clazzes = Stream.of(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
             wordGroupService.addClazzes(wordGroup, clazzes);
         }
         return SUCCESS_VO;
@@ -227,7 +228,7 @@ public class WordGroupController extends BaseController {
         Group wordGroup = wordGroupService.find(wordGroupId);
         Assert.notNull(wordGroup, "word group不存在");
         Assert.noNullElements(wordIds, "clazz ids不能存在为null的元素");
-        Word[] words = Arrays.stream(wordIds).map(wordService::find).toArray(Word[]::new);
+        Word[] words = Stream.of(wordIds).map(wordService::find).toArray(Word[]::new);
         wordGroupService.removeWords(wordGroup, words);
         return SUCCESS_VO;
     }
@@ -246,7 +247,7 @@ public class WordGroupController extends BaseController {
         Group wordGroup = wordGroupService.find(wordGroupId);
         Assert.notNull(wordGroup, "word group不存在");
         Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
-        Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
+        Student[] students = Stream.of(studentIds).map(studentService::find).toArray(Student[]::new);
         wordGroupService.removeStudents(wordGroup, students);
         return SUCCESS_VO;
     }
@@ -345,7 +346,7 @@ public class WordGroupController extends BaseController {
         Assert.notNull(student, "student不存在");
         if (masteredWordIds == null) masteredWordIds = new Integer[0];
         Assert.noNullElements(masteredWordIds, "mastered word ids不能存在为null的元素");
-        Word[] masteredWords = Arrays.stream(masteredWordIds).map(wordService::find).toArray(Word[]::new);
+        Word[] masteredWords = Stream.of(masteredWordIds).map(wordService::find).toArray(Word[]::new);
         wordGroupService.scoreWords(wordGroup, student, masteredWords);
         return SUCCESS_VO;
     }
@@ -410,7 +411,7 @@ public class WordGroupController extends BaseController {
     protected BaseVo imports(Integer groupId, Integer studentId, @RequestParam("file") MultipartFile... files) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         wordGroupService.importWords(
-            Arrays.stream(files)
+            Stream.of(files)
                 .map((Func1<MultipartFile, ProcessImportVo>) file -> new ProcessImportVo(groupId, studentId, file.getOriginalFilename(), file.getBytes()))
                 .toArray(ProcessImportVo[]::new)
         );

@@ -1,8 +1,12 @@
 package com.benzolamps.dict;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -61,7 +65,7 @@ public final class index {
 
         if (!file.exists() || file.isFile()) return false;
 
-        List<File> zipFiles = Arrays.stream(file.listFiles(index::validate)).sorted(Comparator.comparing(File::getName)).collect(Collectors.toList());
+        List<File> zipFiles = Stream.of(file.listFiles(index::validate)).sorted(Comparator.comparing(File::getName)).collect(Collectors.toList());
 
         if (zipFiles.isEmpty()) return false;
 

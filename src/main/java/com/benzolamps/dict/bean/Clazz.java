@@ -2,6 +2,7 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.component.DictPropertyInfo;
+import com.benzolamps.dict.component.DictTextArea;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,6 +42,7 @@ public class Clazz extends BaseEntity {
     /** 描述 */
     @Column
     @Length(max = 50)
+    @DictTextArea
     @DictPropertyInfo(display = "描述")
     private String description;
 

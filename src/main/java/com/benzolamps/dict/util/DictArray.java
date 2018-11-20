@@ -1,8 +1,10 @@
 package com.benzolamps.dict.util;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 /**
  * 数组工具类
@@ -20,7 +22,7 @@ public interface DictArray {
      */
     static boolean contains(Object[] array, Object obj) {
         if (array == null || array.length <= 0) return false;
-        return Arrays.stream(array).anyMatch(item -> Objects.deepEquals(obj, item));
+        return Stream.of(array).anyMatch(item -> Objects.deepEquals(obj, item));
     }
 
     /**
@@ -59,7 +61,7 @@ public interface DictArray {
      */
     static boolean contains(int[] array, int obj) {
         if (array == null || array.length <= 0) return false;
-        return Arrays.stream(array).anyMatch(item -> obj == item);
+        return IntStream.of(array).anyMatch(item -> obj == item);
     }
 
     /**
@@ -70,7 +72,7 @@ public interface DictArray {
      */
     static boolean contains(long[] array, long obj) {
         if (array == null || array.length <= 0) return false;
-        return Arrays.stream(array).anyMatch(item -> obj == item);
+        return LongStream.of(array).anyMatch(item -> obj == item);
     }
 
     /**

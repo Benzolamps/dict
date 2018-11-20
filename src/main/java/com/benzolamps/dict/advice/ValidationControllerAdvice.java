@@ -12,8 +12,8 @@ import javax.annotation.Resource;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.benzolamps.dict.util.Constant.EMPTY_CLASS_ARRAY;
 
@@ -40,7 +40,7 @@ public class ValidationControllerAdvice {
         for (int i = 0; i < args.length; i++) {
             if (args[i] == null) continue;
             Annotation[] annotations = parameterAnnotations[i];
-            Validated validated = (Validated) Arrays.stream(annotations).filter(Validated.class::isInstance).findFirst().orElse(null);
+            Validated validated = (Validated) Stream.of(annotations).filter(Validated.class::isInstance).findFirst().orElse(null);
             Set<ConstraintViolation<Object>> constraintViolations = validator.validate(args[i], validated != null ? validated.value() : EMPTY_CLASS_ARRAY);
             if (!constraintViolations.isEmpty()) {
                 ConstraintViolation<Object> constraintViolation = constraintViolations.iterator().next();

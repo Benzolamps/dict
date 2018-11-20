@@ -25,5 +25,5 @@ public interface BaseElementDao<T extends BaseElement> extends BaseDao<T> {
      * @param library 词库
      * @return 最小的索引
      */
-    Integer findMinIndex(Library library);
+    int findMaxIndex(Library library);
 }

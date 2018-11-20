@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -163,7 +164,7 @@ public class PhraseGroupController extends BaseController {
             Group phraseGroup = phraseGroupService.find(phraseGroupId);
             Assert.notNull(phraseGroup, "phrase group不存在");
             Assert.noNullElements(phraseIds, "phrase ids不能存在为null的元素");
-            Phrase[] phrases = Arrays.stream(phraseIds).map(phraseService::find).toArray(Phrase[]::new);
+            Phrase[] phrases = Stream.of(phraseIds).map(phraseService::find).toArray(Phrase[]::new);
             phraseGroupService.addPhrases(phraseGroup, phrases);
         }
         return SUCCESS_VO;
@@ -185,7 +186,7 @@ public class PhraseGroupController extends BaseController {
             Group phraseGroup = phraseGroupService.find(phraseGroupId);
             Assert.notNull(phraseGroup, "phrase group不存在");
             Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
-            Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
+            Student[] students = Stream.of(studentIds).map(studentService::find).toArray(Student[]::new);
             phraseGroupService.addStudents(phraseGroup, students);
         }
         return SUCCESS_VO;
@@ -207,7 +208,7 @@ public class PhraseGroupController extends BaseController {
             Group phraseGroup = phraseGroupService.find(phraseGroupId);
             Assert.notNull(phraseGroup, "phrase group不存在");
             Assert.noNullElements(clazzIds, "clazz ids不能存在为null的元素");
-            Clazz[] clazzes = Arrays.stream(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
+            Clazz[] clazzes = Stream.of(clazzIds).map(clazzService::find).toArray(Clazz[]::new);
             phraseGroupService.addClazzes(phraseGroup, clazzes);
         }
         return SUCCESS_VO;
@@ -227,7 +228,7 @@ public class PhraseGroupController extends BaseController {
         Group phraseGroup = phraseGroupService.find(phraseGroupId);
         Assert.notNull(phraseGroup, "phrase group不存在");
         Assert.noNullElements(phraseIds, "clazz ids不能存在为null的元素");
-        Phrase[] phrases = Arrays.stream(phraseIds).map(phraseService::find).toArray(Phrase[]::new);
+        Phrase[] phrases = Stream.of(phraseIds).map(phraseService::find).toArray(Phrase[]::new);
         phraseGroupService.removePhrases(phraseGroup, phrases);
         return SUCCESS_VO;
     }
@@ -246,7 +247,7 @@ public class PhraseGroupController extends BaseController {
         Group phraseGroup = phraseGroupService.find(phraseGroupId);
         Assert.notNull(phraseGroup, "phrase group不存在");
         Assert.noNullElements(studentIds, "student ids不能存在为null的元素");
-        Student[] students = Arrays.stream(studentIds).map(studentService::find).toArray(Student[]::new);
+        Student[] students = Stream.of(studentIds).map(studentService::find).toArray(Student[]::new);
         phraseGroupService.removeStudents(phraseGroup, students);
         return SUCCESS_VO;
     }
@@ -345,7 +346,7 @@ public class PhraseGroupController extends BaseController {
         Assert.notNull(student, "student不存在");
         if (masteredPhraseIds == null) masteredPhraseIds = new Integer[0];
         Assert.noNullElements(masteredPhraseIds, "mastered phrase ids不能存在为null的元素");
-        Phrase[] masteredPhrases = Arrays.stream(masteredPhraseIds).map(phraseService::find).toArray(Phrase[]::new);
+        Phrase[] masteredPhrases = Stream.of(masteredPhraseIds).map(phraseService::find).toArray(Phrase[]::new);
         phraseGroupService.scorePhrases(phraseGroup, student, masteredPhrases);
         return SUCCESS_VO;
     }
@@ -410,7 +411,7 @@ public class PhraseGroupController extends BaseController {
     protected BaseVo imports(Integer groupId, Integer studentId, @RequestParam("file") MultipartFile... files) {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
         phraseGroupService.importPhrases(
-                Arrays.stream(files)
+                Stream.of(files)
                         .map((Func1<MultipartFile, ProcessImportVo>) file -> new ProcessImportVo(groupId, studentId, file.getOriginalFilename(), file.getBytes()))
                         .toArray(ProcessImportVo[]::new)
         );

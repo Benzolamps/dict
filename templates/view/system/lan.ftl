@@ -77,6 +77,6 @@
     var $content = $(this).parent().parent().find('input');
     $content[0].select();
     document.execCommand("Copy");
-    layer.tips('已复制！', $(this).parent()[0]);
+    layer.tips('已复制！', $(this).parent()[0], {anim: 0});
   });
 </script>

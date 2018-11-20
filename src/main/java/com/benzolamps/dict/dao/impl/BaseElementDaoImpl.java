@@ -44,12 +44,12 @@ public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> im
     }
 
     @Override
-    public Integer findMinIndex(Library library) {
+    public int findMaxIndex(Library library) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Number> criteriaQuery = criteriaBuilder.createQuery(Number.class);
         Root<T> root = criteriaQuery.from(entityClass);
         criteriaQuery.where(criteriaBuilder.equal(root.get("library"), library));
-        criteriaQuery.select(criteriaBuilder.min(root.get("index")));
+        criteriaQuery.select(criteriaBuilder.max(root.get("index")));
         Number result = entityManager.createQuery(criteriaQuery).getSingleResult();
         return result != null ? result.intValue() : 0;
     }

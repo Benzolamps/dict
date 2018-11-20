@@ -258,7 +258,7 @@ public class DictPropertyInfoVo implements Serializable {
         Collection<?> collection = null;
         if (Arrays.asList("string", "integer", "float", "char", "date").contains(getType())) {
             if (dictProperty.hasAnnotation(DictOptions.class)) {
-                Stream<String> values = Arrays.stream(dictProperty.getAnnotation(DictOptions.class).value());
+                Stream<String> values = Stream.of(dictProperty.getAnnotation(DictOptions.class).value());
                 if ("integer".equals(getType())) {
                     collection = values.map(Long::valueOf).sorted().collect(Collectors.toList());
                 } else if ("float".equals(getType())) {

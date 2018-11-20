@@ -1,6 +1,5 @@
 package com.benzolamps.dict.util;
 
-import com.benzolamps.dict.component.CellFormat;
 import com.benzolamps.dict.component.DetectColumnNum;
 import com.benzolamps.dict.component.ExcelHeader;
 import com.benzolamps.dict.exception.DictException;
@@ -13,11 +12,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.util.Assert;
 import org.springframework.util.StreamUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -59,51 +60,49 @@ public interface DictExcel {
             try {
                 Cell cell = row.getCell(index);
                 /* 判断类型 */
-                if (cell != null) switch (excelHeader.cellFormat()) {
-                    case STRING:
-                        value = row.getCell(index).getStringCellValue();
+                if (cell != null) switch (cell.getCellType()) {
+                    case Cell.CELL_TYPE_BLANK:
+                        Assert.isTrue(!excelHeader.notEmpty(), "单元格内容不能为空");
                         break;
-                    case INTEGER:
-                        value = (int) row.getCell(index).getNumericCellValue();
+                    case Cell.CELL_TYPE_BOOLEAN:
+                        value = cell.getBooleanCellValue();
                         break;
-                    case DOUBLE:
-                        value = row.getCell(index).getNumericCellValue();
+                    case Cell.CELL_TYPE_ERROR:
+                        value = cell.getErrorCellValue();
                         break;
-                    case DATE:
-                        value = row.getCell(index).getDateCellValue();
+                    case Cell.CELL_TYPE_FORMULA:
+                        value = cell.getArrayFormulaRange().formatAsString();
                         break;
-                    case BOOLEAN:
-                        value = row.getCell(index).getBooleanCellValue();
+                    case Cell.CELL_TYPE_NUMERIC:
+                        if (Date.class.isAssignableFrom(excelHeader.cellClass())) {
+                            value = cell.getDateCellValue();
+                        } else {
+                            value = cell.getNumericCellValue();
+                        }
+                        break;
+                    case Cell.CELL_TYPE_STRING:
+                        value = cell.getStringCellValue().trim();
                         break;
                 }
+                value = DictObject.ofObject(value, excelHeader.cellClass());
+                Assert.isTrue((value = DictObject.ofObject(value, excelHeader.cellClass())) != null || !excelHeader.notEmpty(), "单元格内容不能为空");
             } catch (Exception e) {
                 throw new ExcelFormatException(e, row.getRowNum(), index);
             }
 
-            /* 判断非空 */
-            if (excelHeader.notEmpty() && (value == null || value.toString().trim().isEmpty())) {
-                throw new ExcelFormatException("单元格内容不能为空", row.getRowNum(), index);
-            }
-
             /* 判断数字范围 */
-            if (excelHeader.cellFormat() == CellFormat.INTEGER || excelHeader.cellFormat() == CellFormat.DOUBLE) {
+            if (Number.class.isAssignableFrom(excelHeader.cellClass())) {
                 if (value != null) {
                     double dbValue = Number.class.cast(value).doubleValue();
                     if (dbValue < excelHeader.range().min() || dbValue > excelHeader.range().max()) {
                         throw new ExcelFormatException(
-                            "数字范围应该介于 " +
-                                excelHeader.range().min() + " 和 " +
-                                excelHeader.range().max() + " 之间, 得到 " + value,
-                            row.getRowNum(), index
+                            "数字范围应该介于 " + excelHeader.range().min() + " 和 " + excelHeader.range().max() + " 之间, 得到 " + value,
+                            row.getRowNum(),
+                            index
                         );
                     }
                 }
             }
-
-            if (excelHeader.cellFormat() == CellFormat.STRING && null != value) {
-                value = value.toString().trim();
-            }
-
 
             /* 给属性赋值 */
             properties.put(property.getName(), value);

@@ -12,7 +12,11 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.persistence.criteria.CriteriaQuery;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static com.benzolamps.dict.dao.core.DictJpa.*;
 
@@ -102,7 +106,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 	public List<T> findList(Filter filter, Order... orders) {
         GeneratedDictQuery<T> query = generateDictQuery();
         query.getFilter().and(filter);
-        Arrays.stream(orders).forEach(query::applyOrder);
+        Stream.of(orders).forEach(query::applyOrder);
         return query.getTypedQuery().getResultList();
 	}
 
@@ -169,7 +173,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     public List<T> findCount(int count, Filter filter, Order... orders) {
         GeneratedDictQuery<T> query = generateDictQuery();
         query.getFilter().and(filter);
-        Arrays.stream(orders).forEach(query::applyOrder);
+        Stream.of(orders).forEach(query::applyOrder);
         return query.getTypedQuery().setMaxResults(count).getResultList();
     }
 

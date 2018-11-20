@@ -43,9 +43,10 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
     public void removePhrases(Group phraseGroup, Phrase... phrases) {
         Assert.notNull(phraseGroup, "phrase group不能为null");
         Assert.noNullElements(phrases, "phrases不能存在为null的元素");
-        phraseGroup.getPhrases().removeAll(Arrays.asList(phrases));
         List<Phrase> phraseList = Arrays.asList(phrases);
-        phraseList.stream().map(Phrase::getFrequencyInfo).forEach(infos -> infos.removeIf(info -> info.getGroupId().equals(phraseGroup.getId())));
+        if (phraseGroup.getFrequencyGenerated()) {
+            phraseList.stream().map(Phrase::getFrequencyInfo).forEach(infos -> infos.removeIf(info -> info.getGroupId().equals(phraseGroup.getId())));
+        }
         phraseGroup.getPhrases().removeAll(phraseList);
         if (phraseGroup.getGroupLog() != null) {
             phraseGroup.getGroupLog().getPhrases().removeAll(phraseList);
@@ -100,7 +101,6 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
 
     @Override
     public Collection<Group> extractPersonalGroup(Group original, Collection<Student> students, Group phraseGroup) {
-        Assert.notNull(original, "original不能为null");
         Assert.notEmpty(students, "students不能为空");
         Collection<Group> groups = students.stream().map(student -> {
             Group group = new Group();
@@ -111,7 +111,7 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
             }
             group.setName(name);
             group.setDescription(phraseGroup.getDescription());
-            Set<Phrase> phrases = new HashSet<>(original.getPhrases());
+            Set<Phrase> phrases = original != null ? original.getPhrases() : student.getFailedPhrases().stream().filter(phrase -> phrase.getLibrary().equals(assertLibrary())).collect(Collectors.toSet());
             phrases.removeIf(student.getMasteredPhrases()::contains);
             group.setPhrases(phrases);
             group.setStudentsOriented(Collections.singleton(student));

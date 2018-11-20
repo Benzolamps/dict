@@ -12,11 +12,11 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.util.Assert;
 
 import java.lang.annotation.Annotation;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.benzolamps.dict.util.Constant.EMPTY_OBJECT_ARRAY;
 import static com.benzolamps.dict.util.Constant.EMPTY_PROPERTIES;
@@ -98,7 +98,7 @@ public abstract class DictSpring {
         assertNull();
         Assert.notNull(annotationClass, "annotation class不能为null");
         String[] names = beanFactory.getBeanNamesForAnnotation(annotationClass);
-        return Arrays.stream(names).map(beanFactory::getBean).collect(Collectors.toList());
+        return Stream.of(names).map(beanFactory::getBean).collect(Collectors.toList());
     }
 
     /**
@@ -132,7 +132,7 @@ public abstract class DictSpring {
         properties = properties == null ? EMPTY_PROPERTIES : properties;
         args = args == null ? EMPTY_OBJECT_ARRAY : args;
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition(requiredType);
-        Arrays.stream(args).forEach(beanDefinitionBuilder::addConstructorArgValue);
+        Stream.of(args).forEach(beanDefinitionBuilder::addConstructorArgValue);
         properties.forEach((key, value) -> beanDefinitionBuilder.addPropertyValue(DictString.toCamel(key.toString()), value));
         beanFactory.registerBeanDefinition(name, beanDefinitionBuilder.getBeanDefinition());
         return (T) beanFactory.getBean(name);

@@ -9,4 +9,9 @@ import com.benzolamps.dict.bean.Library;
  * @datetime 2018-7-1 22:15:45
  */
 public interface LibraryDao extends BaseDao<Library> {
+
+    /**
+     * 重置索引
+     */
+    void normalizeIndex();
 }

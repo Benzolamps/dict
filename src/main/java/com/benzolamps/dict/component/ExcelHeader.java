@@ -30,7 +30,7 @@ public @interface ExcelHeader {
     int value();
 
     /** @return 列的格式 */
-    CellFormat cellFormat() default CellFormat.STRING;
+    Class<?> cellClass() default String.class;
 
     /** @return not null */
     boolean notEmpty() default false;

@@ -34,4 +34,9 @@ public interface LibraryService extends BaseService<Library> {
      * @return 检测结果
      */
     boolean nameExists(String name);
+
+    /**
+     * 重置索引
+     */
+    void normalizeIndex();
 }

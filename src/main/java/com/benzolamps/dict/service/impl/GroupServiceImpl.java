@@ -14,6 +14,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static com.benzolamps.dict.bean.Group.Status.*;
 import static com.benzolamps.dict.bean.Group.Type.WORD;
@@ -48,20 +49,16 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     @Override
     public Group find(Integer id) {
-        Library library = libraryService.getCurrent();
-        Assert.notNull(library, "未选中词库");
         Group group = super.find(id);
-        return group != null && library.equals(group.getLibrary()) && type.equals(group.getType()) ? group : null;
+        return group != null && assertLibrary().equals(group.getLibrary()) && type.equals(group.getType()) ? group : null;
     }
 
     @Override
     public void persist(Group... groups) {
-        Library library = libraryService.getCurrent();
-        Assert.notNull(library, "未选中词库");
-        Arrays.stream(groups).forEach(group -> {
+        Stream.of(groups).forEach(group -> {
             group.setType(type);
             group.setStatus(NORMAL);
-            group.setLibrary(library);
+            group.setLibrary(assertLibrary());
             group.setScoreCount(0);
             group.setFrequencyGenerated(false);
         });
@@ -70,11 +67,9 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     @Override
     public Group persist(Group group) {
-        Library library = libraryService.getCurrent();
-        Assert.notNull(library, "未选中词库");
         group.setType(type);
         group.setStatus(NORMAL);
-        group.setLibrary(library);
+        group.setLibrary(assertLibrary());
         group.setScoreCount(0);
         group.setFrequencyGenerated(false);
         return super.persist(group);
@@ -82,12 +77,10 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     @Override
     public void persist(Collection<Group> groups) {
-        Library library = libraryService.getCurrent();
-        Assert.notNull(library, "未选中词库");
         groups.forEach(group -> {
             group.setType(type);
             group.setStatus(NORMAL);
-            group.setLibrary(library);
+            group.setLibrary(assertLibrary());
             group.setScoreCount(0);
             group.setFrequencyGenerated(false);
         });
@@ -129,9 +122,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     @Override
     protected void handleFilter(final Filter filter) {
-        Library library = libraryService.getCurrent();
-        Assert.notNull(library, "未选中词库");
-        filter.and(Filter.eq("type", type)).and(Filter.eq("library", library));
+        filter.and(Filter.eq("type", type)).and(Filter.eq("library", assertLibrary()));
     }
 
     @Transactional(readOnly = true)
@@ -262,6 +253,11 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         group.getStudentsScored().clear();
     }
 
+    /**
+     * 断言分组和学生
+     * @param group 分组
+     * @param student 学生
+     */
     protected void assertGroupAndStudent(Group group, Student student) {
         if (group != null) {
             Assert.isTrue(!Group.Status.COMPLETED.equals(group.getStatus()), group.getName() + " 分组当前处于已完成状态，无法进行评分！");
@@ -270,5 +266,14 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
                 Assert.isTrue(!group.getStudentsScored().contains(student), student.getName() + " 已评分 " + group.getName() + " 分组！");
             }
         }
+    }
+
+    /**
+     * 断言是否选中词库
+     */
+    protected Library assertLibrary() {
+        Library library = libraryService.getCurrent();
+        Assert.notNull(library, "未选中词库");
+        return library;
     }
 }

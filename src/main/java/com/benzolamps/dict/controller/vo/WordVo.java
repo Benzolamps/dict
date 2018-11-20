@@ -15,8 +15,8 @@ import org.springframework.util.Assert;
 
 import javax.persistence.Id;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 单词Vo
@@ -96,7 +96,7 @@ public class WordVo implements Serializable {
         word.setBritishPronunciation(wordVo.getBritishPronunciation());
         word.setAmericanPronunciation(wordVo.getAmericanPronunciation());
         word.setDefinition(wordVo.getDefinition());
-        word.setClazzes(Arrays.stream(wordVo.getClazzes()).map(clazz -> {
+        word.setClazzes(Stream.of(wordVo.getClazzes()).map(clazz -> {
             WordClazz wordClazz = wordClazzService.findByIdOrName(clazz.toString());
             if (wordClazz == null) {
                 wordClazz = new WordClazz();

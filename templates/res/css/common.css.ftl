@@ -21,3 +21,9 @@ textarea, .selectable {
   -ms-user-select: text;
   user-select: text;
 }
+
+body .dict-skin .layui-layer-title {
+  background: #FFB800;
+  color: #111;
+  border: none;
+}

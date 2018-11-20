@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
@@ -100,7 +100,7 @@ public class ShuffleSolutionController extends BaseController {
     @PostMapping("delete.json")
     @ResponseBody
     protected BaseVo delete(@RequestParam("id") Integer... ids) {
-        Arrays.stream(ids).forEach(shuffleSolutionService::remove);
+        Stream.of(ids).forEach(shuffleSolutionService::remove);
         return SUCCESS_VO;
     }
 

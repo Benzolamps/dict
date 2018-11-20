@@ -115,7 +115,7 @@ public class DictJpa {
         Assert.hasText(sql, "sql不能为null或空");
         Assert.notNull(tClass, "t class不能为null");
         logger.info("sql: " + sql);
-
+        sql = sql.replace(":=", "\\:=");
         Query query = entityManager.createNativeQuery(sql);
         if (!CollectionUtils.isEmpty(parameters)) parameters.forEach(query::setParameter);
         if (!ObjectUtils.isEmpty(positionParameters)) {
@@ -149,7 +149,7 @@ public class DictJpa {
         Assert.notNull(entityManager, "entity manager不能为null");
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
-
+        sql = sql.replace(":=", "\\:=");
         Query query = entityManager.createNativeQuery(sql);
         if (!CollectionUtils.isEmpty(parameters)) parameters.forEach(query::setParameter);
         if (!ObjectUtils.isEmpty(positionParameters)) {

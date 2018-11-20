@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Service基类接口实现类
@@ -105,7 +106,7 @@ public abstract class BaseServiceImpl<T extends BaseEntity> implements BaseServi
     @Override
     @Transactional
     public void persist(T... entities) {
-        Arrays.stream(entities).forEach(baseDao::persist);
+        Stream.of(entities).forEach(baseDao::persist);
     }
 
     @SuppressWarnings("unchecked")

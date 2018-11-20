@@ -31,10 +31,13 @@ Array.prototype.toString = function () {
       title: '提示',
       resize: false,
       move: false,
-      anim: 3,
       closeBtn: 2,
-      skin: 'layui-layer-molv'
+      skin: 'dict-skin'
     });
+
+    setInterval(function () {
+      layer && layer.config({anim: ((Math.random() * 5) | 0) + 1});
+    }, 1);
   };
   this.loadLayui();
 }();

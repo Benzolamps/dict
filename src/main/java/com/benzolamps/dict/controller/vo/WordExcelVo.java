@@ -2,7 +2,6 @@ package com.benzolamps.dict.controller.vo;
 
 import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
-import com.benzolamps.dict.component.CellFormat;
 import com.benzolamps.dict.component.DetectColumnNum;
 import com.benzolamps.dict.component.ExcelHeader;
 import lombok.Data;
@@ -24,7 +23,7 @@ public class WordExcelVo implements BaseElementVo<Word> {
     private static final long serialVersionUID = -2201903558371038672L;
 
     /** 索引 */
-    @ExcelHeader(value = 0, cellFormat = CellFormat.INTEGER, notEmpty = true, range = @ExcelHeader.Range(min = 1))
+    @ExcelHeader(value = 0, cellClass = int.class, range = @ExcelHeader.Range(min = 0))
     private Integer index;
 
     /** 单词原形 */
