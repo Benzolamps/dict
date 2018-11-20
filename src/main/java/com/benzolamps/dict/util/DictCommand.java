@@ -24,9 +24,10 @@ public class DictCommand {
      * @param cmd 命令
      * @param action 输入流与错误流回调
      */
+    @SuppressWarnings("SpellCheckingInspection")
     @SneakyThrows(IOException.class)
     public static void exec(String cmd, Action2<String, String> action) {
-        logger.info("cmd:" + cmd);
+        logger.info("cmd: " + cmd);
         Runtime runtime = Runtime.getRuntime();
         Process addProcess = runtime.exec(cmd);
         Charset gbk = Charset.forName("GBK");
