@@ -98,12 +98,12 @@ public class Festival {
         return true;
     }
 
-    /* 感恩节，11月第4个星期五 */
+    /* 感恩节，11月第4个星期四 */
     private static boolean isThanksDay(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         if (calendar.get(MONTH) != NOVEMBER) return false;
-        if (calendar.get(DAY_OF_WEEK) != FRIDAY) return false;
+        if (calendar.get(DAY_OF_WEEK) != THURSDAY) return false;
         if (calendar.get(WEEK_OF_MONTH) != 4) return false;
         return true;
     }
