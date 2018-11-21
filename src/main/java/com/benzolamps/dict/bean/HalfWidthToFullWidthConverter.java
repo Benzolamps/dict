@@ -14,9 +14,9 @@ import static com.benzolamps.dict.util.Constant.HALF_WIDTH_FULL_WIDTH_MAPPING;
  * @datetime 2018-10-4 11:09:54
  */
 @Converter
-public class HalfWidthToFullWidthConverter implements AttributeConverter<String, String> {
+public class HalfWidthToFullWidthConverter extends StringByteArrayConverter {
     @Override
-    public String convertToDatabaseColumn(String value) {
+    public String convertToDatabaseColumn0(String value) {
         if (value == null) {
             return null;
         }
@@ -27,7 +27,7 @@ public class HalfWidthToFullWidthConverter implements AttributeConverter<String,
     }
 
     @Override
-    public String convertToEntityAttribute(String value) {
+    public String convertToEntityAttribute0(String value) {
         if (value == null) {
             return null;
         }

@@ -33,7 +33,7 @@ public abstract class BaseElement extends BaseEntity {
 
     /** 原形 */
     @Convert(converter = FullWidthToHalfWidthConverter.class)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar(255) not null")
     @NotEmpty
     @Length(max = 255)
     private String prototype;
@@ -42,16 +42,16 @@ public abstract class BaseElement extends BaseEntity {
     @Converter
     public static class DefinitionConverter extends HalfWidthToFullWidthConverter {
         @Override
-        public String convertToDatabaseColumn(String value) {
-            return super.convertToDatabaseColumn(value)
+        public String convertToDatabaseColumn0(String value) {
+            return super.convertToDatabaseColumn0(value)
                 .replaceAll("[，]+", "，")
                 .replaceAll("[；]+", "；")
                 .replaceAll("(^；+)|(；+$)|(^，+)|(，+$)", "");
         }
 
         @Override
-        public String convertToEntityAttribute(String value) {
-            return super.convertToDatabaseColumn(value)
+        public String convertToEntityAttribute0(String value) {
+            return super.convertToDatabaseColumn0(value)
                 .replaceAll("[，]+", "，")
                 .replaceAll("[；]+", "；")
                 .replaceAll("(^；+)|(；+$)|(^，+)|(，+$)", "");
@@ -60,7 +60,7 @@ public abstract class BaseElement extends BaseEntity {
 
     /** 词义 */
     @Convert(converter = DefinitionConverter.class)
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "varchar(255) not null")
     @NotEmpty
     @Length(max = 255)
     private String definition;

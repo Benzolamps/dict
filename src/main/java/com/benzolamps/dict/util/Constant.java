@@ -5,6 +5,7 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.yaml.snakeyaml.Yaml;
 
 import java.lang.reflect.Method;
+import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -27,6 +28,12 @@ public interface Constant {
 
     /** SimpleDateFormat */
     DateFormat SIMPLE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    /** UTF-8编码 */
+    Charset UTF8_CHARSET = Charset.forName("UTF-8");
+
+    /** GBK编码 */
+    Charset GBK_CHARSET = Charset.forName("GBK");
 
     /** 标识符正则表达式 */
     // language=RegExp
