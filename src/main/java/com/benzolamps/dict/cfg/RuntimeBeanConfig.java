@@ -3,9 +3,9 @@ package com.benzolamps.dict.cfg;
 import com.benzolamps.dict.util.lambda.Action2;
 import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.config.MapFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
@@ -30,16 +30,18 @@ import static com.benzolamps.dict.util.DictSpring.resolve;
 @Slf4j
 @ImportResource("classpath:freemarker.xml")
 public class RuntimeBeanConfig {
-
     @Resource
     private Configuration configuration;
+
+    @Lazy
+    @Resource
+    private Map freemarkerGlobals;
 
     @SuppressWarnings({"unused", "unchecked", "rawtypes"})
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws Exception {
 
         /* 加载Freemarker共享变量 */
-        Map freemarkerGlobals = getBean("freemarkerGlobals", MapFactoryBean.class).getObject();
         freemarkerGlobals.forEach((Action2<String, Object>) configuration::setSharedVariable);
 
         logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
