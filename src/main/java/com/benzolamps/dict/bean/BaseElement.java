@@ -42,16 +42,16 @@ public abstract class BaseElement extends BaseEntity {
     @Converter
     public static class DefinitionConverter extends HalfWidthToFullWidthConverter {
         @Override
-        public String convertToDatabaseColumn0(String value) {
-            return super.convertToDatabaseColumn0(value)
+        public String parse(String value) {
+            return super.parse(value)
                 .replaceAll("[，]+", "，")
                 .replaceAll("[；]+", "；")
                 .replaceAll("(^；+)|(；+$)|(^，+)|(，+$)", "");
         }
 
         @Override
-        public String convertToEntityAttribute0(String value) {
-            return super.convertToDatabaseColumn0(value)
+        public String dump(String value) {
+            return super.parse(value)
                 .replaceAll("[，]+", "，")
                 .replaceAll("[；]+", "；")
                 .replaceAll("(^；+)|(；+$)|(^，+)|(，+$)", "");
