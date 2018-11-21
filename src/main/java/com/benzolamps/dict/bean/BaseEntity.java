@@ -40,14 +40,14 @@ public abstract class BaseEntity extends BaseBean {
     @Column(nullable = false, updatable = false)
     @DictIgnore
     @CreationTimestamp
-    @JsonFormat(pattern = "yyyy年MM月dd日 H:mm:ss")
+    @JsonFormat(pattern = "yyyy年M月d日 H:mm:ss")
     private Date createDate;
 
     /** 修改时间 */
     @Column(nullable = false)
     @DictIgnore
     @UpdateTimestamp
-    @JsonFormat(pattern = "yyyy年MM月dd日 H:mm:ss")
+    @JsonFormat(pattern = "yyyy年M月d日 H:mm:ss")
     private Date modifyDate;
 
     /** 备注 */

@@ -47,7 +47,7 @@ public class MiscellaneousDirective {
         return arguments -> libraryService.findAll();
     }
 
-    /** @return 查看所有词库 */
+    /** @return 查看当前农历日期*/
     @Bean
     protected TemplateMethodModelEx currentLunarDateMethod() {
         return arguments -> {

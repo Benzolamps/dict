@@ -1,7 +1,6 @@
 package com.benzolamps.dict.cfg;
 
 import com.benzolamps.dict.util.lambda.Action2;
-import com.benzolamps.dict.util.lambda.Operator1;
 import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.MapFactoryBean;
@@ -61,7 +60,7 @@ public class RuntimeBeanConfig {
 
         boolean isRelease = getBean(Environment.class).acceptsProfiles("release");
 
-        return (Operator1<String>) str -> {
+        return str -> {
             if (!StringUtils.hasText(str)) {
                 return "";
             } else if (isRelease) {

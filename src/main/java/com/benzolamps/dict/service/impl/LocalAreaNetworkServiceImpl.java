@@ -16,11 +16,12 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
+import static com.benzolamps.dict.util.Constant.GBK_CHARSET;
 
 /**
  * 局域网操作Service接口实现类
@@ -106,11 +107,10 @@ public class LocalAreaNetworkServiceImpl implements LocalAreaNetworkService {
     @SneakyThrows(IOException.class)
     private void exec(String cmd, Action2<String, String> action) {
         Runtime runtime = Runtime.getRuntime();
-        Process addProcess = runtime.exec(cmd);
-        Charset gbk = Charset.forName("GBK");
-        try (InputStream is = addProcess.getInputStream(); InputStream es = addProcess.getErrorStream()) {
-            String istr = StreamUtils.copyToString(is, gbk);
-            String estr = StreamUtils.copyToString(es, gbk);
+        Process process = runtime.exec(cmd);
+        try (InputStream is = process.getInputStream(); InputStream es = process.getErrorStream()) {
+            String istr = StreamUtils.copyToString(is, GBK_CHARSET);
+            String estr = StreamUtils.copyToString(es, GBK_CHARSET);
             istr = compress.apply(istr);
             estr = compress.apply(estr);
             action.accept(istr, estr);
