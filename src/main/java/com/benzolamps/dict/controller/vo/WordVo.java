@@ -5,6 +5,7 @@ import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.component.DictIgnore;
 import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.DictRemote;
+import com.benzolamps.dict.component.DictTextArea;
 import com.benzolamps.dict.service.base.WordClazzService;
 import com.benzolamps.dict.util.DictSpring;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -61,6 +62,7 @@ public class WordVo implements Serializable {
     @NotEmpty
     @Length(max = 255)
     @DictPropertyInfo(display = "词义")
+    @DictTextArea
     private String definition;
 
     /** 索引 */

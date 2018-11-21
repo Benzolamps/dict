@@ -57,6 +57,8 @@
   add='${base_url}/clazz/add.html'
   edit='${base_url}/clazz/edit.html'
   delete='${base_url}/clazz/delete.json'
+  window_width=400
+  window_height=400
   head_toolbar=[
     {
       'html': '<i class="fa fa-paw" style="font-size: 20px;"></i> &nbsp; 添加到单词分组',

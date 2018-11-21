@@ -181,6 +181,8 @@
   add='${base_url}/phrase/add.html'
   edit='${base_url}/phrase/edit.html'
   delete='${base_url}/phrase/delete.json'
+  window_width=400
+  window_height=400
   head_toolbar=head_toolbar?eval
   page_enabled=true
   search=search?eval
