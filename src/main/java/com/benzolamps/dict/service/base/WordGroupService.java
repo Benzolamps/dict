@@ -63,10 +63,20 @@ public interface WordGroupService extends GroupService {
     Collection<Group> extractPersonalGroup(Group original, Collection<Student> students, Group wordGroup);
 
     /**
+     * 添加单词词频分组 (STR)
+     * @param wordGroup 单词分组
+     * @param content 内容
+     * @param extraWords 词库中不存在的单词
+     * @return 添加后的分组
+     */
+    Group persistFrequencyGroupStr(Group wordGroup, String content, List<String> extraWords);
+
+    /**
      * 添加单词词频分组 (TXT)
      * @param wordGroup 单词分组
      * @param bytes byte[]
      * @param extraWords 词库中不存在的单词
+     * @return 添加后的分组
      */
     Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords);
 
@@ -75,14 +85,25 @@ public interface WordGroupService extends GroupService {
      * @param wordGroup 单词分组
      * @param bytes byte[]
      * @param extraWords 词库中不存在的单词
+     * @return 添加后的分组
      */
     Group persistFrequencyGroupDoc(Group wordGroup, byte[] bytes, List<String> extraWords);
+
+    /**
+     * 更新单词词频分组 (STR)
+     * @param wordGroup 单词分组
+     * @param content 内容
+     * @param extraWords 词库中不存在的单词
+     * @return 更新后的分组
+     */
+    Group updateFrequencyGroupStr(Group wordGroup, String content, List<String> extraWords);
 
     /**
      * 更新单词词频分组 (TXT)
      * @param wordGroup 单词分组
      * @param bytes byte[]
      * @param extraWords 词库中不存在的单词
+     * @return 更新后的分组
      */
     Group updateFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords);
 
@@ -91,6 +112,7 @@ public interface WordGroupService extends GroupService {
      * @param wordGroup 单词分组
      * @param bytes byte[]
      * @param extraWords 词库中不存在的单词
+     * @return 更新后的分组
      */
     Group updateFrequencyGroupDoc(Group wordGroup, byte[] bytes, List<String> extraWords);
 }

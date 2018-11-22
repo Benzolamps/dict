@@ -15,6 +15,7 @@ import com.benzolamps.dict.util.lambda.Func1;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -433,17 +434,24 @@ public class PhraseGroupController extends BaseController {
      * 保存短语词频分组
      * @param phraseGroup 短语分组
      * @param file 文件
+     * @param content 内容
      * @return 操作成功
      */
     @ResponseBody
     @PostMapping(value = "add_frequency_group_save.json")
-    protected BaseVo addFrequencyGroupSave(Group phraseGroup, MultipartFile file) throws IOException {
+    protected BaseVo addFrequencyGroupSave(Group phraseGroup, MultipartFile file, String content) throws IOException {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.isTrue(null != file || StringUtils.hasText(content), "参数错误");
         List<String> extraPhrases = new ArrayList<>();
-        if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
-            phraseGroup = phraseGroupService.persistFrequencyGroupDoc(phraseGroup, file.getBytes(), extraPhrases);
-        } else {
-            phraseGroup = phraseGroupService.persistFrequencyGroupTxt(phraseGroup, file.getBytes(), extraPhrases);
+        if (null != file) {
+            if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
+                phraseGroup = phraseGroupService.persistFrequencyGroupDoc(phraseGroup, file.getBytes(), extraPhrases);
+            } else {
+                phraseGroup = phraseGroupService.persistFrequencyGroupTxt(phraseGroup, file.getBytes(), extraPhrases);
+            }
+        }
+        if (StringUtils.hasText(content)) {
+            phraseGroup = phraseGroupService.persistFrequencyGroupStr(phraseGroup, content, extraPhrases);
         }
         return makeupVo(phraseGroup, extraPhrases);
     }
@@ -470,17 +478,24 @@ public class PhraseGroupController extends BaseController {
      * 更新短语词频分组
      * @param phraseGroup 短语分组
      * @param file 文件
+     * @param content 内容
      * @return 操作成功
      */
     @ResponseBody
     @PostMapping(value = "edit_frequency_group_save.json")
-    protected BaseVo updateFrequencyGroupSave(Group phraseGroup, MultipartFile file) throws IOException {
+    protected BaseVo updateFrequencyGroupSave(Group phraseGroup, MultipartFile file, String content) throws IOException {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.isTrue(null != file || StringUtils.hasText(content), "参数错误");
         List<String> extraPhrases = new ArrayList<>();
-        if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
-            phraseGroup = phraseGroupService.updateFrequencyGroupDoc(phraseGroup, file.getBytes(), extraPhrases);
-        } else {
-            phraseGroup = phraseGroupService.updateFrequencyGroupTxt(phraseGroup, file.getBytes(), extraPhrases);
+        if (null != file) {
+            if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
+                phraseGroup = phraseGroupService.updateFrequencyGroupDoc(phraseGroup, file.getBytes(), extraPhrases);
+            } else {
+                phraseGroup = phraseGroupService.updateFrequencyGroupTxt(phraseGroup, file.getBytes(), extraPhrases);
+            }
+        }
+        if (StringUtils.hasText(content)) {
+            phraseGroup = phraseGroupService.updateFrequencyGroupStr(phraseGroup, content, extraPhrases);
         }
         return makeupVo(phraseGroup, extraPhrases);
     }

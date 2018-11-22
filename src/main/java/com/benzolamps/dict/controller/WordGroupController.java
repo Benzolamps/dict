@@ -15,6 +15,7 @@ import com.benzolamps.dict.util.lambda.Func1;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -433,17 +434,24 @@ public class WordGroupController extends BaseController {
      * 保存单词词频分组
      * @param wordGroup 单词分组
      * @param file 文件
+     * @param content 内容
      * @return 操作成功
      */
     @ResponseBody
     @PostMapping(value = "add_frequency_group_save.json")
-    protected BaseVo addFrequencyGroupSave(Group wordGroup, MultipartFile file) throws IOException {
+    protected BaseVo addFrequencyGroupSave(Group wordGroup, MultipartFile file, String content) throws IOException {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.isTrue(null != file || StringUtils.hasText(content), "参数错误");
         List<String> extraWords = new ArrayList<>();
-        if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
-            wordGroup = wordGroupService.persistFrequencyGroupDoc(wordGroup, file.getBytes(), extraWords);
-        } else {
-            wordGroup = wordGroupService.persistFrequencyGroupTxt(wordGroup, file.getBytes(), extraWords);
+        if (null != file) {
+            if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
+                wordGroup = wordGroupService.persistFrequencyGroupDoc(wordGroup, file.getBytes(), extraWords);
+            } else {
+                wordGroup = wordGroupService.persistFrequencyGroupTxt(wordGroup, file.getBytes(), extraWords);
+            }
+        }
+        if (StringUtils.hasText(content)) {
+            wordGroup = wordGroupService.persistFrequencyGroupStr(wordGroup, content, extraWords);
         }
         return makeupVo(wordGroup, extraWords);
     }
@@ -470,17 +478,24 @@ public class WordGroupController extends BaseController {
      * 更新单词词频分组
      * @param wordGroup 单词分组
      * @param file 文件
+     * @param content 内容
      * @return 操作成功
      */
     @ResponseBody
     @PostMapping(value = "edit_frequency_group_save.json")
-    protected BaseVo updateFrequencyGroupSave(Group wordGroup, MultipartFile file) throws IOException {
+    protected BaseVo updateFrequencyGroupSave(Group wordGroup, MultipartFile file, String content) throws IOException {
         Assert.isTrue(libraryService.count() > 0, "未选择词库");
+        Assert.isTrue(null != file || StringUtils.hasText(content), "参数错误");
         List<String> extraWords = new ArrayList<>();
-        if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
-            wordGroup = wordGroupService.updateFrequencyGroupDoc(wordGroup, file.getBytes(), extraWords);
-        } else {
-            wordGroup = wordGroupService.updateFrequencyGroupTxt(wordGroup, file.getBytes(), extraWords);
+        if (null != file) {
+            if (file.getOriginalFilename().endsWith(".doc") || file.getOriginalFilename().endsWith(".docx")) {
+                wordGroup = wordGroupService.updateFrequencyGroupDoc(wordGroup, file.getBytes(), extraWords);
+            } else {
+                wordGroup = wordGroupService.updateFrequencyGroupTxt(wordGroup, file.getBytes(), extraWords);
+            }
+        }
+        if (StringUtils.hasText(content)) {
+            wordGroup = wordGroupService.updateFrequencyGroupStr(wordGroup, content, extraWords);
         }
         return makeupVo(wordGroup, extraWords);
     }

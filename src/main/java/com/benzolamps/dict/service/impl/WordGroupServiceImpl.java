@@ -1,10 +1,14 @@
 package com.benzolamps.dict.service.impl;
 
-import com.benzolamps.dict.bean.*;
+import com.benzolamps.dict.bean.FrequencyInfo;
+import com.benzolamps.dict.bean.Group;
+import com.benzolamps.dict.bean.Student;
+import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.controller.vo.ProcessImportVo;
 import com.benzolamps.dict.exception.ProcessImportException;
 import com.benzolamps.dict.service.base.WordGroupService;
 import com.benzolamps.dict.service.base.WordService;
+import com.benzolamps.dict.util.Constant;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.POITextExtractor;
@@ -22,7 +26,6 @@ import org.springframework.util.concurrent.ListenableFuture;
 import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
@@ -273,6 +276,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         }
     }
 
+
     private void handleFrequencyGroup(Group wordGroup,String content, List<String> extraWords) {
         String regex = "[A-Za-z]+";
         Matcher matcher = Pattern.compile(regex).matcher(content);
@@ -287,7 +291,6 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             word.getFrequencyInfo().add(new FrequencyInfo(wordGroup.getId(), frequencies.get(word.getPrototype().toLowerCase())));
             word.setFrequency(word.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
         }
-        extraWords.clear();
         extraWords.addAll(frequencies.keySet());
         extraWords.removeAll(words.stream().map(Word::getPrototype).collect(Collectors.toList()));
         wordGroup.setWords(new HashSet<>(words));
@@ -295,11 +298,17 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
 
     @Transactional
     @Override
-    public Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords) {
-        String content = new String(bytes, Charset.forName("UTF-8"));
+    public Group persistFrequencyGroupStr(Group wordGroup, String content, List<String> extraWords) {
         wordGroup = persist(wordGroup);
         handleFrequencyGroup(wordGroup, content, extraWords);
         return wordGroup;
+    }
+
+    @Transactional
+    @Override
+    public Group persistFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords) {
+        String content = new String(bytes, Constant.UTF8_CHARSET);
+        return persistFrequencyGroupStr(wordGroup, content, extraWords);
     }
 
     @Transactional
@@ -313,7 +322,15 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             extractor = new XWPFWordExtractor(new XWPFDocument(new ByteArrayInputStream(bytes)));
         }
         String content = extractor.getText();
-        wordGroup = persist(wordGroup);
+        return persistFrequencyGroupStr(wordGroup, content, extraWords);
+    }
+
+    @Transactional
+    @Override
+    public Group updateFrequencyGroupStr(Group wordGroup, String content, List<String> extraWords) {
+        wordGroup = find(wordGroup.getId());
+        Assert.isTrue(wordGroup.getFrequencyGenerated(), "word group不是词频分组");
+        clearFrequencyInfo(wordGroup);
         handleFrequencyGroup(wordGroup, content, extraWords);
         return wordGroup;
     }
@@ -321,20 +338,14 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
     @Transactional
     @Override
     public Group updateFrequencyGroupTxt(Group wordGroup, byte[] bytes, List<String> extraWords) {
-        wordGroup = find(wordGroup.getId());
-        Assert.isTrue(wordGroup.getFrequencyGenerated(), "word group不是词频分组");
-        String content = new String(bytes, Charset.forName("UTF-8"));
-        clearFrequencyInfo(wordGroup);
-        handleFrequencyGroup(wordGroup, content, extraWords);
-        return wordGroup;
+        String content = new String(bytes, Constant.UTF8_CHARSET);
+        return updateFrequencyGroupStr(wordGroup, content, extraWords);
     }
 
     @Transactional
     @Override
     @SneakyThrows(IOException.class)
     public Group updateFrequencyGroupDoc(Group wordGroup, byte[] bytes, List<String> extraWords) {
-        wordGroup = find(wordGroup.getId());
-        Assert.isTrue(wordGroup.getFrequencyGenerated(), "word group不是词频分组");
         POITextExtractor extractor;
         try {
             extractor = new WordExtractor(new ByteArrayInputStream(bytes));
@@ -342,8 +353,6 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
             extractor = new XWPFWordExtractor(new XWPFDocument(new ByteArrayInputStream(bytes)));
         }
         String content = extractor.getText();
-        clearFrequencyInfo(wordGroup);
-        handleFrequencyGroup(wordGroup, content, extraWords);
-        return wordGroup;
+        return updateFrequencyGroupStr(wordGroup, content, extraWords);
     }
 }

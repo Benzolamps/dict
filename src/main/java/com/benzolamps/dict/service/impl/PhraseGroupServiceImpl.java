@@ -122,12 +122,22 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
     }
 
     @Override
+    public Group persistFrequencyGroupStr(Group phraseGroup, String content, List<String> extraPhrases) {
+        throw new UnsupportedOperationException("该功能尚未实现！");
+    }
+
+    @Override
     public Group persistFrequencyGroupTxt(Group phraseGroup, byte[] bytes, List<String> extraPhrases) {
         throw new UnsupportedOperationException("该功能尚未实现！");
     }
 
     @Override
     public Group persistFrequencyGroupDoc(Group phraseGroup, byte[] bytes, List<String> extraPhrases) {
+        throw new UnsupportedOperationException("该功能尚未实现！");
+    }
+
+    @Override
+    public Group updateFrequencyGroupStr(Group phraseGroup, String content, List<String> extraPhrases) {
         throw new UnsupportedOperationException("该功能尚未实现！");
     }
 

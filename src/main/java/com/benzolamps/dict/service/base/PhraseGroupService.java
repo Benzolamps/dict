@@ -64,10 +64,20 @@ public interface PhraseGroupService extends GroupService {
     Collection<Group> extractPersonalGroup(Group original, Collection<Student> students, Group phraseGroup);
 
     /**
+     * 添加短语词频分组 (STR)
+     * @param phraseGroup 短语分组
+     * @param content 内容
+     * @param extraPhrases 词库中不存在的短语
+     * @return 添加后的分组
+     */
+    Group persistFrequencyGroupStr(Group phraseGroup, String content, List<String> extraPhrases);
+
+    /**
      * 添加短语词频分组 (TXT)
      * @param phraseGroup 短语分组
      * @param bytes byte[]
      * @param extraPhrases 词库中不存在的短语
+     * @return 添加后的分组
      */
     Group persistFrequencyGroupTxt(Group phraseGroup, byte[] bytes, List<String> extraPhrases);
 
@@ -76,14 +86,25 @@ public interface PhraseGroupService extends GroupService {
      * @param phraseGroup 短语分组
      * @param bytes byte[]
      * @param extraPhrases 词库中不存在的短语
+     * @return 添加后的分组
      */
     Group persistFrequencyGroupDoc(Group phraseGroup, byte[] bytes, List<String> extraPhrases);
+
+    /**
+     * 更新短语词频分组 (STR)
+     * @param phraseGroup 短语分组
+     * @param content 内容
+     * @param extraPhrases 词库中不存在的短语
+     * @return 更新后的分组
+     */
+    Group updateFrequencyGroupStr(Group phraseGroup, String content, List<String> extraPhrases);
 
     /**
      * 更新短语词频分组 (TXT)
      * @param phraseGroup 短语分组
      * @param bytes byte[]
      * @param extraPhrases 词库中不存在的短语
+     * @return 更新后的分组
      */
     Group updateFrequencyGroupTxt(Group phraseGroup, byte[] bytes, List<String> extraPhrases);
 
@@ -92,6 +113,7 @@ public interface PhraseGroupService extends GroupService {
      * @param phraseGroup 短语分组
      * @param bytes byte[]
      * @param extraPhrases 词库中不存在的短语
+     * @return 更新后的分组
      */
     Group updateFrequencyGroupDoc(Group phraseGroup, byte[] bytes, List<String> extraPhrases);
 }
