@@ -5,11 +5,12 @@ import com.benzolamps.dict.component.DictPropertyInfo;
 import com.benzolamps.dict.component.IShuffleStrategy;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
 import com.benzolamps.dict.main.DictApplication;
-import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Range;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
+import org.springframework.core.io.Resource;
 import org.springframework.util.StreamUtils;
+
+import javax.validation.constraints.NotNull;
 import java.nio.charset.Charset;
 
 /**
@@ -23,6 +24,9 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
     private static final long serialVersionUID = -3170125922193664875L;
 
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DictApplication.class);
+
+    @Value("url:#{dictProperties.remoteBaseUrl}/dict/tips.txt")
+    private Resource tipsUrl;
 
     @Value("10")
     @DictOptions({"5", "10", "15", "20", "25", "30"})
@@ -141,11 +145,8 @@ public class RoseShuffleStrategySetup implements IShuffleStrategySetup {
         logger.info(String.valueOf(¥$¥ >> ¥$¥ + ¥$¥ << ¥$¥));
         if (p.test(666666)) {
             try {
-                UrlResource urlResource = new UrlResource("https://benzolamps.oss-cn-beijing.aliyuncs.com/dict/tips.txt");
-                String content = StreamUtils.copyToString(urlResource.getInputStream(), Charset.forName("UTF-8"));
-                logger.info(content);
-            } catch (Throwable ignored) {
-            }
+                logger.info(StreamUtils.copyToString(tipsUrl.getInputStream(), Charset.forName("UTF-8")));
+            } catch (Throwable ignored) { }
         }
         return new RoseShuffleStrategy(size, hash, this);
     }

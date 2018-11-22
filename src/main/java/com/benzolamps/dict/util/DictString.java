@@ -69,15 +69,15 @@ public interface DictString {
         } else if (Character.class.equals(tClass) || char.class.equals(tClass)) {
             return (T) (str.isEmpty() ? null  : str.charAt(0));
         } else if (Byte.class.equals(tClass) || byte.class.equals(tClass)) {
-            return (T) Byte.valueOf(str);
+            return (T) Byte.valueOf(Double.valueOf(str).byteValue());
         } else if (Short.class.equals(tClass) || short.class.equals(tClass)) {
-            return (T) Short.valueOf(str);
+            return (T) Short.valueOf(Double.valueOf(str).shortValue());
         } else if (Integer.class.equals(tClass) || int.class.equals(tClass)) {
-            return (T) Integer.valueOf(str);
+            return (T) Integer.valueOf(Double.valueOf(str).intValue());
         } else if (Long.class.equals(tClass) || long.class.equals(tClass)) {
-            return (T) Long.valueOf(str);
+            return (T) Long.valueOf(Double.valueOf(str).longValue());
         } else if (Float.class.equals(tClass) || float.class.equals(tClass)) {
-            return (T) Float.valueOf(str);
+            return (T) Float.valueOf(Double.valueOf(str).floatValue());
         } else if (Double.class.equals(tClass) || double.class.equals(tClass)) {
             return (T) Double.valueOf(str);
         } else if (BigInteger.class.equals(tClass)) {
