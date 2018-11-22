@@ -2,7 +2,6 @@ package com.benzolamps.dict.bean;
 
 import com.benzolamps.dict.util.KeyValuePairs;
 
-import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 
 import static com.benzolamps.dict.util.Constant.HALF_WIDTH_FULL_WIDTH_MAPPING;
@@ -16,7 +15,7 @@ import static com.benzolamps.dict.util.Constant.HALF_WIDTH_FULL_WIDTH_MAPPING;
 @Converter
 public class HalfWidthToFullWidthConverter extends StringByteArrayConverter {
     @Override
-    public String convertToDatabaseColumn0(String value) {
+    public String parse(String value) {
         if (value == null) {
             return null;
         }
@@ -27,7 +26,7 @@ public class HalfWidthToFullWidthConverter extends StringByteArrayConverter {
     }
 
     @Override
-    public String convertToEntityAttribute0(String value) {
+    public String dump(String value) {
         if (value == null) {
             return null;
         }

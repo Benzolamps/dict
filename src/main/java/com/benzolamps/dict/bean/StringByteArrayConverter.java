@@ -15,7 +15,7 @@ public abstract class StringByteArrayConverter implements AttributeConverter<Str
     @Override
     public final byte[] convertToDatabaseColumn(String value) {
         if (value == null) return null;
-        value = convertToDatabaseColumn0(value);
+        value = parse(value);
         return value.getBytes(UTF8_CHARSET);
     }
 
@@ -23,11 +23,11 @@ public abstract class StringByteArrayConverter implements AttributeConverter<Str
     public final String convertToEntityAttribute(byte[] value) {
         if (value == null) return null;
         String str = new String(value, UTF8_CHARSET);
-        str = convertToEntityAttribute0(str);
+        str = dump(str);
         return str;
     }
 
-    public abstract String convertToDatabaseColumn0(String value);
+    public abstract String parse(String value);
 
-    public abstract String convertToEntityAttribute0(String value);
+    public abstract String dump(String value);
 }
