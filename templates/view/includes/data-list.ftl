@@ -26,6 +26,11 @@
     #${id} .field-th-active {
       background-color: #FFB800;
     }
+
+    .layui-table-box {
+      border-bottom: 1px solid #e3e3e3;
+      border-spacing: 0;
+    }
   </style>
 
   <div id="${id}-container" class="layui-container">
@@ -100,7 +105,7 @@
   </script>
 
   <script type="text/javascript">
-    $('#${id}-container').css('width', (parent.$('body').width() - 300) + 'px');
+    $('#${id}-container').css('width', '100%');
 
     <#-- 表格字段 -->
     var fields = <@json_dump obj=fields/>;
@@ -123,8 +128,9 @@
     <#if delete_enabled && edit_enabled><#assign width += 110/></#if>
     <#assign width += 110 * toolbar?size/>
 
-    fields.push({field: 'id', title: '操作', align: 'left', fixed: 'right', toolbar: '#${id}-tools', width: ${width}});
-    fields.unshift(/*{type: 'numbers'},*/{type: 'checkbox'});
+    fields.push({title: '操作', align: 'left', fixed: 'right', toolbar: '#${id}-tools', width: ${width}});
+    fields.push({field: 'id', hide: 'true'});
+    fields.unshift({type: 'numbers'}, {type: 'checkbox'});
 
     var emptyText = [
       '空空如也~',
@@ -149,31 +155,21 @@
     });
 
     <#-- TODO: 分页渲染 -->
-    <#if page_enabled && 1 lt page.totalPages>
-      laypage.render({
-        elem: '${id}-page',
-        count: ${page.total},
-        curr: ${page.pageNumber},
-        limit: ${page.pageSize},
-        limits: [10, 20, 30, 50, 100, 200, 500, 1000],
-        layout: ['count', 'prev', 'page', 'next', 'skip', 'limit'],
-        jump: function (obj, first) {
-          if (!first) {
-            $('#${id}-page-info [name=pageSize]').val(obj.limit);
-            $('#${id}-page-info [name=pageNumber]').val(obj.curr);
-            execute();
-          }
+    laypage.render({
+      elem: '${id}-page',
+      count: ${page.total},
+      curr: ${page.pageNumber},
+      limit: ${page.pageSize},
+      limits: [10, 20, 30, 50, 100, 200, 500, 1000],
+      layout: ['count', 'prev', 'page', 'next', 'skip', 'limit'],
+      jump: function (obj, first) {
+        if (!first) {
+          $('#${id}-page-info [name=pageSize]').val(obj.limit);
+          $('#${id}-page-info [name=pageNumber]').val(obj.curr);
+          execute();
         }
-      });
-    </#if>
-    <#if page.total gt 0 && page.total lte 5>
-      var littleText = [
-        '就剩这么点了！',
-        '就只能找到这些了！',
-        '其他数据都被怪兽吃掉惹！'
-      ];
-      $('#${id}-page').html('<blockquote class="layui-elem-quote">' + littleText[(Math.random() * littleText.length) | 0] + '</blockquote>');
-    </#if>
+      }
+    });
 
     var add = $('#${id} [lay-event=add]');
     var delMany = $('#${id} [lay-event=delMany]');

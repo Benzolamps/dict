@@ -24,6 +24,7 @@
         {'id': 'failedPhrases desc', 'value': '未掌握短语数 ↓'}
       ]
     },
+    {'name': 'description', 'display': '描述', 'type': 'string'},
     {
       'name': 'clazz',
       'display': '班级',

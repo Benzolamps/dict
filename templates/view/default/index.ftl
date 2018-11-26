@@ -63,7 +63,7 @@
 
         .layui-nav-itemed>.dict-column {
           background-color: #DDDDDD !important;
-          color: #222222 !important !important;
+          color: #222222 !important;
         }
 
         .layui-this>.dict-child {
@@ -167,7 +167,7 @@
           <div class="layui-tab tab" lay-filter="docDemoTabBrief" style="height: 95%">
             <div class="layui-tab-content" style="width: 100%; height: 100%">
               <div class="layui-tab-item layui-show" style="width: 100%; height: 100%">
-                <iframe src="javascript:;" id="content-frame" frameborder="0" style="width: 98%; height: 100%"></iframe>
+                <iframe src="javascript:;" id="content-frame" frameborder="0" style="width: 98%; height: 100%; overflow-x: hidden; overflow-y: hidden;" scrolling="no"></iframe>
               </div>
             </div>
           </div>
