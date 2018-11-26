@@ -1,12 +1,12 @@
 package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.bean.Group;
+import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.dao.base.GroupDao;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
-import com.benzolamps.dict.dao.core.SwitchOptions;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,9 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.text.ParseException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
 
 import static com.benzolamps.dict.util.Constant.SIMPLE_DATE_FORMAT;
 
@@ -95,5 +97,19 @@ public class GroupDaoImpl extends BaseDaoImpl<Group> implements GroupDao {
             }
         };
         return super.findPage(dictQuery, pageable);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Number> findMaxInfo(Library library) {
+        String jpql =
+            "select " +
+            "max(groups.studentsOrientedCount) as maxStudentsCount, " +
+            "max(groups.wordsCount) as maxWordsCount, " +
+            "max(groups.phrasesCount) as maxPhrasesCount, " +
+            "max(groups.scoreCount) as maxScoreCount " +
+            "from Group as groups " +
+            "where groups.library = :library";
+        return (Map<String, Number>) DictJpa.createJpqlQuery(entityManager, jpql, Collections.singletonMap("library", library)).uniqueResult();
     }
 }

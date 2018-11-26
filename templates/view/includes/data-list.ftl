@@ -67,7 +67,7 @@
 
       <#-- 表格主体 -->
       <div class="layui-row layui-col-space10" style="margin: auto 0">
-        <div class="layui-col-lg12">
+        <div class="layui-col-xs12">
           <table class="layui-table" lay-filter="${id}"></table>
         </div>
       </div>
@@ -370,7 +370,7 @@
       }
     );
     $('#${id}-search').append($(
-      '<div class="layui-col-md2" style="height: 100%" >' +
+      '<div class="layui-col-xs2" style="height: 100%" >' +
       '<button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="search" type="submit">' +
       '<i class="layui-icon" style="font-size: 20px;">&#xe615;</i> 搜索' +
       '</button>' +
@@ -410,22 +410,15 @@
 
     <#-- 执行 -->
     var execute = function (forcedReload) {
-      dict.loadText({
-        url: location.pathname,
-        requestBody: true,
-        type: 'POST',
-        data: forcedReload ? null : dict.loadFormData(),
-        success: function (result, status, request) {
-          document.close();
-          document.write(result);
-        },
-        error: function (result, status, request) {
-          parent.layer.alert(result.message, {
-            icon: 2,
-            title: result.status
-          });
-        }
-      });
+      var newSearch = '?' + encodeURIComponent(JSON.stringify(dict.loadFormData()));
+      if (forcedReload) {
+        newSearch = "";
+      }
+      if (newSearch == location.search) {
+        location.reload(forcedReload);
+      } else {
+        location.replace(location.pathname + newSearch);
+      }
     };
 
     <#-- 页面刷新 -->

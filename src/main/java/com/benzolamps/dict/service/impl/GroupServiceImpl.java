@@ -253,6 +253,11 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
         group.getStudentsScored().clear();
     }
 
+    @Override
+    public Map<String, Number> findMaxInfo() {
+        return groupDao.findMaxInfo(assertLibrary());
+    }
+
     /**
      * 断言分组和学生
      * @param group 分组
@@ -270,6 +275,7 @@ public abstract class GroupServiceImpl extends BaseServiceImpl<Group> implements
 
     /**
      * 断言是否选中词库
+     * @return 当前词库
      */
     protected Library assertLibrary() {
         Library library = libraryService.getCurrent();

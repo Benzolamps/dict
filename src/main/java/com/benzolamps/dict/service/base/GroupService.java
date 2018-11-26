@@ -2,7 +2,10 @@ package com.benzolamps.dict.service.base;
 
 import com.benzolamps.dict.bean.Clazz;
 import com.benzolamps.dict.bean.Group;
+import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.bean.Student;
+
+import java.util.Map;
 
 /**
  * 单词短语分组Service接口
@@ -59,4 +62,10 @@ public interface GroupService extends BaseService<Group> {
      * @param group 分组
      */
     void complete(Group group);
+
+    /**
+     * 获取最大值信息
+     * @return 最大值信息
+     */
+    Map<String, Number> findMaxInfo();
 }

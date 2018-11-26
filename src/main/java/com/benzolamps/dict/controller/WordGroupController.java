@@ -68,6 +68,7 @@ public class WordGroupController extends BaseController {
         if (libraryService.count() > 0) {
             mv.setViewName("view/word_group/list");
             mv.addObject("page", wordGroupService.findPage(pageable));
+            mv.addObject("maxInfo", wordGroupService.findMaxInfo());
         } else {
             mv.setViewName("view/library/lack");
         }

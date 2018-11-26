@@ -41,7 +41,7 @@
         {'id': 'scoreCount desc', 'value': '已考核次数 ↓'}
       ]
     },
-    {'name': 'studentsCount', 'display': '学生数', 'type': 'string', 'options': <@switch100/>},
+    {'name': 'studentsCount', 'display': '学生数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxStudentsCount}},
     {'name': 'wordsCount', 'display': '单词数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
     {'name': 'scoreCount', 'display': '已考核次数', 'type': 'string', 'options': <@switch10/>},
     {'name': 'studentNumber', 'display': '学生学号', 'type': 'integer'}

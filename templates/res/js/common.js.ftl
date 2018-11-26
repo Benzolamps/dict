@@ -21,7 +21,7 @@ Array.prototype.toString = function () {
 };
 
 !function () {
-  this.models = ['element', 'layer', 'form', 'table', 'code', 'laypage', 'laydate'];
+  this.models = ['element', 'layer', 'form', 'table', 'code', 'laypage', 'laydate', 'slider'];
   this.loadLayui = function () {
     $.each(models, function (index, value) {
       window[value] || (window[value] = layui[value]);

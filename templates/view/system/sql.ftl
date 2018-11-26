@@ -3,7 +3,7 @@
 </blockquote>
 <div class="layui-row">
   <div class="layui-card" style="width: 800px;">
-    <div class="layui-card-body">
+    <div class="layui-card-body" style="font-family: Consolas, Helvetica Neue, Helvetica, PingFang SC, Tahoma, Arial, sans-serif">
     <textarea id="sql" cols="120" rows="20" style="resize: none" autocomplete="off"></textarea>
     <input id="sql-execute" value="执行" type="button" class="layui-btn layui-btn-normal layui-btn-disabled" style="margin-top: 10px;">
     </div>

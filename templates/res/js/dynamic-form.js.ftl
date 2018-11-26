@@ -133,6 +133,9 @@ dict.produceFormItem = function (property) {
           .attr('placeholder', property.display)
           .attr('autocomplete', 'off')
           .attr('value', property.value)
+          .attr('readonly', true)
+          .css('user-select', 'none')
+          .css('cursor', 'pointer')
           .attr('required', property.notEmpty)
           .addClass('layui-input');
         var laydateParam = {
@@ -148,7 +151,7 @@ dict.produceFormItem = function (property) {
               case 'month': return 'M';
             }
           })(property.type),
-          trigger: 'click',
+          trigger: 'focus',
           value: property.value
         };
         if (property.hasOwnProperty('min')) {
@@ -159,6 +162,34 @@ dict.produceFormItem = function (property) {
         }
         laydate.render(laydateParam);
         break;
+      }
+      case 'numberRange': {
+        $component = $(document.createElement('input'))
+          .attr('type', 'text')
+          .attr('name', property.name)
+          .attr('placeholder', property.display)
+          .attr('autocomplete', 'off')
+          .attr('value', property.value)
+          .attr('readonly', true)
+          .css('user-select', 'none')
+          .css('cursor', 'pointer')
+          .attr('required', property.notEmpty)
+          .addClass('layui-input')
+          .focus(function () {
+            layer.tips('<div id="property-range" style="margin: 10px">', this, {
+              tips: [3, '#FFF'],
+              time: 0,
+              area: ['400px', '40px'],
+              success: function () {
+                slider.render({
+                  elem: '#property-range',
+                  range: true,
+                  min: 0,
+                  max: 'max' in property ? property.max : 100
+                });
+              }
+            });
+          });
       }
     }
   }
@@ -409,7 +440,7 @@ dict.dynamicSearch = function (form, selector, fields, initValues, extendedRules
     fields[i].value = initValues[fields[i].name] != null ? initValues[fields[i].name] : fields[i].defaultValue;
     fields[i].name = 'search.' + fields[i].name;
     var $subDiv = $(document.createElement('div'))
-      .addClass('layui-col-md2')
+      .addClass('layui-col-xs2')
       .append(dict.produceFormItem(fields[i]));
     $div.append($subDiv);
   }
