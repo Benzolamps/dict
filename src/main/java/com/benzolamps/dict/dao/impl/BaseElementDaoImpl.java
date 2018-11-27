@@ -3,15 +3,14 @@ package com.benzolamps.dict.dao.impl;
 import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.dao.base.BaseElementDao;
+import com.benzolamps.dict.dao.core.DictJpa;
 import org.springframework.core.ResolvableType;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 单词或短语类的基类Dao接口实现类
@@ -21,16 +20,6 @@ import java.util.Set;
  */
 @SuppressWarnings("unchecked")
 public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> implements BaseElementDao<T> {
-
-    /** 实体类类型 */
-    private Class<T> entityClass;
-
-    /** 构造方法 */
-    public BaseElementDaoImpl() {
-        ResolvableType resolvableType = ResolvableType.forClass(getClass());
-        entityClass = (Class<T>) resolvableType.getSuperType().getGeneric().resolve();
-    }
-
     @Override
     public Set<String> findPrototypes(Library library) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
@@ -52,5 +41,17 @@ public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> im
         criteriaQuery.select(criteriaBuilder.max(root.get("index")));
         Number result = entityManager.createQuery(criteriaQuery).getSingleResult();
         return result != null ? result.intValue() : 0;
+    }
+
+    @Override
+    public Map<String, Number> findMaxInfo(Library library) {
+        String jpql =
+            "select " +
+            "max(ele.masteredStudentsCount) as maxMasteredStudentsCount, " +
+            "max(ele.failedStudentsCount) as maxFailedStudentsCount, " +
+            "max(ele.frequency) as maxFrequency " +
+            "from " + entityClass.getSimpleName() + " as ele " +
+            "where ele.library = :library";
+        return (Map<String, Number>) DictJpa.createJpqlQuery(entityManager, jpql, Collections.singletonMap("library", library)).uniqueResult();
     }
 }

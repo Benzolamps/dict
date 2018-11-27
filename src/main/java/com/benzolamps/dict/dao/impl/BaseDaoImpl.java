@@ -30,7 +30,7 @@ import static com.benzolamps.dict.dao.core.DictJpa.*;
 public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
 
 	/** 实体类类型 */
-	private Class<T> entityClass;
+    protected Class<T> entityClass;
 
 	@PersistenceContext
 	protected EntityManager entityManager;

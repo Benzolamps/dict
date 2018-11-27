@@ -34,11 +34,11 @@ public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseD
             @Override
             public void applySearch(Search search) {
                 if ("masteredStudents".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch1000("masteredStudentsCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    applyRangeFilter(new Search("masteredStudentsCount", search.getValue()));
                 } else if ("failedStudents".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch1000("failedStudentsCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    applyRangeFilter(new Search("failedStudentsCount", search.getValue()));
                 } else if ("frequency".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch1000("frequency", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    applyRangeFilter(search);
                 } else if ("isMastered".equals(search.getField())) {
                     isMastered = DictObject.ofObject(search.getValue(), boolean.class);
                 } else if ("studentNumber".equals(search.getField())) {

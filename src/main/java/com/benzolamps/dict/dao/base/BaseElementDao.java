@@ -3,6 +3,7 @@ package com.benzolamps.dict.dao.base;
 import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.bean.Library;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -26,4 +27,11 @@ public interface BaseElementDao<T extends BaseElement> extends BaseDao<T> {
      * @return 最小的索引
      */
     int findMaxIndex(Library library);
+
+    /**
+     * 获取最大值信息
+     * @param library 词库
+     * @return 最大值信息
+     */
+    Map<String, Number> findMaxInfo(Library library);
 }

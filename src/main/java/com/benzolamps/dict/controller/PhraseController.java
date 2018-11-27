@@ -67,6 +67,7 @@ public class PhraseController extends BaseController {
             Page<Phrase> phrases = phraseService.findPage(pageable);
             Page<PhraseVo> phraseVos = phrases.convertPage(PhraseVo::convertFromPhrase);
             mv.addObject("page", phraseVos);
+            mv.addObject("maxInfo", phraseService.findMaxInfo());
         } else {
             mv.setViewName("view/library/lack");
         }

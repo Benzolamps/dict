@@ -2,6 +2,7 @@ package com.benzolamps.dict.dao.core;
 
 import com.benzolamps.dict.bean.BaseEntity;
 import com.benzolamps.dict.component.Alias;
+import com.benzolamps.dict.util.DictObject;
 import com.benzolamps.dict.util.DictString;
 import lombok.Setter;
 import org.springframework.core.ResolvableType;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 生成好的自定义查询
@@ -108,5 +110,14 @@ public class GeneratedDictQuery<B extends BaseEntity> implements DictQuery<B> {
     @Override
     public final Filter getFilter() {
         return filter;
+    }
+
+    protected final void applyRangeFilter(Search rangeSearch) {
+        getFilter().and(Filter.betweenAnd(
+            rangeSearch.getField(),
+            Stream.of(rangeSearch.getValue().toString().split("[ \\s\\u00a0]*~[ \\s\\u00a0]*"))
+                .map(str -> DictObject.ofObject(str, int.class))
+                .toArray())
+        );
     }
 }

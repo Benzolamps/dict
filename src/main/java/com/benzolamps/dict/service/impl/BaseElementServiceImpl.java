@@ -23,10 +23,7 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -160,5 +157,11 @@ public abstract class BaseElementServiceImpl<T extends BaseElement, R extends Ba
     public Collection<T> findByPrototypes(Collection<String> prototypes) {
         Library current = libraryService.getCurrent();
         return findList(Filter.inIgnoreCase("prototype", prototypes).and(Filter.eq("library", current)));
+    }
+
+    @Override
+    public Map<String, Number> findMaxInfo() {
+        Library current = libraryService.getCurrent();
+        return baseElementDao.findMaxInfo(current);
     }
 }

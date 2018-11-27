@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Group>" -->
+<#-- @ftlvariable name="maxInfo" type="java.util.Map<String, Number>" -->
 <#list page.searches as search>
   <#if search.field == 'student' && search.value??><#assign student = search.value/></#if>
 </#list>
@@ -42,8 +43,8 @@
       ]
     },
     {'name': 'studentsCount', 'display': '学生数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxStudentsCount}},
-    {'name': 'wordsCount', 'display': '单词数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
-    {'name': 'scoreCount', 'display': '已考核次数', 'type': 'string', 'options': <@switch10/>},
+    {'name': 'wordsCount', 'display': '单词数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxWordsCount}},
+    {'name': 'scoreCount', 'display': '已考核次数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxScoreCount}},
     {'name': 'studentNumber', 'display': '学生学号', 'type': 'integer'}
     <#if student??>
       , {'name': 'studentName', 'display': '学生姓名', 'type': 'string', 'readonly': true}

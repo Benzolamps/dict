@@ -65,13 +65,13 @@ public class GroupDaoImpl extends BaseDaoImpl<Group> implements GroupDao {
                 } else if ("frequencyGenerated".equals(search.getField())) {
                     getFilter().and(Filter.eq("frequencyGenerated", DictObject.ofObject(search.getValue(), int.class) == 1));
                 } else if ("studentsCount".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch100("studentsOrientedCount", DictObject.ofObject(search.getValue(), int.class), true, true, true, true));
+                    applyRangeFilter(new Search("studentsOrientedCount", search.getValue()));
                 } else if ("wordsCount".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch1000("wordsCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    applyRangeFilter(search);
                 } else if ("phrasesCount".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch1000("phrasesCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    applyRangeFilter(search);
                 } else if ("scoreCount".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch10("scoreCount", DictObject.ofObject(search.getValue(), int.class), true, true, true));
+                    applyRangeFilter(search);
                 } else if (!"studentName".equals(search.getField())){
                     super.applySearch(search);
                 }

@@ -1,14 +1,15 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Student>" -->
 <#-- @ftlvariable name="clazzes" type="java.util.Collection<com.benzolamps.dict.bean.Clazz>" -->
+<#-- @ftlvariable name="maxInfo" type="java.util.Map<String, Number>" -->
 <@nothing><script type="text/javascript"></@nothing>
 <#assign search>
   [
     {'name': 'number', 'display': '学号', 'type': 'integer'},
     {'name': 'name', 'display': '姓名', 'type': 'string'},
-    {'name': 'masteredWords', 'display': '已掌握单词数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
-    {'name': 'failedWords', 'display': '未掌握单词数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
-    {'name': 'masteredPhrases', 'display': '已掌握短语数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
-    {'name': 'failedPhrases', 'display': '未掌握短语数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
+    {'name': 'masteredWords', 'display': '已掌握单词数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxMasteredWordsCount}},
+    {'name': 'failedWords', 'display': '未掌握单词数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxFailedWordsCount}},
+    {'name': 'masteredPhrases', 'display': '已掌握短语数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxMasteredPhrasesCount}},
+    {'name': 'failedPhrases', 'display': '未掌握短语数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxFailedPhrasesCount}},
     {
       'name': 'order',
       'display': '排序',
@@ -120,7 +121,7 @@
   name='学生'
   fields=[
     {'field': 'number', 'title': '学号', 'sort': true},
-    {'field': 'name', 'title': '姓名', 'sort': true},
+    {'field': 'name', 'title': '姓名', 'sort': true, 'format': '{{d.name}}（{{d.description}}）'},
     {'field': 'clazz', 'title': '班级', 'sort': true},
     {'title': '学习进度 （已掌握／未掌握）', 'width': 250, 'format': '单词 {{d.masteredWords}}／{{d.failedWords}} 短语 {{d.masteredPhrases}}／{{d.failedPhrases}}'}
   ]

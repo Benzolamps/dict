@@ -6,6 +6,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 筛选条件
@@ -445,6 +446,46 @@ public class Filter extends SnippetResolver {
             .addSnippet(left)
             .addSnippet(new OperatorSnippet(") and lower("))
             .addSnippet(right)
+            .addSnippet(new OperatorSnippet(")"));
+    }
+
+    /**
+     * between and
+     * @param field 字段
+     * @param bound 边界
+     * @return Filter
+     */
+    public static Filter betweenAnd(String field, Object[] bound) {
+        Assert.hasText(field, "field不能为null或空");
+        Assert.notEmpty(bound, "bound不能为为null或空");
+        Assert.isTrue(bound.length >= 2, "bound的元素应大于2");
+        Assert.noNullElements(bound, "bound中不能含有为null的元素");
+        return (Filter) new Filter()
+            .addSnippet(new FieldSnippet(field))
+            .addSnippet(new OperatorSnippet("between"))
+            .addSnippet(bound[0])
+            .addSnippet(new OperatorSnippet("and"))
+            .addSnippet(bound[1]);
+    }
+
+    /**
+     * between and ignore case
+     * @param field 字段
+     * @param bound 边界
+     * @return Filter
+     */
+    public static Filter betweenAndIgnoreCase(String field, String[] bound) {
+        Assert.hasText(field, "field不能为null或空");
+        Assert.notEmpty(bound, "bound不能为为null或空");
+        Assert.isTrue(bound.length >= 2, "bound的元素应大于2");
+        Assert.isTrue(Stream.of(bound).allMatch(StringUtils::hasText), "bound中不能含有为null或空的元素");
+        return (Filter) new Filter()
+            .addSnippet(new OperatorSnippet("lower("))
+            .addSnippet(new FieldSnippet(field))
+            .addSnippet(new OperatorSnippet(") between lower("))
+            .addSnippet(bound[0])
+            .addSnippet(new OperatorSnippet(") and lower("))
+            .addSnippet(bound[1])
             .addSnippet(new OperatorSnippet(")"));
     }
 

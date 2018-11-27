@@ -14,9 +14,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import static java.util.Collections.singletonMap;
 
@@ -61,14 +60,15 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
                         case "failedPhrases asc": this.applyOrder(Order.asc("failedPhrases")); return;
                         case "failedPhrases desc": this.applyOrder(Order.desc("failedPhrases"));
                     }
+
                 } else if ("masteredWords".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch1000("masteredWordsCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    applyRangeFilter(new Search("masteredWordsCount", search.getValue()));
                 } else if ("failedWords".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch1000("failedWordsCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    applyRangeFilter(new Search("failedWordsCount", search.getValue()));
                 } else if ("masteredPhrases".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch1000("masteredPhrasesCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    applyRangeFilter(new Search("masteredPhrasesCount", search.getValue()));
                 } else if ("failedPhrases".equals(search.getField())) {
-                    getFilter().and(SwitchOptions.switch1000("failedPhrasesCount", DictObject.ofObject(search.getValue(), int.class), true, false, true, false));
+                    applyRangeFilter(new Search("failedPhrasesCount", search.getValue()));
                 } else {
                     super.applySearch(search);
                 }
@@ -107,9 +107,22 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     }
 
     @Override
-    public Student findByNumber(Integer studentNumber) {
-        Assert.notNull(studentNumber, "student number不能为null");
-        return findSingle(Filter.eq("number", studentNumber));
+    public Student findByNumber(Integer number) {
+        Assert.notNull(number, "student number不能为null");
+        return findSingle(Filter.eq("number", number));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Number> findMaxInfo() {
+        String jpql =
+            "select " +
+            "max(student.masteredWordsCount) as maxMasteredWordsCount, " +
+            "max(student.failedWordsCount) as maxFailedWordsCount, " +
+            "max(student.masteredPhrasesCount) as maxMasteredPhrasesCount, " +
+            "max(student.failedPhrasesCount) as maxFailedPhrasesCount " +
+            "from Student as student ";
+        return (Map<String, Number>) DictJpa.createJpqlQuery(entityManager, jpql, null).uniqueResult();
     }
 
     @Override

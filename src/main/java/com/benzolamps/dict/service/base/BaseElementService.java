@@ -1,9 +1,11 @@
 package com.benzolamps.dict.service.base;
 
 import com.benzolamps.dict.bean.BaseElement;
+import com.benzolamps.dict.bean.Library;
 import org.springframework.core.io.Resource;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * 单词或短语类的基类Service接口
@@ -42,4 +44,10 @@ public interface BaseElementService<T extends BaseElement> extends BaseService<T
      * @return 单词或短语集合
      */
     Collection<T> findByPrototypes(Collection<String> prototypes);
+
+    /**
+     * 获取最大值信息
+     * @return 最大值信息
+     */
+    Map<String, Number> findMaxInfo();
 }

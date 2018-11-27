@@ -68,6 +68,7 @@ public class PhraseGroupController extends BaseController {
         if (libraryService.count() > 0) {
             mv.setViewName("view/phrase_group/list");
             mv.addObject("page", phraseGroupService.findPage(pageable));
+            mv.addObject("maxInfo", phraseGroupService.findMaxInfo());
         } else {
             mv.setViewName("view/library/lack");
         }

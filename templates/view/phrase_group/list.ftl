@@ -1,4 +1,5 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Group>" -->
+<#-- @ftlvariable name="maxInfo" type="java.util.Map<String, Number>" -->
 <#list page.searches as search>
   <#if search.field == 'student' && search.value??><#assign student = search.value/></#if>
 </#list>
@@ -34,16 +35,16 @@
       'type': 'string',
       'options': [
         {'id': 'studentsCount asc', 'value': '学生数 ↑'},
-        {'id': 'phrasesCount asc', 'value': '短语数 ↑'},
+        {'id': 'wordsCount asc', 'value': '短语数 ↑'},
         {'id': 'scoreCount asc', 'value': '已考核次数 ↑'},
         {'id': 'studentsCount desc', 'value': '学生数 ↓'},
         {'id': 'phrasesCount desc', 'value': '短语数 ↓'},
         {'id': 'scoreCount desc', 'value': '已考核次数 ↓'}
       ]
     },
-    {'name': 'studentsCount', 'display': '学生数', 'type': 'string', 'options': <@switch100/>},
-    {'name': 'phrasesCount', 'display': '短语数', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
-    {'name': 'scoreCount', 'display': '已考核次数', 'type': 'string', 'options': <@switch10/>},
+    {'name': 'studentsCount', 'display': '学生数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxStudentsCount}},
+    {'name': 'wordsCount', 'display': '短语数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxPhrasesCount}},
+    {'name': 'scoreCount', 'display': '已考核次数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxScoreCount}},
     {'name': 'studentNumber', 'display': '学生学号', 'type': 'integer'}
     <#if student??>
       , {'name': 'studentName', 'display': '学生姓名', 'type': 'string', 'readonly': true}
@@ -51,7 +52,7 @@
   ]
 </#assign>
 
-<#assign import_phrase_process>
+<#assign import_word_process>
   dict.uploadFile({
     action: 'import.json',
     multiple: true,
@@ -67,7 +68,7 @@
   parent.layer.open({
     type: 2,
     title: '导出短语',
-    content: '${base_url}/phrase/export.html',
+    content: '${base_url}/word/export.html',
     area: ['400px', '400px'],
     cancel: function () {
       delete parent.exportData;
@@ -82,7 +83,7 @@
       param.docSolutionId = parent.exportData.docSolution;
       param.shuffleSolutionId = parent.exportData.shuffleSolution;
       dict.loadText({
-        url: '${base_url}/phrase/export_save.json',
+        url: '${base_url}/word/export_save.json',
         type: 'post',
         data: param,
         dataType: 'json',
@@ -111,29 +112,29 @@
 <@nothing></script></@nothing>
 
 <@data_list
-  id='phrase-groups'
+  id='word-groups'
   name='短语分组'
   fields=[
     {'field': 'name', 'title': '名称', 'sort': true, 'minWidth': 120},
     {'field': 'description', 'title': '描述', 'sort': true, 'minWidth': 120},
     {'field': 'createDate', 'title': '创建时间', 'sort': true, 'minWidth': 120},
     {'field': 'status', 'title': '状态', 'sort': true, 'minWidth': 10},
-    {'title': '学生数／短语数／已考核次数', 'format': '{{d.studentsOriented}}／{{d.phrases}}／{{d.scoreCount}}', 'minWidth': 120}
+    {'title': '学生数／短语数／已考核次数', 'format': '{{d.studentsOriented}}／{{d.words}}／{{d.scoreCount}}', 'minWidth': 120}
   ]
   page=page
-  add='${base_url}/phrase_group/add.html'
-  edit='${base_url}/phrase_group/edit.html'
-  delete='${base_url}/phrase_group/delete.json'
+  add='${base_url}/word_group/add.html'
+  edit='${base_url}/word_group/edit.html'
+  delete='${base_url}/word_group/delete.json'
   window_width=400
   window_height=400
   head_toolbar=[
     {
       'html': '<i class="fa fa-plus" style="font-size: 20px;"></i> &nbsp; 添加短语词频分组',
-      'handler': 'parent.layer.open({type: 2, title: \'添加短语词频分组\', content: \'${base_url}/phrase_group/add_frequency_group.html\', area: [\'800px\', \'600px\']});'
+      'handler': 'parent.layer.open({type: 2, title: \'添加短语词频分组\', content: \'${base_url}/word_group/add_frequency_group.html\', area: [\'800px\', \'600px\']});'
     },
     {
       'html': '导入短语学习进度',
-      'handler': import_phrase_process
+      'handler': import_word_process
     },
     {
       'html': '导出短语',

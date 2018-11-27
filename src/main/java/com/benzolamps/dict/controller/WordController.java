@@ -75,6 +75,7 @@ public class WordController extends BaseController {
                 return wordVo;
             });
             mv.addObject("wordClazzes", wordClazzService.findAll());
+            mv.addObject("maxInfo", wordService.findMaxInfo());
             mv.addObject("page", wordVos);
         } else {
             mv.setViewName("view/library/lack");

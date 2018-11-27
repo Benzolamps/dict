@@ -1,6 +1,7 @@
 <#-- @ftlvariable name="page" type="com.benzolamps.dict.dao.core.Page<com.benzolamps.dict.bean.Word>" -->
 <#-- @ftlvariable name="wordClazzes" type="java.util.Collection<com.benzolamps.dict.bean.WordClazz>" -->
 <#-- @ftlvariable name="student" type="com.benzolamps.dict.bean.Student" -->
+<#-- @ftlvariable name="maxInfo" type="java.util.Map<String, Number>" -->
 <@nothing><script type="text/javascript"></@nothing>
 
 <#assign file_upload>
@@ -45,9 +46,9 @@
         {'id': 'false', 'value': '未掌握'}
       ]
     },
-    {'name': 'frequency', 'display': '词频', 'type': 'string', 'options': <@switch1000 gt1=false eq1=false/>},
-    {'name': 'masteredStudents', 'display': '已掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>},
-    {'name': 'failedStudents', 'display': '未掌握人数', 'type': 'string', 'options': <@switch100 gt1=false eq1=false/>}
+    {'name': 'frequency', 'display': '词频', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxFrequency}},
+    {'name': 'masteredStudents', 'display': '已掌握人数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxMasteredStudentsCount}},
+    {'name': 'failedStudents', 'display': '未掌握人数', 'type': 'numberRange', 'min': 0, 'max': ${maxInfo.maxFailedStudentsCount}}
   ]
 </#assign>
 <@nothing>;</@nothing>

@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * 学生Service接口实现类
@@ -69,5 +70,10 @@ public class StudentServiceImpl extends BaseServiceImpl<Student> implements Stud
     @Override
     public StudyProcess[] getStudyProcess(Student student) {
         return studentDao.getStudyProcess(student);
+    }
+
+    @Override
+    public Map<String, Number> findMaxInfo() {
+        return studentDao.findMaxInfo();
     }
 }

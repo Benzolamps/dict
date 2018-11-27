@@ -164,14 +164,14 @@ dict.produceFormItem = function (property) {
       }
       case 'numberRange': {
         var tipsIndex, sliderIndex;
+        var min = 'min' in property ? property.min : 0, max = 'max' in property ? property.max : 100;
+        property.pattern = /^\d+[ \s\u00a0]*~[ \s\u00a0]*\d+$/;
         $component = $(document.createElement('input'))
           .attr('type', 'text')
           .attr('name', property.name)
           .attr('placeholder', property.display)
           .attr('autocomplete', 'off')
           .attr('value', property.value)
-          .attr('readonly', true)
-          .css('cursor', 'pointer')
           .attr('required', property.notEmpty)
           .addClass('layui-input')
           .focus(function () {
@@ -182,10 +182,9 @@ dict.produceFormItem = function (property) {
               shadeClose: true,
               shade: 0.01,
               success: function () {
-                var min = 'min' in property ? property.min : 0, max = 'max' in property ? property.max : 100;
                 var defaultValue = [min, max];
-                if ($.trim($component.val()).match(/\d+ ~ \d+/)) {
-                  defaultValue = $component.val().split(' ~ ');
+                if ($.trim($component.val()).match(/^\d+[ \s\u00a0]*~[ \s\u00a0]*\d+$/)) {
+                  defaultValue = $component.val().split(/[ \s\u00a0]*~[ \s\u00a0]*/);
                 }
                 sliderIndex = slider.render({
                   elem: '.property-range',
@@ -294,12 +293,12 @@ dict.postInitForm = function (form, fields, extendedRules, extendedMessages, sub
       itemMessages.integer = fields[i].display + '必须是有效的整数';
     }
 
-    if (fields[i].max != null) {
+    if (fields[i].type != 'numberRange' && fields[i].max != null) {
       itemRules.max = fields[i].max;
       itemMessages.max = fields[i].display + '不能大于 ' + fields[i].max;
     }
 
-    if (fields[i].min != null) {
+    if (fields[i].type != 'numberRange' && fields[i].min != null) {
       itemRules.min = fields[i].min;
       itemMessages.min = fields[i].display + '不能小于 ' + fields[i].min;
     }
