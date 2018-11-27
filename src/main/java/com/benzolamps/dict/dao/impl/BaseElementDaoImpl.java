@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.dao.base.BaseElementDao;
 import com.benzolamps.dict.dao.core.DictJpa;
+import org.intellij.lang.annotations.Language;
 import org.springframework.core.ResolvableType;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -11,6 +12,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.*;
+
+import static java.util.Collections.singletonMap;
 
 /**
  * 单词或短语类的基类Dao接口实现类
@@ -20,6 +23,19 @@ import java.util.*;
  */
 @SuppressWarnings("unchecked")
 public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> implements BaseElementDao<T> {
+
+    @Override
+    public void remove(Collection<T> elements) {
+        for (BaseElement element : elements) {
+            @Language("MySQL") String sqlGs = "delete from dict_gw where word = :element_id ;";
+            @Language("MySQL") String sqlGss = "delete from dict_gp where phrase = :element_id ;";
+            Map<String, Object> parameters = singletonMap("element_id", element.getId());
+            executeNative(sqlGs, parameters);
+            executeNative(sqlGss, parameters);
+        }
+        super.remove(elements);
+    }
+
     @Override
     public Set<String> findPrototypes(Library library) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

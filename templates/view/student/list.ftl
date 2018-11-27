@@ -121,7 +121,7 @@
   name='学生'
   fields=[
     {'field': 'number', 'title': '学号', 'sort': true},
-    {'field': 'name', 'title': '姓名', 'sort': true, 'format': '{{d.name}}（{{d.description}}）'},
+    {'field': 'name', 'title': '姓名', 'sort': true, 'format': '{{d.name}}{{\'description\' in d ? \'（\' + d.description + \'）\' : \'\'}}'},
     {'field': 'clazz', 'title': '班级', 'sort': true},
     {'title': '学习进度 （已掌握／未掌握）', 'width': 250, 'format': '单词 {{d.masteredWords}}／{{d.failedWords}} 短语 {{d.masteredPhrases}}／{{d.failedPhrases}}'}
   ]

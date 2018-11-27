@@ -44,7 +44,7 @@
                 if ((function () {
                   ${submit_handler}
                 })()) {
-                  parent.$('iframe')[0].contentWindow.dict.reload(true);
+                  parent.$('iframe')[0].contentWindow.dict.reload();
                 }
               }
             });

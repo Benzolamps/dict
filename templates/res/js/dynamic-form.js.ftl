@@ -164,7 +164,11 @@ dict.produceFormItem = function (property) {
       }
       case 'numberRange': {
         var tipsIndex, sliderIndex;
-        var min = 'min' in property ? property.min : 0, max = 'max' in property ? property.max : 100;
+        var min = 'min' in property && !isNaN(property.min) ? property.min : 0, max = 'max' in property && !isNaN(property.max) ? property.max : 100;
+        if (max - min == 0) {
+          max = 100;
+          min = 0;
+        }
         property.pattern = /^\d+[ \s\u00a0]*~[ \s\u00a0]*\d+$/;
         $component = $(document.createElement('input'))
           .attr('type', 'text')
@@ -180,7 +184,7 @@ dict.produceFormItem = function (property) {
               time: 0,
               area: ['400px', '40px'],
               shadeClose: true,
-              shade: 0.01,
+              shade: [2, '#FFFFFF00'],
               success: function () {
                 var defaultValue = [min, max];
                 if ($.trim($component.val()).match(/^\d+[ \s\u00a0]*~[ \s\u00a0]*\d+$/)) {

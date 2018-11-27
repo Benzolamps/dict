@@ -35,8 +35,9 @@
 
   <div id="${id}-container" class="layui-container">
     <form class="layui-form" id="${id}" lay-filter="${id}" onsubmit="return false;" method="post">
+      <button type="submit" id="submit-button" style="display: none">hidden</button>
       <#-- 头部工具栏 -->
-      <div class="layui-row layui-col-space10" style="margin: auto 0">
+      <div id="${id}-head-toolbar" class="layui-row layui-col-space10">
         <div class="head-toolbar">
           <button style="margin-bottom: 5px" class="layui-btn layui-btn-normal layui-btn-sm" lay-event="refresh" type="button">
             <i class="fa fa-refresh" style="font-size: 20px;"></i> &nbsp; 刷新
@@ -72,14 +73,24 @@
         </div>
       </div>
 
-      <#-- 分页 -->
-      <#if page_enabled>
-        <div id="${id}-page"></div>
-        <div id="${id}-page-info">
-          <span name="pageSize"></span>
-          <span name="pageNumber"></span>
+      <div class="layui-row layui-col-space10" style="margin: auto 0">
+        <div class="layui-col-xs10">
+        <#-- 分页 -->
+        <#if page_enabled>
+          <div id="${id}-page"></div>
+          <div id="${id}-page-info">
+            <span name="pageSize"></span>
+            <span name="pageNumber"></span>
+          </div>
+        </#if>
         </div>
-      </#if>
+        <div class="layui-col-xs2">
+          <br>
+          <button style="margin-bottom: 5px" class="layui-btn layui-btn-xs" lay-event="fullscreen" type="button">
+            <i class="fa fa-expand" style="font-size: 20px;"></i> &nbsp; 全屏
+          </button>
+        </div>
+      </div>
 
       <#-- 排序 -->
       <div id="${id}-order-info">
@@ -174,6 +185,7 @@
     var add = $('#${id} [lay-event=add]');
     var delMany = $('#${id} [lay-event=delMany]');
     var refresh = $('#${id} [lay-event=refresh]');
+    var fullscreen = $('#${id} [lay-event=fullscreen]');
 
     <#-- TODO: 添加操作 -->
     add.click(function () {
@@ -224,6 +236,13 @@
     <#-- 刷新 -->
     refresh.click(function () {
       execute();
+    });
+    
+    fullscreen.click(function () {
+      parent.$('#toggle-nav').trigger('click');
+      $('#${id}-head-toolbar').slideUp();
+      $('#${id}-search').slideUp();
+      table.reload('${id}', {height: 'full-100'});
     });
 
     <#-- 头部工具栏操作 -->
@@ -365,13 +384,13 @@
       <@json_dump obj=rules/>,
       <@json_dump obj=messages/>,
       function () {
-        $pageInfo.find('[name=pageNumber]').val(1);
-        execute();
+        'avoid recurse';
+        execute(window.forcedReload);
       }
     );
     $('#${id}-search').append($(
       '<div class="layui-col-xs2" style="height: 100%" >' +
-      '<button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="search" type="submit">' +
+      '<button class="layui-btn layui-btn-radius layui-btn-normal" lay-event="search" type="button" onclick="$pageInfo.find(\'[name=pageNumber]\').val(1); execute();">' +
       '<i class="layui-icon" style="font-size: 20px;">&#xe615;</i> 搜索' +
       '</button>' +
       '</div>'
@@ -410,14 +429,18 @@
 
     <#-- 执行 -->
     var execute = function (forcedReload) {
-      var newSearch = '?' + encodeURIComponent(JSON.stringify(dict.loadFormData()));
-      if (forcedReload) {
-        newSearch = "";
-      }
-      if (newSearch == location.search) {
-        location.reload(forcedReload);
+      if (arguments.callee.caller.toString().indexOf('avoid recurse') > -1) {
+        var newSearch = '?' + encodeURIComponent(JSON.stringify(dict.loadFormData()));
+        if (forcedReload) {
+          newSearch = "";
+        }
+        if (newSearch == location.search) {
+          location.reload(forcedReload);
+        } else {
+          location.replace(location.pathname + newSearch);
+        }
       } else {
-        location.replace(location.pathname + newSearch);
+        $('#submit-button').trigger('click');
       }
     };
 
