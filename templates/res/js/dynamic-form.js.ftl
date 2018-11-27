@@ -134,7 +134,6 @@ dict.produceFormItem = function (property) {
           .attr('autocomplete', 'off')
           .attr('value', property.value)
           .attr('readonly', true)
-          .css('user-select', 'none')
           .css('cursor', 'pointer')
           .attr('required', property.notEmpty)
           .addClass('layui-input');
@@ -164,6 +163,7 @@ dict.produceFormItem = function (property) {
         break;
       }
       case 'numberRange': {
+        var tipsIndex, sliderIndex;
         $component = $(document.createElement('input'))
           .attr('type', 'text')
           .attr('name', property.name)
@@ -171,21 +171,34 @@ dict.produceFormItem = function (property) {
           .attr('autocomplete', 'off')
           .attr('value', property.value)
           .attr('readonly', true)
-          .css('user-select', 'none')
           .css('cursor', 'pointer')
           .attr('required', property.notEmpty)
           .addClass('layui-input')
           .focus(function () {
-            layer.tips('<div id="property-range" style="margin: 10px">', this, {
+            tipsIndex = layer.tips('<div class="property-range" style="margin: 10px">', this, {
               tips: [3, '#FFF'],
               time: 0,
               area: ['400px', '40px'],
+              shadeClose: true,
+              shade: 0.01,
               success: function () {
-                slider.render({
-                  elem: '#property-range',
+                var min = 'min' in property ? property.min : 0, max = 'max' in property ? property.max : 100;
+                var defaultValue = [min, max];
+                if ($.trim($component.val()).match(/\d+ ~ \d+/)) {
+                  defaultValue = $component.val().split(' ~ ');
+                }
+                sliderIndex = slider.render({
+                  elem: '.property-range',
                   range: true,
-                  min: 0,
-                  max: 'max' in property ? property.max : 100
+                  min: min,
+                  max: max,
+                  value: defaultValue,
+                  setTips: function (value) {
+                    return property.display + '：' + value;
+                  },
+                  change: function (value) {
+                    return $component.val(value.join(' ~ '));
+                  }
                 });
               }
             });
