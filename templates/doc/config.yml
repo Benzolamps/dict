@@ -54,15 +54,12 @@ solutions:
     properties:
       separate_columns: 4
   - id: 4
-    name: Excel表格
+    name: 单词Excel表格
     type: STREAM
     generatorClass: rose.WordExcelGenerator
-    remark: 单词对照表
-    needHeader: true
+    remark: 单词Excel表格
     exportFor: WORD
     needShuffle: false
-    properties:
-      separate_columns: 4
   - id: 5
     name: 短语排查表
     type: TEMPLATE
@@ -102,3 +99,10 @@ solutions:
     needShuffle: false
     properties:
       separate_columns: 4
+  - id: 9
+    name: 短语Excel表格
+    type: STREAM
+    generatorClass: rose.PhraseExcelGenerator
+    remark: 短语Excel表格
+    exportFor: PHRASE
+    needShuffle: false

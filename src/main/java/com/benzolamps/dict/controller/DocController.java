@@ -70,6 +70,7 @@ public class DocController extends BaseController {
      * @param docExportVo DocExportVo
      * @return 操作成功
      */
+    @SuppressWarnings("unchecked")
     @RequestMapping(value = "export_personal.json")
     protected BaseVo exportPersonal(DocExportVo docExportVo) throws IOException, TemplateException {
         Assert.notNull(docExportVo, "doc export vo不能为null");
@@ -85,16 +86,31 @@ public class DocController extends BaseController {
             }
             docExportVo.setContent(elements);
             Map<String, Object> attributes = new HashMap<>();
-            Template template = this.getTemplate(docExportVo, attributes);
-            for (Student student : students) {
-                attributes.put("student", studentService.find(student.getId()));
-                attributes.put("groupId", group.getId());
-                try (StringWriter stringWriter = new StringWriter()) {
-                    template.process(attributes, stringWriter);
-                    String content = compress.apply(stringWriter.toString());
-                    String name = (String) attributes.get("title");
-                    InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
-                    zipItems.add(new DictFile.ZipItem(name + " - " + group.getName() + " - " + student.getNumber() + " - " + student.getName() + ".doc", inputStream));
+
+            if (docExportVo.getDocSolution().getType().equals(DocSolution.Type.STREAM)) {
+                Class<IStreamDocumentGenerator> generatorClass = DictDynamicClass.loadClass(docExportVo.getDocSolution().getGeneratorClass());
+                IStreamDocumentGenerator generator = new DictBean<>(generatorClass).createSpringBean(null);
+                for (Student student : students) {
+                    attributes.put("student", studentService.find(student.getId()));
+                    attributes.put("groupId", group.getId());
+                    try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+                        generator.generate(outputStream, docExportVo.getContent(), docExportVo.getTitle());
+                        InputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+                        zipItems.add(new DictFile.ZipItem(docExportVo.getTitle() + " - " + group.getName() + " - " + student.getNumber() + " - " + student.getName() + "." + generator.getExt(), inputStream));
+                    }
+                }
+            } else {
+                Template template = this.getTemplate(docExportVo, attributes);
+                for (Student student : students) {
+                    attributes.put("student", studentService.find(student.getId()));
+                    attributes.put("groupId", group.getId());
+                    try (StringWriter stringWriter = new StringWriter()) {
+                        template.process(attributes, stringWriter);
+                        String content = compress.apply(stringWriter.toString());
+                        String name = (String) attributes.get("title");
+                        InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
+                        zipItems.add(new DictFile.ZipItem(name + " - " + group.getName() + " - " + student.getNumber() + " - " + student.getName() + ".doc", inputStream));
+                    }
                 }
             }
         }
@@ -123,13 +139,11 @@ public class DocController extends BaseController {
         Assert.notNull(docExportVo, "doc export vo不能为null");
         Map<String, Object> attributes = new HashMap<>();
         Map<String, Object> exportAttribute = new HashMap<>();
-        DocSolution docSolution = docSolutionService.find(docExportVo.getDocSolutionId());
-        Assert.notNull(docSolution, "doc solution不存在");
-        if (docSolution.getType().equals(DocSolution.Type.STREAM)) {
-            Class<IStreamDocumentGenerator> generatorClass = DictDynamicClass.loadClass(docSolution.getGeneratorClass());
+        if (docExportVo.getDocSolution().getType().equals(DocSolution.Type.STREAM)) {
+            Class<IStreamDocumentGenerator> generatorClass = DictDynamicClass.loadClass(docExportVo.getDocSolution().getGeneratorClass());
             IStreamDocumentGenerator generator = new DictBean<>(generatorClass).createSpringBean(null);
             exportAttribute.put("ext", generator.getExt());
-            exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> generator.generate(outputStream, docExportVo.getContent()));
+            exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> generator.generate(outputStream, docExportVo.getContent(), docExportVo.getTitle()));
         } else {
             Template template = this.getTemplate(docExportVo, attributes);
             try (StringWriter stringWriter = new StringWriter()) {
@@ -148,7 +162,7 @@ public class DocController extends BaseController {
     private Template getTemplate(DocExportVo docExportVo, Map<String, Object> attributes) throws IOException {
         Assert.notEmpty(docExportVo.getContent(), "content不能为null或空");
         attributes.put("content", docExportVo.getContent());
-        DocSolution docSolution = docSolutionService.find(docExportVo.getDocSolutionId());
+        DocSolution docSolution = docExportVo.getDocSolution();
         Assert.notNull(docSolution, "doc solution不能为null");
         attributes.put("title", docExportVo.getTitle());
         if (docSolution.getNeedShuffle()) {

@@ -1,12 +1,17 @@
 package com.benzolamps.dict.controller.vo;
 
 import com.benzolamps.dict.bean.BaseElement;
+import com.benzolamps.dict.bean.DocSolution;
 import com.benzolamps.dict.bean.Group;
+import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.dao.core.Pageable;
+import com.benzolamps.dict.service.base.DocSolutionService;
+import com.benzolamps.dict.util.DictSpring;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -52,4 +57,16 @@ public class DocExportVo implements Serializable {
 
     /** 比较策略 */
     private Integer compareStrategy;
+
+    @JsonIgnore
+    private DocSolution docSolution;
+
+    @JsonIgnore
+    private ShuffleSolution shuffleSolution;
+
+    public void setDocSolutionId(Integer docSolutionId) {
+        this.docSolutionId = docSolutionId;
+        docSolution = DictSpring.getBean(DocSolutionService.class).find(docSolutionId);
+        Assert.notNull(docSolution, "doc solution不存在");
+    }
 }

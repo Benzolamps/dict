@@ -24,5 +24,5 @@ public interface IStreamDocumentGenerator<T extends BaseElement> {
      * @param outputStream 输出流
      * @param elements 元素
      */
-    void generate(OutputStream outputStream, Collection<T> elements);
+    void generate(OutputStream outputStream, Collection<T> elements, String title);
 }

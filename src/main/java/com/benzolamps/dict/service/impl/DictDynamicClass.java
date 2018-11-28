@@ -5,6 +5,7 @@ import com.benzolamps.dict.util.DictFile;
 import com.benzolamps.dict.util.DictSpring;
 import com.benzolamps.dict.util.lambda.Action1;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
@@ -27,6 +28,7 @@ import static javax.tools.JavaFileObject.Kind.CLASS;
  * @version 2.1.1
  * @datetime 2018-7-18 22:04:21
  */
+@Slf4j
 @Component
 @SuppressWarnings({"unused", "unchecked"})
 public class DictDynamicClass {
@@ -106,6 +108,7 @@ public class DictDynamicClass {
             JavaCompiler.CompilationTask task = compiler.getTask(null, produceJavaFileManager(manager), null, options, null, iterable);
             Boolean result = task.call();
             Assert.isTrue(result != null && result, "编译失败");
+            logger.info("compiled classes: " + classBytes.keySet());
             classBytes.keySet().forEach((Action1<String>) key -> dynamicClassSet.add(classLoader.loadClass(key)));
             DictSpring.setClassLoader(classLoader);
         }
