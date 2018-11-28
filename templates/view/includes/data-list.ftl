@@ -63,32 +63,34 @@
 
       <#-- 筛选 -->
       <#if search?size gt 0>
-        <div id="${id}-search" class="layui-row layui-col-space10" style="margin-top: 10px; margin-left: 0; margin-right: 0"></div>
+        <div id="${id}-search" class="layui-row layui-col-space10" style="margin-top: 10px"></div>
       </#if>
 
       <#-- 表格主体 -->
-      <div class="layui-row layui-col-space10" style="margin: auto 0">
+      <div class="layui-row layui-col-space10">
         <div class="layui-col-xs12">
           <table class="layui-table" lay-filter="${id}"></table>
         </div>
       </div>
 
-      <div class="layui-row layui-col-space10" style="margin: auto 0">
-        <div class="layui-col-xs10">
-        <#-- 分页 -->
-        <#if page_enabled>
-          <div id="${id}-page"></div>
-          <div id="${id}-page-info">
-            <span name="pageSize"></span>
-            <span name="pageNumber"></span>
+      <div class="layui-row layui-col-space10">
+        <div style="position: fixed; bottom: 0; left: 10px; right: 0">
+          <div class="layui-col-xs10">
+          <#-- 分页 -->
+          <#if page_enabled>
+            <div id="${id}-page"></div>
+            <div id="${id}-page-info">
+              <span name="pageSize"></span>
+              <span name="pageNumber"></span>
+            </div>
+          </#if>
           </div>
-        </#if>
-        </div>
-        <div class="layui-col-xs2">
-          <br>
-          <button style="margin-bottom: 5px" class="layui-btn layui-btn-xs" lay-event="fullscreen" type="button">
-            <i class="fa fa-expand" style="font-size: 20px;"></i> &nbsp; 全屏
-          </button>
+          <div class="layui-col-xs1 layui-col-xs-offset1">
+            <br>
+            <button style="margin-bottom: 5px" class="layui-btn layui-btn-xs" lay-event="fullscreen" type="button">
+              <i class="fa fa-expand" style="font-size: 20px;"></i>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -102,17 +104,19 @@
 
   <#-- 工具栏 -->
   <script type="text/html" id="${id}-tools">
-    <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" type="button">
-      <i class="fa fa-pencil-square-o" style="font-size: 20px;"></i> &nbsp; 修改
-    </button>
-    <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del" type="button">
-      <i class="fa fa-trash-o" style="font-size: 20px;"></i> &nbsp; 删除
-    </button>
-    <#list toolbar as tool>
-      <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="toolbar-${tool_index}" type="button">
-        ${tool.html}
+    <div>
+      <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" type="button" style="border: none; background-color: #DDDDDD">
+        <i class="fa fa-pencil-square-o" style="font-size: 20px;"></i> &nbsp; 修改
       </button>
-    </#list>
+      <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="del" type="button" style="border: none; background-color: #DDDDDD">
+        <i class="fa fa-trash-o" style="font-size: 20px;"></i> &nbsp; 删除
+      </button>
+      <#list toolbar as tool>
+        <button class="layui-btn layui-btn-primary layui-btn-xs" lay-event="toolbar-${tool_index}" type="button" style="border: none; background-color: #DDDDDD">
+          ${tool.html}
+        </button>
+      </#list>
+    </div>
   </script>
 
   <script type="text/javascript">
@@ -139,8 +143,8 @@
     <#if delete_enabled && edit_enabled><#assign width += 110/></#if>
     <#assign width += 110 * toolbar?size/>
 
-    fields.push({title: '操作', align: 'left', fixed: 'right', toolbar: '#${id}-tools', width: ${width}});
-    fields.push({field: 'id', hide: 'true'});
+    fields.push({title: '操作', align: 'left', fixed: 'right', toolbar: '#${id}-tools', width: ${width}, unresize: 'true'});
+    fields.push({field: 'id', hide: 'true', unresize: 'true'});
     fields.unshift({type: 'numbers'}, {type: 'checkbox'});
 
     var emptyText = [
@@ -151,15 +155,18 @@
       '数据被怪兽吃掉惹~'
     ];
 
+    var $table = $('#${id} table');
+
     <#-- TODO: 表格渲染 -->
     table.render({
-      elem: $('#${id} table'),
+      elem: $table,
       page: false,
       limit: ${page.pageSize},
       cols: [fields],
       data: <@json_dump obj=values/>,
       id: '${id}',
-      height: 'full-250',
+      size: 'sm',
+      height: 'full-230',
       text: {
         none: emptyText[(Math.random() * emptyText.length) | 0]
       }
@@ -237,12 +244,27 @@
     refresh.click(function () {
       execute();
     });
+
+    var hided = false;
     
     fullscreen.click(function () {
-      parent.$('#toggle-nav').trigger('click');
-      $('#${id}-head-toolbar').slideUp();
-      $('#${id}-search').slideUp();
-      table.reload('${id}', {height: 'full-100'});
+      if (hided) {
+        $table.next().fadeOut(function () {
+          table.reload('${id}', {height: 'full-230'});
+          $table.next().fadeIn();
+          $('#${id}-head-toolbar').fadeIn();
+          $('#${id}-search').fadeIn();
+          hided ^= true;
+        });
+      } else {
+        $('#${id}-head-toolbar').fadeOut();
+        $('#${id}-search').fadeOut();
+        $table.next().fadeOut(function () {
+          table.reload('${id}', {height: 'full-89'});
+          $table.next().fadeIn();
+          hided ^= true;
+        });
+      }
     });
 
     <#-- 头部工具栏操作 -->

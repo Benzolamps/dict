@@ -8,10 +8,14 @@ import com.benzolamps.dict.dao.base.WordClazzDao;
 import com.benzolamps.dict.dao.base.WordDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
+import org.intellij.lang.annotations.Language;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.Collection;
+import java.util.Map;
+
+import static java.util.Collections.singletonMap;
 
 /**
  * 单词Dao接口实现类
@@ -28,6 +32,20 @@ public class WordDaoImpl extends BaseElementDaoImpl<Word> implements WordDao {
 
     @Resource
     private StudentDao studentDao;
+
+    @Override
+    public void remove(Collection<Word> words) {
+        for (Word word : words) {
+            @Language("MySQL") String sqlGw = "delete from dict_gw where word = :word_id ;";
+            @Language("MySQL") String sqlSw = "delete from dict_sw where word = :word_id ;";
+            @Language("MySQL") String sqlSwf = "delete from dict_swf where word = :word_id ;";
+            Map<String, Object> parameters = singletonMap("word_id", word.getId());
+            executeNative(sqlGw, parameters);
+            executeNative(sqlSw, parameters);
+            executeNative(sqlSwf, parameters);
+        }
+        super.remove(words);
+    }
 
     @Override
     public Page<Word> findPage(Pageable pageable) {

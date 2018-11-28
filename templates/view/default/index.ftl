@@ -163,14 +163,8 @@
             </ul>
           </div>
         </div>
-        <div id="content-div" class="layui-body dict-body" style="margin: 5px; padding: 5px;">
-          <div class="layui-tab tab" lay-filter="docDemoTabBrief" style="height: 95%">
-            <div class="layui-tab-content" style="width: 100%; height: 100%">
-              <div class="layui-tab-item layui-show" style="width: 100%; height: 100%">
-                <iframe src="javascript:;" id="content-frame" frameborder="0" style="width: 98%; height: 100%; overflow-x: hidden; overflow-y: hidden;" scrolling="no"></iframe>
-              </div>
-            </div>
-          </div>
+        <div id="content-div" class="layui-body dict-body" style="margin: 5px; padding: 5px; overflow-y: hidden;">
+          <iframe src="javascript:;" id="content-frame" frameborder="0" style="width: 100%; height: 100%; overflow-x: hidden; overflow-y: hidden;" scrolling="no"></iframe>
         </div>
         <div class="layui-footer dict-footer" style="background-color: #FBFBFB; text-align: center">
           &copy; <a target="_blank">benzolamps.com</a>
