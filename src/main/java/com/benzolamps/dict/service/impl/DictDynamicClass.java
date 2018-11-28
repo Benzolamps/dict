@@ -1,7 +1,12 @@
-package com.benzolamps.dict.util;
+package com.benzolamps.dict.service.impl;
 
+import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictFile;
+import com.benzolamps.dict.util.DictSpring;
 import com.benzolamps.dict.util.lambda.Action1;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -22,10 +27,12 @@ import static javax.tools.JavaFileObject.Kind.CLASS;
  * @version 2.1.1
  * @datetime 2018-7-18 22:04:21
  */
+@Component
 @SuppressWarnings({"unused", "unchecked"})
-public class DynamicClass {
+public class DictDynamicClass {
 
     /* 目录 */
+    @Value("#{dictProperties.universePath}")
     private File file;
 
     /* 编译错误监听 */
@@ -35,12 +42,14 @@ public class DynamicClass {
     private Locale locale = Locale.SIMPLIFIED_CHINESE;
 
     /* charset */
-    private Charset charset = Charset.forName("UTF-8");
+    private Charset charset = Constant.UTF8_CHARSET;
 
     /* 类byte[] */
+    @Value("#{new java.util.HashMap()}")
     private Map<String, byte[]> classBytes;
 
     /* 全部的动态类 */
+    @Value("#{new java.util.HashSet()}")
     private Set<Class<?>> dynamicClassSet;
 
     /* 获取编译器 */
@@ -130,10 +139,8 @@ public class DynamicClass {
 
     /**
      * 构造器
-     * @param classPath 类加载路径
      */
-    public DynamicClass(String classPath) {
-        Assert.notNull(classPath, "class path不能为null");
+    public DictDynamicClass() {
         Assert.notNull(compiler, "需要tools.jar");
         classLoader = new URLClassLoader(new URL[0], DictSpring.getClassLoader()) {
             @Override
@@ -146,10 +153,6 @@ public class DynamicClass {
                 return defineClass(name, buf, 0, buf.length);
             }
         };
-
-        file = new File(classPath);
-        classBytes = new HashMap<>();
-        dynamicClassSet = new HashSet<>();
     }
 
     @SneakyThrows(ClassNotFoundException.class)

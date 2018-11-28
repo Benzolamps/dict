@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,8 +31,8 @@ import java.util.stream.Collectors;
 public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
 
     /* 动态类加载器 */
-    @Value("#{new com.benzolamps.dict.util.DynamicClass(dictProperties.universePath)}")
-    private DynamicClass dictDynamicClass;
+    @Resource
+    private DictDynamicClass dictDynamicClass;
 
     /* 可用的乱序策略Class */
     @Value("#{new java.util.HashSet()}")
@@ -88,7 +89,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     @Override
     @Transactional
     public ShuffleSolution persist(ShuffleSolution shuffleSolution) {
-        Class<IShuffleStrategySetup> strategyClass = DynamicClass.loadClass(shuffleSolution.getStrategyClass());
+        Class<IShuffleStrategySetup> strategyClass = DictDynamicClass.loadClass(shuffleSolution.getStrategyClass());
         DictBean<IShuffleStrategySetup> dictBean = new DictBean<>(strategyClass);
         Collection<DictProperty> dictProperties = dictBean.getProperties();
         Map<String, Object> properties = shuffleSolution.getProperties();
@@ -126,7 +127,7 @@ public class ShuffleSolutionServiceImpl implements ShuffleSolutionService {
     public Collection<DictPropertyInfoVo> getShuffleSolutionPropertyInfo(String className) {
         Assert.hasText(className, "class name不能为null或空");
         Assert.isTrue(getAvailableStrategyNames().contains(className), "class name不存在");
-        Class<?> strategyClass = DynamicClass.loadClass(className);
+        Class<?> strategyClass = DictDynamicClass.loadClass(className);
         return DictPropertyInfoVo.applyDictPropertyInfo(strategyClass);
     }
 

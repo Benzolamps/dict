@@ -16,6 +16,7 @@ baseProperties:
 solutions:
   - id: 0
     name: 单词排查表
+    type: TEMPLATE
     path: doc/universe/check_words.doc
     remark: 单词排查表
     needHeader: true
@@ -26,6 +27,7 @@ solutions:
       need_top_info: true
   - id: 1
     name: 单词生词表
+    type: TEMPLATE
     path: doc/universe/new_words.doc
     remark: 单词生词表
     needHeader: true
@@ -34,6 +36,7 @@ solutions:
     properties: {}
   - id: 2
     name: 单词抄写表
+    type: TEMPLATE
     path: doc/universe/copy_words.doc
     remark: 单词抄写表
     needHeader: true
@@ -42,6 +45,7 @@ solutions:
     properties: {}
   - id: 3
     name: 单词对照表
+    type: TEMPLATE
     path: doc/universe/collation_words.doc
     remark: 单词对照表
     needHeader: true
@@ -50,7 +54,18 @@ solutions:
     properties:
       separate_columns: 4
   - id: 4
+    name: Excel表格
+    type: STREAM
+    generatorClass: rose.WordExcelGenerator
+    remark: 单词对照表
+    needHeader: true
+    exportFor: WORD
+    needShuffle: false
+    properties:
+      separate_columns: 4
+  - id: 5
     name: 短语排查表
+    type: TEMPLATE
     path: doc/universe/check_phrases.doc
     remark: 短语排查表
     needHeader: true
@@ -59,24 +74,27 @@ solutions:
     properties:
       separate_columns: 4
       need_top_info: true
-  - id: 5
+  - id: 6
     name: 短语生词表
+    type: TEMPLATE
     path: doc/universe/new_phrases.doc
     remark: 短语生词表
     needHeader: true
     exportFor: PHRASE
     needShuffle: false
     properties: {}
-  - id: 6
+  - id: 7
     name: 短语抄写表
+    type: TEMPLATE
     path: doc/universe/copy_phrases.doc
     remark: 短语抄写表
     needHeader: true
     exportFor: PHRASE
     needShuffle: true
     properties: {}
-  - id: 7
+  - id: 8
     name: 短语对照表
+    type: TEMPLATE
     path: doc/universe/collation_phrases.doc
     remark: 短语对照表
     needHeader: true

@@ -5,12 +5,15 @@ import com.benzolamps.dict.bean.DocSolution;
 import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
+import com.benzolamps.dict.component.IStreamDocumentGenerator;
 import com.benzolamps.dict.controller.vo.BaseElementComparator;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.service.base.DocSolutionService;
 import com.benzolamps.dict.service.base.ShuffleSolutionService;
 import com.benzolamps.dict.service.base.StudentService;
+import com.benzolamps.dict.service.impl.DictDynamicClass;
+import com.benzolamps.dict.util.DictBean;
 import com.benzolamps.dict.util.DictFile;
 import com.benzolamps.dict.util.lambda.Action1;
 import freemarker.template.Template;
@@ -58,6 +61,9 @@ public class DocController extends BaseController {
 
     @Resource
     private UnaryOperator<String> compress;
+
+    @Resource
+    private DictDynamicClass dictDynamicClass;
 
     /**
      * 导出专属文档
@@ -110,23 +116,33 @@ public class DocController extends BaseController {
      * @param docExportVo DocExportVo
      * @return 操作成功
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @RequestMapping(value = "export_default.json", method = {GET, POST})
     @ResponseBody
     protected BaseVo exportDefault(@ModelAttribute DocExportVo docExportVo) throws IOException, TemplateException {
         Assert.notNull(docExportVo, "doc export vo不能为null");
         Map<String, Object> attributes = new HashMap<>();
-        Template template = this.getTemplate(docExportVo, attributes);
-        try (StringWriter stringWriter = new StringWriter()) {
-            template.process(attributes, stringWriter);
-            String content = compress.apply(stringWriter.toString());
-            Map<String, Object> exportAttribute = new HashMap<>();
-            exportAttribute.put("ext", "doc");
-            exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> outputStream.write(content.getBytes("UTF-8")));
-            String token = UUID.randomUUID().toString().replace("-", "");
-            RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
-            requestAttributes.setAttribute(token, exportAttribute, RequestAttributes.SCOPE_SESSION);
-            return wrapperData(token);
+        Map<String, Object> exportAttribute = new HashMap<>();
+        DocSolution docSolution = docSolutionService.find(docExportVo.getDocSolutionId());
+        Assert.notNull(docSolution, "doc solution不存在");
+        if (docSolution.getType().equals(DocSolution.Type.STREAM)) {
+            Class<IStreamDocumentGenerator> generatorClass = DictDynamicClass.loadClass(docSolution.getGeneratorClass());
+            IStreamDocumentGenerator generator = new DictBean<>(generatorClass).createSpringBean(null);
+            exportAttribute.put("ext", generator.getExt());
+            exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> generator.generate(outputStream, docExportVo.getContent()));
+        } else {
+            Template template = this.getTemplate(docExportVo, attributes);
+            try (StringWriter stringWriter = new StringWriter()) {
+                template.process(attributes, stringWriter);
+                String content = compress.apply(stringWriter.toString());
+                exportAttribute.put("ext", "doc");
+                exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> outputStream.write(content.getBytes("UTF-8")));
+            }
         }
+        String token = UUID.randomUUID().toString().replace("-", "");
+        RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
+        requestAttributes.setAttribute(token, exportAttribute, RequestAttributes.SCOPE_SESSION);
+        return wrapperData(token);
     }
 
     private Template getTemplate(DocExportVo docExportVo, Map<String, Object> attributes) throws IOException {

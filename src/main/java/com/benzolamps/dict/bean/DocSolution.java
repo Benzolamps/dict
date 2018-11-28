@@ -31,6 +31,20 @@ public class DocSolution extends BaseBean {
     /** 备注 */
     private String remark;
 
+    /** 类型 */
+    public enum Type {
+        /** 模板 */
+        TEMPLATE,
+
+        /** 流 */
+        STREAM
+    }
+
+    /** 类型 */
+    private Type type;
+
+    private String generatorClass;
+
     /** 是否需要头部 */
     private Boolean needHeader;
 

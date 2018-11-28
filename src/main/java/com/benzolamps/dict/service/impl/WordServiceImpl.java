@@ -39,7 +39,7 @@ public class WordServiceImpl extends BaseElementServiceImpl<Word, WordExcelVo> i
     @Resource
     private WordClazzService wordClazzService;
 
-    @Value("classpath:xlsx/sample.xlsx")
+    @Value("classpath:templates/xlsx/sample.xlsx")
     private org.springframework.core.io.Resource sampleExcelResource;
 
     @Override

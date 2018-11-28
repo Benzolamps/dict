@@ -47,7 +47,7 @@ public interface DictWeb {
             case "docx":
                 return DOC;
             case "xls":
-            case "xlsx":
+            case "templates/xlsx":
                 return XLS;
             case "zip":
             case "jar":
