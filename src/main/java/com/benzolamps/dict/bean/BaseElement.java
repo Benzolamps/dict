@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 单词或短语类的基类
@@ -96,4 +97,28 @@ public abstract class BaseElement extends BaseEntity {
             this.setFrequency(this.getFrequencyInfo().stream().mapToInt(FrequencyInfo::getFrequency).sum());
         }
     }
+
+    /**
+     * 获取已掌握该单词或短语的学生
+     * @return 学生数
+     */
+    public abstract Set<Student> getMasteredStudents();
+
+    /**
+     * 获取未掌握该单词或短语的学生
+     * @return 学生数
+     */
+    public abstract Set<Student> getFailedStudents();
+
+    /**
+     * 获取已掌握该单词或短语的学生数
+     * @return 学生数
+     */
+    public abstract Integer getMasteredStudentsCount();
+
+    /**
+     * 获取未掌握该单词或短语的学生数
+     * @return 学生数
+     */
+    public abstract Integer getFailedStudentsCount();
 }

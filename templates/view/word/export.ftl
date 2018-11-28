@@ -31,6 +31,24 @@
       maxLength: 20
     },
     {
+      name: 'compareStrategy',
+      type: 'string',
+      display: '排序',
+      description: '文档的排序',
+      options: [
+        {id: 0, value: '索引 ↑'},
+        {id: 1, value: '字典顺序 ↑'},
+        {id: 2, value: '已掌握学生数 ↑'},
+        {id: 3, value: '未掌握学生数 ↑'},
+        {id: 4, value: '词频 ↑'},
+        {id: 5, value: '索引 ↓'},
+        {id: 6, value: '字典顺序 ↓'},
+        {id: 7, value: '已掌握学生数 ↓'},
+        {id: 8, value: '未掌握学生数 ↓'},
+        {id: 9, value: '词频 ↓'}
+      ]
+    },
+    {
       name: 'docSolution',
       type: 'string',
       display: '模板',

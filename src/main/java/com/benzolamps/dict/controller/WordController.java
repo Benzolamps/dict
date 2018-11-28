@@ -5,10 +5,7 @@ import com.benzolamps.dict.bean.Word;
 import com.benzolamps.dict.bean.WordClazz;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
-import com.benzolamps.dict.controller.vo.BaseVo;
-import com.benzolamps.dict.controller.vo.DataVo;
-import com.benzolamps.dict.controller.vo.DocExportVo;
-import com.benzolamps.dict.controller.vo.WordVo;
+import com.benzolamps.dict.controller.vo.*;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
@@ -116,6 +113,9 @@ public class WordController extends BaseController {
             mv.setViewName("redirect:/doc/export_personal.json");
         } else {
             List<Word> words = wordService.findPage(pageable).getContent();
+            if (docExportVo.getCompareStrategy() !=  null) {
+                words.sort(new BaseElementComparator<>(docExportVo.getCompareStrategy()));
+            }
             mv.setViewName("redirect:/doc/export_default.json");
             docExportVo.setContent(words);
         }

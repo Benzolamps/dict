@@ -31,7 +31,7 @@ Array.prototype.toString = function () {
       title: '提示',
       resize: false,
       move: false,
-      closeBtn: 2,
+      closeBtn: 1,
       skin: 'dict-skin'
     });
 

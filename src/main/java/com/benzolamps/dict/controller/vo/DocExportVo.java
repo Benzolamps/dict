@@ -49,4 +49,7 @@ public class DocExportVo implements Serializable {
     /** 分组 */
     @JsonIgnore
     private Collection<Group> groups;
+
+    /** 比较策略 */
+    private Integer compareStrategy;
 }

@@ -4,10 +4,7 @@ import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Phrase;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
-import com.benzolamps.dict.controller.vo.BaseVo;
-import com.benzolamps.dict.controller.vo.DataVo;
-import com.benzolamps.dict.controller.vo.DocExportVo;
-import com.benzolamps.dict.controller.vo.PhraseVo;
+import com.benzolamps.dict.controller.vo.*;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.dao.core.Page;
 import com.benzolamps.dict.dao.core.Pageable;
@@ -108,6 +105,9 @@ public class PhraseController extends BaseController {
         } else {
             List<Phrase> phrases = phraseService.findPage(pageable).getContent();
             mv.setViewName("redirect:/doc/export_default.json");
+            if (docExportVo.getCompareStrategy() !=  null) {
+                phrases.sort(new BaseElementComparator<>(docExportVo.getCompareStrategy()));
+            }
             docExportVo.setContent(phrases);
         }
         redirectAttributes.addFlashAttribute("docExportVo", docExportVo);

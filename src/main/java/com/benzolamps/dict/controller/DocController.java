@@ -5,6 +5,7 @@ import com.benzolamps.dict.bean.DocSolution;
 import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.component.IShuffleStrategySetup;
+import com.benzolamps.dict.controller.vo.BaseElementComparator;
 import com.benzolamps.dict.controller.vo.BaseVo;
 import com.benzolamps.dict.controller.vo.DocExportVo;
 import com.benzolamps.dict.service.base.DocSolutionService;
@@ -70,9 +71,12 @@ public class DocController extends BaseController {
         for (Group group : docExportVo.getGroups()) {
             boolean isWord = WORD.equals(group.getType());
             Set<Student> students = group.getStudentsOriented();
-            Set<? extends BaseElement> elements = isWord ? group.getWords() : group.getPhrases();
+            List<? extends BaseElement> elements = new ArrayList<>(isWord ? group.getWords() : group.getPhrases());
             Assert.notEmpty(students, "分组" + group.getName() + "中没有学生");
             Assert.notEmpty(elements, "分组" + group.getName() + "中没有" + (isWord ? "单词" : "短语"));
+            if (docExportVo.getCompareStrategy() !=  null) {
+                elements.sort(new BaseElementComparator<>(group, docExportVo.getCompareStrategy()));
+            }
             docExportVo.setContent(elements);
             Map<String, Object> attributes = new HashMap<>();
             Template template = this.getTemplate(docExportVo, attributes);
