@@ -1,6 +1,5 @@
 <#-- 单词排查表 -->
 <#-- @ftlvariable name="content" type="java.util.List<com.benzolamps.dict.bean.Word>" -->
-<#-- @ftlvariable name="is_definition" type="boolean" -->
 <#list content as word>
   <w:p wsp:rsidR="002A2BA6" wsp:rsidRDefault="002A2BA6" wsp:rsidP="002A2BA6">
     <w:pPr>

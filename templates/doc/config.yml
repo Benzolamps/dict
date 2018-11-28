@@ -15,14 +15,6 @@ baseProperties:
   white_base64: iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAAVSURBVBhXY/z//z8DAwMTEDMwMAAAJAYDAbrboo8AAAAASUVORK5CYII=
 solutions:
   - id: 0
-    name: 单词生词表
-    path: doc/universe/new_words.doc
-    remark: 单词生词表
-    needHeader: true
-    exportFor: WORD
-    needShuffle: false
-    properties: {}
-  - id: 1
     name: 单词排查表
     path: doc/universe/check_words.doc
     remark: 单词排查表
@@ -32,6 +24,14 @@ solutions:
     properties:
       separate_columns: 4
       need_top_info: true
+  - id: 1
+    name: 单词生词表
+    path: doc/universe/new_words.doc
+    remark: 单词生词表
+    needHeader: true
+    exportFor: WORD
+    needShuffle: false
+    properties: {}
   - id: 2
     name: 单词抄写表
     path: doc/universe/copy_words.doc
@@ -41,22 +41,15 @@ solutions:
     needShuffle: true
     properties: {}
   - id: 3
-    name: 单词词义对照表
+    name: 单词对照表
     path: doc/universe/collation_words.doc
     remark: 单词对照表
     needHeader: true
     exportFor: WORD
     needShuffle: false
-    properties: {}
+    properties:
+      separate_columns: 4
   - id: 4
-    name: 短语生词表
-    path: doc/universe/new_phrases.doc
-    remark: 短语生词表
-    needHeader: true
-    exportFor: PHRASE
-    needShuffle: false
-    properties: {}
-  - id: 5
     name: 短语排查表
     path: doc/universe/check_phrases.doc
     remark: 短语排查表
@@ -66,6 +59,14 @@ solutions:
     properties:
       separate_columns: 4
       need_top_info: true
+  - id: 5
+    name: 短语生词表
+    path: doc/universe/new_phrases.doc
+    remark: 短语生词表
+    needHeader: true
+    exportFor: PHRASE
+    needShuffle: false
+    properties: {}
   - id: 6
     name: 短语抄写表
     path: doc/universe/copy_phrases.doc
@@ -75,10 +76,11 @@ solutions:
     needShuffle: true
     properties: {}
   - id: 7
-    name: 短语词义对照表
+    name: 短语对照表
     path: doc/universe/collation_phrases.doc
     remark: 短语对照表
     needHeader: true
     exportFor: PHRASE
     needShuffle: false
-    properties: {}
+    properties:
+      separate_columns: 4

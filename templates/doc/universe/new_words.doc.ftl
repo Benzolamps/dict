@@ -91,7 +91,7 @@
               </w:tcPr>
               <w:p wsp:rsidR="00E602B2" wsp:rsidRPr="006C50AA" wsp:rsidRDefault="00D5413F" wsp:rsidP="00E602B2">
                 <w:pPr>
-                  <w:jc w:val="right"/>
+                  <w:jc w:val="left"/>
                   <w:rPr>
                     <w:rFonts w:ascii="${english_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${english_font_family}"/>
                     <wx:font wx:val="${english_font_family}"/>
@@ -114,7 +114,7 @@
           <w:tr wsp:rsidR="00E602B2" wsp:rsidRPr="006C50AA" wsp:rsidTr="00E602B2">
             <w:trPr>
               <w:cantSplit/>
-              <w:jc w:val="center"/>
+              <w:jc w:val="left"/>
             </w:trPr>
             <w:tc>
               <w:tcPr>
@@ -153,7 +153,7 @@
               </w:tcPr>
               <w:p wsp:rsidR="00E602B2" wsp:rsidRPr="006C50AA" wsp:rsidRDefault="00E602B2" wsp:rsidP="00E602B2">
                 <w:pPr>
-                  <w:jc w:val="right"/>
+                  <w:jc w:val="left"/>
                   <w:rPr>
                     <w:rFonts w:ascii="${english_font_family}" w:fareast="${english_font_family}" w:h-ansi="${english_font_family}"/>
                     <wx:font wx:val="${english_font_family}"/>
@@ -184,7 +184,7 @@
                 <w:tcW w:w="5020" w:type="dxa"/>
                 <w:gridSpan w:val="3"/>
                 <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
-                <w:vAlign w:val="center"/>
+                <w:vAlign w:val="left"/>
               </w:tcPr>
               <#if definition_arranges_vertically>
                 <@vertical_arrangement definations=word.definition/>
@@ -197,7 +197,7 @@
             <w:tr wsp:rsidR="00E602B2" wsp:rsidRPr="006C50AA" wsp:rsidTr="00E602B2">
               <w:trPr>
                 <w:cantSplit/>
-                <w:jc w:val="center"/>
+                <w:jc w:val="left"/>
               </w:trPr>
               <w:tc>
                 <w:tcPr>

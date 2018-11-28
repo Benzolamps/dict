@@ -156,7 +156,7 @@
         children: [
           <#if group.status != 'COMPLETED'>
             <#list group.frequencySortedWords as word>
-            {id: '${word.id}', name: '${word.prototype}（${word.definition}）${group.frequencyGenerated?string('（词频：' + word.groupFrequency + '／' + word.frequency + '）', '')}'},
+            {id: '${word.id}', name: '${word.prototype}（${word.definition}）（词频：${group.frequencyGenerated?string(word.groupFrequency + '／', '') + word.frequency}）'},
             </#list>
           <#else>
             <#list group.groupLog.words as word>

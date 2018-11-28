@@ -40,7 +40,7 @@
           <w:tr wsp:rsidR="00E602B2" wsp:rsidRPr="006C50AA" wsp:rsidTr="00C52ADE">
             <w:trPr>
               <w:cantSplit/>
-              <w:jc w:val="center"/>
+              <w:jc w:val="left"/>
             </w:trPr>
             <w:tc>
               <w:tcPr>
@@ -89,7 +89,7 @@
               </w:tcPr>
               <w:p wsp:rsidR="00E602B2" wsp:rsidRPr="006C50AA" wsp:rsidRDefault="00C52ADE" wsp:rsidP="00E602B2">
                 <w:pPr>
-                  <w:jc w:val="right"/>
+                  <w:jc w:val="left"/>
                   <w:rPr>
                     <w:rFonts w:ascii="${english_font_family}" w:fareast="${chinese_font_family}" w:h-ansi="${english_font_family}"/>
                     <wx:font wx:val="${english_font_family}"/>
@@ -103,7 +103,7 @@
           <w:tr wsp:rsidR="00C52ADE" wsp:rsidRPr="006C50AA" wsp:rsidTr="00554791">
             <w:trPr>
               <w:cantSplit/>
-              <w:jc w:val="center"/>
+              <w:jc w:val="left"/>
             </w:trPr>
             <w:tc>
               <w:tcPr>
@@ -123,7 +123,7 @@
               </w:tcPr>
               <w:p wsp:rsidR="00C52ADE" wsp:rsidRPr="006C50AA" wsp:rsidRDefault="00C52ADE" wsp:rsidP="00E602B2">
                 <w:pPr>
-                  <w:jc w:val="right"/>
+                  <w:jc w:val="left"/>
                   <w:rPr>
                     <w:rFonts w:ascii="${english_font_family}" w:fareast="${english_font_family}" w:h-ansi="${english_font_family}"/>
                     <wx:font wx:val="${english_font_family}"/>
@@ -138,7 +138,7 @@
             <w:tr wsp:rsidR="00E602B2" wsp:rsidRPr="006C50AA" wsp:rsidTr="00E602B2">
               <w:trPr>
                 <w:cantSplit/>
-                <w:jc w:val="center"/>
+                <w:jc w:val="left"/>
               </w:trPr>
               <w:tc>
                 <w:tcPr>
