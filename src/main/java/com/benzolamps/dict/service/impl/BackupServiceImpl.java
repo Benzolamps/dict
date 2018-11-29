@@ -34,6 +34,7 @@ public class BackupServiceImpl implements BackupService {
     @Resource
     private UnaryOperator<String> compress;
 
+    @SuppressWarnings("SpellCheckingInspection")
     @Override
     public void backup(OutputStream outputStream) {
         DictCommand.exec(mysqlDumpCmd, (istr, estr) -> {

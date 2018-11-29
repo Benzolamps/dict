@@ -18,10 +18,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * 单词生成Excel表格
+ * 短语生成Excel表格
  * @author Benzolamps
  * @version 2.3.5
- * @datetime 2018-11-28 15:44:26
+ * @datetime 2018-11-28 16:04:40
  */
 public class PhraseExcelGenerator implements IStreamDocumentGenerator<Phrase> {
 

@@ -55,9 +55,9 @@ public class WordExcelGenerator implements IStreamDocumentGenerator<Word> {
             row.createCell(2).setCellValue(word.getBritishPronunciation());
             row.createCell(3).setCellValue(word.getAmericanPronunciation());
             row.createCell(4).setCellValue(
-                    CollectionUtils.isEmpty(word.getClazzes()) ?
-                            null :
-                            word.getClazzes().stream().map(WordClazz::getName).collect(Collectors.joining("，", "", ""))
+                CollectionUtils.isEmpty(word.getClazzes()) ?
+                    null :
+                    word.getClazzes().stream().map(WordClazz::getName).collect(Collectors.joining("，", "", ""))
             );
             row.createCell(5).setCellValue(word.getDefinition());
             IntStream.range(0, 6).forEach(j -> row.getCell(j).setCellStyle(cellStyles.get(j)));

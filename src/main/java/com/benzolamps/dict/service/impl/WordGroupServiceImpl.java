@@ -27,11 +27,13 @@ import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 /**
@@ -114,19 +116,22 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         ThreadPoolTaskExecutor threadPoolTaskExecutor = this.getThreadPoolTaskExecutor();
         Assert.notEmpty(processImportVos, "process import vos不能为null或空");
         AtomicReference<Throwable> throwable = new AtomicReference<>();
+        CountDownLatch countDownLatch = new CountDownLatch(processImportVos.length);
         Stream.of(processImportVos)
             .map(GroupQrCodeTask::new)
             .forEach(task -> {
                 ListenableFuture<?> listenableFuture = threadPoolTaskExecutor.submitListenable(task);
-                listenableFuture.addCallback(result -> {}, e -> {
-                    throwable.set(e);
-                    threadPoolTaskExecutor.shutdown();
-                    threadPoolTaskExecutor.initialize();
-                });
+                listenableFuture.addCallback(
+                    result -> countDownLatch.countDown(),
+                    e -> {
+                        LongStream.range(0, countDownLatch.getCount()).forEach(l -> countDownLatch.countDown());
+                        throwable.set(e);
+                        threadPoolTaskExecutor.shutdown();
+                        threadPoolTaskExecutor.initialize();
+                    }
+                );
             });
-        while (throwable.get() == null && threadPoolTaskExecutor.getThreadPoolExecutor().getCompletedTaskCount() < threadPoolTaskExecutor.getThreadPoolExecutor().getTaskCount()) {
-            Thread.sleep(100);
-        }
+        countDownLatch.await();
         logger.info("识别二维码完成");
         if (throwable.get() != null) {
             throw throwable.get();
@@ -233,19 +238,22 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
         handle(processImportVos);
         ThreadPoolTaskExecutor threadPoolTaskExecutor = this.getThreadPoolTaskExecutor();
         AtomicReference<Throwable> throwable = new AtomicReference<>();
+        CountDownLatch countDownLatch = new CountDownLatch(processImportVos.length);
         Stream.of(processImportVos)
             .map(GroupBaseElementTask::new)
             .forEach(task -> {
                 ListenableFuture<?> listenableFuture = threadPoolTaskExecutor.submitListenable(task);
-                listenableFuture.addCallback(result -> {}, e -> {
-                    throwable.set(e);
-                    threadPoolTaskExecutor.shutdown();
-                    threadPoolTaskExecutor.initialize();
-                });
+                listenableFuture.addCallback(
+                    result -> countDownLatch.countDown(),
+                    e -> {
+                        LongStream.range(0, countDownLatch.getCount()).forEach(l -> countDownLatch.countDown());
+                        throwable.set(e);
+                        threadPoolTaskExecutor.shutdown();
+                        threadPoolTaskExecutor.initialize();
+                    }
+                );
             });
-        while (throwable.get() == null && threadPoolTaskExecutor.getThreadPoolExecutor().getCompletedTaskCount() < threadPoolTaskExecutor.getThreadPoolExecutor().getTaskCount()) {
-            Thread.sleep(100);
-        }
+        countDownLatch.await();
         if (throwable.get() != null) {
             throw throwable.get();
         }
