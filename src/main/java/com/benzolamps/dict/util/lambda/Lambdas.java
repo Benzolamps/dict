@@ -9,7 +9,7 @@ package com.benzolamps.dict.util.lambda;
 @SuppressWarnings("unused")
 public interface Lambdas {
 
-    /***
+    /**
      * 忽略异常执行一个无参无返回值的action
      * @param action action
      */
@@ -17,7 +17,7 @@ public interface Lambdas {
         action.run();
     }
 
-    /***
+    /**
      * 忽略异常执行一个无参有返回值的func
      * @param func func
      * @param <T> 返回值的类型

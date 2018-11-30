@@ -42,7 +42,7 @@ public interface VersionService {
      */
     Status getStatus();
 
-    /***
+    /**
      * 获取总大小
      * @return 总大小
      */
