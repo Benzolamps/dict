@@ -153,7 +153,7 @@ public class Group extends BaseEntity {
 
     /** 是否是词频分组 */
     @DictIgnore
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     @ColumnDefault("false")
     private Boolean frequencyGenerated;
 
