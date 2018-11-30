@@ -104,10 +104,10 @@ public class GroupDaoImpl extends BaseDaoImpl<Group> implements GroupDao {
     public Map<String, Number> findMaxInfo(Library library) {
         String jpql =
             "select " +
-            "max(groups.studentsOrientedCount) as maxStudentsCount, " +
-            "max(groups.wordsCount) as maxWordsCount, " +
-            "max(groups.phrasesCount) as maxPhrasesCount, " +
-            "max(groups.scoreCount) as maxScoreCount " +
+            "coalesce(max(groups.studentsOrientedCount), 0) as maxStudentsCount, " +
+            "coalesce(max(groups.wordsCount), 0) as maxWordsCount, " +
+            "coalesce(max(groups.phrasesCount), 0) as maxPhrasesCount, " +
+            "coalesce(max(groups.scoreCount), 0) as maxScoreCount " +
             "from Group as groups " +
             "where groups.library = :library";
         return (Map<String, Number>) DictJpa.createJpqlQuery(entityManager, jpql, Collections.singletonMap("library", library)).uniqueResult();

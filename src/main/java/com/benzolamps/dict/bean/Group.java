@@ -109,21 +109,21 @@ public class Group extends BaseEntity {
     private Type type;
 
     /** 分组中的的学生 */
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dict_gs", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "student"))
     @DictIgnore
     @JsonIgnore
     private Set<Student> studentsOriented;
 
     /** 已评分的学生 */
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dict_gss", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "student"))
     @DictIgnore
     @JsonIgnore
     private Set<Student> studentsScored;
 
     /** 分组中的单词 */
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dict_gw", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "word"))
     @DictIgnore
     @JsonIgnore
@@ -131,7 +131,7 @@ public class Group extends BaseEntity {
     private Set<Word> words;
 
     /** 分组中的短语 */
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dict_gp", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     @DictIgnore
     @JsonIgnore

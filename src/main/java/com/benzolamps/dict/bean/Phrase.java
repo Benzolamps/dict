@@ -1,13 +1,11 @@
 package com.benzolamps.dict.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import java.util.Set;
 
 /**
@@ -26,12 +24,17 @@ public class Phrase extends BaseElement {
     private static final long serialVersionUID = 5771542562398020839L;
 
     /** 已掌握该短语的学生 */
-    @ManyToMany(mappedBy = "masteredPhrases")
+    @ManyToMany(mappedBy = "masteredPhrases",cascade = CascadeType.ALL)
     private Set<Student> masteredStudents;
 
     /** 未掌握该短语的学生 */
-    @ManyToMany(mappedBy = "failedPhrases")
+    @ManyToMany(mappedBy = "failedPhrases", cascade = CascadeType.ALL)
     private Set<Student> failedStudents;
+
+    /** 有该单短语的分组 */
+    @ManyToMany(mappedBy = "phrases", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Group> groups;
 
     /** 已掌握该短语的学生数 */
     @Formula("(select count(1) from dict_sp as sp where sp.phrase = id)")

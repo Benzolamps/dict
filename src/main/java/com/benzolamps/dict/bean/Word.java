@@ -46,14 +46,19 @@ public class Word extends BaseElement {
     private Set<WordClazz> clazzes;
 
     /** 已掌握该单词的学生 */
-    @ManyToMany(mappedBy = "masteredWords")
+    @ManyToMany(mappedBy = "masteredWords", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Student> masteredStudents;
 
     /** 未掌握该单词的学生 */
-    @ManyToMany(mappedBy = "failedWords")
+    @ManyToMany(mappedBy = "failedWords", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Student> failedStudents;
+
+    /** 有该单词的分组 */
+    @ManyToMany(mappedBy = "words", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Group> groups;
 
     /** 已掌握该单词的学生数 */
     @Formula("(select count(1) from dict_sw as sw where sw.word = id)")

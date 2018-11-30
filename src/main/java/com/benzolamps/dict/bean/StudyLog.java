@@ -29,7 +29,7 @@ public class StudyLog extends BaseEntity {
     private static final long serialVersionUID = -2554704023637347137L;
 
     /** 学生 */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "student", nullable = false, updatable = false)
     @NotNull
     @JsonIgnore

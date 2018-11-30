@@ -6,14 +6,10 @@ import com.benzolamps.dict.dao.base.PhraseDao;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
-import org.intellij.lang.annotations.Language;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.Collection;
-import java.util.Map;
-
-import static java.util.Collections.singletonMap;
 
 /**
  * 短语Dao接口实现类
@@ -26,20 +22,6 @@ public class PhraseDaoImpl extends BaseElementDaoImpl<Phrase> implements PhraseD
 
     @Resource
     private StudentDao studentDao;
-
-    @Override
-    public void remove(Collection<Phrase> phrases) {
-        for (Phrase phrase : phrases) {
-            @Language("MySQL") String sqlGp = "delete from dict_gp where phrase = :phrase_id ;";
-            @Language("MySQL") String sqlSp = "delete from dict_sp where phrase = :phrase_id ;";
-            @Language("MySQL") String sqlSpf = "delete from dict_spf where phrase = :phrase_id ;";
-            Map<String, Object> parameters = singletonMap("phrase_id", phrase.getId());
-            executeNative(sqlGp, parameters);
-            executeNative(sqlSp, parameters);
-            executeNative(sqlSpf, parameters);
-        }
-        super.remove(phrases);
-    }
 
     @Override
     public Page<Phrase> findPage(Pageable pageable) {

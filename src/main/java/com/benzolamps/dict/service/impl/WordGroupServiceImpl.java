@@ -173,7 +173,7 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
            }
            group.setName(name);
            group.setDescription(wordGroup.getDescription());
-           Set<Word> words = original != null ? original.getWords() : student.getFailedWords().stream().filter(word -> word.getLibrary().equals(assertLibrary())).collect(Collectors.toSet());
+           Set<Word> words = (original != null ? original.getWords() : student.getFailedWords()).stream().filter(word -> word.getLibrary().equals(assertLibrary())).collect(Collectors.toSet());
            words.removeIf(student.getMasteredWords()::contains);
            group.setWords(words);
            group.setStudentsOriented(Collections.singleton(student));

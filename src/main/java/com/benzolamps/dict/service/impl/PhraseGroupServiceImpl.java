@@ -111,7 +111,7 @@ public class PhraseGroupServiceImpl extends GroupServiceImpl implements PhraseGr
             }
             group.setName(name);
             group.setDescription(phraseGroup.getDescription());
-            Set<Phrase> phrases = original != null ? original.getPhrases() : student.getFailedPhrases().stream().filter(phrase -> phrase.getLibrary().equals(assertLibrary())).collect(Collectors.toSet());
+            Set<Phrase> phrases = (original != null ? original.getPhrases() : student.getFailedPhrases()).stream().filter(phrase -> phrase.getLibrary().equals(assertLibrary())).collect(Collectors.toSet());
             phrases.removeIf(student.getMasteredPhrases()::contains);
             group.setPhrases(phrases);
             group.setStudentsOriented(Collections.singleton(student));

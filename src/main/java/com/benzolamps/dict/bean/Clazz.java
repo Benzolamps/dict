@@ -47,7 +47,7 @@ public class Clazz extends BaseEntity {
     private String description;
 
     /** 学生 */
-    @OneToMany(mappedBy = "clazz", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "clazz", cascade = CascadeType.ALL)
     @DictIgnore
     @JsonIgnore
     private Set<Student> students;

@@ -42,7 +42,7 @@ public class Student extends BaseEntity {
     private String name;
 
     /** 班级 */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "class", nullable = false)
     private Clazz clazz;
 
@@ -52,19 +52,19 @@ public class Student extends BaseEntity {
     private String description;
 
     /** 已掌握的单词 */
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dict_sw", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
     @JsonIgnore
     private Set<Word> masteredWords;
 
     /** 已掌握的短语 */
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dict_sp", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     @JsonIgnore
     private Set<Phrase> masteredPhrases;
 
     /** 未掌握的单词 */
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "dict_swf", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
     @JsonIgnore
     private Set<Word> failedWords;
@@ -75,8 +75,18 @@ public class Student extends BaseEntity {
     @JsonIgnore
     private Set<Phrase> failedPhrases;
 
+    /** 有该学生的分组 */
+    @ManyToMany(mappedBy = "studentsOriented", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Group> groupsOriented;
+
+    /** 该学生已评分完毕的分组 */
+    @ManyToMany(mappedBy = "studentsScored", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Group> groupsScored;
+
     /** 学习记录 */
-    @OneToMany(mappedBy = "student", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<StudyLog> studyLogs;
 

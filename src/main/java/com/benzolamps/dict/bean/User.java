@@ -73,7 +73,7 @@ public class User extends BaseEntity {
     private String nickname;
 
     /** 词库 */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "library")
     @DictIgnore
     private Library library;

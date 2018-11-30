@@ -8,13 +8,11 @@ import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
 import org.hibernate.Query;
-import org.intellij.lang.annotations.Language;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -118,23 +116,11 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     public Map<String, Number> findMaxInfo() {
         String jpql =
             "select " +
-            "max(student.masteredWordsCount) as maxMasteredWordsCount, " +
-            "max(student.failedWordsCount) as maxFailedWordsCount, " +
-            "max(student.masteredPhrasesCount) as maxMasteredPhrasesCount, " +
-            "max(student.failedPhrasesCount) as maxFailedPhrasesCount " +
+            "coalesce(max(student.masteredWordsCount), 0) as maxMasteredWordsCount, " +
+            "coalesce(max(student.failedWordsCount), 0) as maxFailedWordsCount, " +
+            "coalesce(max(student.masteredPhrasesCount), 0) as maxMasteredPhrasesCount, " +
+            "coalesce(max(student.failedPhrasesCount), 0) as maxFailedPhrasesCount " +
             "from Student as student ";
         return (Map<String, Number>) DictJpa.createJpqlQuery(entityManager, jpql, null).uniqueResult();
-    }
-
-    @Override
-    public void remove(Collection<Student> students) {
-        for (Student student : students) {
-            @Language("MySQL") String sqlGs = "delete from dict_gs where student = :student_id ;";
-            @Language("MySQL") String sqlGss = "delete from dict_gss where student = :student_id ;";
-            Map<String, Object> parameters = singletonMap("student_id", student.getId());
-            executeNative(sqlGs, parameters);
-            executeNative(sqlGss, parameters);
-        }
-        super.remove(students);
     }
 }

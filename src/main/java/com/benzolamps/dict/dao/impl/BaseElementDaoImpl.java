@@ -47,9 +47,9 @@ public class BaseElementDaoImpl<T extends BaseElement> extends BaseDaoImpl<T> im
     public Map<String, Number> findMaxInfo(Library library) {
         String jpql =
             "select " +
-            "max(ele.masteredStudentsCount) as maxMasteredStudentsCount, " +
-            "max(ele.failedStudentsCount) as maxFailedStudentsCount, " +
-            "max(ele.frequency) as maxFrequency " +
+            "coalesce(max(ele.masteredStudentsCount), 0) as maxMasteredStudentsCount, " +
+            "coalesce(max(ele.failedStudentsCount), 0) as maxFailedStudentsCount, " +
+            "coalesce(max(ele.frequency), 0) as maxFrequency " +
             "from " + entityClass.getSimpleName() + " as ele " +
             "where ele.library = :library";
         return (Map<String, Number>) DictJpa.createJpqlQuery(entityManager, jpql, Collections.singletonMap("library", library)).uniqueResult();
