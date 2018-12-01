@@ -54,7 +54,7 @@ spring:
       auto_include: view/includes/main.ftl
       number_format: '#'
 server:
-  port: 80
+  port: 2018
   context_path: /${dict.system.name}
   tomcat:
     uri_encoding: UTF-8
