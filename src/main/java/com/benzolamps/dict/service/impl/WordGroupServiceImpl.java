@@ -33,7 +33,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 /**
@@ -124,10 +123,11 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                 listenableFuture.addCallback(
                     result -> countDownLatch.countDown(),
                     e -> {
-                        LongStream.range(0, countDownLatch.getCount()).forEach(l -> countDownLatch.countDown());
+                        while (countDownLatch.getCount() > 0) {
+                            countDownLatch.countDown();
+                        }
                         throwable.set(e);
                         threadPoolTaskExecutor.shutdown();
-                        threadPoolTaskExecutor.initialize();
                     }
                 );
             });
@@ -246,10 +246,11 @@ public class WordGroupServiceImpl extends GroupServiceImpl implements WordGroupS
                 listenableFuture.addCallback(
                     result -> countDownLatch.countDown(),
                     e -> {
-                        LongStream.range(0, countDownLatch.getCount()).forEach(l -> countDownLatch.countDown());
+                        while (countDownLatch.getCount() > 0) {
+                            countDownLatch.countDown();
+                        }
                         throwable.set(e);
                         threadPoolTaskExecutor.shutdown();
-                        threadPoolTaskExecutor.initialize();
                     }
                 );
             });
