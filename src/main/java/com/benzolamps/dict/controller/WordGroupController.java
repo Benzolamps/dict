@@ -4,12 +4,15 @@ import com.benzolamps.dict.bean.Clazz;
 import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.Word;
+import com.benzolamps.dict.component.IStreamDocumentGenerator;
 import com.benzolamps.dict.controller.interceptor.NavigationView;
 import com.benzolamps.dict.controller.interceptor.WindowView;
 import com.benzolamps.dict.controller.vo.*;
 import com.benzolamps.dict.dao.core.Pageable;
 import com.benzolamps.dict.service.base.*;
+import com.benzolamps.dict.service.impl.DictDynamicClass;
 import com.benzolamps.dict.util.Constant;
+import com.benzolamps.dict.util.DictBean;
 import com.benzolamps.dict.util.lambda.Action1;
 import com.benzolamps.dict.util.lambda.Func1;
 import org.springframework.util.Assert;
@@ -509,14 +512,16 @@ public class WordGroupController extends BaseController {
         } else {
             String token = UUID.randomUUID().toString().replace("-", "");
             Map<String, Object> exportAttribute = new HashMap<>();
-            exportAttribute.put("ext", "xlsx");
+            Class<IStreamDocumentGenerator<Word>> generatorClass = DictDynamicClass.loadClass("rose.WordExcelGenerator");
+            IStreamDocumentGenerator<Word> generator = new DictBean<>(generatorClass).createSpringBean(null);
+            exportAttribute.put("ext", generator.getExt());
             exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> {
                 List<Word> words = extraWords.stream().map(prototype -> {
                     Word word = new Word();
                     word.setPrototype(prototype);
                     return word;
                 }).collect(Collectors.toList());
-                wordService.toExcel(words, outputStream);
+                generator.generate(outputStream, words, wordGroup.getName());
             });
             RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
             requestAttributes.setAttribute(token, exportAttribute, RequestAttributes.SCOPE_SESSION);
