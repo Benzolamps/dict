@@ -37,7 +37,7 @@ public class RuntimeBeanConfig {
     @Resource
     private Map freemarkerGlobals;
 
-    @SuppressWarnings({"unused", "unchecked", "rawtypes"})
+    @SuppressWarnings({"unused", "unchecked", "rawtypes", "ResultOfMethodCallIgnored"})
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws Exception {
 
@@ -46,7 +46,7 @@ public class RuntimeBeanConfig {
 
         logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
         if (resolve("#{'${os.name}'.startsWith('Windows')}")) {
-            Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler http://localhost:2018/dict/index.html");
+            Runtime.getRuntime().exec(resolve("#{'rundll32 url.dll,FileProtocolHandler http://localhost:${server.port}${server.context_path}/index.html'}").toString());
         }
 
         File file = new File("C:\\upload");
