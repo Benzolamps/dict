@@ -16,7 +16,8 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.Collection;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.benzolamps.dict.bean.Group.Type.WORD;
@@ -109,21 +110,21 @@ public class Group extends BaseEntity {
     private Type type;
 
     /** 分组中的的学生 */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "dict_gs", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "student"))
     @DictIgnore
     @JsonIgnore
     private Set<Student> studentsOriented;
 
     /** 已评分的学生 */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "dict_gss", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "student"))
     @DictIgnore
     @JsonIgnore
     private Set<Student> studentsScored;
 
     /** 分组中的单词 */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "dict_gw", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "word"))
     @DictIgnore
     @JsonIgnore
@@ -131,7 +132,7 @@ public class Group extends BaseEntity {
     private Set<Word> words;
 
     /** 分组中的短语 */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "dict_gp", joinColumns = @JoinColumn(name = "groups"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     @DictIgnore
     @JsonIgnore
@@ -262,5 +263,12 @@ public class Group extends BaseEntity {
         }
         e2.setGroupFrequency(frequency2);
         return frequency1.compareTo(frequency2);
+    }
+
+    @PostLoad
+    private void postLoad() {
+        if (getStudentsScoredCount() == getStudentsOrientedCount() && getStatus() == Status.SCORING) {
+            setStatus(Status.COMPLETED);
+        }
     }
 }

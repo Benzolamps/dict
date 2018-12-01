@@ -24,15 +24,18 @@ public class Phrase extends BaseElement {
     private static final long serialVersionUID = 5771542562398020839L;
 
     /** 已掌握该短语的学生 */
-    @ManyToMany(mappedBy = "masteredPhrases",cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "dict_sp", joinColumns = @JoinColumn(name = "phrase"), inverseJoinColumns = @JoinColumn(name = "student"))
     private Set<Student> masteredStudents;
 
     /** 未掌握该短语的学生 */
-    @ManyToMany(mappedBy = "failedPhrases", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "dict_spf", joinColumns = @JoinColumn(name = "phrase"), inverseJoinColumns = @JoinColumn(name = "student"))
     private Set<Student> failedStudents;
 
     /** 有该单短语的分组 */
-    @ManyToMany(mappedBy = "phrases", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "dict_gp", joinColumns = @JoinColumn(name = "phrase"), inverseJoinColumns = @JoinColumn(name = "groups"))
     @JsonIgnore
     private Set<Group> groups;
 

@@ -225,7 +225,7 @@ public abstract class BaseDaoImpl<T extends BaseEntity> implements BaseDao<T> {
     @Override
 	public void remove(Collection<T> entities) {
         Assert.notNull(entities, "entities不能为null");
-        entities.forEach(entity -> entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity)));
+        entities.forEach(entityManager::remove);
 	}
 
     @Override

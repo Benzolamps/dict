@@ -46,17 +46,20 @@ public class Word extends BaseElement {
     private Set<WordClazz> clazzes;
 
     /** 已掌握该单词的学生 */
-    @ManyToMany(mappedBy = "masteredWords", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "dict_sw", joinColumns = @JoinColumn(name = "word"), inverseJoinColumns = @JoinColumn(name = "student"))
     @JsonIgnore
     private Set<Student> masteredStudents;
 
     /** 未掌握该单词的学生 */
-    @ManyToMany(mappedBy = "failedWords", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "dict_swf", joinColumns = @JoinColumn(name = "word"), inverseJoinColumns = @JoinColumn(name = "student"))
     @JsonIgnore
     private Set<Student> failedStudents;
 
     /** 有该单词的分组 */
-    @ManyToMany(mappedBy = "words", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "dict_gw", joinColumns = @JoinColumn(name = "word"), inverseJoinColumns = @JoinColumn(name = "groups"))
     @JsonIgnore
     private Set<Group> groups;
 

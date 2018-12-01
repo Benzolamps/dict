@@ -13,6 +13,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
 
+import static javax.persistence.CascadeType.ALL;
+
 /**
  * 学生实体类
  * @author Benzolamps
@@ -52,19 +54,19 @@ public class Student extends BaseEntity {
     private String description;
 
     /** 已掌握的单词 */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "dict_sw", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
     @JsonIgnore
     private Set<Word> masteredWords;
 
     /** 已掌握的短语 */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "dict_sp", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "phrase"))
     @JsonIgnore
     private Set<Phrase> masteredPhrases;
 
     /** 未掌握的单词 */
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "dict_swf", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "word"))
     @JsonIgnore
     private Set<Word> failedWords;
@@ -76,17 +78,19 @@ public class Student extends BaseEntity {
     private Set<Phrase> failedPhrases;
 
     /** 有该学生的分组 */
-    @ManyToMany(mappedBy = "studentsOriented", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "dict_gs", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "groups"))
     @JsonIgnore
     private Set<Group> groupsOriented;
 
     /** 该学生已评分完毕的分组 */
-    @ManyToMany(mappedBy = "studentsScored", cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(name = "dict_gss", joinColumns = @JoinColumn(name = "student"), inverseJoinColumns = @JoinColumn(name = "groups"))
     @JsonIgnore
     private Set<Group> groupsScored;
 
     /** 学习记录 */
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = ALL)
     @JsonIgnore
     private Set<StudyLog> studyLogs;
 
