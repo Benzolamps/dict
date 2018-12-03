@@ -76,14 +76,16 @@
       <div class="layui-row layui-col-space10">
         <div style="position: fixed; bottom: 0; left: 10px; right: 0">
           <div class="layui-col-xs10">
-          <#-- 分页 -->
-          <#if page_enabled>
-            <div id="${id}-page"></div>
-            <div id="${id}-page-info">
-              <span name="pageSize"></span>
-              <span name="pageNumber"></span>
-            </div>
-          </#if>
+            <#-- 分页 -->
+            <#if page_enabled>
+              <div id="${id}-page"></div>
+              <div id="${id}-page-info">
+                <span name="pageSize"></span>
+                <span name="pageNumber"></span>
+              </div>
+            <#else>
+              &nbsp;
+            </#if>
           </div>
           <div class="layui-col-xs1 layui-col-xs-offset1">
             <br>
@@ -121,6 +123,7 @@
 
   <script type="text/javascript">
     $('#${id}-container').css('width', '100%');
+    $('.overflow').removeClass('overflow');
 
     <#-- 表格字段 -->
     var fields = <@json_dump obj=fields/>;

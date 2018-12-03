@@ -27,3 +27,7 @@ body .dict-skin .layui-layer-title {
   color: #111;
   border: none;
 }
+
+.overflow {
+  overflow-y: auto;
+}

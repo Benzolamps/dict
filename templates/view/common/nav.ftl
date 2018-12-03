@@ -21,7 +21,9 @@
       </script>
     </head>
     <body>
-      <#include '/${content_path}.ftl'/>
+      <div class="overflow">
+        <#include '/${content_path}.ftl'/>
+      </div>
       <script type="text/javascript">
         $(function () {
           /* 请求栏目JSON */
@@ -35,7 +37,7 @@
           });
 
           /* 将当前页面地址与JSON中逐个比对 */
-          var href = location.href, column = -1, child = -1, title = '${title!""}';
+          var href = location.href, column = -1, child = -1, title = '${title!}';
           for (var i = 0; i < columns.length; i++) {
             var children = columns[i].children;
             for (var j = 0; j < children.length; j++) {

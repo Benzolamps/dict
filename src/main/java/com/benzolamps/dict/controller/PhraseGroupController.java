@@ -266,14 +266,16 @@ public class PhraseGroupController extends BaseController {
         Assert.notNull(id, "phrase group id不能为null");
         Group phraseGroup = phraseGroupService.find(id);
         Assert.notNull(phraseGroup, "phrase group不存在");
-        phraseGroup.getGroupLog().getPhrases().removeIf(phrase -> phraseGroup.getPhrases().stream().noneMatch(phrase1 -> phrase1.getId().equals(phrase.getId())));
-        phraseGroup.getGroupLog().getStudents().removeIf(student -> phraseGroup.getStudentsOriented().stream().noneMatch(student1 -> student1.getId().equals(student.getId())));
         ModelAndView mv = new ModelAndView("view/phrase_group/detail");
         mv.addObject("group", phraseGroup);
         if (phraseGroup.getStatus() != Group.Status.COMPLETED) {
             mv.addObject("students", ClazzStudentTreeVo.convert(phraseGroup.getStudentsOriented()));
         } else {
-            mv.addObject("students", ClazzStudentTreeVo.convert(phraseGroup.getGroupLog().getStudents()));
+            if (phraseGroup.getGroupLog() != null) {
+                phraseGroup.getGroupLog().getPhrases().removeIf(phrase -> phraseGroup.getPhrases().stream().noneMatch(phrase1 -> phrase1.getId().equals(phrase.getId())));
+                phraseGroup.getGroupLog().getStudents().removeIf(student -> phraseGroup.getStudentsOriented().stream().noneMatch(student1 -> student1.getId().equals(student.getId())));
+                mv.addObject("students", ClazzStudentTreeVo.convert(phraseGroup.getGroupLog().getStudents()));
+            }
         }
         return mv;
     }

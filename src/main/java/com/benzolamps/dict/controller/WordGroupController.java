@@ -271,13 +271,15 @@ public class WordGroupController extends BaseController {
         Assert.notNull(wordGroup, "word group不存在");
 
         ModelAndView mv = new ModelAndView("view/word_group/detail");
-        wordGroup.getGroupLog().getWords().removeIf(word -> wordGroup.getWords().stream().noneMatch(word1 -> word1.getId().equals(word.getId())));
-        wordGroup.getGroupLog().getStudents().removeIf(student -> wordGroup.getStudentsOriented().stream().noneMatch(student1 -> student1.getId().equals(student.getId())));
         mv.addObject("group", wordGroup);
         if (wordGroup.getStatus() != Group.Status.COMPLETED) {
             mv.addObject("students", ClazzStudentTreeVo.convert(wordGroup.getStudentsOriented()));
         } else {
-            mv.addObject("students", ClazzStudentTreeVo.convert(wordGroup.getGroupLog().getStudents()));
+            if (wordGroup.getGroupLog() != null) {
+                wordGroup.getGroupLog().getWords().removeIf(word -> wordGroup.getWords().stream().noneMatch(word1 -> word1.getId().equals(word.getId())));
+                wordGroup.getGroupLog().getStudents().removeIf(student -> wordGroup.getStudentsOriented().stream().noneMatch(student1 -> student1.getId().equals(student.getId())));
+                mv.addObject("students", ClazzStudentTreeVo.convert(wordGroup.getGroupLog().getStudents()));
+            }
         }
         return mv;
     }
