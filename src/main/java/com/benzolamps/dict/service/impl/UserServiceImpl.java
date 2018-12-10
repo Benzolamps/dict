@@ -4,6 +4,8 @@ import com.benzolamps.dict.bean.User;
 import com.benzolamps.dict.dao.base.UserDao;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.service.base.UserService;
+import com.benzolamps.dict.util.DictSpring;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -31,6 +33,9 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
     @Resource
     private UserDao userDao;
+
+    @Resource
+    private Environment environment;
 
     @Override
     @Transactional(readOnly = true)
@@ -77,7 +82,7 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
     public User getCurrent() {
         RequestAttributes requestAttributes = RequestContextHolder.currentRequestAttributes();
         Integer id = (Integer) requestAttributes.getAttribute(CURRENT_USER_ATTRIBUTE, SCOPE_SESSION);
-        return id == null ? null : userDao.find(id);
+        return id == null ? environment.acceptsProfiles("release") ? null : userDao.find(1) : userDao.find(id);
     }
 
     @Override

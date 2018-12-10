@@ -278,9 +278,9 @@ SockJS = (function(){
     }
 
     utils.log = function() {
-        if (_window.console && console.log && console.log.apply) {
+        /*if (_window.console && console.log && console.log.apply) {
             console.log.apply(console, arguments);
-        }
+        }*/
     };
 
     utils.bind = function(fun, that) {
