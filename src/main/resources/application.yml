@@ -47,7 +47,7 @@ spring:
     multipart:
       max_file_size: 50MB
       max_request_size: 100MB
-      location: C:\upload
+      location: /upload
   freemarker:
     template_loader_path: file:templates
     settings:

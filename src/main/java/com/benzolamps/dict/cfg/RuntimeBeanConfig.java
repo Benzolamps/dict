@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
-import java.io.File;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
@@ -40,21 +39,12 @@ public class RuntimeBeanConfig {
     @SuppressWarnings({"unused", "unchecked", "rawtypes", "ResultOfMethodCallIgnored"})
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws Exception {
-
         /* 加载Freemarker共享变量 */
         freemarkerGlobals.forEach((Action2<String, Object>) configuration::setSharedVariable);
-
         logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
-        if (resolve("#{'${os.name}'.startsWith('Windows')}")) {
+        if (resolve("#{'${os.name}' matches '(?i).*windows.*' and environment.acceptsProfiles('release')}")) {
             Runtime.getRuntime().exec(resolve("#{'rundll32 url.dll,FileProtocolHandler http://localhost:${server.port}${server.context_path}/index.html'}").toString());
         }
-
-        File file = new File("C:\\upload");
-        if (file.isFile()) {
-            file.delete();
-        }
-        file.mkdirs();
-
     }
 
     @Bean("compress")

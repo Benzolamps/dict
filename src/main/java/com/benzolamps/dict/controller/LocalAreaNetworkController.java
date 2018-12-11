@@ -29,7 +29,7 @@ public class LocalAreaNetworkController extends BaseController {
     public static class LanCondition implements Condition {
         @Override
         public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-            return System.getProperty("os.name").startsWith("Windows");
+            return System.getProperty("os.name").matches("(?i).*windows.*");
         }
     }
 
