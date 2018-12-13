@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static com.benzolamps.dict.util.DictSpring.resolve;
+import static com.benzolamps.dict.util.DictSpring.$;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -136,7 +136,7 @@ public class SystemController extends BaseController {
     protected BaseVo shutdownProcess() {
         new Thread((Action) () -> {
             Thread.sleep(100);
-            logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 已退出！'}"));
+            logger.info($("#{'**${dict.system.title} - ${dict.system.version} - 已退出！'}"));
             System.exit(0);
         }).start();
         return SUCCESS_VO;

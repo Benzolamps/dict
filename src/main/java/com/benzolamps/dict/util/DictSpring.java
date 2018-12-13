@@ -212,10 +212,21 @@ public abstract class DictSpring {
     /**
      * 执行spel
      * @param expression 表达式
+     * @param tClass 类型
      * @param <T> 类型
      * @return 结果
      */
-    public static <T> T resolve(@Language("SpEL") String expression) {
-        return (T) resolve(expression, Object.class);
+    public static <T> T $(@Language("SpEL") String expression, Class<T> tClass) {
+        return resolve(expression, tClass);
+    }
+
+    /**
+     * 执行spel
+     * @param expression 表达式
+     * @param <T> 类型
+     * @return 结果
+     */
+    public static <T> T $(@Language("SpEL") String expression) {
+        return (T) $(expression, Object.class);
     }
 }

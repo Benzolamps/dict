@@ -1,5 +1,6 @@
 package com.benzolamps.dict.cfg;
 
+import com.benzolamps.dict.util.DictSpring;
 import com.benzolamps.dict.util.lambda.Action2;
 import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +18,7 @@ import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import static com.benzolamps.dict.util.DictSpring.getBean;
-import static com.benzolamps.dict.util.DictSpring.resolve;
+import static com.benzolamps.dict.util.DictSpring.$;
 
 /**
  * 运行时bean声明
@@ -41,9 +42,9 @@ public class RuntimeBeanConfig {
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws Exception {
         /* 加载Freemarker共享变量 */
         freemarkerGlobals.forEach((Action2<String, Object>) configuration::setSharedVariable);
-        logger.info(resolve("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
-        if (resolve("#{'${os.name}' matches '(?i).*windows.*' and environment.acceptsProfiles('release')}")) {
-            Runtime.getRuntime().exec(resolve("#{'rundll32 url.dll,FileProtocolHandler http://localhost:${server.port}${server.context_path}/index.html'}").toString());
+        logger.info($("#{'**${dict.system.title} - ${dict.system.version} - 启动成功！'}"));
+        if ($("#{'${os.name}' matches '(?i).*windows.*' and environment.acceptsProfiles('release')}")) {
+            Runtime.getRuntime().exec($("#{'rundll32 url.dll,FileProtocolHandler http://localhost:${server.port}${server.context_path}/index.html'}").toString());
         }
     }
 

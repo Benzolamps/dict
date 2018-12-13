@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
@@ -19,7 +20,7 @@ import javax.annotation.Resource;
  * @version 2.2.1
  * @datetime 2018-10-9 13:00:44
  */
-@Controller
+@RestController
 @RequestMapping("lan")
 @ResponseBody
 @Conditional(LocalAreaNetworkController.LanCondition.class)
