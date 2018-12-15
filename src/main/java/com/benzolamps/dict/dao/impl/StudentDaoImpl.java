@@ -3,12 +3,12 @@ package com.benzolamps.dict.dao.impl;
 import com.benzolamps.dict.bean.Clazz;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.StudyProcess;
+import com.benzolamps.dict.cfg.processor.annotation.ResourceContent;
 import com.benzolamps.dict.dao.base.ClazzDao;
 import com.benzolamps.dict.dao.base.StudentDao;
 import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
 import org.hibernate.Query;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -30,13 +30,7 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
     @Resource
     private ClazzDao clazzDao;
 
-    // language=SpEL
-    @Value(
-        "#{" +
-        "T(org.springframework.util.StreamUtils)" +
-        ".copyToString(new org.springframework.core.io.ClassPathResource('sql/study_process.sql').inputStream, 'UTF-8')" +
-        "}"
-    )
+    @ResourceContent("classpath:sql/study_process.sql")
     private String studyProcessSql;
 
     @Override

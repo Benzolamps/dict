@@ -5,6 +5,8 @@ import org.springframework.util.StringUtils;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+import static com.benzolamps.dict.util.Constant.UTF8_CHARSET;
+
 /**
  * String工具类
  * @author Benzolamps
@@ -88,6 +90,8 @@ public interface DictString {
             return (T) new StringBuilder(str);
         } else if (StringBuffer.class.equals(tClass)) {
             return (T) new StringBuffer(str);
+        } else if (byte[].class.equals(tClass)) {
+            return (T) str.getBytes(UTF8_CHARSET);
         } else {
             return null;
         }

@@ -16,14 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @datetime 2018-7-11 19:10:18
  */
 @SpringBootApplication
-@ComponentScan(basePackages = {
-    "com.benzolamps.dict.dao.impl",
-    "com.benzolamps.dict.service.impl",
-    "com.benzolamps.dict.controller",
-    "com.benzolamps.dict.cfg",
-    "com.benzolamps.dict.advice",
-    "com.benzolamps.dict.directive"
-})
+@ComponentScan(basePackages = "com.benzolamps.dict.*")
 @EntityScan(basePackages = "com.benzolamps.dict.bean")
 @EnableTransactionManagement
 @EnableCaching

@@ -1,6 +1,5 @@
 package com.benzolamps.dict.cfg;
 
-import com.benzolamps.dict.util.DictSpring;
 import com.benzolamps.dict.util.lambda.Action2;
 import freemarker.template.Configuration;
 import lombok.extern.slf4j.Slf4j;
@@ -17,8 +16,8 @@ import javax.annotation.Resource;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
-import static com.benzolamps.dict.util.DictSpring.getBean;
 import static com.benzolamps.dict.util.DictSpring.$;
+import static com.benzolamps.dict.util.DictSpring.getBean;
 
 /**
  * 运行时bean声明
