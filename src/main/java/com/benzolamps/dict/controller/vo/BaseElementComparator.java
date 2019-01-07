@@ -5,6 +5,7 @@ import com.benzolamps.dict.bean.Group;
 import com.benzolamps.dict.bean.Student;
 import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -18,7 +19,9 @@ import java.util.List;
  * @datetime 2018-11-28 13:36:27
  */
 @RequiredArgsConstructor
-public class BaseElementComparator<E extends BaseElement> implements Comparator<E> {
+public class BaseElementComparator<E extends BaseElement> implements Comparator<E>, Serializable {
+
+    private static final long serialVersionUID = -484680822558494553L;
 
     private final Group group;
 

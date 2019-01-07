@@ -17,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -267,7 +268,7 @@ public class Group extends BaseEntity {
 
     @PostLoad
     private void postLoad() {
-        if (getStudentsScoredCount() == getStudentsOrientedCount() && getStatus() == Status.SCORING) {
+        if (Objects.equals(getStudentsScoredCount(), getStudentsOrientedCount()) && getStatus() == Status.SCORING) {
             setStatus(Status.COMPLETED);
         }
     }

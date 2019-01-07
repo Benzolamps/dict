@@ -30,11 +30,11 @@ public class ExtractGroupVo<T extends BaseElement> implements Serializable {
 
     private final Integer[] studentIds;
 
-    private final GroupService groupService;
+    private final transient GroupService groupService;
 
-    private final BaseElementService<T> elementService;
+    private final transient BaseElementService<T> elementService;
 
-    private final StudentService studentService;
+    private final transient StudentService studentService;
 
     /**
      * 获取分组
