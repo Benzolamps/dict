@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 @SuppressWarnings("unchecked")
 @RequiredArgsConstructor
 public class ExtractGroupVo<T extends BaseElement> implements Serializable {
+
     private static final long serialVersionUID = -3104948090003565239L;
 
     private final Integer groupId;
