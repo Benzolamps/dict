@@ -2,8 +2,8 @@ package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.bean.DocSolution;
 import com.benzolamps.dict.bean.DocSolutions;
+import com.benzolamps.dict.cfg.processor.annotation.YamlContent;
 import com.benzolamps.dict.dao.base.DocSolutionDao;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
@@ -20,15 +20,7 @@ import java.util.Map;
 @Repository("docSolutionDao")
 public class DocSolutionDaoImpl implements DocSolutionDao {
 
-    // language=SpEL
-    @Value(
-        "#{" +
-        "T(com.benzolamps.dict.util.Constant).YAML.loadAs(" +
-        "new org.springframework.core.io.FileSystemResource('templates/doc/config.yml').inputStream, " +
-        "T(com.benzolamps.dict.bean.DocSolutions)" +
-        ")" +
-        "}"
-    )
+    @YamlContent("file:templates/doc/config.yml")
     private DocSolutions solutions;
 
     @Override

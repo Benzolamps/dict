@@ -105,7 +105,7 @@ public class PhraseController extends BaseController {
         } else {
             List<Phrase> phrases = phraseService.findPage(pageable).getContent();
             mv.setViewName("redirect:/doc/export_default.json");
-            if (docExportVo.getCompareStrategy() !=  null) {
+            if (docExportVo.getCompareStrategy() != null) {
                 phrases.sort(new BaseElementComparator<>(docExportVo.getCompareStrategy()));
             }
             docExportVo.setContent(phrases);
@@ -193,7 +193,6 @@ public class PhraseController extends BaseController {
         int count = phraseService.imports(new InputStreamResource(file.getInputStream()));
         return wrapperData(count);
     }
-
 
     /**
      * 检测短语是否已存在

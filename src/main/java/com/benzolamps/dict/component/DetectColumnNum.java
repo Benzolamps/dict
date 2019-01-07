@@ -12,6 +12,7 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 public @interface DetectColumnNum {
+
     /** @return 表格的列数 */
     int value();
 }

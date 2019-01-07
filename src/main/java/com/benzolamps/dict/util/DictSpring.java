@@ -4,8 +4,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.intellij.lang.annotations.Language;
-import org.springframework.beans.factory.config.BeanExpressionContext;
-import org.springframework.beans.factory.config.BeanExpressionResolver;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -36,8 +34,6 @@ public abstract class DictSpring {
 
     private static DefaultListableBeanFactory beanFactory;
 
-    private static BeanExpressionContext beanExpressionContext;
-
     private static ClassLoader classLoader;
 
     private static void assertNull() {
@@ -52,7 +48,6 @@ public abstract class DictSpring {
         DictSpring.applicationContext = applicationContext;
         DictSpring.classLoader = applicationContext.getClassLoader();
         DictSpring.beanFactory = (DefaultListableBeanFactory) applicationContext.getBeanFactory();
-        DictSpring.beanExpressionContext = new BeanExpressionContext(beanFactory, null);
     }
 
     /**
@@ -160,9 +155,8 @@ public abstract class DictSpring {
         Assert.isTrue(containsBean(name), "未找到" + name + "对应的bean");
         if (beanFactory.isSingleton(name)) {
             beanFactory.destroySingleton(name);
-        } else {
-            beanFactory.removeBeanDefinition(name);
         }
+        beanFactory.removeBeanDefinition(name);
     }
 
     /**
@@ -201,12 +195,7 @@ public abstract class DictSpring {
      */
     public static <T> T resolve(@Language("SpEL") String expression, Class<T> tClass) {
         assertNull();
-        String placeholdersResolved = beanFactory.resolveEmbeddedValue(expression);
-        BeanExpressionResolver beanExpressionResolver = beanFactory.getBeanExpressionResolver();
-        if (beanExpressionResolver == null) {
-            return (T) expression;
-        }
-        return (T) beanExpressionResolver.evaluate(placeholdersResolved, beanExpressionContext);
+        return DictAssist.initialValue(tClass, expression);
     }
 
     /**

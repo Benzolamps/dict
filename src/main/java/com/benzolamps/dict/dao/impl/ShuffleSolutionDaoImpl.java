@@ -2,6 +2,7 @@ package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.bean.ShuffleSolution;
 import com.benzolamps.dict.bean.ShuffleSolutions;
+import com.benzolamps.dict.cfg.processor.annotation.YamlContent;
 import com.benzolamps.dict.dao.base.ShuffleSolutionDao;
 import com.benzolamps.dict.dao.core.Order;
 import com.benzolamps.dict.dao.core.Page;
@@ -29,15 +30,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     private FileSystemResource resource;
 
     /* 默认乱序方案配置文件 */
-    // language=SpEL
-    @Value(
-        "#{" +
-        "T(com.benzolamps.dict.util.Constant).YAML.loadAs(" +
-        "new org.springframework.core.io.FileSystemResource(dictProperties.universePath + '/default-shuffle-solution.yml').inputStream, " +
-        "T(com.benzolamps.dict.bean.ShuffleSolution)" +
-        ")" +
-        "}"
-    )
+    @YamlContent("file:${dict.system.universe_path}/default-shuffle-solution.yml")
     private ShuffleSolution defaultSolution;
 
     private ShuffleSolutions solutions;

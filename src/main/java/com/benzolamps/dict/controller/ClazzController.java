@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 import java.util.Arrays;
 
@@ -47,7 +48,7 @@ public class ClazzController extends BaseController {
      */
     @RequestMapping(value = "list.html", method = {GET, POST})
     @NavigationView
-    protected ModelAndView list(@RequestBody(required = false) Pageable pageable) {
+    protected ModelAndView list(@RequestBody(required = false) Pageable pageable, HttpServletRequest request) {
         ModelAndView mv = new ModelAndView("view/clazz/list");
         Page<Clazz> libraries = clazzService.findPage(pageable);
         mv.addObject("page", libraries);

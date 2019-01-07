@@ -13,6 +13,6 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface DictOptions {
 
-    /* 可选项的数组 */
+    /** 可选项的数组 */
     String[] value();
 }

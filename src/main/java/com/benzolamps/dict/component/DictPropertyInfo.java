@@ -12,6 +12,7 @@ import java.lang.annotation.*;
 @Inherited
 @Documented
 public @interface DictPropertyInfo {
+
     /** @return 属性的显示名字 */
     String display() default "";
 
