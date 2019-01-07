@@ -4,7 +4,6 @@ import com.benzolamps.dict.bean.User;
 import com.benzolamps.dict.dao.base.UserDao;
 import com.benzolamps.dict.dao.core.Filter;
 import com.benzolamps.dict.service.base.UserService;
-import com.benzolamps.dict.util.DictSpring;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +13,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.annotation.Resource;
 import javax.persistence.NoResultException;
-import java.nio.charset.Charset;
 
+import static com.benzolamps.dict.util.Constant.UTF8_CHARSET;
 import static org.springframework.util.DigestUtils.md5DigestAsHex;
 import static org.springframework.web.context.request.RequestAttributes.SCOPE_SESSION;
 
@@ -111,12 +110,11 @@ public class UserServiceImpl extends BaseServiceImpl<User> implements UserServic
 
     private String encryptPassword(String password) {
         Assert.hasText(password, "password不能为null或空");
-        Charset charset = Charset.forName("UTF-8");
-        String one = md5DigestAsHex(password.getBytes(charset));
-        String two = md5DigestAsHex(one.getBytes(charset));
-        String three = md5DigestAsHex(two.getBytes(charset));
-        String four = md5DigestAsHex(three.getBytes(charset));
-        String five = md5DigestAsHex(four.getBytes(charset));
-        return md5DigestAsHex(five.getBytes(charset));
+        String one = md5DigestAsHex(password.getBytes(UTF8_CHARSET));
+        String two = md5DigestAsHex(one.getBytes(UTF8_CHARSET));
+        String three = md5DigestAsHex(two.getBytes(UTF8_CHARSET));
+        String four = md5DigestAsHex(three.getBytes(UTF8_CHARSET));
+        String five = md5DigestAsHex(four.getBytes(UTF8_CHARSET));
+        return md5DigestAsHex(five.getBytes(UTF8_CHARSET));
     }
 }

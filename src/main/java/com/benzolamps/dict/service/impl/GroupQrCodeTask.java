@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import java.util.Base64;
 import java.util.Random;
 
+import static com.benzolamps.dict.util.Constant.UTF8_CHARSET;
+
 /**
  * 识别二维码线程
  * @author Benzolamps
@@ -32,7 +34,7 @@ public class GroupQrCodeTask implements Runnable {
                 for (int i = 0; i < bytes.length; i++) {
                     bytes[i] ^= (random.nextInt(Byte.MAX_VALUE * 2) - Byte.MAX_VALUE);
                 }
-                String[] value = new String(bytes, "UTF-8").split(",");
+                String[] value = new String(bytes, UTF8_CHARSET).split(",");
                 Integer studentId = Integer.valueOf(value[0]);
                 Integer groupId = Integer.valueOf(value[1]);
                 if (processImportVo.getStudentId() == null) {

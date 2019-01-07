@@ -10,6 +10,8 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static com.benzolamps.dict.util.Constant.GBK_CHARSET;
+
 /**
  * Class index
  * @author Benzolamps
@@ -42,7 +44,7 @@ public final class index {
 
         List<String> params = new ArrayList<>();
         params.add("--spring.profiles.active=release");
-        params.add("--file.encoding=GBK");
+        params.add("--file.encoding=" + GBK_CHARSET.name());
 
         if (null != succeed) {
             if (succeed) {

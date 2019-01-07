@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
+import static com.benzolamps.dict.util.Constant.GBK_CHARSET;
+
 /**
  * 命令行工具类
  * @author Benzolamps
@@ -30,10 +32,9 @@ public class DictCommand {
         logger.info("cmd: " + cmd);
         Runtime runtime = Runtime.getRuntime();
         Process addProcess = runtime.exec(cmd);
-        Charset gbk = Charset.forName("GBK");
         try (InputStream is = addProcess.getInputStream(); InputStream es = addProcess.getErrorStream()) {
-            String istr = StreamUtils.copyToString(is, gbk);
-            String estr = StreamUtils.copyToString(es, gbk);
+            String istr = StreamUtils.copyToString(is, GBK_CHARSET);
+            String estr = StreamUtils.copyToString(es, GBK_CHARSET);
             action.accept(istr, estr);
         }
     }

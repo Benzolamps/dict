@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.benzolamps.dict.util.Constant.UTF8_CHARSET;
+
 /**
  * 二维码工具类
  * @author 国文源
@@ -36,7 +38,7 @@ public interface DictQrCode {
     static byte[] createQrCode(String content, int width, int height) {
         Assert.hasText(content, "content不能为null或空");
         Map<EncodeHintType, Object> hints = new HashMap<>();
-        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        hints.put(EncodeHintType.CHARACTER_SET, UTF8_CHARSET);
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
         hints.put(EncodeHintType.MARGIN, 2);
         BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints);
@@ -68,7 +70,7 @@ public interface DictQrCode {
         );
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(new BufferedImageLuminanceSource(bufferedImage)));
         HashMap hints = new HashMap<>();
-        hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        hints.put(EncodeHintType.CHARACTER_SET, UTF8_CHARSET);
         result = new MultiFormatReader().decode(bitmap, hints);
         return result.getText();
     }

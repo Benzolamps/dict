@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.util.stream.IntStream;
 
+import static com.benzolamps.dict.util.Constant.UTF8_CHARSET;
+
 /**
  * 分页建言
  * @author Benzolamps
@@ -45,7 +47,7 @@ public class PageableAdvice {
 
                 /* 根据参数生成Pageable对象 */
                 if (StringUtils.hasText(queryString)) {
-                    String json = URLDecoder.decode(queryString, "UTF-8");
+                    String json = URLDecoder.decode(queryString, UTF8_CHARSET.name());
                     args[i] = objectMapper.readValue(json, Pageable.class);
                 } else {
                     args[i] = new Pageable();

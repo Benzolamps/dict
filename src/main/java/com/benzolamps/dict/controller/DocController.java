@@ -33,6 +33,7 @@ import java.util.function.UnaryOperator;
 import java.util.zip.ZipOutputStream;
 
 import static com.benzolamps.dict.bean.Group.Type.WORD;
+import static com.benzolamps.dict.util.Constant.UTF8_CHARSET;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -108,7 +109,7 @@ public class DocController extends BaseController {
                         template.process(attributes, stringWriter);
                         String content = compress.apply(stringWriter.toString());
                         String name = (String) attributes.get("title");
-                        InputStream inputStream = new ByteArrayInputStream(content.getBytes("UTF-8"));
+                        InputStream inputStream = new ByteArrayInputStream(content.getBytes(UTF8_CHARSET));
                         zipItems.add(new DictFile.ZipItem(name + " - " + group.getName() + " - " + student.getNumber() + " - " + student.getName() + ".doc", inputStream));
                     }
                 }
@@ -150,7 +151,7 @@ public class DocController extends BaseController {
                 template.process(attributes, stringWriter);
                 String content = compress.apply(stringWriter.toString());
                 exportAttribute.put("ext", "doc");
-                exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> outputStream.write(content.getBytes("UTF-8")));
+                exportAttribute.put("consumer", (Action1<OutputStream>) outputStream -> outputStream.write(content.getBytes(UTF8_CHARSET)));
             }
         }
         String token = UUID.randomUUID().toString().replace("-", "");
