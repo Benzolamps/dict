@@ -7,7 +7,7 @@
   $('#restore').click(function () {
     dict.uploadFile({
       action: 'restore.json',
-      accept: '*.sql, *.txt',
+      accept: '.sql, .txt',
       success: function (data, delta) {
         parent.layer.alert('备份已恢复！<br>用时 ' + delta + ' 秒！', {icon: 1});
       }
