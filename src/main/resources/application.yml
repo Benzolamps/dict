@@ -1,8 +1,8 @@
 dict:
   system:
-    name: @project.name@
-    title: @project.description@
-    version: @project.version@
+    name: "@project.name@"
+    title: "@project.description@"
+    version: "@project.version@"
     remote_base_url: http://benzolamps.oss-cn-beijing.aliyuncs.com
     universe_path: templates/java/universe
   aip:
@@ -47,7 +47,7 @@ spring:
     multipart:
       max_file_size: 50MB
       max_request_size: 100MB
-      location: /upload
+      location: C:\upload
   freemarker:
     template_loader_path: file:templates
     settings:
