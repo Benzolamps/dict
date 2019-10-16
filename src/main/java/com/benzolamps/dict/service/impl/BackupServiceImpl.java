@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.function.UnaryOperator;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 /**
  * 数据库备份恢复Service接口实现类
  * @author Benzolamps
@@ -24,7 +26,6 @@ import java.util.function.UnaryOperator;
 @Slf4j
 public class BackupServiceImpl implements BackupService {
 
-    @SuppressWarnings("SpringElInspection")
     @Value("#{miscellaneousService.mysqlBaseDir}\\bin\\mysqldump -u${spring.datasource.username} -p${spring.datasource.password} ${spring.datasource.name} --hex-blob --default-character-set gbk")
     private String mysqlDumpCmd;
 
@@ -39,7 +40,7 @@ public class BackupServiceImpl implements BackupService {
     public void backup(OutputStream outputStream) {
         DictCommand.exec(mysqlDumpCmd, (istr, estr) -> {
             if (StringUtils.hasText(istr)) {
-                outputStream.write(istr.getBytes("UTF-8"));
+                outputStream.write(istr.getBytes(UTF_8));
             }
             if (StringUtils.hasText(estr)) {
                 estr = compress.apply(estr);
@@ -53,7 +54,6 @@ public class BackupServiceImpl implements BackupService {
     }
 
     @Override
-    @SuppressWarnings("SpellCheckingInspection")
     public void restore(InputStream inputStream) {
         miscellaneousService.executeSqlScript("set foreign_key_checks = 0;");
         miscellaneousService.executeSqlScript(inputStream);

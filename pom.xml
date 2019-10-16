@@ -94,7 +94,7 @@
       <artifactId>tools</artifactId>
       <scope>system</scope>
       <version>0.0.1.SNAPSHOT</version>
-      <systemPath>${java.home}/lib/tools.jar</systemPath>
+      <systemPath>D:/devtools/Java/jdk1.8.0_202/lib/tools.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>org.jetbrains</groupId>

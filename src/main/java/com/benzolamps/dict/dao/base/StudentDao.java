@@ -1,6 +1,5 @@
 package com.benzolamps.dict.dao.base;
 
-import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.bean.Student;
 import com.benzolamps.dict.bean.StudyProcess;
 

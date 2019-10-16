@@ -21,12 +21,13 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.stream.IntStream;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * Jpql工具类
@@ -47,10 +48,9 @@ public class DictJpa {
      * @param positionParameters 位置参数
      * @return TypedQuery
      */
-    @SuppressWarnings("unchecked")
     public static <T> TypedQuery<T> createJpqlQuery(
         EntityManager entityManager,
-        @Language("JPAQL") String jpql,
+        String jpql,
         Class<T> tClass,
         Map<String, Object> parameters,
         Object... positionParameters) {
@@ -75,10 +75,9 @@ public class DictJpa {
      * @param positionParameters 位置参数
      * @return org.hibernate.Query
      */
-    @SuppressWarnings("unchecked")
     public static org.hibernate.Query createJpqlQuery(
             EntityManager entityManager,
-            @Language("JPAQL") String jpql,
+            String jpql,
             Map<String, Object> parameters,
             Object... positionParameters) {
 
@@ -101,7 +100,6 @@ public class DictJpa {
      * @param parameters 参数
      * @param positionParameters 位置参数
      */
-    @SuppressWarnings("unchecked")
     public static void executeJpqlQuery(
         EntityManager entityManager,
         @Language("JPAQL") String jpql,
@@ -128,7 +126,6 @@ public class DictJpa {
      * @param positionParameters 位置参数
      * @return org.hibernate.Query
      */
-    @SuppressWarnings("unchecked")
     public static org.hibernate.Query createNativeQuery(
         EntityManager entityManager,
         @Language("MySQL") String sql,
@@ -164,7 +161,6 @@ public class DictJpa {
      * @param parameters 参数
      * @param positionParameters 位置参数
      */
-    @SuppressWarnings("unchecked")
     public static void executeNativeQuery(
             EntityManager entityManager,
             @Language("MySQL") String sql,
@@ -191,7 +187,7 @@ public class DictJpa {
     public static void executeSqlScript(@Language("MySQL") String sql) {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
-        executeSqlScript(new ByteArrayResource(sql.getBytes("UTF-8")));
+        executeSqlScript(new ByteArrayResource(sql.getBytes(UTF_8)));
     }
 
     /**
@@ -203,7 +199,7 @@ public class DictJpa {
         Assert.notNull(sqlResource, "sql resource不能为null");
         DataSource dataSource = DictSpring.getBean(DataSource.class);
         try (Connection connection = dataSource.getConnection()) {
-            ScriptUtils.executeSqlScript(connection, new EncodedResource(sqlResource, Charset.forName("UTF-8")));
+            ScriptUtils.executeSqlScript(connection, new EncodedResource(sqlResource, UTF_8));
         }
     }
 

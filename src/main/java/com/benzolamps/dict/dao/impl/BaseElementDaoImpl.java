@@ -4,6 +4,7 @@ import com.benzolamps.dict.bean.BaseElement;
 import com.benzolamps.dict.bean.Library;
 import com.benzolamps.dict.dao.base.BaseElementDao;
 import com.benzolamps.dict.dao.core.DictJpa;
+import org.intellij.lang.annotations.Language;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;

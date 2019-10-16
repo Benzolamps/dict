@@ -174,7 +174,6 @@ public interface BaseDao<T extends BaseEntity> {
 	 * 删除实体对象
 	 * @param entities 实体对象
 	 */
-	@SuppressWarnings("unchecked")
 	void remove(Collection<T> entities);
 
 	/**

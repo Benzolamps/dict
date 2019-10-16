@@ -9,6 +9,7 @@ import com.benzolamps.dict.dao.core.*;
 import com.benzolamps.dict.util.DictObject;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.intellij.lang.annotations.Language;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;

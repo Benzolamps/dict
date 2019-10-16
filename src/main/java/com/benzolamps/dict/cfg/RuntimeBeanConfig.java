@@ -36,7 +36,7 @@ public class RuntimeBeanConfig {
     @Resource
     private Map freemarkerGlobals;
 
-    @SuppressWarnings({"unused", "unchecked", "rawtypes", "ResultOfMethodCallIgnored"})
+    @SuppressWarnings({"unused", "unchecked", "rawtypes"})
     @EventListener(condition = "not @environment.acceptsProfiles('test')")
     public void applicationListener(ContextRefreshedEvent contextRefreshedEvent) throws Exception {
         /* 加载Freemarker共享变量 */

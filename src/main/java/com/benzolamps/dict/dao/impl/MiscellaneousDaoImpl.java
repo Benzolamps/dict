@@ -2,6 +2,7 @@ package com.benzolamps.dict.dao.impl;
 
 import com.benzolamps.dict.dao.base.MiscellaneousDao;
 import com.benzolamps.dict.dao.core.DictJpa;
+import org.intellij.lang.annotations.Language;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,6 @@ public class MiscellaneousDaoImpl implements MiscellaneousDao {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @SuppressWarnings("unchecked")
     @Override
     @Transactional(readOnly = true)
     public String getMysqlVersion() {
@@ -55,7 +55,6 @@ public class MiscellaneousDaoImpl implements MiscellaneousDao {
             .collect(Collectors.joining("\n")));
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     @Transactional(readOnly = true)
     public long dataSize() {

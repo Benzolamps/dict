@@ -14,6 +14,7 @@ import java.io.Serializable;
  * @version 2.1.1
  * @datetime 2018-9-11 14:56:52
  */
+@SuppressWarnings("unused")
 @Lazy(false)
 @Configuration
 @ConfigurationProperties(prefix = "dict.system")

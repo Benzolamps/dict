@@ -19,7 +19,6 @@ import java.util.Collection;
  * @version 2.1.1
  * @datetime 2018-7-1 22:13:15
  */
-@SuppressWarnings("unchecked")
 @Repository("wordDao")
 public class WordDaoImpl extends BaseElementDaoImpl<Word> implements WordDao {
 

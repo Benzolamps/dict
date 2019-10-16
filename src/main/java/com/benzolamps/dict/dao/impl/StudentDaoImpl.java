@@ -44,14 +44,22 @@ public class StudentDaoImpl extends BaseDaoImpl<Student> implements StudentDao {
                     getFilter().and(Filter.eq("clazz", clazz));
                 } else if ("order".equals(search.getField())) {
                     switch (search.getValue().toString()) {
-                        case "masteredWords asc": this.applyOrder(Order.asc("masteredWords")); return;
-                        case "masteredWords desc": this.applyOrder(Order.desc("masteredWords")); return;
-                        case "failedWords asc": this.applyOrder(Order.asc("failedWords")); return;
-                        case "failedWords desc": this.applyOrder(Order.desc("failedWords")); return;
-                        case "masteredPhrases asc": this.applyOrder(Order.asc("masteredPhrases")); return;
-                        case "masteredPhrases desc": this.applyOrder(Order.desc("masteredPhrases")); return;
-                        case "failedPhrases asc": this.applyOrder(Order.asc("failedPhrases")); return;
-                        case "failedPhrases desc": this.applyOrder(Order.desc("failedPhrases"));
+                        case "masteredWords asc":
+                            this.applyOrder(Order.asc("masteredWords")); return;
+                        case "masteredWords desc":
+                            this.applyOrder(Order.desc("masteredWords")); return;
+                        case "failedWords asc":
+                            this.applyOrder(Order.asc("failedWords")); return;
+                        case "failedWords desc":
+                            this.applyOrder(Order.desc("failedWords")); return;
+                        case "masteredPhrases asc":
+                            this.applyOrder(Order.asc("masteredPhrases")); return;
+                        case "masteredPhrases desc":
+                            this.applyOrder(Order.desc("masteredPhrases")); return;
+                        case "failedPhrases asc":
+                            this.applyOrder(Order.asc("failedPhrases")); return;
+                        case "failedPhrases desc":
+                            this.applyOrder(Order.desc("failedPhrases"));
                     }
 
                 } else if ("masteredWords".equals(search.getField())) {

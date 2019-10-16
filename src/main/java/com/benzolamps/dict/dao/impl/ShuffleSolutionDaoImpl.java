@@ -14,10 +14,19 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import static com.benzolamps.dict.util.Constant.YAML;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * 乱序方案Dao接口实现类
@@ -55,19 +64,17 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
         return solutions.getSolutions().stream().filter(solution -> solution.getId().equals(id)).findFirst().orElse(null);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public ShuffleSolution persist(ShuffleSolution shuffleSolution) {
         Assert.notNull(shuffleSolution, "shuffle solution不能为null");
         Assert.isNull(shuffleSolution.getId(), "shuffle solution必须为新建对象");
 
-        Integer id = solutions.getSolutions().stream().mapToInt(ShuffleSolution::getId).max().orElse(-1);
+        int id = solutions.getSolutions().stream().mapToInt(ShuffleSolution::getId).max().orElse(-1);
         shuffleSolution.setId(id + 1);
         solutions.getSolutions().add(shuffleSolution);
         return shuffleSolution;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public ShuffleSolution update(ShuffleSolution shuffleSolution) {
         Assert.notNull(shuffleSolution, "shuffle solution不能为null");
@@ -109,7 +116,7 @@ public class ShuffleSolutionDaoImpl implements ShuffleSolutionDao {
     public void flush() {
         File file = resource.getFile();
         if (file.exists() || file.getParentFile().mkdirs() && file.createNewFile()) {
-            try (var os = new FileOutputStream(file); var osw = new OutputStreamWriter(os, "UTF-8")) {
+            try (var os = new FileOutputStream(file); var osw = new OutputStreamWriter(os, UTF_8)) {
                 YAML.dump(solutions, osw);
             }
         }
