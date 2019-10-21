@@ -11,6 +11,8 @@ import javassist.bytecode.annotation.StringMemberValue;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.UUID;
+
 /**
  * JavaAssist操作
  * @author Benzolamps
@@ -30,7 +32,7 @@ public interface DictAssist {
     @SneakyThrows({CannotCompileException.class, IllegalAccessException.class})
     static <T> T initialValue(Class<T> type, String value) {
         ClassPool classPool = ClassPool.getDefault();
-        CtClass  ctClass = classPool.makeClass("com.benzolamps.dict.AnnotationAssist" + System.currentTimeMillis());
+        CtClass  ctClass = classPool.makeClass(UUID.randomUUID().toString());
         CtField ctField = CtField.make("public " + type.getName() + " target;", ctClass);
         ConstPool constPool = ctClass.getClassFile().getConstPool();
         AnnotationsAttribute fieldAttr = new AnnotationsAttribute(constPool, AnnotationsAttribute.visibleTag);

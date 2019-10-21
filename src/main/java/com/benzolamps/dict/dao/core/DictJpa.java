@@ -20,7 +20,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -183,7 +182,6 @@ public class DictJpa {
      * 执行一个原生SQL语句
      * @param sql SQL
      */
-    @SneakyThrows(IOException.class)
     public static void executeSqlScript(@Language("MySQL") String sql) {
         Assert.hasText(sql, "sql不能为null或空");
         logger.info("sql: " + sql);
